@@ -2,220 +2,101 @@
 
 This directory contains Model Context Protocol (MCP) servers that expose Agent Swarm capabilities.
 
-## Swarm Messaging Server
+## 🗂️ Server Organization
 
-Exposes the swarm messaging system via MCP, allowing agents and external tools to send messages to agents via PyAutoGUI coordinates.
+The MCP servers are organized into three main categories:
 
-### Configuration
+### 1. Core Operations
+Essential servers for agent coordination and task management.
+- **Mission Control Server**: Central command for task assignment and integrity (Captain)
+- **Swarm Messaging**: Inter-agent communication
+- **Task Manager**: Master task log operations
+- **Swarm Brain**: Knowledge base and memory
 
-Add to your MCP settings (e.g., Claude Desktop config):
+### 2. Development & Quality
+Tools for maintaining code quality and standards.
+- **Refactoring Server**: Automated code cleanup and pyramid analysis
+- **Git Operations**: Work verification and commit checking
+- **V2 Compliance**: Code standard enforcement
+- **Testing Server**: Test execution and coverage analysis
+- **Memory Safety**: Resource leak detection and verification
 
-```json
-{
-  "mcpServers": {
-    "swarm-messaging": {
-      "command": "python",
-      "args": ["D:/Agent_Cellphone_V2_Repository/mcp_servers/messaging_server.py"]
-    }
-  }
-}
-```
+### 3. Infrastructure & Monitoring
+Tools for system health and external services.
+- **Website Manager**: WordPress and content management
+- **Observability Server**: System metrics and health monitoring
 
-### Available Tools
+---
 
-1. **send_agent_message**: Send message to specific agent
-   - `agent_id`: Target agent (Agent-1 through Agent-8)
-   - `message`: Message content
-   - `priority`: "regular" or "urgent"
+## 🚀 Server Details
 
-2. **broadcast_message**: Send message to all agents
-   - `message`: Message content
-   - `priority`: "regular" or "urgent"
+### 1. Mission Control Server (Captain)
+Exposes Captain's coordination, mission assignment, and integrity tools.
+- **Tools**: 
+  - `assign_mission`: Create structured mission files
+  - `check_integrity`: Verify work claims with git history
+  - `update_leaderboard`: Manage agent points and achievements
+  - `calculate_points`: Standardized point calculation
+  - `check_agent_status`: Monitor agent activity
 
-3. **get_agent_coordinates**: Get coordinates and status for all agents
-   - Returns: Agent positions, active status, descriptions
+### 2. Refactoring Server
+Exposes automated code analysis and refactoring tools.
+- **Tools**:
+  - `auto_extract_code`: Plan function extraction for large files
+  - `fix_linting_issues`: Auto-fix linting errors
+  - `analyze_test_pyramid`: check unit/integration/e2e balance
+  - `check_file_size`: Validate file length compliance
 
-### Usage Examples
+### 3. Swarm Messaging Server
+Exposes the swarm messaging system via MCP.
+- **Tools**: `send_agent_message`, `broadcast_message`, `get_agent_coordinates`
 
-```python
-# Send message to Agent-1
-send_agent_message(
-    agent_id="Agent-1",
-    message="Execute vector consolidation now",
-    priority="urgent"
-)
+### 4. Task Manager Server
+Exposes the MASTER_TASK_LOG.md system via MCP.
+- **Tools**: `add_task_to_inbox`, `mark_task_complete`, `move_task_to_waiting`, `get_tasks`
 
-# Broadcast to all agents
-broadcast_message(
-    message="V2 compliance check required",
-    priority="regular"
-)
+### 5. Website Manager Server
+Exposes WordPress and website management capabilities.
+- **Tools**: `create_wordpress_page`, `deploy_file_to_wordpress`, `create_blog_post`, `generate_image_prompts`
 
-# Get agent coordinates
-get_agent_coordinates()
-```
+### 6. Swarm Brain Server
+Exposes Swarm Brain knowledge base operations.
+- **Tools**: `share_learning`, `record_decision`, `search_swarm_knowledge`, `take_note`
 
-## Task Manager Server
+### 7. Git Operations Server
+Exposes git verification and commit checking capabilities.
+- **Tools**: `verify_git_work`, `get_recent_commits`, `check_file_history`, `validate_commit`
 
-Exposes the MASTER_TASK_LOG.md system via MCP, allowing agents to update task status, add tasks, and track work.
+### 8. V2 Compliance Checker Server
+Exposes V2 compliance validation capabilities.
+- **Tools**: `check_v2_compliance`, `validate_file_size`, `check_function_size`, `get_v2_exceptions`
 
-### Configuration
+### 9. Testing Server
+Exposes testing and coverage capabilities.
+- **Tools**: `run_coverage_analysis`, `run_mutation_tests`
 
-```json
-{
-  "mcpServers": {
-    "task-manager": {
-      "command": "python",
-      "args": ["D:/Agent_Cellphone_V2_Repository/mcp_servers/task_manager_server.py"]
-    }
-  }
-}
-```
+### 10. Observability Server
+Exposes metrics and system health monitoring.
+- **Tools**: `get_metrics_snapshot`, `check_system_health`, `check_slo_compliance`
 
-### Available Tools
+### 11. Memory Safety Server
+Exposes memory leak detection and resource verification.
+- **Tools**: `detect_memory_leaks`, `verify_files_exist`, `check_file_handles`
 
-1. **add_task_to_inbox** - Add task to INBOX
-2. **mark_task_complete** - Mark task as done
-3. **move_task_to_waiting** - Move task to WAITING ON
-4. **get_tasks** - Read tasks from log
+---
 
-See `TASK_MANAGER_README.md` for full documentation.
+## ⚙️ Configuration
 
-## Website Manager Server
-
-Exposes WordPress and website management capabilities via MCP, allowing agents to create pages, deploy files, manage menus, create blog posts, and generate image prompts.
-
-### Configuration
-
-```json
-{
-  "mcpServers": {
-    "website-manager": {
-      "command": "python",
-      "args": ["D:/Agent_Cellphone_V2_Repository/mcp_servers/website_manager_server.py"]
-    }
-  }
-}
-```
-
-### Available Tools
-
-1. **WordPress Management:**
-   - `create_wordpress_page` - Create new pages
-   - `deploy_file_to_wordpress` - Deploy files
-   - `add_page_to_menu` - Add pages to menus
-   - `list_wordpress_pages` - List all pages
-   - `purge_wordpress_cache` - Clear cache
-
-2. **Blog Automation:**
-   - `create_blog_post` - Create blog posts
-   - `create_report_page` - Create report pages
-
-3. **Image Generation:**
-   - `generate_image_prompts` - Generate design prompts
-
-See `WEBSITE_MANAGER_README.md` for full documentation.
-
-## Swarm Brain Server
-
-Exposes Swarm Brain knowledge base operations via MCP, allowing agents to search knowledge, share learnings, record decisions, and manage personal notes.
-
-### Configuration
+To use these servers, add them to your MCP settings (e.g., `claude_desktop_config.json`).
+A complete configuration example is available in `all_mcp_servers.json`.
 
 ```json
 {
   "mcpServers": {
-    "swarm-brain": {
+    "server-name": {
       "command": "python",
-      "args": ["D:/Agent_Cellphone_V2_Repository/mcp_servers/swarm_brain_server.py"]
+      "args": ["/path/to/mcp_servers/server_script.py"]
     }
   }
 }
 ```
-
-### Available Tools
-
-1. **Knowledge Sharing:**
-   - `share_learning` - Share learning to knowledge base
-   - `record_decision` - Record important decision
-   - `search_swarm_knowledge` - Search knowledge base
-
-2. **Personal Notes:**
-   - `take_note` - Take personal note
-   - `get_agent_notes` - Get agent's notes
-
-See `SWARM_BRAIN_README.md` for full documentation.
-
-## Integration with Global MCP
-
-All MCP servers are designed to work with any MCP-compatible client:
-- Claude Desktop
-- Cursor IDE
-- Custom MCP clients
-- Other AI tools with MCP support
-
-This enables seamless swarm coordination, website management, and knowledge sharing from any MCP-enabled environment.
-
-## Git Operations Server
-
-Exposes git verification and commit checking capabilities via MCP, allowing agents to verify work, check commits, and validate changes.
-
-### Configuration
-
-```json
-{
-  "mcpServers": {
-    "git-operations": {
-      "command": "python",
-      "args": ["D:/Agent_Cellphone_V2_Repository/mcp_servers/git_operations_server.py"]
-    }
-  }
-}
-```
-
-### Available Tools
-
-1. **Work Verification:**
-   - `verify_git_work` - Verify claimed work against git commits
-   - `verify_work_exists` - Verify work exists in today's commits
-
-2. **Commit Checking:**
-   - `get_recent_commits` - Get recent commits
-   - `check_file_history` - Check file git history
-   - `validate_commit` - Validate commit details
-
-See `GIT_OPERATIONS_README.md` for full documentation.
-
-## V2 Compliance Checker Server
-
-Exposes V2 compliance validation capabilities via MCP, allowing agents to check files, functions, and get exception lists before committing.
-
-### Configuration
-
-```json
-{
-  "mcpServers": {
-    "v2-compliance": {
-      "command": "python",
-      "args": ["D:/Agent_Cellphone_V2_Repository/mcp_servers/v2_compliance_server.py"]
-    }
-  }
-}
-```
-
-### Available Tools
-
-1. **Compliance Checking:**
-   - `check_v2_compliance` - Comprehensive V2 compliance check
-   - `validate_file_size` - Check file size against limit
-   - `check_function_size` - Check function size against limit
-   - `get_v2_exceptions` - Get approved exceptions list
-
-See `V2_COMPLIANCE_README.md` for full documentation.
-
-## MCP Tools Analysis
-
-See `MCP_TOOLS_ANALYSIS.md` for analysis of which tools should be MCP-accessible vs unnecessary.
-
-
-

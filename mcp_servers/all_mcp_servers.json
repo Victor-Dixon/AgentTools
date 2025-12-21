@@ -41,6 +41,41 @@
         "D:/Agent_Cellphone_V2_Repository/mcp_servers/v2_compliance_server.py"
       ],
       "description": "V2 compliance checking and validation for agents"
+    },
+    "testing-server": {
+      "command": "python",
+      "args": [
+        "D:/Agent_Cellphone_V2_Repository/mcp_servers/testing_server.py"
+      ],
+      "description": "Testing and coverage analysis tools"
+    },
+    "observability-server": {
+      "command": "python",
+      "args": [
+        "D:/Agent_Cellphone_V2_Repository/mcp_servers/observability_server.py"
+      ],
+      "description": "System health monitoring and metrics"
+    },
+    "memory-safety-server": {
+      "command": "python",
+      "args": [
+        "D:/Agent_Cellphone_V2_Repository/mcp_servers/memory_safety_server.py"
+      ],
+      "description": "Memory leak detection and resource verification"
+    },
+    "mission-control-server": {
+      "command": "python",
+      "args": [
+        "D:/Agent_Cellphone_V2_Repository/mcp_servers/mission_control_server.py"
+      ],
+      "description": "Captain's coordination, mission assignment, and integrity tools"
+    },
+    "refactoring-server": {
+      "command": "python",
+      "args": [
+        "D:/Agent_Cellphone_V2_Repository/mcp_servers/refactoring_server.py"
+      ],
+      "description": "Automated refactoring and code quality tools"
     }
   }
 }
