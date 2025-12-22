@@ -25,23 +25,32 @@ def get_category(filepath, root_dir):
     
     # Handle tools/ root files heuristics
     name = filepath.name.lower()
+    
+    # Specific infrastructure keywords
+    if any(x in name for x in ['github', 'repo', 'git', 'pr_']): return 'github_tools'
+    if any(x in name for x in ['aws', 's3', 'cloud', 'sftp', 'ftp', 'ssh']): return 'cloud_tools'
+    if any(x in name for x in ['db', 'database', 'postgres', 'sql', 'migrate', 'seed']): return 'db_tools'
+    if any(x in name for x in ['metric', 'report', 'dashboard', 'analytics', 'audit', 'log']): return 'reporting_tools'
+    if any(x in name for x in ['test', 'verify', 'validate', 'check', 'lint']): return 'testing_tools'
+    if any(x in name for x in ['discord', 'slack', 'message', 'chat', 'notification']): return 'communication_tools'
+    if any(x in name for x in ['swarm', 'orchestrator', 'cycle', 'mission', 'task']): return 'swarm_tools'
+    if any(x in name for x in ['web', 'site', 'blog', 'post', 'seo', 'css', 'html', 'theme']): return 'web_tools'
+    
     if name.startswith('agent'): return 'agent_ops'
-    if name.startswith('analyze') or name.startswith('analysis'): return 'analysis'
+    if name.startswith('analyze') or name.startswith('analysis'): return 'reporting_tools' # Consolidated
     if name.startswith('auto'): return 'automation'
     if name.startswith('captain'): return 'captain'
-    if name.startswith('check'): return 'checks'
+    if name.startswith('check'): return 'testing_tools' # Consolidated
     if name.startswith('cleanup'): return 'cleanup'
     if name.startswith('debug'): return 'debug'
     if name.startswith('deploy'): return 'deployment'
     if name.startswith('find'): return 'discovery'
     if name.startswith('fix'): return 'fixes'
     if name.startswith('generate'): return 'generators'
-    if name.startswith('monitor'): return 'monitoring'
-    if name.startswith('scan'): return 'scanning'
+    if name.startswith('monitor'): return 'reporting_tools' # Consolidated
+    if name.startswith('scan'): return 'reporting_tools' # Consolidated
     if name.startswith('setup'): return 'setup'
-    if name.startswith('test'): return 'testing'
-    if name.startswith('validate') or name.startswith('verify'): return 'verification'
-    if name.startswith('wordpress'): return 'wordpress'
+    if name.startswith('wordpress'): return 'web_tools' # Consolidated
     
     return 'misc'
 
