@@ -112,37 +112,39 @@ Add to your Claude Desktop or Cursor config:
 ## 🐺 CLI Commands
 
 ```bash
-# Check swarm status
-swarm status --wolves alpha,beta,scout-1
+# Check which agents are available
+swarm status --agents agent-1,agent-2,agent-3
 
-# Send a howl
-swarm howl alpha scout-1 "Hunt the bug in auth.py"
+# Send a message to another agent
+swarm send agent-1 agent-2 "Please review my PR"
 
-# Listen for incoming howls
-swarm listen scout-1 --unheard
+# Check your inbox
+swarm inbox agent-2 --unread
 
-# Search pack memory
-swarm recall "circular import"
+# Search shared knowledge
+swarm search "auth bug"
 
-# Share wisdom
-swarm share --wolf beta --category debugging \
-  --title "Import fix pattern" \
-  --wisdom "When ImportError occurs..."
+# Save something you learned
+swarm learn --agent agent-1 --category bugs \
+  --title "Auth fix" --content "Always check token expiry..."
 
-# Scout territory for prey
-swarm scout --path ./src --limit 20
+# Find tasks in the codebase (TODOs, FIXMEs)
+swarm tasks --path ./src
+
+# Assign a task to an agent
+swarm assign agent-2 "Fix the login bug"
 ```
 
 ## 📦 MCP Servers
 
 | Server | Tools | Description |
 |--------|-------|-------------|
-| **swarm-messaging** | `howl`, `broadcast`, `listen` | Wolf-to-wolf async communication |
-| **swarm-tasks** | `assign_hunt`, `complete_hunt`, `get_hunts` | Hunt/task management |
-| **swarm-memory** | `share_lore`, `recall`, `record_hunt` | Collective knowledge |
-| **swarm-control** | `roll_call`, `assign_territory`, `rankings` | Pack coordination |
-| **git-operations** | `verify_kill`, `get_commits`, `validate` | Hunt verification |
-| **code-quality** | `check_size`, `auto_extract`, `fix_lint` | Code compliance |
+| **swarm-messaging** | `send`, `broadcast`, `inbox` | Agent-to-agent messaging |
+| **swarm-tasks** | `assign`, `complete`, `list` | Task management |
+| **swarm-memory** | `learn`, `search`, `history` | Shared knowledge base |
+| **swarm-control** | `status`, `assign`, `leaderboard` | Coordination |
+| **git-operations** | `verify`, `commits`, `validate` | Work verification |
+| **code-quality** | `check`, `refactor`, `lint` | Code quality |
 
 ## 🧠 Core Concepts
 
