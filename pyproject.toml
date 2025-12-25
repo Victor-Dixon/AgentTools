@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "swarm-mcp"
 version = "0.1.0"
-description = "🐺 WE ARE SWARM - Multi-Agent AI Coordination (wolves, not bees)"
+description = "🐺 WE ARE SWARM - Multi-Agent AI Coordination Framework with consensus voting, conflict detection, capability learning, and work verification"
 readme = "README.md"
 license = "MIT"
 authors = [
@@ -13,7 +13,8 @@ authors = [
 ]
 keywords = [
     "ai", "agents", "multi-agent", "swarm", "mcp", "model-context-protocol",
-    "coordination", "llm", "claude", "gpt", "automation", "wolfpack"
+    "coordination", "llm", "claude", "gpt", "automation", "consensus",
+    "conflict-detection", "machine-learning-free", "ai-orchestration"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
