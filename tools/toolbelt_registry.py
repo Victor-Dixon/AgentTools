@@ -703,14 +703,42 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
         "flags": ["--fix-stuck", "--unstuck"],
         "args_passthrough": True,
     },
-    # Workspace Tools (Agent-6 Organization)
+    # ═══════════════════════════════════════════════════════════════════
+    # UNIFIED TOOLS (Phase 1 Consolidation - 2025-12-25)
+    # ═══════════════════════════════════════════════════════════════════
+    "unified-monitor": {
+        "name": "Unified Monitor",
+        "module": "tools.unified_monitor",
+        "main_function": "main",
+        "description": "All monitoring: queue, service, disk, agents, workspace, coverage",
+        "flags": ["--monitor", "--unified-monitor", "-m"],
+        "args_passthrough": True,
+    },
+    "unified-validator": {
+        "name": "Unified Validator",
+        "module": "tools.unified_validator",
+        "main_function": "main",
+        "description": "All validation: ssot, imports, tracker, session, refactor, queue",
+        "flags": ["--validate", "--unified-validator", "-V"],
+        "args_passthrough": True,
+    },
+    "unified-analyzer": {
+        "name": "Unified Analyzer",
+        "module": "tools.unified_analyzer",
+        "main_function": "main",
+        "description": "All analysis: repository, structure, file, consolidation, overlaps",
+        "flags": ["--analyze", "--unified-analyzer", "-a"],
+        "args_passthrough": True,
+    },
+    # Workspace Tools (now uses unified_monitor)
     "workspace-health": {
         "name": "Workspace Health Monitor",
-        "module": "tools.workspace_health_monitor",
+        "module": "tools.unified_monitor",
         "main_function": "main",
-        "description": "Check workspace health (consolidates workspace_health_checker.py)",
+        "description": "Check workspace health via unified monitor",
         "flags": ["--workspace-health", "--health"],
-        "args_passthrough": True,
+        "args_passthrough": False,
+        "override_args": ["--category", "workspace"],
     },
     # Git Tools (Agent-6 Organization)
     "git-work-verify": {

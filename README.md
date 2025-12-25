@@ -2,42 +2,93 @@
 
 This repository contains all tools used by the Agent Swarm system for autonomous operations, coordination, and task execution.
 
+## 🎯 Quick Start - Unified Tools
+
+After Phase 1 consolidation (2025-12-25), use these **3 unified tools** for most operations:
+
+```bash
+# Monitoring (queue, service, disk, agents, workspace, coverage)
+python tools/unified_monitor.py --category all
+
+# Validation (ssot, imports, tracker, session, refactor, consolidation)
+python tools/unified_validator.py --all
+
+# Analysis (repository, structure, file, consolidation, overlaps)
+python tools/unified_analyzer.py --category all
+```
+
+### Via Toolbelt
+
+```bash
+python tools/toolbelt.py --monitor --category all     # or -m
+python tools/toolbelt.py --validate --all             # or -V
+python tools/toolbelt.py --analyze --category all     # or -a
+```
+
+## 📊 Consolidation Status
+
+| Metric | Value |
+|--------|-------|
+| Starting tools | 709 |
+| Current tools | 473 |
+| Reduction | 33% (236 deleted) |
+| Unified tools | 14 |
+
+See [CONSOLIDATION_PLAN.md](./CONSOLIDATION_PLAN.md) for full details.
+
 ## Structure
 
-- **`tools/`** - Legacy tools and individual utility scripts
-- **`tools_v2/`** - Modern toolbelt system with categorized tools, adapters, and core infrastructure
-- **`mcp_servers/`** - Custom MCP (Model Context Protocol) servers for agent operations
+- **`tools/`** - Consolidated tools (~473 files)
+  - `unified_monitor.py` - All monitoring operations
+  - `unified_validator.py` - All validation operations
+  - `unified_analyzer.py` - All analysis operations
+  - `unified_*.py` - Other unified tools (14 total)
+  - `captain_*.py` - Captain coordination tools
+  - `toolbelt.py` - CLI launcher
+- **`tools_v2/`** - Modern toolbelt system with categorized tools
+- **`mcp_servers/`** - Custom MCP servers for agent operations
 
-## Tool Categories
+## Unified Tools Reference
 
-### Tools V2 System
+### unified_monitor.py
+```bash
+--category {queue,message_queue_file,service,disk,agents,coverage,workspace,resume,all}
+--trigger-resume    # Trigger resume prompts for inactive agents
+--watch             # Continuous monitoring mode
+--json              # JSON output
+```
 
-The `tools_v2/` directory contains the modern toolbelt architecture:
+### unified_validator.py
+```bash
+--category {ssot_config,imports,tracker,session,refactor,consolidation,queue,all}
+--file FILE         # Validate specific file
+--dir DIR           # Validate directory
+--agent AGENT       # For session validation
+--all               # Run all validations
+```
 
-- **`categories/`** - Tool categories organized by domain:
-  - `bi_tools.py` - Business Intelligence tools
-  - `captain_tools.py` - Captain coordination tools
-  - `communication_tools.py` - Messaging and communication
-  - `compliance_tools.py` - V2 compliance checking
-  - `infrastructure_tools.py` - Infrastructure management
-  - `swarm_brain_tools.py` - Swarm knowledge management
-  - And many more...
+### unified_analyzer.py
+```bash
+--category {repository,structure,file,consolidation,overlaps,all}
+--file FILE         # Analyze specific file
+--repos REPOS       # Comma-separated repo paths
+--json              # JSON output
+```
 
-- **`adapters/`** - Tool adapter interfaces
-- **`core/`** - Core toolbelt infrastructure
-- **`utils/`** - Utility functions
+## Gold Tools (Recovered)
 
-### Legacy Tools
+These valuable tools were recovered during consolidation:
 
-The `tools/` directory contains individual utility scripts for:
-- Agent coordination and messaging
-- WordPress deployment and management
-- Site auditing and health checks
-- Content management
-- Analysis and reporting
-- And more...
+| Tool | Purpose |
+|------|---------|
+| `check_sensitive_files.py` | 🔒 Security audit |
+| `analyze_swarm_coordination_patterns.py` | 🐝 Swarm BI |
+| `tech_debt_ci_summary.py` | 🏗️ CI tech debt |
+| `audit_imports.py` | 🔍 Import testing |
+| `debug_message_queue.py` | 📬 Queue debugging |
+| `fix_message_queue.py` | 🔧 Queue fixer |
 
-### MCP Servers
+## MCP Servers
 
 The `mcp_servers/` directory contains custom MCP servers:
 - **`swarm_brain_server.py`** - Swarm knowledge and memory management
@@ -47,27 +98,14 @@ The `mcp_servers/` directory contains custom MCP servers:
 - **`git_operations_server.py`** - Git operations and verification
 - **`messaging_server.py`** - Agent messaging operations
 
-## Usage
-
-Tools can be executed directly or through the toolbelt system:
-
-```bash
-# Direct execution
-python tools/check_toolbelt_health.py
-
-# Through toolbelt
-python -m tools_v2.advisor_cli --tool bi.metrics
-```
-
 ## Contributing
 
 When adding new tools:
-1. Place in appropriate category in `tools_v2/categories/`
-2. Register in `tools_v2/tool_registry.lock.json`
-3. Add tests in `tools_v2/tests/`
+1. Check if functionality exists in a unified tool first
+2. If new functionality needed, add to appropriate `unified_*.py`
+3. Register in `tools/toolbelt_registry.py`
 4. Update this README if adding new categories
 
 ## License
 
 Part of the Agent Swarm system.
-
