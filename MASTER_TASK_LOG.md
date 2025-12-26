@@ -23,13 +23,13 @@
 ## 🎯 THIS WEEK - High Priority
 
 ### Package Publishing
-- [ ] [INFRA][P0][SWARM-001] Build and test package locally with `pip install -e .`
+- [x] [INFRA][P0][SWARM-001] Build and test package locally with `pip install -e .`
 - [ ] [INFRA][P0][SWARM-002] Create PyPI account and API token
 - [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*`
 - [ ] [INFRA][P0][SWARM-004] Verify install works: `pip install swarm-mcp`
 
 ### MCP Server Implementation
-- [ ] [MCP][P0][SWARM-005] Implement `swarm_mcp/servers/messaging.py` - Full MCP protocol
+- [x] [MCP][P0][SWARM-005] Implement `swarm_mcp/servers/messaging.py` - Full MCP protocol
 - [ ] [MCP][P0][SWARM-006] Implement `swarm_mcp/servers/memory.py` - PackMemory MCP wrapper
 - [ ] [MCP][P0][SWARM-007] Implement `swarm_mcp/servers/tasks.py` - Task management MCP
 - [ ] [MCP][P0][SWARM-008] Implement `swarm_mcp/servers/control.py` - Coordination MCP

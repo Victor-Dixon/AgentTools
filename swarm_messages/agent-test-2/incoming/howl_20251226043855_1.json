@@ -1,0 +1,11 @@
+{
+  "id": "howl_20251226043855_1",
+  "sender": "agent-test-1",
+  "recipient": "agent-test-2",
+  "content": "Hello World",
+  "howl_type": "w2w",
+  "urgency": 3,
+  "timestamp": "2025-12-26T04:38:55.706796",
+  "metadata": {},
+  "heard": false
+}

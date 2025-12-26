@@ -53,6 +53,7 @@ Issues = "https://github.com/swarm-team/swarm-mcp/issues"
 
 [project.scripts]
 swarm = "swarm_mcp.cli:main"
+swarm-messaging-server = "swarm_mcp.servers.messaging:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["swarm_mcp"]
