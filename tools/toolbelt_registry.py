@@ -17,7 +17,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     # -------------------------------------------------------------------------
     "monitor": {
         "name": "Unified Monitor",
-        "module": "tools.unified_monitor",
+        "module": "tools.monitoring.unified_monitor",
         "main_function": "main",
         "description": "System-wide monitoring (Queue, Service, Disk, Agents, Workspace)",
         "flags": ["--monitor", "-m"],
@@ -25,7 +25,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "validator": {
         "name": "Unified Validator",
-        "module": "tools.unified_validator",
+        "module": "tools.validation.unified_validator",
         "main_function": "main",
         "description": "System-wide validation (SSOT, Imports, Config, Tracker)",
         "flags": ["--validate", "-V"],
@@ -33,7 +33,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "analyzer": {
         "name": "Unified Analyzer",
-        "module": "tools.unified_analyzer",
+        "module": "tools.analysis.unified_analyzer",
         "main_function": "main",
         "description": "System-wide analysis (Repository, Structure, Complexity, Overlap)",
         "flags": ["--analyze", "-a"],
@@ -41,7 +41,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "agent": {
         "name": "Unified Agent Tools",
-        "module": "tools.unified_agent",
+        "module": "tools.agent.unified_agent",
         "main_function": "main",
         "description": "Agent operations (Status, Tasks, Orientation, Onboarding)",
         "flags": ["--agent", "-A"],
@@ -49,7 +49,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "captain": {
         "name": "Unified Captain Tools",
-        "module": "tools.unified_captain",
+        "module": "tools.captain.unified_captain",
         "main_function": "main",
         "description": "Captain operations (Inbox, Coordination, Mission Control)",
         "flags": ["--captain", "-C"],
@@ -57,7 +57,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "cleanup": {
         "name": "Unified Cleanup",
-        "module": "tools.unified_cleanup",
+        "module": "tools.cleanup.unified_cleanup",
         "main_function": "main",
         "description": "System cleanup (Workspace, Archives, Logs)",
         "flags": ["--cleanup", "--clean"],
@@ -65,7 +65,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "discord": {
         "name": "Unified Discord",
-        "module": "tools.unified_discord",
+        "module": "tools.discord.unified_discord",
         "main_function": "main",
         "description": "Discord operations (Bot, Webhooks, Verification)",
         "flags": ["--discord"],
@@ -73,7 +73,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "github": {
         "name": "Unified GitHub",
-        "module": "tools.unified_github",
+        "module": "tools.github.unified_github",
         "main_function": "main",
         "description": "GitHub operations (PRs, Issues, Repo Audit)",
         "flags": ["--github", "--gh"],
@@ -81,7 +81,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "verifier": {
         "name": "Unified Verifier",
-        "module": "tools.unified_verifier",
+        "module": "tools.verification.unified_verifier",
         "main_function": "main",
         "description": "Deep verification (CI/CD, Merge, Credentials, Test Health)",
         "flags": ["--verify"],
@@ -89,7 +89,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "wordpress": {
         "name": "Unified WordPress",
-        "module": "tools.unified_wordpress",
+        "module": "tools.wordpress.unified_wordpress",
         "main_function": "main",
         "description": "WordPress operations (Deploy, Theme, Admin)",
         "flags": ["--wordpress", "--wp"],
@@ -101,7 +101,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     # -------------------------------------------------------------------------
     "check-sensitive": {
         "name": "Sensitive File Checker",
-        "module": "tools.check_sensitive_files",
+        "module": "tools.security.check_sensitive_files",
         "main_function": "main",
         "description": "Scan for sensitive files and credentials",
         "flags": ["--check-sensitive", "--sec-check"],
@@ -109,7 +109,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "audit-imports": {
         "name": "Import Auditor",
-        "module": "tools.audit_imports",
+        "module": "tools.validation.audit_imports",
         "main_function": "main",
         "description": "Audit Python imports and dependencies",
         "flags": ["--audit-imports"],
@@ -117,7 +117,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "diagnose-auth": {
         "name": "GitHub Auth Diagnoser",
-        "module": "tools.diagnose_github_cli_auth",
+        "module": "tools.debug.diagnose_github_cli_auth",
         "main_function": "main",
         "description": "Diagnose and fix GitHub CLI authentication",
         "flags": ["--diagnose-auth"],
@@ -125,7 +125,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "debug-queue": {
         "name": "Queue Debugger",
-        "module": "tools.debug_message_queue",
+        "module": "tools.debug.debug_message_queue",
         "main_function": "main",
         "description": "Debug message queue contents and state",
         "flags": ["--debug-queue"],
@@ -133,7 +133,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "fix-queue": {
         "name": "Queue Fixer",
-        "module": "tools.fix_message_queue",
+        "module": "tools.debug.fix_message_queue",
         "main_function": "main",
         "description": "Attempt to fix message queue issues",
         "flags": ["--fix-queue"],
@@ -141,7 +141,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "check-stuck": {
         "name": "Stuck Message Checker",
-        "module": "tools.check_stuck_messages",
+        "module": "tools.debug.check_stuck_messages",
         "main_function": "main",
         "description": "Identify stuck messages in the system",
         "flags": ["--check-stuck"],
@@ -149,7 +149,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "ci-debt": {
         "name": "CI Technical Debt Summary",
-        "module": "tools.tech_debt_ci_summary",
+        "module": "tools.analysis.tech_debt_ci_summary",
         "main_function": "main",
         "description": "Summarize technical debt in CI pipelines",
         "flags": ["--ci-debt"],
@@ -157,7 +157,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "swarm-patterns": {
         "name": "Swarm Pattern Analyzer",
-        "module": "tools.analyze_swarm_coordination_patterns",
+        "module": "tools.analysis.analyze_swarm_coordination_patterns",
         "main_function": "main",
         "description": "Analyze coordination patterns in the swarm",
         "flags": ["--swarm-patterns"],
@@ -165,7 +165,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "create-session": {
         "name": "Session Creator",
-        "module": "tools.create_work_session",
+        "module": "tools.captain.create_work_session",
         "main_function": "main",
         "description": "Create a new work session structure",
         "flags": ["--create-session", "--session"],
@@ -177,7 +177,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     # -------------------------------------------------------------------------
     "fix-types": {
         "name": "Type Annotation Fixer",
-        "module": "tools.type_annotation_fixer",
+        "module": "tools.devops.type_annotation_fixer",
         "main_function": "main",
         "description": "Add and fix type annotations",
         "flags": ["--fix-types"],
@@ -185,7 +185,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "suggest-refactor": {
         "name": "Refactoring Suggester",
-        "module": "tools.refactoring_suggestion_engine",
+        "module": "tools.analysis.refactoring_suggestion_engine",
         "main_function": "main",
         "description": "Generate refactoring suggestions",
         "flags": ["--suggest-refactor"],
@@ -193,7 +193,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "analyze-consolidation": {
         "name": "Consolidation Analyzer",
-        "module": "tools.consolidation_analyzer",
+        "module": "tools.analysis.consolidation_analyzer",
         "main_function": "main",
         "description": "Analyze opportunities for tool consolidation",
         "flags": ["--analyze-consolidation"],
@@ -201,7 +201,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "analyze-debt": {
         "name": "Technical Debt Analyzer",
-        "module": "tools.technical_debt_analyzer",
+        "module": "tools.analysis.technical_debt_analyzer",
         "main_function": "main",
         "description": "Deep scan for technical debt",
         "flags": ["--analyze-debt"],
@@ -209,7 +209,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "analyze-source": {
         "name": "Source Analyzer",
-        "module": "tools.source_analyzer",
+        "module": "tools.analysis.source_analyzer",
         "main_function": "main",
         "description": "Analyze source code statistics",
         "flags": ["--analyze-source"],
@@ -217,7 +217,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "analyze-tools": {
         "name": "Tool Analyzer",
-        "module": "tools.comprehensive_tool_analyzer",
+        "module": "tools.analysis.comprehensive_tool_analyzer",
         "main_function": "main",
         "description": "Analyze the tool ecosystem itself",
         "flags": ["--analyze-tools"],
@@ -225,7 +225,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "auto-cleanup": {
         "name": "Auto Workspace Cleaner",
-        "module": "tools.workspace_auto_cleaner",
+        "module": "tools.cleanup.workspace_auto_cleaner",
         "main_function": "main",
         "description": "Automated workspace maintenance",
         "flags": ["--auto-cleanup"],
@@ -233,7 +233,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "session-cleanup": {
         "name": "Session Cleanup",
-        "module": "tools.session_cleanup_automation",
+        "module": "tools.cleanup.session_cleanup_automation",
         "main_function": "main",
         "description": "Cleanup old sessions",
         "flags": ["--session-cleanup"],
@@ -241,7 +241,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "generate-docs": {
         "name": "Documentation Generator",
-        "module": "tools.documentation_assistant",
+        "module": "tools.devops.documentation_assistant",
         "main_function": "main",
         "description": "Assist in generating documentation",
         "flags": ["--generate-docs"],
@@ -249,7 +249,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "seo-extract": {
         "name": "SEO Meta Extractor",
-        "module": "tools.seo_meta_tag_extractor",
+        "module": "tools.analysis.seo_meta_tag_extractor",
         "main_function": "main",
         "description": "Extract SEO meta tags from files",
         "flags": ["--seo-extract"],
@@ -257,7 +257,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "schema-validate": {
         "name": "Schema Validator",
-        "module": "tools.schema_org_validator",
+        "module": "tools.validation.schema_org_validator",
         "main_function": "main",
         "description": "Validate Schema.org JSON-LD",
         "flags": ["--schema-validate"],
@@ -265,7 +265,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "master-task": {
         "name": "Master Task Claimer",
-        "module": "tools.claim_and_fix_master_task",
+        "module": "tools.captain.claim_and_fix_master_task",
         "main_function": "main",
         "description": "Workflow for claiming and fixing tasks",
         "flags": ["--master-task"],
@@ -273,7 +273,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "test-coordinator": {
         "name": "Integration Test Coordinator",
-        "module": "tools.integration_test_coordinator",
+        "module": "tools.verification.integration_test_coordinator",
         "main_function": "main",
         "description": "Coordinate integration tests",
         "flags": ["--test-coordinator"],
@@ -281,7 +281,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "template-lint": {
         "name": "Template Linter",
-        "module": "tools.template_structure_linter",
+        "module": "tools.validation.template_structure_linter",
         "main_function": "main",
         "description": "Lint template structures",
         "flags": ["--template-lint"],
@@ -289,7 +289,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "session-transition": {
         "name": "Session Transition",
-        "module": "tools.session_transition_automator",
+        "module": "tools.captain.session_transition_automator",
         "main_function": "main",
         "description": "Automate session transitions",
         "flags": ["--session-transition"],
@@ -297,7 +297,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "stress-queue": {
         "name": "Queue Stress Tester",
-        "module": "tools.stress_test_messaging_queue",
+        "module": "tools.verification.stress_test_messaging_queue",
         "main_function": "main",
         "description": "Stress test the messaging queue",
         "flags": ["--stress-queue"],
@@ -305,7 +305,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
     },
     "task-cli": {
         "name": "Task CLI",
-        "module": "tools.task_cli",
+        "module": "tools.captain.task_cli",
         "main_function": "main",
         "description": "Task management CLI",
         "flags": ["--task", "-t"],
