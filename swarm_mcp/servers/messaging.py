@@ -1,128 +1,127 @@
 #!/usr/bin/env python3
 """
-MCP Server for Swarm Messaging System (swarm_mcp)
+MCP Server for Swarm Messaging System
 Exposes messaging capabilities via Model Context Protocol
 """
 
 import json
 import sys
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from swarm_mcp.core.messaging import MessageQueue, HowlUrgency, HowlType
+try:
+    from swarm_mcp.core.messaging import get_queue, HowlUrgency, HowlType, MessageQueue
+    HAS_CORE = True
+except ImportError:
+    HAS_CORE = False
 
-def get_queue(territory: str = "./swarm_messages") -> MessageQueue:
-    """Get message queue instance."""
-    return MessageQueue(territory)
-
-def send_message(sender: str, recipient: str, content: str, urgency: str = "normal") -> dict:
+def send_agent_message(agent_id: str, message: str, priority: str = "regular") -> Dict[str, Any]:
     """Send message to an agent."""
-    try:
-        # Map urgency string to enum
-        urgency_map = {
-            "emergency": HowlUrgency.EMERGENCY,
-            "urgent": HowlUrgency.URGENT,
-            "normal": HowlUrgency.NORMAL,
-            "low": HowlUrgency.LOW
-        }
-        urgency_enum = urgency_map.get(urgency.lower(), HowlUrgency.NORMAL)
+    if not HAS_CORE:
+        return {"success": False, "error": "Swarm Core not available"}
 
+    try:
+        urgency = HowlUrgency.URGENT if priority.lower() == "urgent" else HowlUrgency.NORMAL
+        
+        # In this context, the "sender" is likely the user/MCP client, which we can call "CAPTAIN" or "USER"
         queue = get_queue()
-        msg = queue.send(
-            sender=sender,
-            recipient=recipient,
-            content=content,
-            urgency=urgency_enum
+        howl = queue.send(
+            sender="CAPTAIN",
+            recipient=agent_id,
+            content=message,
+            urgency=urgency,
+            howl_type=HowlType.WOLF_TO_WOLF
         )
 
         return {
             "success": True,
-            "id": msg.id,
-            "sender": msg.sender,
-            "recipient": msg.recipient,
-            "content": msg.content,
-            "timestamp": msg.timestamp.isoformat()
-        }
-    except Exception as e:
-        return {"success": False, "error": str(e)}
-
-def read_inbox(agent_id: str, unread_only: bool = False, limit: int = 50) -> dict:
-    """Read messages from inbox."""
-    try:
-        queue = get_queue()
-        messages = queue.listen(agent_id, unheard_only=unread_only, limit=limit)
-        
-        result_msgs = []
-        for msg in messages:
-            result_msgs.append({
-                "id": msg.id,
-                "sender": msg.sender,
-                "recipient": msg.recipient,
-                "content": msg.content,
-                "urgency": msg.urgency.name,
-                "timestamp": msg.timestamp.isoformat(),
-                "heard": msg.heard,
-                "type": msg.howl_type.value
-            })
-            
-        return {
-            "success": True,
             "agent": agent_id,
-            "count": len(result_msgs),
-            "messages": result_msgs
+            "message_sent": message,
+            "priority": priority,
+            "id": howl.id
         }
     except Exception as e:
         return {"success": False, "error": str(e)}
 
-def mark_as_read(agent_id: str, message_id: str) -> dict:
-    """Mark a message as read."""
-    try:
-        queue = get_queue()
-        success = queue.mark_heard(message_id, agent_id)
-        
-        if success:
-            return {"success": True, "message_id": message_id, "status": "marked_read"}
-        else:
-            return {"success": False, "error": "Message not found or already read"}
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+def broadcast_message(message: str, priority: str = "regular") -> Dict[str, Any]:
+    """Broadcast message to all agents."""
+    if not HAS_CORE:
+        return {"success": False, "error": "Swarm Core not available"}
 
-def broadcast_message(sender: str, content: str, pack: list[str], urgency: str = "normal") -> dict:
-    """Broadcast message to multiple agents."""
     try:
-        urgency_map = {
-            "emergency": HowlUrgency.EMERGENCY,
-            "urgent": HowlUrgency.URGENT,
-            "normal": HowlUrgency.NORMAL,
-            "low": HowlUrgency.LOW
-        }
-        urgency_enum = urgency_map.get(urgency.lower(), HowlUrgency.NORMAL)
-        
+        urgency = HowlUrgency.URGENT if priority.lower() == "urgent" else HowlUrgency.NORMAL
         queue = get_queue()
+        
+        # We need a list of agents. For now, we'll just broadcast to a known set or use a specific howl type
+        # But `broadcast` in core takes a list of wolves.
+        # We can try to discover wolves or just use a generic "pack" recipient if supported,
+        # but the core `broadcast` function iterates over the list.
+        # Let's see if we can get the pack list. 
+        # Ideally we'd use PackCoordinator, but we don't want to couple heavily here.
+        # For now, we'll scan the 'pack_messages' directory or just support a few default agents if we can't find them.
+        
+        # A simple way is to check who has an inbox in pack_messages
+        inboxes = [d.name for d in queue.territory.iterdir() if d.is_dir()]
+        if not inboxes:
+            # Fallback
+            inboxes = ["Agent-1", "Agent-2", "Agent-8"] # Common agents seen in workspace
+            
         howls = []
-        for wolf in pack:
-            msg = queue.send(
-                sender=sender,
+        for wolf in inboxes:
+            howl = queue.send(
+                sender="CAPTAIN",
                 recipient=wolf,
-                content=content,
-                urgency=urgency_enum,
+                content=message,
+                urgency=urgency,
                 howl_type=HowlType.PACK_HOWL
             )
-            howls.append(msg.id)
-            
+            howls.append(howl)
+
         return {
             "success": True,
-            "sender": sender,
-            "recipients": pack,
-            "message_count": len(howls),
-            "message_ids": howls
+            "total_agents": len(inboxes),
+            "message_sent": message,
+            "results": {h.recipient: True for h in howls}
         }
     except Exception as e:
         return {"success": False, "error": str(e)}
 
-# MCP Server Protocol
+def read_messages(agent_id: str, unread_only: bool = True, limit: int = 10) -> Dict[str, Any]:
+    """Read messages for an agent."""
+    if not HAS_CORE:
+        return {"success": False, "error": "Swarm Core not available"}
+        
+    try:
+        queue = get_queue()
+        howls = queue.listen(agent_id, unheard_only=unread_only, limit=limit)
+        
+        # Mark as heard if we read them? The tool definition should specify.
+        # Usually reading implies consuming.
+        for howl in howls:
+            if not howl.heard:
+                queue.mark_heard(howl.id, agent_id)
+                
+        return {
+            "success": True,
+            "agent_id": agent_id,
+            "count": len(howls),
+            "messages": [
+                {
+                    "id": h.id,
+                    "sender": h.sender,
+                    "content": h.content,
+                    "urgency": h.urgency.name,
+                    "timestamp": h.timestamp.isoformat()
+                }
+                for h in howls
+            ]
+        }
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
 def main():
     """MCP server main loop."""
     print(
@@ -134,113 +133,60 @@ def main():
                     "protocolVersion": "2024-11-05",
                     "capabilities": {
                         "tools": {
-                            "send_message": {
-                                "description": "Send a message to another agent",
+                            "send_agent_message": {
+                                "description": "Send message to a specific agent",
                                 "inputSchema": {
                                     "type": "object",
                                     "properties": {
-                                        "sender": {
+                                        "agent_id": {"type": "string"},
+                                        "message": {"type": "string"},
+                                        "priority": {
                                             "type": "string",
-                                            "description": "ID of the sending agent",
-                                        },
-                                        "recipient": {
-                                            "type": "string",
-                                            "description": "ID of the recipient agent",
-                                        },
-                                        "content": {
-                                            "type": "string",
-                                            "description": "Message content",
-                                        },
-                                        "urgency": {
-                                            "type": "string",
-                                            "enum": ["normal", "urgent", "emergency", "low"],
-                                            "default": "normal",
+                                            "enum": ["regular", "urgent"],
+                                            "default": "regular",
                                         },
                                     },
-                                    "required": ["sender", "recipient", "content"],
+                                    "required": ["agent_id", "message"],
                                 },
                             },
-                            "read_inbox": {
-                                "description": "Check your messages",
+                            "broadcast_message": {
+                                "description": "Broadcast message to all known agents",
                                 "inputSchema": {
                                     "type": "object",
                                     "properties": {
-                                        "agent_id": {
+                                        "message": {"type": "string"},
+                                        "priority": {
                                             "type": "string",
-                                            "description": "Your agent ID",
+                                            "enum": ["regular", "urgent"],
+                                            "default": "regular",
                                         },
-                                        "unread_only": {
-                                            "type": "boolean",
-                                            "description": "Only show unread messages",
-                                            "default": False,
-                                        },
-                                        "limit": {
-                                            "type": "integer",
-                                            "description": "Max messages to retrieve",
-                                            "default": 50,
-                                        },
+                                    },
+                                    "required": ["message"],
+                                },
+                            },
+                            "read_messages": {
+                                "description": "Read messages for an agent (and mark as read)",
+                                "inputSchema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "agent_id": {"type": "string"},
+                                        "unread_only": {"type": "boolean", "default": True},
+                                        "limit": {"type": "integer", "default": 10},
                                     },
                                     "required": ["agent_id"],
                                 },
                             },
-                            "mark_as_read": {
-                                "description": "Mark a message as read/heard",
-                                "inputSchema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "agent_id": {
-                                            "type": "string",
-                                            "description": "Your agent ID",
-                                        },
-                                        "message_id": {
-                                            "type": "string",
-                                            "description": "ID of the message to mark read",
-                                        },
-                                    },
-                                    "required": ["agent_id", "message_id"],
-                                },
-                            },
-                            "broadcast_message": {
-                                "description": "Broadcast message to multiple agents",
-                                "inputSchema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "sender": {
-                                            "type": "string",
-                                            "description": "ID of the sending agent",
-                                        },
-                                        "pack": {
-                                            "type": "array",
-                                            "items": {"type": "string"},
-                                            "description": "List of recipient agent IDs",
-                                        },
-                                        "content": {
-                                            "type": "string",
-                                            "description": "Message content",
-                                        },
-                                        "urgency": {
-                                            "type": "string",
-                                            "enum": ["normal", "urgent", "emergency", "low"],
-                                            "default": "normal",
-                                        },
-                                    },
-                                    "required": ["sender", "pack", "content"],
-                                },
-                            },
                         }
                     },
-                    "serverInfo": {"name": "swarm-messaging", "version": "0.1.0"},
+                    "serverInfo": {"name": "swarm-messaging", "version": "1.0.0"},
                 },
             }
         )
     )
     sys.stdout.flush()
 
-    # Handle tool calls
     for line in sys.stdin:
         try:
-            if not line.strip():
-                continue
             request = json.loads(line)
             method = request.get("method")
             params = request.get("params", {})
@@ -249,45 +195,28 @@ def main():
                 tool_name = params.get("name")
                 arguments = params.get("arguments", {})
 
-                result = {}
-                if tool_name == "send_message":
-                    result = send_message(**arguments)
-                elif tool_name == "read_inbox":
-                    result = read_inbox(**arguments)
-                elif tool_name == "mark_as_read":
-                    result = mark_as_read(**arguments)
+                if tool_name == "send_agent_message":
+                    result = send_agent_message(**arguments)
                 elif tool_name == "broadcast_message":
                     result = broadcast_message(**arguments)
+                elif tool_name == "read_messages":
+                    result = read_messages(**arguments)
                 else:
                     result = {"success": False, "error": f"Unknown tool: {tool_name}"}
 
-                print(
-                    json.dumps(
-                        {
-                            "jsonrpc": "2.0",
-                            "id": request.get("id"),
-                            "result": {"content": [{"type": "text", "text": json.dumps(result)}]},
-                        }
-                    )
-                )
+                print(json.dumps({
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "result": {"content": [{"type": "text", "text": json.dumps(result)}]}
+                }))
                 sys.stdout.flush()
         except Exception as e:
-            # Try to report error if we have an id, otherwise just log to stderr
-            try:
-                req_id = request.get("id") if 'request' in locals() else None
-                if req_id:
-                     print(
-                        json.dumps(
-                            {
-                                "jsonrpc": "2.0",
-                                "id": req_id,
-                                "error": {"code": -32603, "message": str(e)},
-                            }
-                        )
-                    )
-                     sys.stdout.flush()
-            except:
-                pass
+            print(json.dumps({
+                "jsonrpc": "2.0",
+                "id": request.get("id"),
+                "error": {"code": -32603, "message": str(e)}
+            }))
+            sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
