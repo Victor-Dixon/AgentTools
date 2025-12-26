@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "swarm-tools": {
+      "command": "swarm-tools-server"
+    },
+    "swarm-memory": {
+      "command": "swarm-memory-server"
+    },
+    "swarm-messaging": {
+      "command": "swarm-messaging-server"
+    },
+    "swarm-tasks": {
+      "command": "swarm-tasks-server"
+    },
+    "swarm-control": {
+      "command": "swarm-control-server"
+    }
+  }
+}

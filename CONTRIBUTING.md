@@ -1,54 +1,64 @@
-# Contributing to Swarm MCP
+# Contributing to the Swarm
 
-🐺 **WE ARE SWARM.**
+**🐺 WE ARE SWARM**
 
-Thank you for your interest in contributing to the Swarm MCP project. We are a pack, and we welcome new wolves who want to hunt with us.
+Thank you for your interest in contributing to the Swarm ecosystem. We are building a unified, autonomous development system.
 
-## 📜 Code of Conduct
+## 🌟 The Mission
 
-1.  **Be respectful.** We hunt together, we don't fight each other.
-2.  **Be collaborative.** "Alone we are strong. Together we are unstoppable."
-3.  **Be clean.** Leave the codebase better than you found it.
+Our goal is to create a self-improving, multi-agent system where every tool is accessible via a standardized interface (MCP) and organized by domain.
 
 ## 🛠️ Getting Started
 
-1.  **Fork the repository.**
-2.  **Clone your fork:**
+1.  **Clone the Repo**:
     ```bash
-    git clone https://github.com/YOUR_USERNAME/swarm-mcp.git
+    git clone https://github.com/your-org/swarm-mcp.git
     cd swarm-mcp
     ```
-3.  **Set up the environment:**
+
+2.  **Install Dependencies**:
     ```bash
     pip install -e ".[dev]"
     ```
 
-## 🧪 Testing
+3.  **Run the Toolbelt**:
+    ```bash
+    python tools/cli.py --list
+    ```
 
-Run the tests before submitting your changes:
+## 🏗️ Architecture
 
-```bash
-pytest
-```
+*   **`swarm_mcp/`**: Core logic (Consensus, Memory, DNA) and MCP Servers.
+*   **`tools/`**: Domain-specific CLI tools (Monitoring, Security, etc.).
+*   **`examples/`**: Runnable examples.
 
-## 📝 Pull Request Process
+## 📝 Pull Request Standards
 
-1.  Create a new branch for your feature or fix: `git checkout -b feature/my-new-feature`
-2.  Commit your changes: `git commit -m 'Add some feature'`
-3.  Push to the branch: `git push origin feature/my-new-feature`
-4.  Submit a pull request.
+1.  **Use the Toolbelt**: Before submitting, run:
+    ```bash
+    # Security Scan
+    python tools/cli.py --security-scan
+    
+    # Import Validation
+    python tools/cli.py --audit-imports
+    ```
 
-## 🎨 Coding Style
+2.  **Tests**: Ensure all tests pass.
+    ```bash
+    pytest
+    ```
 
-*   Follow PEP 8 guidelines.
-*   Use meaningful variable names.
-*   Document your code.
-*   We use `ruff` for linting and formatting.
+3.  **Commit Messages**: Use semantic commits (e.g., `feat: Add new agent`, `fix: Resolve queue deadlock`).
 
-## 🐺 Philosophy
+## 🤝 Adding New Tools
 
-*   **Autonomy:** Agents should be capable of independent action.
-*   **Coordination:** The power of the swarm comes from effective communication and consensus.
-*   **Resilience:** The system should handle failures gracefully.
+1.  Create your script in the appropriate `tools/<category>/` directory.
+2.  Register it in `tools/toolbelt_registry.py`.
+3.  Add it to `swarm_mcp/servers/tools.py` if it should be exposed to AI agents.
 
-Happy Hunting!
+## 💬 Community
+
+Join the pack. Discussion happens on GitHub Issues and Discord.
+
+---
+**"The strength of the wolf is the pack."**
