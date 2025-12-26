@@ -39,6 +39,11 @@
       "command": "python",
       "args": ["-m", "swarm_mcp.servers.testing"],
       "description": "🐺 Coverage analysis and mutation testing"
+    },
+    "mod-deployment": {
+      "command": "python",
+      "args": ["mcp_servers/mod_deployment_server.py"],
+      "description": "🎮 Thunderstore mod deployment automation for game servers"
     }
   }
 }
