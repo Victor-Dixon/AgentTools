@@ -59,6 +59,11 @@
       "command": "python",
       "args": ["mcp_servers/discord_integration_server.py"],
       "description": "💬 Discord webhooks, status posts, role sync, notifications"
+    },
+    "player-analytics": {
+      "command": "python",
+      "args": ["mcp_servers/player_analytics_server.py"],
+      "description": "📈 Player session tracking, engagement metrics, retention analytics"
     }
   }
 }
