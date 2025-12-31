@@ -8,6 +8,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/tasks');
 const projectRoutes = require('./routes/projects');
+const projectSharingRoutes = require('./routes/projectSharing');
 const boardRoutes = require('./routes/boards');
 const githubRoutes = require('./routes/github');
 const aiAgentRoutes = require('./routes/aiAgent');
@@ -80,6 +81,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/project-sharing', projectSharingRoutes);
 app.use('/api/boards', boardRoutes);
 app.use('/api/github', githubRoutes);
 app.use('/api/ai', aiAgentRoutes);

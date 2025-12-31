@@ -8,12 +8,11 @@ import {
   PhotoIcon,
   SparklesIcon,
   TrashIcon,
-  PinIcon,
+  BookmarkIcon,
   XMarkIcon,
   DocumentTextIcon,
   ClipboardIcon
 } from '@heroicons/react/24/outline';
-import { PinIcon as PinIconSolid } from '@heroicons/react/24/solid';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 
@@ -25,7 +24,7 @@ const Whiteboards = () => {
   const [uploading, setUploading] = useState(false);
   const queryClient = useQueryClient();
 
-  const { data: whiteboardsData, isLoading, error } = useQuery(
+  const { data: whiteboardsData, isLoading } = useQuery(
     ['whiteboards', searchQuery],
     () => whiteboardsAPI.getWhiteboards({ search: searchQuery }).then(res => res.data),
     { staleTime: 60000 }
@@ -219,7 +218,7 @@ const Whiteboards = () => {
               {/* Pin indicator */}
               {whiteboard.isPinned && (
                 <div className="absolute top-2 right-2 z-10">
-                  <PinIconSolid className="h-5 w-5 text-yellow-500" />
+                  <BookmarkIcon className="h-5 w-5 text-yellow-500 fill-yellow-500" />
                 </div>
               )}
 
@@ -300,11 +299,7 @@ const Whiteboards = () => {
                       className="text-gray-400 hover:text-yellow-500"
                       title={whiteboard.isPinned ? 'Unpin' : 'Pin'}
                     >
-                      {whiteboard.isPinned ? (
-                        <PinIconSolid className="h-4 w-4" />
-                      ) : (
-                        <PinIcon className="h-4 w-4" />
-                      )}
+                      <BookmarkIcon className={`h-4 w-4 ${whiteboard.isPinned ? 'text-yellow-500 fill-yellow-500' : ''}`} />
                     </button>
                     <button
                       onClick={() => setSelectedWhiteboard(whiteboard)}

@@ -112,6 +112,10 @@ if [ ! -z "$API_KEY" ]; then
     echo -e "${YELLOW}🤖 For Agents on Other Computers:${NC}"
     echo -e "   API URL:  ${GREEN}http://${LOCAL_IP}:5000/api/ai${NC}"
     echo -e "   API Key:  ${GREEN}${API_KEY}${NC}"
+    echo ""
+    echo -e "${YELLOW}🌐 To Access from Chromebook/Other Devices:${NC}"
+    echo -e "   Open browser and go to: ${GREEN}http://${LOCAL_IP}:3000${NC}"
+    echo -e "   Make sure both devices are on the same WiFi network!"
 fi
 echo ""
 echo -e "${BLUE}───────────────────────────────────────────${NC}"

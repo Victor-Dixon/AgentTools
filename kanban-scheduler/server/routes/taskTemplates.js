@@ -86,7 +86,7 @@ router.post('/create-from-template', authenticateAIAgent, [
 
     // Create tasks from template
     const createdTasks = [];
-    const errors = [];
+    const taskErrors = [];
 
     for (const category of template.categories || []) {
       const categoryName = category.name;
@@ -118,7 +118,7 @@ router.post('/create-from-template', authenticateAIAgent, [
           });
           createdTasks.push(task);
         } catch (error) {
-          errors.push({
+          taskErrors.push({
             category: categoryName,
             task: taskTemplate.title,
             error: error.message
@@ -130,7 +130,7 @@ router.post('/create-from-template', authenticateAIAgent, [
     res.status(201).json({
       message: `Created ${createdTasks.length} tasks from template "${template.name}"`,
       created: createdTasks.length,
-      errors: errors.length > 0 ? errors : undefined,
+      errors: taskErrors.length > 0 ? taskErrors : undefined,
       tasks: createdTasks
     });
   } catch (error) {

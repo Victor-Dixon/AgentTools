@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { projectsAPI } from '../services/api';
-import { PlusIcon, FolderIcon } from '@heroicons/react/24/outline';
+import { projectsAPI, projectSharingAPI } from '../services/api';
+import { PlusIcon, FolderIcon, UserPlusIcon, ShareIcon } from '@heroicons/react/24/outline';
 import LoadingSpinner from '../components/LoadingSpinner';
 import toast from 'react-hot-toast';
 import { getPhaseInfo } from '../utils/phases';
+import RequestAccessModal from '../components/RequestAccessModal';
 
 const Projects = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showRequestModal, setShowRequestModal] = useState(false);
   const [selectedType, setSelectedType] = useState('ALL');
+  const [requestUsername, setRequestUsername] = useState('');
+  const [requestProjectName, setRequestProjectName] = useState('');
   const queryClient = useQueryClient();
 
   const { data: projectsData, isLoading, error } = useQuery(
@@ -78,13 +82,22 @@ const Projects = () => {
           <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
           <p className="text-gray-600">Organize your work and life with projects</p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="btn-primary flex items-center gap-2"
-        >
-          <PlusIcon className="h-5 w-5" />
-          New Project
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowRequestModal(true)}
+            className="btn-outline flex items-center gap-2"
+          >
+            <UserPlusIcon className="h-5 w-5" />
+            Request Access
+          </button>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="btn-primary flex items-center gap-2"
+          >
+            <PlusIcon className="h-5 w-5" />
+            New Project
+          </button>
+        </div>
       </div>
 
       {/* Filter Tabs */}
@@ -135,9 +148,19 @@ const Projects = () => {
                         style={{ backgroundColor: project.color }}
                       />
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
+                          {!project.isOwner && (
+                            <ShareIcon className="h-4 w-4 text-gray-400" title="Shared project" />
+                          )}
+                        </div>
                         <div className="flex items-center gap-2 mt-1">
                           <p className="text-sm text-gray-600">{project.type}</p>
+                          {!project.isOwner && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                              Shared
+                            </span>
+                          )}
                           {project.phase && (
                             <span 
                               className="text-xs px-2 py-0.5 rounded-full font-medium"
@@ -150,6 +173,11 @@ const Projects = () => {
                             </span>
                           )}
                         </div>
+                        {!project.isOwner && project.user && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Owner: {project.user.name || project.user.username}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <span className={`badge ${
@@ -308,6 +336,89 @@ const Projects = () => {
           </div>
         </div>
       )}
+
+      {/* Request Access Modal */}
+      <div className={showRequestModal ? "fixed inset-0 z-50 overflow-y-auto" : "hidden"}>
+        <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div className="fixed inset-0 transition-opacity" onClick={() => setShowRequestModal(false)}>
+            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          </div>
+
+          <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                Request Project Access by Username
+              </h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Owner Username *
+                  </label>
+                  <input
+                    value={requestUsername}
+                    onChange={(e) => setRequestUsername(e.target.value)}
+                    className="input"
+                    placeholder="Enter the project owner's username"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Project Name *
+                  </label>
+                  <input
+                    value={requestProjectName}
+                    onChange={(e) => setRequestProjectName(e.target.value)}
+                    className="input"
+                    placeholder="Enter the project name"
+                    required
+                  />
+                </div>
+                
+                <p className="text-sm text-gray-500">
+                  Enter the username of the project owner and the name of the project you want to access.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                onClick={async () => {
+                  if (!requestUsername || !requestProjectName) {
+                    toast.error('Please fill in all fields');
+                    return;
+                  }
+                  try {
+                    await projectSharingAPI.requestAccessByUsername(requestUsername, requestProjectName);
+                    toast.success('Access request sent!');
+                    setShowRequestModal(false);
+                    setRequestUsername('');
+                    setRequestProjectName('');
+                  } catch (error) {
+                    toast.error(error.response?.data?.error || 'Failed to send request');
+                  }
+                }}
+                className="btn-primary"
+              >
+                Send Request
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowRequestModal(false);
+                  setRequestUsername('');
+                  setRequestProjectName('');
+                }}
+                className="btn-outline mr-3"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -136,4 +136,17 @@ export const whiteboardsAPI = {
   transcribeImage: (id) => api.post(`/whiteboards/${id}/transcribe`),
 };
 
+export const projectSharingAPI = {
+  requestAccess: (projectId, message) => api.post(`/project-sharing/request/${projectId}`, { message }),
+  requestAccessByUsername: (ownerUsername, projectName, message) => 
+    api.post('/project-sharing/request-by-username', { ownerUsername, projectName, message }),
+  getPendingInvitations: () => api.get('/project-sharing/pending-invitations'),
+  getMyRequests: () => api.get('/project-sharing/my-requests'),
+  respondToInvitation: (invitationId, action) => 
+    api.put(`/project-sharing/invitation/${invitationId}/respond`, { action }),
+  getProjectMembers: (projectId) => api.get(`/project-sharing/project/${projectId}/members`),
+  removeMember: (projectId, userId) => api.delete(`/project-sharing/project/${projectId}/members/${userId}`),
+  cancelRequest: (invitationId) => api.delete(`/project-sharing/request/${invitationId}`),
+};
+
 export default api;

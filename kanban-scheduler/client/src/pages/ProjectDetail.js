@@ -5,6 +5,7 @@ import { projectsAPI } from '../services/api';
 import { useTasks } from '../hooks/useTasks';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { ArrowLeftIcon, CalendarIcon, UsersIcon } from '@heroicons/react/24/outline';
+import ProjectAccessManager from '../components/ProjectAccessManager';
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -271,6 +272,18 @@ const ProjectDetail = () => {
                   {completedTasks} of {totalTasks} tasks completed
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Project Access & Members */}
+          <div className="card">
+            <div className="card-body">
+              <ProjectAccessManager
+                projectId={project.id}
+                projectName={project.name}
+                ownerUsername={project.user?.username}
+                isOwner={project.isOwner}
+              />
             </div>
           </div>
         </div>

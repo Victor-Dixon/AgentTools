@@ -30,17 +30,31 @@ router.get('/', authenticateToken, [
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
+    // Get projects where user is owner OR member
+    const memberProjects = await prisma.projectMember.findMany({
+      where: { userId: req.user.id },
+      select: { projectId: true }
+    });
+    const memberProjectIds = memberProjects.map(m => m.projectId);
+
     const where = {
-      userId: req.user.id
+      OR: [
+        { userId: req.user.id }, // Own projects
+        { id: { in: memberProjectIds } } // Shared projects
+      ]
     };
 
     if (type) where.type = type;
     if (status) where.status = status;
     if (phase) where.phase = phase;
     if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } }
+      where.AND = [
+        {
+          OR: [
+            { name: { contains: search, mode: 'insensitive' } },
+            { description: { contains: search, mode: 'insensitive' } }
+          ]
+        }
       ];
     }
 
@@ -48,6 +62,19 @@ router.get('/', authenticateToken, [
       prisma.project.findMany({
         where,
         include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true
+            }
+          },
+          members: {
+            where: { userId: req.user.id },
+            select: {
+              role: true
+            }
+          },
           _count: {
             select: {
               tasks: true
@@ -69,12 +96,14 @@ router.get('/', authenticateToken, [
       prisma.project.count({ where })
     ]);
 
-    // Add completion percentage to each project
+    // Add completion percentage and ownership info to each project
     const projectsWithStats = projects.map(project => ({
       ...project,
       completionPercentage: project._count.tasks > 0 
         ? Math.round((project.tasks.length / project._count.tasks) * 100)
-        : 0
+        : 0,
+      isOwner: project.userId === req.user.id,
+      myRole: project.userId === req.user.id ? 'OWNER' : (project.members[0]?.role || 'MEMBER')
     }));
 
     res.json({
@@ -95,38 +124,60 @@ router.get('/', authenticateToken, [
 // Get a single project
 router.get('/:id', authenticateToken, async (req, res) => {
   try {
+    // Check if user is owner or member
     const project = await prisma.project.findFirst({
       where: {
         id: req.params.id,
-        userId: req.user.id
+        OR: [
+          { userId: req.user.id },
+          { members: { some: { userId: req.user.id } } }
+        ]
       },
-      include: {
-        tasks: {
-          include: {
-            comments: {
-              select: {
-                id: true,
-                content: true,
-                createdAt: true,
-                user: {
-                  select: { id: true, username: true, name: true }
-                }
-              },
-              orderBy: { createdAt: 'desc' },
-              take: 5
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true
             }
           },
-          orderBy: [
-            { status: 'asc' },
-            { position: 'asc' }
-          ]
-        },
-        _count: {
-          select: {
-            tasks: true
+          members: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  username: true,
+                  name: true
+                }
+              }
+            }
+          },
+          tasks: {
+            include: {
+              comments: {
+                select: {
+                  id: true,
+                  content: true,
+                  createdAt: true,
+                  user: {
+                    select: { id: true, username: true, name: true }
+                  }
+                },
+                orderBy: { createdAt: 'desc' },
+                take: 5
+              }
+            },
+            orderBy: [
+              { status: 'asc' },
+              { position: 'asc' }
+            ]
+          },
+          _count: {
+            select: {
+              tasks: true
+            }
           }
         }
-      }
     });
 
     if (!project) {
@@ -143,9 +194,13 @@ router.get('/:id', authenticateToken, async (req, res) => {
       ? Math.round((taskStats.DONE || 0) / project._count.tasks * 100)
       : 0;
 
+    const myMember = project.members.find(m => m.userId === req.user.id);
+    
     res.json({
       project: {
         ...project,
+        isOwner: project.userId === req.user.id,
+        myRole: project.userId === req.user.id ? 'OWNER' : (myMember?.role || 'MEMBER'),
         stats: {
           totalTasks: project._count.tasks,
           completedTasks: taskStats.DONE || 0,

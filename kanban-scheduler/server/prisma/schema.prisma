@@ -21,11 +21,13 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relations
-  boards     Board[]
-  tasks      Task[]
-  projects   Project[]
-  comments   Comment[]
-  whiteboards Whiteboard[]
+  boards            Board[]
+  tasks             Task[]
+  projects          Project[]
+  comments          Comment[]
+  whiteboards       Whiteboard[]
+  projectMembers    ProjectMember[]
+  projectInvitations ProjectInvitation[]
 
   @@map("users")
 }
@@ -120,13 +122,16 @@ model Project {
   color       String        @default("#10B981")
   startDate   DateTime?
   endDate     DateTime?
+  isPublic    Boolean       @default(false) // Allow public access requests
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
   // Relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks  Task[]
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks      Task[]
+  members    ProjectMember[]
+  invitations ProjectInvitation[]
 
   @@map("projects")
 }
@@ -165,6 +170,39 @@ model Whiteboard {
   @@map("whiteboards")
 }
 
+model ProjectMember {
+  id        String   @id @default(cuid())
+  role      String   @default("MEMBER") // OWNER, ADMIN, MEMBER, VIEWER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_members")
+}
+
+model ProjectInvitation {
+  id        String   @id @default(cuid())
+  status    String   @default("PENDING") // PENDING, ACCEPTED, REJECTED, CANCELLED
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_invitations")
+}
+
 // Note: SQLite doesn't support enums, using String fields instead
 // Valid values:
 // TaskStatus: TODO, IN_PROGRESS, IN_REVIEW, DONE, BLOCKED, CANCELLED
@@ -172,3 +210,5 @@ model Whiteboard {
 // ProjectStatus: ACTIVE, ON_HOLD, COMPLETED, CANCELLED
 // ProjectType: PERSONAL, WORK, GITHUB, LEARNING, HEALTH, FINANCE, OTHER
 // ProjectPhase: 0A (Organization and Planning), 0B (Research), 1 (Design), 2 (Development), 3 (Testing), 4 (Deployment), 5 (Maintenance)
+// ProjectMemberRole: OWNER, ADMIN, MEMBER, VIEWER
+// ProjectInvitationStatus: PENDING, ACCEPTED, REJECTED, CANCELLED
