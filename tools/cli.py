@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Legacy CLI module shim for tooling expecting tools/cli.py."""
 
 from __future__ import annotations
