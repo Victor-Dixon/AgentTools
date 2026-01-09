@@ -17,9 +17,54 @@ try:
     from swarm_mcp.core.coordinator import PackCoordinator
 except ImportError:
     # Fallback/Mock for verification environments without full setup
+    class MockHowl:
+        def __init__(
+            self,
+            howl_id: str,
+            sender: str,
+            recipient: str,
+            content: str,
+            urgency: str,
+            howl_type: str,
+        ):
+            self.id = howl_id
+            self.sender = sender
+            self.recipient = recipient
+            self.content = content
+            self.urgency = urgency
+            self.howl_type = howl_type
+
+    class MockTerritory:
+        def iterdir(self):
+            return iter(())
+
     class MockQueue:
-        def send(self, *args, **kwargs): return True
-    def get_queue(): return MockQueue()
+        territory = MockTerritory()
+
+        def send(self, *args, **kwargs):
+            return MockHowl(
+                howl_id="mock-howl",
+                sender=kwargs.get("sender", "mock-sender"),
+                recipient=kwargs.get("recipient", "mock-recipient"),
+                content=kwargs.get("content", ""),
+                urgency=kwargs.get("urgency", HowlUrgency.NORMAL),
+                howl_type=kwargs.get("howl_type", HowlType.WOLF_TO_WOLF),
+            )
+
+        def count_unheard(self, agent_id):
+            return 0
+
+    def get_queue():
+        return MockQueue()
+
+    class HowlUrgency:
+        NORMAL = "normal"
+        URGENT = "urgent"
+
+    class HowlType:
+        WOLF_TO_WOLF = "wolf_to_wolf"
+        PACK_HOWL = "pack_howl"
+
     class PackCoordinator:
         def __init__(self, wolves, den): pass
         def roll_call(self): return {}
