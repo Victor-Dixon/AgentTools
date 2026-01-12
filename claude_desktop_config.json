@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "swarm-messaging": {
+      "command": "python",
+      "args": ["-m", "swarm_mcp.servers.messaging"],
+      "env": {
+        "PYTHONPATH": "D:/agent-tools"
+      }
+    },
+    "swarm-memory": {
+      "command": "python",
+      "args": ["-m", "swarm_mcp.servers.memory"],
+      "env": {
+        "PYTHONPATH": "D:/agent-tools"
+      }
+    },
+    "swarm-tasks": {
+      "command": "python",
+      "args": ["-m", "swarm_mcp.servers.tasks"],
+      "env": {
+        "PYTHONPATH": "D:/agent-tools"
+      }
+    },
+    "swarm-control": {
+      "command": "python",
+      "args": ["-m", "swarm_mcp.servers.control"],
+      "env": {
+        "PYTHONPATH": "D:/agent-tools"
+      }
+    },
+    "swarm-tools": {
+      "command": "python",
+      "args": ["-m", "swarm_mcp.servers.tools"],
+      "env": {
+        "PYTHONPATH": "D:/agent-tools"
+      }
+    }
+  }
+}
