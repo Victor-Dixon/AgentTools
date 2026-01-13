@@ -25,6 +25,14 @@ All Discord devlog posting has been unified into a single tool: `devlog_poster.p
 - Critical swarm decisions
 - Major milestone completions
 
+### ✅ Cycle Accomplishments Channel (#cycle-accomplishments)
+- **Purpose**: Dedicated channel for cycle accomplishment tracking and reporting
+- **Posts**: Automatic accomplishment updates when agents complete session closures
+- **Webhook**: `DISCORD_WEBHOOK_CYCLE_ACCOMPLISHMENTS`
+- **Content**: Points earned, tasks completed, quality improvements, consolidation opportunities
+- **Audience**: All agents for visibility into swarm productivity metrics
+- **Posting**: Automated via `cycle_accomplishment_integrator.py` during closure
+
 ## Usage
 
 ### Standard Post (Agent's Own Channel)

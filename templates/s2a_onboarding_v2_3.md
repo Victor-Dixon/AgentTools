@@ -69,7 +69,8 @@ ELSE → TRANSITION TO CLOSURE
 
 ### Ultra-Compressed Message Structure
 ```md
-# [HEADER] S2A ONBOARDING (SOFT) — v2.3 (FORCE-MULTIPLIER GATE + ONE-SCREEN LOOP)
+# [HEADER] S2A ONBOARDING (SOFT) — v2.3 SSOT (FORCE-MULTIPLIER GATE + ONE-SCREEN LOOP)
+# 🟢 SINGLE SOURCE OF TRUTH - Current canonical onboarding template
 
 ## 1. LOAD STATE
 cat agent_workspaces/{AGENT_ID}/rehydration.json
@@ -77,15 +78,21 @@ cat agent_workspaces/{AGENT_ID}/rehydration.json
 ## 2. EVALUATE GATE
 python tools/force_multiplier_gate.py --agent {AGENT_ID}
 
-## 3. EXECUTE OR BLOCK
-IF gate_pass:
+## 3. AI COORDINATION ANALYSIS (MANDATORY)
+```bash
+# Analyze task for coordination requirements
+mcp --server ai-orchestration analyze_task --task-description "[task from rehydration.json]"
+```
+
+## 4. EXECUTE OR BLOCK
+IF gate_pass AND ai_analysis_recommends_execution:
   RUN next_action.command (from rehydration.json)
   VALIDATE expected_output
   UPDATE rehydration.json
   LOOP until no next_action
 ELSE:
-  RECORD blocker
-  ESCALATE
+  RECORD blocker (gate failure or AI coordination recommendation)
+  ESCALATE with AI analysis results
   STOP
 ```
 

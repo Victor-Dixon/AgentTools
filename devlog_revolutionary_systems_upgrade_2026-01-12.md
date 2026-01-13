@@ -41,7 +41,7 @@
 #### Integration Architecture
 - **S2A v2.3:** Provides gate check and state management
 - **PyAutoGUI:** Executes actual visual mouse/keyboard interactions
-- **Combined:** `soft_onboard_agent.py` orchestrates both systems
+- **Combined:** `soft_onboard_cli.py` (SSOT) orchestrates both systems
 
 ### 3. Cycle Accomplishment System Enterprise Hardening
 **Problem:** Basic cycle logging with potential duplicates, crashes, drift

@@ -28,9 +28,19 @@
 
 ### Website Audit & Security
 - [x] [AUDIT][P0][WEBSITE-001] Generate comprehensive website audit report using Ollama tool. Source: Agent-2 initiative. Justification: Systematic analysis needed for website improvements. Proof: reports/comprehensive_website_audit_report.json. [COMPLETED by Agent-2]
-- [ ] [SECURITY][P0][WEBSITE-002] Fix plugin directory vulnerabilities across all WordPress sites. Source: Website audit. Justification: Directory browsing exposes sensitive files. Proof: reports/comprehensive_website_audit_report.json. [UNCLAIMED - Agent-3]
-- [ ] [SEO][P0][WEBSITE-003] Add missing meta descriptions to all websites. Source: Website audit. Justification: Critical for search engine visibility. Proof: reports/comprehensive_website_audit_report.json. [UNCLAIMED - Agent-7]
-- [ ] [UX][P0][WEBSITE-004] Implement call-to-action buttons on key landing pages. Source: Website audit. Justification: Users need clear next steps. Proof: reports/comprehensive_website_audit_report.json. [UNCLAIMED - Agent-7]
+- [x] [AUDIT][P0][WEBSITE-001-ENHANCED] Create enhanced audit report combining manual analysis + Ollama insights. Source: Tool reliability improvement. Justification: Hybrid approach provides better results than automated tools alone. Proof: reports/enhanced_audit_with_ollama.md. [COMPLETED by Agent-2]
+- [ ] [TOOL][P1][WEBSITE-002-TOOL] Fix automated Ollama audit tool timeout issues. Source: Tool reliability testing. Justification: Automated tool fails consistently, needs debugging. Proof: timeout errors in testing. [UNCLAIMED - Agent-8]
+- [ ] [SECURITY][P0][WEBSITE-003] Fix plugin directory vulnerabilities across all WordPress sites. Source: Website audit. Justification: Directory browsing exposes sensitive files. Proof: reports/enhanced_audit_with_ollama.md. [UNCLAIMED - Agent-3]
+- [ ] [SEO][P0][WEBSITE-004] Add missing meta descriptions to all websites. Source: Website audit. Justification: Critical for search engine visibility. Proof: reports/enhanced_audit_with_ollama.md. [UNCLAIMED - Agent-7]
+
+### Codebase Audit & Cleanup (Agent-2 Audit)
+- [x] [AUDIT][P0][CODEBASE-001] Complete comprehensive codebase audit of src/, tools/, scripts/, archive/. Source: Code quality initiative. Justification: Identify duplication, dead code, orphaned code for cleanup. Proof: CODEBASE_AUDIT_REPORT.md. [COMPLETED by Agent-2]
+- [ ] [AUDIT][P1][CODEBASE-002] Generate evidence manifests for dead files, duplicates, orphans. Source: Captain safety requirements. Justification: Path-level evidence required before deletions. Proof: audit_outputs/ directory. [PENDING - Agent-2]
+- [ ] [CLEANUP][P0][CODEBASE-003] Delete confirmed duplicate CLI handlers (5 files, 890 lines). Source: Audit findings. Justification: Safe deletions with evidence. Proof: audit_outputs/dead_files_confirmed.json. [PENDING - Captain Approval]
+- [ ] [ARCHITECTURE][P1][CODEBASE-004] Consolidate messaging services (15+ files → 1 service). Source: Service duplication audit. Justification: Eliminate maintenance overhead. Proof: audit_outputs/duplicate_clusters.json. [UNCLAIMED - Agent-8]
+- [ ] [ARCHITECTURE][P1][CODEBASE-005] Merge vector database services (4 services → 1). Source: Service duplication audit. Justification: Prevent data inconsistency. Proof: audit_outputs/duplicate_clusters.json. [UNCLAIMED - Agent-8]
+- [ ] [CLEANUP][P1][CODEBASE-006] Archive cleanup - remove obsolete files (30% reduction). Source: Archive audit. Justification: Reduce maintenance burden. Proof: CODEBASE_AUDIT_REPORT.md. [UNCLAIMED - Agent-3]
+- [ ] [UX][P0][WEBSITE-005] Implement call-to-action buttons on key landing pages. Source: Website audit. Justification: Users need clear next steps. Proof: reports/enhanced_audit_with_ollama.md. [UNCLAIMED - Agent-7]
 
 ### Package Publishing
 - [x] [INFRA][P0][SWARM-001] Build and test package locally with `pip install -e .`

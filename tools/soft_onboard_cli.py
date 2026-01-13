@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-Soft Onboard Agent - Integrated S2A v2.3 + PyAutoGUI Visual Onboarding
-======================================================================
+Soft Onboard CLI - SSOT Integrated S2A v2.3 + PyAutoGUI Visual Onboarding
+========================================================================
 
-CLI tool that combines S2A v2.3 rehydration logic with the real PyAutoGUI-based
-soft onboarding service for complete visual automation with animations.
+🟢 SINGLE SOURCE OF TRUTH (SSOT) - Canonical soft onboarding implementation
 
-This tool connects to the REAL soft onboarding system in Agent_Cellphone_V2_Repository
-that uses PyAutoGUI for visual chat interactions and animations.
+The authoritative soft onboarding CLI tool that combines S2A v2.3 rehydration logic
+with the real PyAutoGUI-based soft onboarding service for complete visual automation.
+
+This IS the working integrated system connecting to Agent_Cellphone_V2_Repository
+PyAutoGUI animations. All other versions have been merged/removed.
 
 Usage:
-    python tools/soft_onboard_agent.py --agent Agent-X
+    python tools/soft_onboard_cli.py --agent Agent-X
 
 Process:
 1. S2A v2.3: Load/create rehydration snapshot + force-multiplier gate check

@@ -71,6 +71,14 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
         "flags": ["--onboard-status"],
         "args_passthrough": True,
     },
+    "message": {
+        "name": "Agent Messaging (PyAutoGUI)",
+        "module": "tools.messaging_cli_wrapper",
+        "main_function": "main",
+        "description": "Send messages to agents via PyAutoGUI autonomous execution",
+        "flags": ["--message", "-msg"],
+        "args_passthrough": True,
+    },
     "captain": {
         "name": "Unified Captain Tools",
         "module": "tools.captain.unified_captain",
