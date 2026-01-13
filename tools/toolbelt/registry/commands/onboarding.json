@@ -1,0 +1,23 @@
+{
+  "namespace": "onboard",
+  "commands": [
+    {
+      "name": "onboard:soft",
+      "entry": "tools.toolbelt.cli.onboarding_cli:cmd_soft",
+      "description": "S2A v2.3 soft onboarding (rehydrate → gate → resume).",
+      "args": ["--agent Agent-X"]
+    },
+    {
+      "name": "onboard:status",
+      "entry": "tools.toolbelt.cli.onboarding_cli:cmd_status",
+      "description": "Show onboarding/rehydration readiness for an agent.",
+      "args": ["--agent Agent-X"]
+    },
+    {
+      "name": "onboard:hard",
+      "entry": "tools.toolbelt.cli.onboarding_cli:cmd_hard",
+      "description": "DESTRUCTIVE: hard reset agent workspace onboarding (requires --yes).",
+      "args": ["--agent Agent-X", "--yes", "--force (optional)", "--message (optional)"]
+    }
+  ]
+}

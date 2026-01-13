@@ -26,7 +26,7 @@ class OnboardingExecutor:
 
     def __init__(self):
         """Initialize onboarding executor."""
-        self.messaging_cli = "python -m src.services.messaging_cli"
+        self.soft_onboard_cli = "python tools/soft_onboard_cli.py"
 
     def execute(self, args) -> int:
         """
@@ -51,23 +51,19 @@ class OnboardingExecutor:
             return 1
 
     def _soft_onboarding(self, args) -> int:
-        """Execute soft onboarding (session cleanup)."""
-        if not args.agent or not args.message:
-            print("❌ --agent and --message required for soft onboarding")
+        """Execute soft onboarding with integrated S2A v2.3 + PyAutoGUI."""
+        if not args.agent:
+            print("❌ --agent required for soft onboarding")
             return 1
 
         cmd = [
             "python",
-            "-m",
-            "src.services.messaging_cli",
-            "--soft-onboarding",
+            "tools/soft_onboard_cli.py",
             "--agent",
             args.agent,
-            "--message",
-            args.message,
         ]
 
-        print(f"🔄 Soft onboarding {args.agent}...")
+        print(f"🚀 Soft onboarding {args.agent} with S2A v2.3 + PyAutoGUI...")
         result = subprocess.run(cmd, capture_output=False)
         return result.returncode
 

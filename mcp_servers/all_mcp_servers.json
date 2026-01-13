@@ -114,6 +114,16 @@
       "command": "python",
       "args": ["mcp_servers/player_analytics_server.py"],
       "description": "📈 Player session tracking, engagement metrics, retention analytics"
+    },
+    "website-audit": {
+      "command": "python",
+      "args": ["mcp_servers/website_audit_server.py"],
+      "description": "🔍 Website auditing with Ollama LLM screenshot analysis"
+    },
+    "ai-orchestration": {
+      "command": "python",
+      "args": ["mcp_servers/ai_orchestration_server.py"],
+      "description": "🤖 AI-powered agent coordination and intelligent task allocation"
     }
   }
 }

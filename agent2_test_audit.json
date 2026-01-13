@@ -1,0 +1,41 @@
+{
+  "url": "https://weareswarm.online",
+  "timestamp": 1768254041,
+  "success": true,
+  "method": "agent2_hybrid",
+  "content_stats": {
+    "word_count": 2138,
+    "size_kb": 39.9,
+    "images": 0,
+    "links": 9
+  },
+  "seo_analysis": {
+    "score": 90,
+    "issues": [
+      "Title too short"
+    ],
+    "recommendations": [
+      "Expand title to 30-60 characters"
+    ]
+  },
+  "ux_analysis": {
+    "score": 90,
+    "issues": [
+      "No contact/lead forms"
+    ],
+    "recommendations": [
+      "Add contact or lead capture forms"
+    ]
+  },
+  "ollama_insights": " Based on the website's content, here are three specific and actionable recommendations for improvement:\n\n1. Add a clear call-to-action (CTA) button: The website currently lacks a prominent CTA button that encourages visitors to take a specific action, such as making a reservation or ordering food. Consider adding a \"Book Now\" or \"Order Online\" button in a contrasting color and place it prominently on the homepage.\n2. Optimize for mobile devices: The website's current design may not be fully responsive, which can make it difficult for visitors to navigate on mobile devices. Ensure that the website is optimized for mobile devices by using media queries to adjust the layout and design accordingly.\n3. Use high-quality images: While the website currently uses placeholder images (lorem ipsum), consider replacing them with high-quality, relevant images of the restaurant's interior, menu items, or staff members. This will help visitors get a better sense of what to expect when they visit the restaurant. ",
+  "scores": {
+    "overall_score": "Overall Score: 90.0/100",
+    "seo_score": "SEO Score: 90/100",
+    "ux_score": "UX Score: 90/100"
+  },
+  "priority_actions": [],
+  "recommendations": [
+    "Expand title to 30-60 characters",
+    "Add contact or lead capture forms"
+  ]
+}

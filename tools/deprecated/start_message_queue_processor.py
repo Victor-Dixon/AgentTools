@@ -22,6 +22,10 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root))
 
+# Also add the main repository path for src imports
+main_repo_path = Path(__file__).resolve().parent.parent.parent / "Agent_Cellphone_V2_Repository"
+sys.path.insert(0, str(main_repo_path))
+
 # Configure logging with both console and file handlers
 log_dir = Path(__file__).resolve().parent.parent / "logs"
 log_dir.mkdir(parents=True, exist_ok=True)
@@ -42,7 +46,7 @@ logger = logging.getLogger(__name__)
 def main():
     """Start the message queue processor."""
     try:
-        from src.core.message_queue_processor import MessageQueueProcessor
+        from src.core.message_queue_processor.core.processor import MessageQueueProcessor
         
         logger.info("🚀 Starting Message Queue Processor...")
         logger.info("📬 This will process queued messages and deliver them via PyAutoGUI")

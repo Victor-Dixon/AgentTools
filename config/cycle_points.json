@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "description": "Cycle accomplishment point scoring configuration",
+  "points": {
+    "per_task": 10,
+    "per_issue": 5,
+    "per_consolidation": 15,
+    "per_quality_check": 8
+  },
+  "caps": {
+    "max_points_per_closure": 200,
+    "max_tasks_per_closure": 20,
+    "max_issues_per_closure": 50,
+    "max_consolidations_per_closure": 10
+  },
+  "multipliers": {
+    "first_time_bonus": 1.2,
+    "complexity_multiplier": {
+      "simple": 0.8,
+      "moderate": 1.0,
+      "complex": 1.3
+    }
+  }
+}

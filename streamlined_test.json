@@ -1,0 +1,30 @@
+{
+  "results": {
+    "https://weareswarm.online": {
+      "url": "https://weareswarm.online",
+      "timestamp": 1768254156,
+      "success": true,
+      "method": "agent2_streamlined",
+      "content_stats": {
+        "words": 2138,
+        "size_kb": 39.9,
+        "images": 0,
+        "links": 4
+      },
+      "scores": {
+        "overall": "Overall Score: 90.0/100",
+        "seo": "SEO Score: 90/100",
+        "ux": "UX Score: 90/100"
+      },
+      "issues": [
+        "Title too short",
+        "No contact forms"
+      ],
+      "recommendations": [
+        "Add contact/lead capture forms"
+      ],
+      "ollama_insights": " Based on the analysis of the website <https://weareswarm.online>, here are two recommendations for agents to implement:\n\n1. Add high-quality images: The website currently has no images. Adding relevant and high-quality images can help improve the visual appeal of the website, making it more engaging for visitors. For example, adding images of the restaurant's interior, exterior, menu items, or staff can help potential customers get a better idea of what to expect when they visit.\n2. Optimize the CTA: The website has a CTA that reads \"Donec vehicula vulputate hendrerit.\" However, it is not clear what action the visitor is supposed to take after clicking on the CTA. To improve the effectiveness of the CTA, agents should consider adding more specific and compelling language that clearly communicates the desired action, such as \"Book a Table Now\" or \"Learn More About Our Menu.\" Additionally",
+      "priority_actions": []
+    }
+  }
+}
