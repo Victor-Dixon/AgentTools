@@ -7,18 +7,25 @@ Exposes messaging capabilities via Model Context Protocol
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
-    from swarm_mcp.core.messaging import get_queue, HowlUrgency, HowlType, MessageQueue
+    from swarm_mcp.core.messaging import get_queue, HowlUrgency, HowlType
+    from swarm_mcp.core.messaging_templates import render_message_template, MessageTemplateCategory
     HAS_CORE = True
 except ImportError:
     HAS_CORE = False
 
-def send_agent_message(agent_id: str, message: str, priority: str = "regular") -> Dict[str, Any]:
+def send_agent_message(
+    agent_id: str,
+    message: str,
+    priority: str = "regular",
+    category: str = "C2A",
+    sender: str = "CAPTAIN",
+) -> Dict[str, Any]:
     """Send message to an agent."""
     if not HAS_CORE:
         return {"success": False, "error": "Swarm Core not available"}
@@ -26,12 +33,18 @@ def send_agent_message(agent_id: str, message: str, priority: str = "regular") -
     try:
         urgency = HowlUrgency.URGENT if priority.lower() == "urgent" else HowlUrgency.NORMAL
         
-        # In this context, the "sender" is likely the user/MCP client, which we can call "CAPTAIN" or "USER"
         queue = get_queue()
-        howl = queue.send(
-            sender="CAPTAIN",
+        formatted = render_message_template(
+            category=MessageTemplateCategory[category.upper()],
+            sender=sender,
             recipient=agent_id,
-            content=message,
+            body=message,
+            priority=priority,
+        )
+        howl = queue.send(
+            sender=sender,
+            recipient=agent_id,
+            content=formatted,
             urgency=urgency,
             howl_type=HowlType.WOLF_TO_WOLF
         )
@@ -39,14 +52,19 @@ def send_agent_message(agent_id: str, message: str, priority: str = "regular") -
         return {
             "success": True,
             "agent": agent_id,
-            "message_sent": message,
+            "message_sent": formatted,
             "priority": priority,
             "id": howl.id
         }
     except Exception as e:
         return {"success": False, "error": str(e)}
 
-def broadcast_message(message: str, priority: str = "regular") -> Dict[str, Any]:
+def broadcast_message(
+    message: str,
+    priority: str = "regular",
+    category: str = "C2A",
+    sender: str = "CAPTAIN",
+) -> Dict[str, Any]:
     """Broadcast message to all agents."""
     if not HAS_CORE:
         return {"success": False, "error": "Swarm Core not available"}
@@ -71,10 +89,17 @@ def broadcast_message(message: str, priority: str = "regular") -> Dict[str, Any]
             
         howls = []
         for wolf in inboxes:
-            howl = queue.send(
-                sender="CAPTAIN",
+            formatted = render_message_template(
+                category=MessageTemplateCategory[category.upper()],
+                sender=sender,
                 recipient=wolf,
-                content=message,
+                body=message,
+                priority=priority,
+            )
+            howl = queue.send(
+                sender=sender,
+                recipient=wolf,
+                content=formatted,
                 urgency=urgency,
                 howl_type=HowlType.PACK_HOWL
             )
@@ -84,6 +109,7 @@ def broadcast_message(message: str, priority: str = "regular") -> Dict[str, Any]
             "success": True,
             "total_agents": len(inboxes),
             "message_sent": message,
+            "category": category.upper(),
             "results": {h.recipient: True for h in howls}
         }
     except Exception as e:
@@ -145,6 +171,12 @@ def main():
                                             "enum": ["regular", "urgent"],
                                             "default": "regular",
                                         },
+                                        "category": {
+                                            "type": "string",
+                                            "enum": ["S2A", "D2A", "C2A", "A2A"],
+                                            "default": "C2A",
+                                        },
+                                        "sender": {"type": "string", "default": "CAPTAIN"},
                                     },
                                     "required": ["agent_id", "message"],
                                 },
@@ -160,6 +192,12 @@ def main():
                                             "enum": ["regular", "urgent"],
                                             "default": "regular",
                                         },
+                                        "category": {
+                                            "type": "string",
+                                            "enum": ["S2A", "D2A", "C2A", "A2A"],
+                                            "default": "C2A",
+                                        },
+                                        "sender": {"type": "string", "default": "CAPTAIN"},
                                     },
                                     "required": ["message"],
                                 },

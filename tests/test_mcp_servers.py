@@ -4,6 +4,8 @@ import subprocess
 from pathlib import Path
 import pytest
 
+from swarm_mcp.servers.messaging import broadcast_message, send_agent_message
+
 # Add workspace root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -94,3 +96,27 @@ class TestMCPServers:
         assert "select_next_task" in tools
         assert "verify_task_completion" in tools
         assert "recover_system" in tools
+
+    def test_send_agent_message_applies_template(self):
+        """send_agent_message should render the selected template category."""
+        result = send_agent_message(
+            agent_id="Agent-Template-1",
+            message="Execute validation",
+            category="A2A",
+            sender="Agent-2",
+        )
+
+        assert result["success"] is True
+        assert "[HEADER] A2A" in result["message_sent"]
+        assert "#A2A" in result["message_sent"]
+
+    def test_broadcast_message_applies_template(self):
+        """broadcast_message should render the selected template category."""
+        result = broadcast_message(
+            message="Kick off sync",
+            category="C2A",
+            sender="CAPTAIN",
+        )
+
+        assert result["success"] is True
+        assert result["category"] == "C2A"
