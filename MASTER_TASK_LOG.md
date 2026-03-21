@@ -1,9 +1,36 @@
-- [ ] [MAINTENANCE][HIGH][TASK-001] Fix broken links in footer [CLAIMED BY Agent-5]
 # 🐺 MASTER TASK LOG - WE ARE SWARM
 
-**Last Updated:** 2025-12-29
+**Last Updated:** 2026-03-21
 **Status:** Active Development
 **Package:** swarm-mcp v0.1.0
+
+---
+
+## 🧭 CURRENT PROJECT STANCE (HUMAN-READABLE SSOT)
+
+### Where we are now
+- **Phase:** Phase 0A — Consolidation + Packaging Readiness
+- **Date locked:** 2026-03-21
+- **Reality check:** Core architecture exists, but release pipeline is **not complete** because PyPI publication tasks are still open.
+
+### What this means
+- We are **not** in launch phase yet.
+- We are in **finish-the-foundation** mode: complete packaging tasks, then move to launch checklist.
+
+### Immediate critical path (in order)
+1. **SWARM-002** — Create PyPI account + API token
+2. **SWARM-003** — Build and publish package to PyPI
+3. **SWARM-004** — Verify fresh install from PyPI
+
+### Branch / merge stance
+- Current active branch: `work`
+- Local branches: `work` only
+- Consolidation state: already single-branch locally (no local branch merges pending)
+
+### What to ask the agent next (copy/paste)
+- `Complete SWARM-002 and document exact token setup steps in MASTER_TASK_LOG.md.`
+- `Run SWARM-003: build and publish to PyPI; record command outputs and any blockers.`
+- `Run SWARM-004 in a clean environment and confirm install/import works end-to-end.`
 
 ---
 
