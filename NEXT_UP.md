@@ -1,73 +1,64 @@
-# NEXT UP — PROJECT ROADMAP DASHBOARD (SSOT COMPANION)
+# NEXT UP — SWARM MCP EXECUTION DASHBOARD
 
-**Updated:** 2026-03-21  
+**Updated:** 2026-03-23  
 **Primary SSOT:** `MASTER_TASK_LOG.md`  
-**Purpose of this file:** give humans a fast, accurate view of current phase, next actions, and exact agent asks.
+**Scope:** Packaging readiness only (Phase 0A)
 
 ---
 
-## 1) Current Phase (Plain English)
+## What this project even is
 
-**We are in:** **Phase 0A — Consolidation + Packaging Readiness**  
-**We are not yet in:** Launch / Growth phases.
+SWARM MCP is a Python package (`swarm-mcp`) for multi-agent coordination over MCP.
+It includes:
+- a CLI for agent coordination workflows,
+- MCP server entry points in `swarm_mcp/servers/`,
+- core coordination modules in `swarm_mcp/core/`.
 
-Reason: packaging-to-release chain is incomplete until SWARM-002/003/004 are finished.
-
----
-
-## 2) Current Status Snapshot
-
-- ✅ Core swarm modules and major MCP server surfaces exist.
-- ✅ Testing foundation is present.
-- ⚠️ PyPI release path is still blocked by account/token + publish + install verification tasks.
-- ✅ Local branch situation is already consolidated to one branch: `work`.
+This dashboard is the human-readable companion to the SSOT task log.
 
 ---
 
-## 3) Critical Path (Do In This Order)
+## Where we are now (accurate status)
 
-1. **SWARM-002 (Account & Token)**
-   - Create PyPI account
-   - Create API token
-   - Store token securely for CI/local publish flow
+**Current phase:** Phase 0A — Consolidation + Packaging Readiness  
+**Release state:** Not yet published to PyPI  
+**Blocking tasks:** SWARM-002, SWARM-003, SWARM-004
 
-2. **SWARM-003 (Publish)**
-   - Run package build
-   - Publish with twine
-   - Record exact command outputs in task log
-
-3. **SWARM-004 (Verify Install)**
-   - Test install in clean environment
-   - Validate import + CLI sanity checks
-   - Mark ready-for-launch-gate if successful
+Interpretation: implementation exists and local package workflows exist, but external release verification is incomplete.
 
 ---
 
-## 4) What We Should Ask the Agent Next (Ready-to-send prompts)
+## Inventory proof snapshot (evidence as of 2026-03-23)
 
-### Prompt A — SWARM-002
-`Complete SWARM-002 now: create a PyPI setup checklist, document token creation/storage steps, and update MASTER_TASK_LOG.md with completion status and date.`
+- `swarm_mcp/servers/*.py` count: **5** (`control.py`, `memory.py`, `messaging.py`, `tasks.py`, `tools.py`)
+- CLI subcommands defined in `swarm_mcp/cli.py`: **12** (`status`, `send`, `inbox`, `search`, `learn`, `tasks`, `assign`, `vote`, `conflict`, `profile`, `prove`, `patterns`)
+- Active local branch: **work**
 
-### Prompt B — SWARM-003
-`Execute SWARM-003 now: run build + publish commands, capture outputs/errors, and update MASTER_TASK_LOG.md with exact results.`
-
-### Prompt C — SWARM-004
-`Execute SWARM-004 in a clean environment: install swarm-mcp from PyPI, verify import and CLI smoke test, then update MASTER_TASK_LOG.md and NEXT_UP.md.`
+These are evidence points, not goals.
 
 ---
 
-## 5) Definition of “Phase Complete” for 0A
+## What we should focus on next (strict order)
 
-Phase 0A is complete only when:
-- [ ] SWARM-002 complete
-- [ ] SWARM-003 complete
-- [ ] SWARM-004 complete
-- [ ] Launch checklist can be entered without blockers
+1. **SWARM-002 — PyPI account/token readiness**
+   - confirm account owner and token scope
+   - document token storage path for CI/local publish
+2. **SWARM-003 — Build and publish**
+   - run `python -m build`
+   - run `twine upload dist/*`
+   - capture exact output in `MASTER_TASK_LOG.md`
+3. **SWARM-004 — Fresh install verification**
+   - in clean env: `pip install swarm-mcp`
+   - verify import + minimal CLI smoke test
 
 ---
 
-## 6) Update Rule
+## Definition of done for this transition
 
-After any critical-path task is completed, update:
-1. `MASTER_TASK_LOG.md` (SSOT status first)
-2. `NEXT_UP.md` (human dashboard second)
+This transition is complete only when all are true:
+- [ ] SSOT has an accurate status statement (phase + blockers + release state)
+- [ ] inventory proof snapshot is updated with dated, reproducible evidence
+- [ ] SWARM-002 marked complete with concrete token setup record
+- [ ] SWARM-003 marked complete with actual publish command output
+- [ ] SWARM-004 marked complete with clean install/import verification output
+
