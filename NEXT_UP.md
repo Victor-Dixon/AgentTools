@@ -68,3 +68,22 @@ This transition is complete only when all are true:
 ## Operator handoff note (2026-03-24)
 
 SWARM-002 was completed on 2026-03-24 with redacted credential evidence recorded in SSOT. Proceed immediately to SWARM-003.
+
+---
+
+## Tooling stream update (mirrors SSOT, 2026-03-24 UTC)
+
+### Completed now
+- Import healer confidence hardening and safe rewrite gating shipped in `tools/swarm/agents/import_healer.py`.
+- Local fixture-based validation added under `tools/swarm/tests/`.
+- Recovery registry updated at `docs/recovery/recovery_registry.yaml` for new files.
+
+### Commands run (2026-03-24 UTC)
+- `python -m py_compile tools/swarm/agents/import_healer.py tools/swarm/tests/validate_import_healer.py tools/swarm/tests/test_import_healer.py`
+- `python tools/swarm/tests/validate_import_healer.py`
+- `python -m pytest -q tools/swarm/tests/test_import_healer.py`
+- `python -m coverage run tools/swarm/tests/validate_import_healer.py` *(failed: module not installed)*
+
+### Active blockers
+- Coverage tooling is not installed in the current environment, so coverage non-regression could not be measured.
+- No CI-enforced "coverage must not dip" threshold is currently wired for this tooling stream.
