@@ -34,7 +34,7 @@ This file is the **single source of truth** for project execution status.
 
 ## Evidence-based inventory snapshot (proof)
 
-Evidence collected 2026-03-23:
+Evidence collected 2026-03-23 (reproducible commands + outputs):
 
 1. **MCP server files present:** 5
    - `control.py`, `memory.py`, `messaging.py`, `tasks.py`, `tools.py`
@@ -44,6 +44,31 @@ Evidence collected 2026-03-23:
 
 > These values replace older stale claims (e.g., "13 MCP servers", "7 CLI commands").
 
+### Repro commands (run 2026-03-23)
+
+```bash
+python - <<'PY'
+from pathlib import Path
+import re
+servers = sorted(p.name for p in Path('swarm_mcp/servers').glob('*.py') if p.name != '__init__.py')
+print('server_count:', len(servers))
+print('server_files:', ', '.join(servers))
+text = Path('swarm_mcp/cli.py').read_text()
+cmds = re.findall(r'subparsers\\.add_parser\\("([^"]+)"', text)
+print('cli_subcommands_count:', len(cmds))
+print('cli_subcommands:', ', '.join(cmds))
+PY
+git branch --format='%(refname:short)'
+```
+
+```text
+server_count: 5
+server_files: control.py, memory.py, messaging.py, tasks.py, tools.py
+cli_subcommands_count: 12
+cli_subcommands: status, send, inbox, search, learn, tasks, assign, vote, conflict, profile, prove, patterns
+work
+```
+
 ---
 
 ## Critical path (must execute in order)
@@ -51,6 +76,25 @@ Evidence collected 2026-03-23:
 - [ ] [INFRA][P0][SWARM-002] Create/confirm PyPI account and API token; document secure storage steps.
 - [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*` and record exact output.
 - [ ] [INFRA][P0][SWARM-004] Verify clean install: `pip install swarm-mcp`; verify import + CLI smoke test.
+
+### SWARM-002 execution log (2026-03-24)
+
+- SSOT-aligned secure storage runbook added: `docs/release/SWARM-002_PYPI_TOKEN_RUNBOOK.md`
+- Runbook defines:
+  - project-scoped token requirement (`swarm-mcp`)
+  - local secure publish pattern (runtime env var + `__token__`)
+  - CI secret standard (`PYPI_API_TOKEN`) and `twine` usage
+  - non-secret evidence template for completion logging
+- Current status: **not complete yet** (maintainer PyPI credential action still required).
+
+#### SWARM-002 completion gate (must be filled after maintainer action)
+
+- Execution date (UTC): `TBD`
+- PyPI account username: `TBD`
+- Token scope confirmed: `TBD`
+- Local secure storage confirmed: `TBD`
+- CI secret `PYPI_API_TOKEN` confirmed: `TBD`
+- Evidence note added with secrets redacted: `TBD`
 
 ---
 
@@ -85,4 +129,3 @@ The current transition is done only when:
 - [ ] SWARM-002 complete with concrete evidence
 - [ ] SWARM-003 complete with concrete evidence
 - [ ] SWARM-004 complete with concrete evidence
-
