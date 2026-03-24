@@ -128,3 +128,34 @@ The current transition is done only when:
 - [x] SWARM-002 complete with concrete evidence
 - [ ] SWARM-003 complete with concrete evidence
 - [ ] SWARM-004 complete with concrete evidence
+
+---
+
+## Tooling lane update — import healer confidence hardening (2026-03-24 UTC)
+
+### Scope completed
+- Added `tools/swarm/agents/import_healer.py` with confidence-tiered rewrite decisions:
+  - `high`: exact module match via explicit rewrite map target
+  - `medium`: unique suffix match from discovered module inventory
+  - `none`: ambiguous suffix matches (no rewrite applied)
+- Added `tools/swarm/tests/fixtures/` fixture set and `tools/swarm/tests/validate_import_healer.py` validation harness.
+- Added `docs/recovery/recovery_registry.yaml` entries for the new recovery-relevant files.
+
+### Evidence commands (run 2026-03-24 UTC)
+```bash
+python -m py_compile tools/swarm/agents/import_healer.py tools/swarm/tests/validate_import_healer.py tools/swarm/tests/test_import_healer.py
+python tools/swarm/tests/validate_import_healer.py
+python -m pytest -q tools/swarm/tests/test_import_healer.py
+python -m coverage run tools/swarm/tests/validate_import_healer.py
+```
+
+### Evidence output snapshot
+```text
+import_healer validation passed
+1 passed in 0.18s
+python: No module named coverage
+```
+
+### Blockers / risks
+- Coverage package is missing in this environment (`No module named coverage`), so numeric baseline/delta could not be computed.
+- Repository-wide automated coverage gate is not yet enforced in CI for this tooling stream.
