@@ -131,31 +131,77 @@ The current transition is done only when:
 
 ---
 
-## Tooling lane update — import healer confidence hardening (2026-03-24 UTC)
+## Tooling lane update — import healer coverage non-regression gate (2026-03-24 UTC)
 
 ### Scope completed
-- Added `tools/swarm/agents/import_healer.py` with confidence-tiered rewrite decisions:
-  - `high`: exact module match via explicit rewrite map target
-  - `medium`: unique suffix match from discovered module inventory
-  - `none`: ambiguous suffix matches (no rewrite applied)
-- Added `tools/swarm/tests/fixtures/` fixture set and `tools/swarm/tests/validate_import_healer.py` validation harness.
-- Added `docs/recovery/recovery_registry.yaml` entries for the new recovery-relevant files.
+- Installed/enabled coverage tooling path for this stream:
+  - local gate command: `python tools/swarm/tests/check_import_healer_coverage.py`
+  - CI gate step added in `.github/workflows/swarm_ci.yml`
+  - dev dependency includes `coverage>=7.6` in `pyproject.toml`
+- Updated validation harness (`tools/swarm/tests/validate_import_healer.py`) to run `import_healer` in-process so the stream is traceable by coverage tooling.
+- Added baseline + gate artifacts:
+  - `tools/swarm/tests/import_healer_coverage_baseline.json`
+  - `tools/swarm/tests/check_import_healer_coverage.py`
+- Updated `docs/recovery/recovery_registry.yaml` with new recovery-relevant files.
 
 ### Evidence commands (run 2026-03-24 UTC)
 ```bash
 python -m py_compile tools/swarm/agents/import_healer.py tools/swarm/tests/validate_import_healer.py tools/swarm/tests/test_import_healer.py
-python tools/swarm/tests/validate_import_healer.py
 python -m pytest -q tools/swarm/tests/test_import_healer.py
-python -m coverage run tools/swarm/tests/validate_import_healer.py
+python tools/swarm/tests/check_import_healer_coverage.py --write-baseline
+python tools/swarm/tests/check_import_healer_coverage.py
+cat > /tmp/import_healer_coverage_strict.json <<'JSON'
+{
+  "baseline_percent": {
+    "tools/swarm/agents/import_healer.py": 99.99,
+    "tools/swarm/tests/validate_import_healer.py": 99.99,
+    "tools/swarm/tests/test_import_healer.py": 100.0
+  }
+}
+JSON
+python tools/swarm/tests/check_import_healer_coverage.py --baseline-file /tmp/import_healer_coverage_strict.json
 ```
 
 ### Evidence output snapshot
 ```text
-import_healer validation passed
-1 passed in 0.18s
-python: No module named coverage
+============================== 1 passed in 0.05s ===============================
+Baseline written to tools/swarm/tests/import_healer_coverage_baseline.json
+- tools/swarm/agents/import_healer.py: 90.85%
+- tools/swarm/tests/validate_import_healer.py: 97.62%
+- tools/swarm/tests/test_import_healer.py: 100.00%
+Import healer coverage report
+- tools/swarm/agents/import_healer.py: current=90.85% baseline=90.85%
+- tools/swarm/tests/validate_import_healer.py: current=97.62% baseline=97.62%
+- tools/swarm/tests/test_import_healer.py: current=100.00% baseline=100.00%
+Coverage gate passed
+Coverage regression detected:
+  - tools/swarm/agents/import_healer.py: current=90.85% baseline=99.99%
+  - tools/swarm/tests/validate_import_healer.py: current=97.62% baseline=99.99%
 ```
 
-### Blockers / risks
-- Coverage package is missing in this environment (`No module named coverage`), so numeric baseline/delta could not be computed.
-- Repository-wide automated coverage gate is not yet enforced in CI for this tooling stream.
+### Pre-commit hook verification (2026-03-24 UTC)
+Commands:
+```bash
+if [ -f .git/hooks/pre-commit ]; then sed -n '1,120p' .git/hooks/pre-commit; fi
+python -m pre_commit --version
+pre-commit --version
+test -x ./node_modules/@fastify/pre-commit/hook && echo 'hook binary present' || echo 'hook binary missing'
+```
+
+Output:
+```text
+#!/usr/bin/env bash
+if git diff --cached --quiet; then
+  echo "No staged changes detected, skipping pre-commit hook."
+  exit 0
+fi
+./node_modules/@fastify/pre-commit/hook
+...
+python: No module named pre_commit
+pre-commit: command not found
+hook binary missing
+```
+
+Blocker + mitigation:
+- Blocker: git hook invokes `./node_modules/@fastify/pre-commit/hook`, but executable is missing; python `pre_commit` CLI is also not installed in this environment.
+- Mitigation: treat pre-commit as non-enforceable in this container and rely on explicit command-based checks (`py_compile`, `pytest`, coverage gate) until hook dependencies are restored.

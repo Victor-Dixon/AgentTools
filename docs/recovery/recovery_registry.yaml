@@ -11,6 +11,14 @@ entries:
     owner: swarm
     validation:
       - python tools/swarm/tests/validate_import_healer.py
+  - path: tools/swarm/tests/check_import_healer_coverage.py
+    type: validation_script
+    owner: swarm
+    validation:
+      - python tools/swarm/tests/check_import_healer_coverage.py
+  - path: tools/swarm/tests/import_healer_coverage_baseline.json
+    type: baseline_data
+    owner: swarm
   - path: tools/swarm/tests/fixtures/broken_imports.py
     type: test_fixture
     owner: swarm
