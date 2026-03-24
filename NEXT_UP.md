@@ -1,6 +1,6 @@
 # NEXT UP — SWARM MCP EXECUTION DASHBOARD
 
-**Updated:** 2026-03-23  
+**Updated:** 2026-03-24
 **Primary SSOT:** `MASTER_TASK_LOG.md`  
 **Scope:** Packaging readiness only (Phase 0A)
 
@@ -22,7 +22,7 @@ This dashboard is the human-readable companion to the SSOT task log.
 
 **Current phase:** Phase 0A — Consolidation + Packaging Readiness  
 **Release state:** Not yet published to PyPI  
-**Blocking tasks:** SWARM-002, SWARM-003, SWARM-004
+**Blocking tasks:** SWARM-003, SWARM-004
 
 Interpretation: implementation exists and local package workflows exist, but external release verification is incomplete.
 
@@ -44,14 +44,11 @@ Inventory values are SSOT-backed and reproducible using the command block in `MA
 
 ## What we should focus on next (strict order)
 
-1. **SWARM-002 — PyPI account/token readiness**
-   - execute maintainer credential step using `docs/release/SWARM-002_PYPI_TOKEN_RUNBOOK.md`
-   - write non-secret completion evidence into `MASTER_TASK_LOG.md` (SWARM-002 execution gate fields)
-2. **SWARM-003 — Build and publish**
+1. **SWARM-003 — Build and publish**
    - run `python -m build`
    - run `twine upload dist/*`
    - capture exact output in `MASTER_TASK_LOG.md`
-3. **SWARM-004 — Fresh install verification**
+2. **SWARM-004 — Fresh install verification**
    - in clean env: `pip install swarm-mcp`
    - verify import + minimal CLI smoke test
 
@@ -62,7 +59,7 @@ Inventory values are SSOT-backed and reproducible using the command block in `MA
 This transition is complete only when all are true:
 - [ ] SSOT has an accurate status statement (phase + blockers + release state)
 - [ ] inventory proof snapshot is updated with dated, reproducible evidence
-- [ ] SWARM-002 marked complete with concrete token setup record
+- [x] SWARM-002 marked complete with concrete token setup record
 - [ ] SWARM-003 marked complete with actual publish command output
 - [ ] SWARM-004 marked complete with clean install/import verification output
 
@@ -70,4 +67,4 @@ This transition is complete only when all are true:
 
 ## Operator handoff note (2026-03-24)
 
-SWARM-002 documentation is ready, but task completion is blocked on maintainer-only PyPI credential actions. After SWARM-002 completion evidence is written to SSOT, proceed immediately to SWARM-003.
+SWARM-002 was completed on 2026-03-24 with redacted credential evidence recorded in SSOT. Proceed immediately to SWARM-003.

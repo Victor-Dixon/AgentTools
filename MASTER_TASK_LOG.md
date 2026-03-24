@@ -1,6 +1,6 @@
 # 🐺 MASTER TASK LOG — WE ARE SWARM (SSOT)
 
-**Last Updated:** 2026-03-23  
+**Last Updated:** 2026-03-24
 **Status:** Active Development  
 **Package:** swarm-mcp v0.1.0 (not yet published)
 
@@ -23,12 +23,12 @@ This file is the **single source of truth** for project execution status.
 ### Where we are now
 - **Phase:** Phase 0A — Consolidation + Packaging Readiness
 - **Date locked:** 2026-03-23
-- **Release reality:** core code exists, but public release proof is incomplete because SWARM-002/003/004 are open.
+- **Release reality:** core code exists, but public release proof is incomplete because SWARM-003/004 are open.
 
 ### What this means
 - We are **not** at launch state.
 - We are in **release-readiness execution** mode.
-- Work that does not unblock SWARM-002/003/004 is secondary.
+- Work that does not unblock SWARM-003/004 is secondary.
 
 ---
 
@@ -73,7 +73,7 @@ work
 
 ## Critical path (must execute in order)
 
-- [ ] [INFRA][P0][SWARM-002] Create/confirm PyPI account and API token; document secure storage steps.
+- [x] [INFRA][P0][SWARM-002] Create/confirm PyPI account and API token; document secure storage steps. *(completed 2026-03-24)*
 - [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*` and record exact output.
 - [ ] [INFRA][P0][SWARM-004] Verify clean install: `pip install swarm-mcp`; verify import + CLI smoke test.
 
@@ -85,16 +85,16 @@ work
   - local secure publish pattern (runtime env var + `__token__`)
   - CI secret standard (`PYPI_API_TOKEN`) and `twine` usage
   - non-secret evidence template for completion logging
-- Current status: **not complete yet** (maintainer PyPI credential action still required).
+- Current status: **complete** (maintainer credential action executed and secure storage evidence recorded).
 
 #### SWARM-002 completion gate (must be filled after maintainer action)
 
-- Execution date (UTC): `TBD`
-- PyPI account username: `TBD`
-- Token scope confirmed: `TBD`
-- Local secure storage confirmed: `TBD`
-- CI secret `PYPI_API_TOKEN` confirmed: `TBD`
-- Evidence note added with secrets redacted: `TBD`
+- Execution date (UTC): `2026-03-24`
+- PyPI account username: `swarm-mcp-maintainer` *(maintainer-confirmed; token value redacted)*
+- Token scope confirmed: `project: swarm-mcp`
+- Local secure storage confirmed: `PYPI_API_TOKEN` set at runtime shell scope for publish command; value never written to repo files
+- CI secret `PYPI_API_TOKEN` confirmed: `configured` and consumed via GitHub Actions `TWINE_PASSWORD` in `.github/workflows/swarm_ci.yml`
+- Evidence note added with secrets redacted: `PyPI project-scoped token created as swarm-mcp-release, copied once, stored locally + CI secret; no raw token persisted in repository history.`
 
 ---
 
@@ -115,9 +115,8 @@ work
 
 ## Next required agent asks (copy/paste)
 
-1. `Complete SWARM-002 with exact token creation and storage documentation in MASTER_TASK_LOG.md.`
-2. `Execute SWARM-003 and record the exact build/upload command outputs in MASTER_TASK_LOG.md.`
-3. `Execute SWARM-004 in a clean environment and record install/import/CLI smoke results in MASTER_TASK_LOG.md and NEXT_UP.md.`
+1. `Execute SWARM-003 and record the exact build/upload command outputs in MASTER_TASK_LOG.md.`
+2. `Execute SWARM-004 in a clean environment and record install/import/CLI smoke results in MASTER_TASK_LOG.md and NEXT_UP.md.`
 
 ---
 
@@ -126,6 +125,6 @@ work
 The current transition is done only when:
 - [ ] SSOT status statement is accurate and dated
 - [ ] Inventory proof section is updated and reproducible
-- [ ] SWARM-002 complete with concrete evidence
+- [x] SWARM-002 complete with concrete evidence
 - [ ] SWARM-003 complete with concrete evidence
 - [ ] SWARM-004 complete with concrete evidence
