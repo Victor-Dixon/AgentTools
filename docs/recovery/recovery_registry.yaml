@@ -1,0 +1,41 @@
+version: 1
+updated_utc: "2026-03-24"
+entries:
+  - path: tools/swarm/agents/import_healer.py
+    type: tool
+    owner: swarm
+    validation:
+      - python -m py_compile tools/swarm/agents/import_healer.py
+  - path: tools/swarm/tests/validate_import_healer.py
+    type: validation_script
+    owner: swarm
+    validation:
+      - python tools/swarm/tests/validate_import_healer.py
+  - path: tools/swarm/tests/check_import_healer_coverage.py
+    type: validation_script
+    owner: swarm
+    validation:
+      - python tools/swarm/tests/check_import_healer_coverage.py
+  - path: tools/swarm/tests/import_healer_coverage_baseline.json
+    type: baseline_data
+    owner: swarm
+  - path: tools/swarm/tests/fixtures/broken_imports.py
+    type: test_fixture
+    owner: swarm
+  - path: tools/swarm/tests/fixtures/rewrite_map.json
+    type: test_fixture
+    owner: swarm
+  - path: tools/swarm/tests/fixtures/modules/pkg_alpha/helpers.py
+    type: test_fixture
+    owner: swarm
+  - path: tools/swarm/tests/fixtures/modules/pkg_alpha/config.py
+    type: test_fixture
+    owner: swarm
+  - path: tools/swarm/tests/fixtures/modules/pkg_beta/config.py
+    type: test_fixture
+    owner: swarm
+  - path: tools/swarm/tests/test_import_healer.py
+    type: test
+    owner: swarm
+    validation:
+      - python -m pytest -q tools/swarm/tests/test_import_healer.py

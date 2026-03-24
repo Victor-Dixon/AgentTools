@@ -1,0 +1,9 @@
+{
+  "generated_utc": "2026-03-24T01:15:47Z",
+  "method": "python trace module",
+  "baseline_percent": {
+    "tools/swarm/agents/import_healer.py": 90.85,
+    "tools/swarm/tests/validate_import_healer.py": 97.62,
+    "tools/swarm/tests/test_import_healer.py": 100.0
+  }
+}
