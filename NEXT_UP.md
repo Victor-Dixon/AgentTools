@@ -36,13 +36,17 @@ Interpretation: implementation exists and local package workflows exist, but ext
 
 These are evidence points, not goals.
 
+### Reproducibility note
+
+Inventory values are SSOT-backed and reproducible using the command block in `MASTER_TASK_LOG.md` (same date: 2026-03-23), including exact output for server file count, CLI subcommand count, and branch state.
+
 ---
 
 ## What we should focus on next (strict order)
 
 1. **SWARM-002 — PyPI account/token readiness**
-   - confirm account owner and token scope
-   - document token storage path for CI/local publish
+   - execute maintainer credential step using `docs/release/SWARM-002_PYPI_TOKEN_RUNBOOK.md`
+   - write non-secret completion evidence into `MASTER_TASK_LOG.md` (SWARM-002 execution gate fields)
 2. **SWARM-003 — Build and publish**
    - run `python -m build`
    - run `twine upload dist/*`
@@ -62,3 +66,8 @@ This transition is complete only when all are true:
 - [ ] SWARM-003 marked complete with actual publish command output
 - [ ] SWARM-004 marked complete with clean install/import verification output
 
+---
+
+## Operator handoff note (2026-03-24)
+
+SWARM-002 documentation is ready, but task completion is blocked on maintainer-only PyPI credential actions. After SWARM-002 completion evidence is written to SSOT, proceed immediately to SWARM-003.
