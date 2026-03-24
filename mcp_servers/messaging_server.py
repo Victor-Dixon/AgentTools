@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 try:
     from swarm_mcp.core.messaging import get_queue, HowlUrgency, HowlType
+    from swarm_mcp.core.messaging_templates import render_message_template, MessageTemplateCategory
     from swarm_mcp.core.coordinator import PackCoordinator
 except ImportError:
     # Fallback/Mock for verification environments without full setup
@@ -24,7 +25,13 @@ except ImportError:
         def __init__(self, wolves, den): pass
         def roll_call(self): return {}
 
-def send_agent_message(agent_id: str, message: str, priority: str = "regular") -> dict:
+def send_agent_message(
+    agent_id: str,
+    message: str,
+    priority: str = "regular",
+    category: str = "C2A",
+    sender: str = "MCP_SERVER",
+) -> dict:
     """Send message to agent via Swarm Messaging."""
     try:
         urgency = (
@@ -34,10 +41,17 @@ def send_agent_message(agent_id: str, message: str, priority: str = "regular") -
         )
 
         queue = get_queue()
-        howl = queue.send(
-            sender="MCP_SERVER",
+        formatted = render_message_template(
+            category=MessageTemplateCategory[category.upper()],
+            sender=sender,
             recipient=agent_id,
-            content=message,
+            body=message,
+            priority=priority,
+        )
+        howl = queue.send(
+            sender=sender,
+            recipient=agent_id,
+            content=formatted,
             urgency=urgency,
             howl_type=HowlType.WOLF_TO_WOLF
         )
@@ -45,7 +59,7 @@ def send_agent_message(agent_id: str, message: str, priority: str = "regular") -
         return {
             "success": True,
             "agent": agent_id,
-            "message_sent": message,
+            "message_sent": formatted,
             "priority": priority,
             "howl_id": howl.id
         }
@@ -53,7 +67,12 @@ def send_agent_message(agent_id: str, message: str, priority: str = "regular") -
         return {"success": False, "error": str(e)}
 
 
-def broadcast_message(message: str, priority: str = "regular") -> dict:
+def broadcast_message(
+    message: str,
+    priority: str = "regular",
+    category: str = "C2A",
+    sender: str = "MCP_SERVER",
+) -> dict:
     """Broadcast message to all agents."""
     try:
         urgency = (
@@ -78,10 +97,17 @@ def broadcast_message(message: str, priority: str = "regular") -> dict:
         
         for agent_id in agents:
             try:
-                queue.send(
-                    sender="MCP_SERVER",
+                formatted = render_message_template(
+                    category=MessageTemplateCategory[category.upper()],
+                    sender=sender,
                     recipient=agent_id,
-                    content=message,
+                    body=message,
+                    priority=priority,
+                )
+                queue.send(
+                    sender=sender,
+                    recipient=agent_id,
+                    content=formatted,
                     urgency=urgency,
                     howl_type=HowlType.PACK_HOWL
                 )
@@ -95,6 +121,7 @@ def broadcast_message(message: str, priority: str = "regular") -> dict:
             "total_agents": len(agents),
             "successful": success_count,
             "results": results,
+            "category": category.upper(),
         }
     except Exception as e:
         return {"success": False, "error": str(e)}
@@ -151,6 +178,12 @@ def main():
                                             "enum": ["regular", "urgent"],
                                             "default": "regular",
                                         },
+                                        "category": {
+                                            "type": "string",
+                                            "enum": ["S2A", "D2A", "C2A", "A2A"],
+                                            "default": "C2A",
+                                        },
+                                        "sender": {"type": "string", "default": "MCP_SERVER"},
                                     },
                                     "required": ["agent_id", "message"],
                                 },
@@ -169,6 +202,12 @@ def main():
                                             "enum": ["regular", "urgent"],
                                             "default": "regular",
                                         },
+                                        "category": {
+                                            "type": "string",
+                                            "enum": ["S2A", "D2A", "C2A", "A2A"],
+                                            "default": "C2A",
+                                        },
+                                        "sender": {"type": "string", "default": "MCP_SERVER"},
                                     },
                                     "required": ["message"],
                                 },
