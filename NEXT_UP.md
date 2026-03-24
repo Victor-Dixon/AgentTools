@@ -74,16 +74,20 @@ SWARM-002 was completed on 2026-03-24 with redacted credential evidence recorded
 ## Tooling stream update (mirrors SSOT, 2026-03-24 UTC)
 
 ### Completed now
-- Import healer confidence hardening and safe rewrite gating shipped in `tools/swarm/agents/import_healer.py`.
-- Local fixture-based validation added under `tools/swarm/tests/`.
-- Recovery registry updated at `docs/recovery/recovery_registry.yaml` for new files.
+- Coverage non-regression gate implemented for import healer stream via `tools/swarm/tests/check_import_healer_coverage.py` (stdlib trace-backed baseline comparison).
+- Baseline recorded in `tools/swarm/tests/import_healer_coverage_baseline.json` for:
+  - `tools/swarm/agents/import_healer.py` → 90.85%
+  - `tools/swarm/tests/validate_import_healer.py` → 97.62%
+  - `tools/swarm/tests/test_import_healer.py` → 100.00%
+- CI now runs the gate in `.github/workflows/swarm_ci.yml`.
+- Validation harness updated to run in-process so import healer execution is counted by coverage tooling.
 
 ### Commands run (2026-03-24 UTC)
 - `python -m py_compile tools/swarm/agents/import_healer.py tools/swarm/tests/validate_import_healer.py tools/swarm/tests/test_import_healer.py`
-- `python tools/swarm/tests/validate_import_healer.py`
 - `python -m pytest -q tools/swarm/tests/test_import_healer.py`
-- `python -m coverage run tools/swarm/tests/validate_import_healer.py` *(failed: module not installed)*
+- `python tools/swarm/tests/check_import_healer_coverage.py --write-baseline`
+- `python tools/swarm/tests/check_import_healer_coverage.py` *(expected pass path)*
+- `python tools/swarm/tests/check_import_healer_coverage.py --baseline-file /tmp/import_healer_coverage_strict.json` *(expected fail path)*
 
-### Active blockers
-- Coverage tooling is not installed in the current environment, so coverage non-regression could not be measured.
-- No CI-enforced "coverage must not dip" threshold is currently wired for this tooling stream.
+### Active blocker
+- Pre-commit remains broken in this environment: `.git/hooks/pre-commit` targets `./node_modules/@fastify/pre-commit/hook`, but executable is missing; `pre-commit` CLI is not installed. Mitigation is explicit command checks until hook dependencies are restored.

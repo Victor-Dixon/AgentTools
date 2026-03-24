@@ -4,15 +4,16 @@
 from __future__ import annotations
 
 import json
-import subprocess
-import sys
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
+
+from tools.swarm.agents.import_healer import main as import_healer_main
 
 
 def run_validation() -> int:
     repo_root = Path(__file__).resolve().parents[3]
-    script = repo_root / "tools/swarm/agents/import_healer.py"
     fixtures = repo_root / "tools/swarm/tests/fixtures"
 
     with TemporaryDirectory() as tmp_dir:
@@ -20,18 +21,21 @@ def run_validation() -> int:
         target = tmp / "broken_imports.py"
         target.write_text((fixtures / "broken_imports.py").read_text(encoding="utf-8"), encoding="utf-8")
 
-        command = [
-            sys.executable,
-            str(script),
-            str(target),
-            "--module-root",
-            str(fixtures / "modules"),
-            "--rewrite-map",
-            str(fixtures / "rewrite_map.json"),
-            "--apply",
-        ]
-        completed = subprocess.run(command, cwd=repo_root, capture_output=True, text=True, check=True)
-        data = json.loads(completed.stdout)
+        capture = StringIO()
+        with redirect_stdout(capture):
+            exit_code = import_healer_main(
+                [
+                    str(target),
+                    "--module-root",
+                    str(fixtures / "modules"),
+                    "--rewrite-map",
+                    str(fixtures / "rewrite_map.json"),
+                    "--apply",
+                ]
+            )
+
+        assert exit_code == 0
+        data = json.loads(capture.getvalue())
 
         result = data["results"][0]
         rewrite_confidences = {item["original"]: item["confidence"] for item in result["rewrites"]}

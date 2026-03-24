@@ -27,6 +27,11 @@ jobs:
       run: |
         pytest tests/ -v
 
+
+    - name: Import healer coverage gate
+      run: |
+        python tools/swarm/tests/check_import_healer_coverage.py
+
     - name: Swarm Security Scan
       run: |
         python tools/cli.py --security-scan
