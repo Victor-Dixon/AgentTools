@@ -5894,6 +5894,7 @@
       "_load_registry_data",
       "_resolve_tool_class",
       "get_tool_class",
+      "get_tool",
       "resolve",
       "list_tools",
       "list_by_category",

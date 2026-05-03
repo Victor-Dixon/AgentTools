@@ -64,6 +64,11 @@ class ToolRegistry:
         """Get tool class by name."""
         return self._resolve_tool_class(tool_name)
 
+    def get_tool(self, tool_name: str) -> IToolAdapter:
+        """Instantiate tool adapter by name."""
+        tool_class = self.get_tool_class(tool_name)
+        return tool_class()
+
     def resolve(self, tool_name: str) -> type[IToolAdapter]:
         """Resolve tool class by name."""
         return self.get_tool_class(tool_name)

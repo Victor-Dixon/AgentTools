@@ -1,33 +1,175 @@
 {
-  "version": "2.0.0",
+  "count": 87,
+  "disabled_tools": {
+    "agent.points": {
+      "disabled_reason": "Missing class: tools_v2.categories.session_tools.PointsCalculatorTool",
+      "registry_entry": [
+        "tools_v2.categories.session_tools",
+        "PointsCalculatorTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "brain.get": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.swarm_brain_tools",
+        "GetAgentNotesTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "brain.note": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.swarm_brain_tools",
+        "TakeNoteTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "brain.search": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.swarm_brain_tools",
+        "SearchKnowledgeTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "brain.session": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.swarm_brain_tools",
+        "LogSessionTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "brain.share": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.swarm_brain_tools",
+        "ShareLearningTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "discord.health": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.discord_tools",
+        "DiscordBotHealthTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "discord.start": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.discord_tools",
+        "DiscordBotStartTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "discord.test": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.discord_tools",
+        "DiscordTestMessageTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "infra.roi_calc": {
+      "disabled_reason": "Missing class: tools_v2.categories.infrastructure_tools.ROICalculatorTool",
+      "registry_entry": [
+        "tools_v2.categories.infrastructure_tools",
+        "ROICalculatorTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "mem.imports": {
+      "disabled_reason": "Missing class: tools_v2.categories.memory_safety_adapters.ImportValidatorTool",
+      "registry_entry": [
+        "tools_v2.categories.memory_safety_adapters",
+        "ImportValidatorTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "msgtask.fingerprint": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.message_task_tools",
+        "TaskFingerprintTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "msgtask.ingest": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.message_task_tools",
+        "MessageIngestTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "msgtask.parse": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.message_task_tools",
+        "TaskParserTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "obs.get": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.observability_tools",
+        "MetricsTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "obs.health": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.observability_tools",
+        "SystemHealthTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "obs.metrics": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.observability_tools",
+        "MetricsSnapshotTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "obs.slo": {
+      "disabled_reason": "Abstract adapter missing get_spec/validate",
+      "registry_entry": [
+        "tools_v2.categories.observability_tools",
+        "SLOCheckTool"
+      ],
+      "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    }
+  },
   "tools": {
-    "vector.context": [
-      "tools_v2.categories.vector_tools",
-      "TaskContextTool"
+    "advisor.guide": [
+      "tools_v2.categories.intelligent_mission_advisor_adapter",
+      "RealtimeGuidanceTool"
     ],
-    "vector.search": [
-      "tools_v2.categories.vector_tools",
-      "VectorSearchTool"
+    "advisor.recommend": [
+      "tools_v2.categories.intelligent_mission_advisor_adapter",
+      "MissionAdvisorTool"
     ],
-    "vector.index": [
-      "tools_v2.categories.vector_tools",
-      "IndexWorkTool"
+    "advisor.swarm": [
+      "tools_v2.categories.intelligent_mission_advisor_adapter",
+      "SwarmAnalyzerTool"
     ],
-    "msg.send": [
-      "tools_v2.categories.messaging_tools",
-      "SendMessageTool"
+    "advisor.validate": [
+      "tools_v2.categories.intelligent_mission_advisor_adapter",
+      "OrderValidatorTool"
     ],
-    "msg.broadcast": [
-      "tools_v2.categories.messaging_tools",
-      "BroadcastTool"
+    "agent.claim": [
+      "tools_v2.categories.agent_ops_tools",
+      "ClaimTaskTool"
     ],
-    "msg.inbox": [
-      "tools_v2.categories.messaging_tools",
-      "InboxCheckTool"
-    ],
-    "analysis.scan": [
-      "tools_v2.categories.analysis_tools",
-      "ProjectScanTool"
+    "agent.status": [
+      "tools_v2.categories.agent_ops_tools",
+      "AgentStatusTool"
     ],
     "analysis.complexity": [
       "tools_v2.categories.analysis_tools",
@@ -37,13 +179,17 @@
       "tools_v2.categories.analysis_tools",
       "DuplicationTool"
     ],
-    "security.audit": [
-      "tools_v2.categories.security_audit_tools",
-      "SecurityAuditTool"
+    "analysis.scan": [
+      "tools_v2.categories.analysis_tools",
+      "ProjectScanTool"
     ],
     "bi.metrics": [
       "tools_v2.categories.bi_tools",
       "QuickMetricsTool"
+    ],
+    "bi.roi.optimize": [
+      "tools_v2.categories.bi_tools",
+      "MarkovROIOptimizerTool"
     ],
     "bi.roi.repo": [
       "tools_v2.categories.bi_tools",
@@ -53,261 +199,37 @@
       "tools_v2.categories.bi_tools",
       "TaskROICalculatorTool"
     ],
-    "bi.roi.optimize": [
-      "tools_v2.categories.bi_tools",
-      "MarkovROIOptimizerTool"
-    ],
-    "v2.check": [
-      "tools_v2.categories.v2_tools",
-      "V2CheckTool"
-    ],
-    "v2.report": [
-      "tools_v2.categories.v2_tools",
-      "V2ReportTool"
-    ],
-    "agent.status": [
-      "tools_v2.categories.agent_ops_tools",
-      "AgentStatusTool"
-    ],
-    "agent.claim": [
-      "tools_v2.categories.agent_ops_tools",
-      "ClaimTaskTool"
-    ],
-    "test.coverage": [
-      "tools_v2.categories.testing_tools",
-      "CoverageReportTool"
-    ],
-    "test.mutation": [
-      "tools_v2.categories.testing_tools",
-      "MutationGateTool"
-    ],
-    "comp.history": [
-      "tools_v2.categories.compliance_tools",
-      "ComplianceHistoryTool"
-    ],
-    "comp.check": [
-      "tools_v2.categories.compliance_tools",
-      "PolicyCheckTool"
-    ],
-    "infra.orchestrator_scan": [
-      "tools_v2.categories.infrastructure_tools",
-      "OrchestratorScanTool"
-    ],
-    "infra.file_lines": [
-      "tools_v2.categories.infrastructure_tools",
-      "FileLineCounterTool"
-    ],
-    "infra.extract_planner": [
-      "tools_v2.categories.infrastructure_tools",
-      "ModuleExtractorPlannerTool"
-    ],
-    "infra.roi_calc": [
-      "tools_v2.categories.infrastructure_tools",
-      "ROICalculatorTool"
-    ],
-    "discord.health": [
-      "tools_v2.categories.discord_tools",
-      "DiscordBotHealthTool"
-    ],
-    "discord.start": [
-      "tools_v2.categories.discord_tools",
-      "DiscordBotStartTool"
-    ],
-    "discord.test": [
-      "tools_v2.categories.discord_tools",
-      "DiscordTestMessageTool"
-    ],
-    "onboard.soft": [
-      "tools_v2.categories.onboarding_tools",
-      "SoftOnboardTool"
-    ],
-    "onboard.hard": [
-      "tools_v2.categories.onboarding_tools",
-      "HardOnboardTool"
-    ],
-    "docs.search": [
-      "tools_v2.categories.docs_tools",
-      "DocsSearchTool"
-    ],
-    "docs.export": [
-      "tools_v2.categories.docs_tools",
-      "DocsExportTool"
-    ],
-    "health.ping": [
-      "tools_v2.categories.health_tools",
-      "HealthPingTool"
-    ],
-    "health.snapshot": [
-      "tools_v2.categories.health_tools",
-      "SnapshotTool"
-    ],
-    "mem.leaks": [
-      "tools_v2.categories.memory_safety_adapters",
-      "MemoryLeakDetectorTool"
-    ],
-    "mem.verify": [
-      "tools_v2.categories.memory_safety_adapters",
-      "FileVerificationTool"
-    ],
-    "mem.scan": [
-      "tools_v2.categories.memory_safety_adapters",
-      "UnboundedScanTool"
-    ],
-    "mem.imports": [
-      "tools_v2.categories.memory_safety_adapters",
-      "ImportValidatorTool"
-    ],
-    "mem.handles": [
-      "tools_v2.categories.memory_safety_adapters",
-      "FileHandleCheckTool"
-    ],
-    "advisor.recommend": [
-      "tools_v2.categories.intelligent_mission_advisor_adapter",
-      "MissionAdvisorTool"
-    ],
-    "advisor.validate": [
-      "tools_v2.categories.intelligent_mission_advisor_adapter",
-      "OrderValidatorTool"
-    ],
-    "advisor.swarm": [
-      "tools_v2.categories.intelligent_mission_advisor_adapter",
-      "SwarmAnalyzerTool"
-    ],
-    "advisor.guide": [
-      "tools_v2.categories.intelligent_mission_advisor_adapter",
-      "RealtimeGuidanceTool"
-    ],
-    "msgtask.ingest": [
-      "tools_v2.categories.message_task_tools",
-      "MessageIngestTool"
-    ],
-    "msgtask.parse": [
-      "tools_v2.categories.message_task_tools",
-      "TaskParserTool"
-    ],
-    "msgtask.fingerprint": [
-      "tools_v2.categories.message_task_tools",
-      "TaskFingerprintTool"
-    ],
-    "session.cleanup": [
-      "tools_v2.categories.session_tools",
-      "SessionCleanupTool"
-    ],
-    "session.passdown": [
-      "tools_v2.categories.session_tools",
-      "PassdownTool"
-    ],
-    "agent.points": [
-      "tools_v2.categories.session_tools",
-      "PointsCalculatorTool"
-    ],
-    "msg.cleanup": [
-      "tools_v2.categories.workflow_tools",
-      "InboxCleanupTool"
-    ],
-    "mission.claim": [
-      "tools_v2.categories.workflow_tools",
-      "MissionClaimTool"
-    ],
-    "workflow.roi": [
-      "tools_v2.categories.workflow_tools",
-      "ROICalculatorTool"
-    ],
-    "swarm.pulse": [
-      "tools_v2.categories.swarm_consciousness",
-      "SwarmPulseTool"
-    ],
-    "oss.clone": [
-      "tools_v2.categories.oss_tools",
-      "OSSCloneTool"
-    ],
-    "oss.issues": [
-      "tools_v2.categories.oss_tools",
-      "OSSFetchIssuesTool"
-    ],
-    "oss.import": [
-      "tools_v2.categories.oss_tools",
-      "OSSImportIssuesTool"
-    ],
-    "oss.portfolio": [
-      "tools_v2.categories.oss_tools",
-      "OSSPortfolioTool"
-    ],
-    "oss.status": [
-      "tools_v2.categories.oss_tools",
-      "OSSStatusTool"
-    ],
-    "brain.note": [
-      "tools_v2.categories.swarm_brain_tools",
-      "TakeNoteTool"
-    ],
-    "brain.share": [
-      "tools_v2.categories.swarm_brain_tools",
-      "ShareLearningTool"
-    ],
-    "brain.search": [
-      "tools_v2.categories.swarm_brain_tools",
-      "SearchKnowledgeTool"
-    ],
-    "brain.session": [
-      "tools_v2.categories.swarm_brain_tools",
-      "LogSessionTool"
-    ],
-    "brain.get": [
-      "tools_v2.categories.swarm_brain_tools",
-      "GetAgentNotesTool"
-    ],
-    "obs.metrics": [
-      "tools_v2.categories.observability_tools",
-      "MetricsSnapshotTool"
-    ],
-    "obs.get": [
-      "tools_v2.categories.observability_tools",
-      "MetricsTool"
-    ],
-    "obs.health": [
-      "tools_v2.categories.observability_tools",
-      "SystemHealthTool"
-    ],
-    "obs.slo": [
-      "tools_v2.categories.observability_tools",
-      "SLOCheckTool"
-    ],
-    "val.smoke": [
-      "tools_v2.categories.validation_tools",
-      "SmokeTestTool"
-    ],
-    "val.flags": [
-      "tools_v2.categories.validation_tools",
-      "FeatureFlagTool"
-    ],
-    "val.rollback": [
-      "tools_v2.categories.validation_tools",
-      "RollbackTool"
-    ],
-    "val.report": [
-      "tools_v2.categories.validation_tools",
-      "ValidationReportTool"
-    ],
-    "captain.status_check": [
+    "captain.assign_mission": [
       "tools_v2.categories.captain_tools",
-      "StatusCheckTool"
-    ],
-    "captain.git_verify": [
-      "tools_v2.categories.captain_tools",
-      "GitVerifyTool"
+      "MissionAssignTool"
     ],
     "captain.calc_points": [
       "tools_v2.categories.captain_tools",
       "PointsCalculatorTool"
     ],
-    "captain.assign_mission": [
+    "captain.cycle_report": [
       "tools_v2.categories.captain_tools",
-      "MissionAssignTool"
+      "CycleReportTool"
     ],
     "captain.deliver_gas": [
       "tools_v2.categories.captain_tools",
       "GasDeliveryTool"
+    ],
+    "captain.git_verify": [
+      "tools_v2.categories.captain_tools",
+      "GitVerifyTool"
+    ],
+    "captain.integrity_check": [
+      "tools_v2.categories.captain_tools",
+      "IntegrityCheckTool"
+    ],
+    "captain.markov_optimize": [
+      "tools_v2.categories.captain_tools",
+      "MarkovOptimizerTool"
+    ],
+    "captain.status_check": [
+      "tools_v2.categories.captain_tools",
+      "StatusCheckTool"
     ],
     "captain.update_leaderboard": [
       "tools_v2.categories.captain_tools",
@@ -317,33 +239,29 @@
       "tools_v2.categories.captain_tools",
       "WorkVerifyTool"
     ],
-    "captain.cycle_report": [
-      "tools_v2.categories.captain_tools",
-      "CycleReportTool"
+    "comp.check": [
+      "tools_v2.categories.compliance_tools",
+      "PolicyCheckTool"
     ],
-    "captain.markov_optimize": [
-      "tools_v2.categories.captain_tools",
-      "MarkovOptimizerTool"
+    "comp.history": [
+      "tools_v2.categories.compliance_tools",
+      "ComplianceHistoryTool"
     ],
-    "captain.integrity_check": [
-      "tools_v2.categories.captain_tools",
-      "IntegrityCheckTool"
+    "config.check-imports": [
+      "tools_v2.categories.config_tools",
+      "CheckConfigImportsAdapter"
     ],
-    "integration.find-ssot-violations": [
-      "tools_v2.categories.integration_tools",
-      "FindSSOTViolationsAdapter"
+    "config.list-sources": [
+      "tools_v2.categories.config_tools",
+      "ListConfigSourcesAdapter"
     ],
-    "integration.find-duplicates": [
-      "tools_v2.categories.integration_tools",
-      "FindDuplicateFunctionalityAdapter"
+    "config.validate-ssot": [
+      "tools_v2.categories.config_tools",
+      "ValidateConfigSSOTAdapter"
     ],
-    "integration.find-opportunities": [
-      "tools_v2.categories.integration_tools",
-      "FindIntegrationOpportunitiesAdapter"
-    ],
-    "integration.check-imports": [
-      "tools_v2.categories.integration_tools",
-      "CheckImportDependenciesAdapter"
+    "coord.check-patterns": [
+      "tools_v2.categories.coordination_tools",
+      "CheckCoordinationPatternsAdapter"
     ],
     "coord.find-expert": [
       "tools_v2.categories.coordination_tools",
@@ -353,22 +271,178 @@
       "tools_v2.categories.coordination_tools",
       "RequestExpertReviewAdapter"
     ],
-    "coord.check-patterns": [
-      "tools_v2.categories.coordination_tools",
-      "CheckCoordinationPatternsAdapter"
+    "docs.export": [
+      "tools_v2.categories.docs_tools",
+      "DocsExportTool"
     ],
-    "config.validate-ssot": [
-      "tools_v2.categories.config_tools",
-      "ValidateConfigSSOTAdapter"
+    "docs.search": [
+      "tools_v2.categories.docs_tools",
+      "DocsSearchTool"
     ],
-    "config.list-sources": [
-      "tools_v2.categories.config_tools",
-      "ListConfigSourcesAdapter"
+    "health.ping": [
+      "tools_v2.categories.health_tools",
+      "HealthPingTool"
     ],
-    "config.check-imports": [
-      "tools_v2.categories.config_tools",
-      "CheckConfigImportsAdapter"
+    "health.snapshot": [
+      "tools_v2.categories.health_tools",
+      "SnapshotTool"
+    ],
+    "infra.extract_planner": [
+      "tools_v2.categories.infrastructure_tools",
+      "ModuleExtractorPlannerTool"
+    ],
+    "infra.file_lines": [
+      "tools_v2.categories.infrastructure_tools",
+      "FileLineCounterTool"
+    ],
+    "infra.orchestrator_scan": [
+      "tools_v2.categories.infrastructure_tools",
+      "OrchestratorScanTool"
+    ],
+    "integration.check-imports": [
+      "tools_v2.categories.integration_tools",
+      "CheckImportDependenciesAdapter"
+    ],
+    "integration.find-duplicates": [
+      "tools_v2.categories.integration_tools",
+      "FindDuplicateFunctionalityAdapter"
+    ],
+    "integration.find-opportunities": [
+      "tools_v2.categories.integration_tools",
+      "FindIntegrationOpportunitiesAdapter"
+    ],
+    "integration.find-ssot-violations": [
+      "tools_v2.categories.integration_tools",
+      "FindSSOTViolationsAdapter"
+    ],
+    "mem.handles": [
+      "tools_v2.categories.memory_safety_adapters",
+      "FileHandleCheckTool"
+    ],
+    "mem.leaks": [
+      "tools_v2.categories.memory_safety_adapters",
+      "MemoryLeakDetectorTool"
+    ],
+    "mem.scan": [
+      "tools_v2.categories.memory_safety_adapters",
+      "UnboundedScanTool"
+    ],
+    "mem.verify": [
+      "tools_v2.categories.memory_safety_adapters",
+      "FileVerificationTool"
+    ],
+    "mission.claim": [
+      "tools_v2.categories.workflow_tools",
+      "MissionClaimTool"
+    ],
+    "msg.broadcast": [
+      "tools_v2.categories.messaging_tools",
+      "BroadcastTool"
+    ],
+    "msg.cleanup": [
+      "tools_v2.categories.workflow_tools",
+      "InboxCleanupTool"
+    ],
+    "msg.inbox": [
+      "tools_v2.categories.messaging_tools",
+      "InboxCheckTool"
+    ],
+    "msg.send": [
+      "tools_v2.categories.messaging_tools",
+      "SendMessageTool"
+    ],
+    "onboard.hard": [
+      "tools_v2.categories.onboarding_tools",
+      "HardOnboardTool"
+    ],
+    "onboard.soft": [
+      "tools_v2.categories.onboarding_tools",
+      "SoftOnboardTool"
+    ],
+    "oss.clone": [
+      "tools_v2.categories.oss_tools",
+      "OSSCloneTool"
+    ],
+    "oss.import": [
+      "tools_v2.categories.oss_tools",
+      "OSSImportIssuesTool"
+    ],
+    "oss.issues": [
+      "tools_v2.categories.oss_tools",
+      "OSSFetchIssuesTool"
+    ],
+    "oss.portfolio": [
+      "tools_v2.categories.oss_tools",
+      "OSSPortfolioTool"
+    ],
+    "oss.status": [
+      "tools_v2.categories.oss_tools",
+      "OSSStatusTool"
+    ],
+    "security.audit": [
+      "tools_v2.categories.security_audit_tools",
+      "SecurityAuditTool"
+    ],
+    "session.cleanup": [
+      "tools_v2.categories.session_tools",
+      "SessionCleanupTool"
+    ],
+    "session.passdown": [
+      "tools_v2.categories.session_tools",
+      "PassdownTool"
+    ],
+    "swarm.pulse": [
+      "tools_v2.categories.swarm_consciousness",
+      "SwarmPulseTool"
+    ],
+    "test.coverage": [
+      "tools_v2.categories.testing_tools",
+      "CoverageReportTool"
+    ],
+    "test.mutation": [
+      "tools_v2.categories.testing_tools",
+      "MutationGateTool"
+    ],
+    "v2.check": [
+      "tools_v2.categories.v2_tools",
+      "V2CheckTool"
+    ],
+    "v2.report": [
+      "tools_v2.categories.v2_tools",
+      "V2ReportTool"
+    ],
+    "val.flags": [
+      "tools_v2.categories.validation_tools",
+      "FeatureFlagTool"
+    ],
+    "val.report": [
+      "tools_v2.categories.validation_tools",
+      "ValidationReportTool"
+    ],
+    "val.rollback": [
+      "tools_v2.categories.validation_tools",
+      "RollbackTool"
+    ],
+    "val.smoke": [
+      "tools_v2.categories.validation_tools",
+      "SmokeTestTool"
+    ],
+    "vector.context": [
+      "tools_v2.categories.vector_tools",
+      "TaskContextTool"
+    ],
+    "vector.index": [
+      "tools_v2.categories.vector_tools",
+      "IndexWorkTool"
+    ],
+    "vector.search": [
+      "tools_v2.categories.vector_tools",
+      "VectorSearchTool"
+    ],
+    "workflow.roi": [
+      "tools_v2.categories.workflow_tools",
+      "ROICalculatorTool"
     ]
   },
-  "count": 87
+  "version": "2.0.0"
 }
