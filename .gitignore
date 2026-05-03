@@ -73,3 +73,6 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+
+# Runtime/generated swarm message packs
+pack_messages/
