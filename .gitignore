@@ -49,3 +49,27 @@ thea_cookies
 *_secret
 password
 credential
+
+# Dependency installs
+node_modules/
+**/node_modules/
+
+# Build/cache outputs
+.next/
+dist/
+build/
+coverage/
+.cache/
+.turbo/
+
+# Env/local
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
