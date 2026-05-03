@@ -91,3 +91,73 @@ SWARM-002 was completed on 2026-03-24 with redacted credential evidence recorded
 
 ### Active blocker
 - Pre-commit remains broken in this environment: `.git/hooks/pre-commit` targets `./node_modules/@fastify/pre-commit/hook`, but executable is missing; `pre-commit` CLI is not installed. Mitigation is explicit command checks until hook dependencies are restored.
+
+---
+
+# Production Restoration Backlog
+
+## Objective
+
+Restore AgentTools into a production-ready Dream.OS toolbelt/MCP runtime using TDD and non-breaking architecture seams.
+
+## Current Architecture Decision
+
+See:
+
+- `docs/architecture/DOMAIN_MODEL_DISCOVERY.md`
+- `docs/architecture/CODE_INVENTORY.md`
+- `docs/architecture/adr/0001-production-architecture.md`
+
+## Active Product Spine
+
+- `swarm_mcp/`
+- `mcp_servers/`
+- `apps/api/`
+- `apps/web/`
+- `packages/shared/`
+- `tests/`
+- `docs/`
+
+## TDD Rule
+
+No refactor without characterization tests.
+
+## Next Workstream
+
+### 1. Agent domain
+
+- Discover `agent_dna.py` public behavior.
+- Add tests for agent identity/capabilities.
+- Extract pure domain object only if needed.
+
+### 2. Message domain
+
+- Discover `messaging.py` and `messaging_templates.py`.
+- Add tests for message construction, routing fields, and validation.
+- Define canonical message envelope.
+
+### 3. Task domain
+
+- Discover `task_scoring.py` and task server behavior.
+- Add tests for scoring, priority, and assignment rules.
+- Define task lifecycle states.
+
+### 4. Work proof / verification
+
+- Discover `work_proof.py` and `verification.py`.
+- Add tests for proof claims, evidence, and pass/fail validation.
+- Define completion contract.
+
+### 5. MCP adapter consolidation
+
+- Compare `swarm_mcp/servers/` and `mcp_servers/`.
+- Mark each legacy MCP server as keep, merge, archive, or delete.
+- Preserve compatibility imports until callers are migrated.
+
+## Exit Criteria
+
+- Production gate passes.
+- Import boundary tests pass.
+- Domain inventory is generated.
+- Active vs legacy surfaces are documented.
+- Next domain workstream has failing-first tests before implementation.
