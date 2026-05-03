@@ -5,7 +5,7 @@ Legacy reports and side-product surfaces were extracted from this repo to reduce
 Local archive path at extraction time:
 
 ```text
-/data/data/com.termux/files/home/archives/AgentTools_legacy_surfaces_20260503_085928
+/data/data/com.termux/files/home/archives/AgentTools_legacy_surfaces_20260503_090103
 ```
 
 Archived content included:
