@@ -76,3 +76,6 @@ venv/
 
 # Runtime/generated swarm message packs
 pack_messages/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
