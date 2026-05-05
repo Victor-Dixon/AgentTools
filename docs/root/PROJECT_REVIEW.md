@@ -141,8 +141,8 @@ AgentTools/
 **Strengths:**
 - Comprehensive README with clear architecture
 - Detailed consolidation plans (`TOOLS_CONSOLIDATION_PLAN.md`, `PHASE_0A_ORGANIZATION_PLAN.md`)
-- Task tracking (`MASTER_TASK_LIST.md`, `MASTER_TASK_LOG.md`)
-- Usage guides (`TOOLS_USAGE_GUIDE.md`, `QUICK_START_PHASE0A.md`)
+- Task tracking (`docs/root/MASTER_TASK_LIST.md`, `docs/root/MASTER_TASK_LOG.md`)
+- Usage guides (`docs/root/TOOLS_USAGE_GUIDE.md`, `QUICK_START_PHASE0A.md`)
 - Contributing guidelines (`CONTRIBUTING.md`)
 - Architecture documentation (`docs/BUILDING_AGENTS.md`)
 

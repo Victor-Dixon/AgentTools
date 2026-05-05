@@ -109,7 +109,7 @@
 ### Phase 8: Documentation & Cleanup (P2)
 - [ ] [DOCS][P2] Update `tools_v2/README.md` with consolidated tool list
 - [ ] [DOCS][P2] Create migration guide for agents using old tools
-- [ ] [DOCS][P2] Update `MASTER_TASK_LIST.md` with consolidation status
+- [ ] [DOCS][P2] Update `docs/root/MASTER_TASK_LIST.md` with consolidation status
 - [ ] [DOCS][P2] Document new unified registry architecture
 - [ ] [CLEAN][P2] Remove empty directories from `tools/`
 - [ ] [CLEAN][P2] Update all import statements across codebase

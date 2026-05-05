@@ -25,7 +25,7 @@ This runbook intentionally excludes raw secrets from logs/docs.
    - token name suggestion: `swarm-mcp-release`
    - scope: **project** (preferred) instead of account-wide.
 4. Copy the token one time and place it in secure storage (local + CI).
-5. Record non-secret evidence back into `MASTER_TASK_LOG.md`.
+5. Record non-secret evidence back into `docs/root/MASTER_TASK_LOG.md`.
 
 ---
 

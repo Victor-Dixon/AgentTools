@@ -1,7 +1,7 @@
 # NEXT UP — SWARM MCP EXECUTION DASHBOARD
 
 **Updated:** 2026-03-24
-**Primary SSOT:** `MASTER_TASK_LOG.md`  
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
 **Scope:** Packaging readiness only (Phase 0A)
 
 ---
@@ -38,7 +38,7 @@ These are evidence points, not goals.
 
 ### Reproducibility note
 
-Inventory values are SSOT-backed and reproducible using the command block in `MASTER_TASK_LOG.md` (same date: 2026-03-23), including exact output for server file count, CLI subcommand count, and branch state.
+Inventory values are SSOT-backed and reproducible using the command block in `docs/root/MASTER_TASK_LOG.md` (same date: 2026-03-23), including exact output for server file count, CLI subcommand count, and branch state.
 
 ---
 
@@ -47,7 +47,7 @@ Inventory values are SSOT-backed and reproducible using the command block in `MA
 1. **SWARM-003 — Build and publish**
    - run `python -m build`
    - run `twine upload dist/*`
-   - capture exact output in `MASTER_TASK_LOG.md`
+   - capture exact output in `docs/root/MASTER_TASK_LOG.md`
 2. **SWARM-004 — Fresh install verification**
    - in clean env: `pip install swarm-mcp`
    - verify import + minimal CLI smoke test

@@ -12,7 +12,7 @@ Generated from current repository docs after legacy archive extraction.
 - `TOOLS_CONSOLIDATION_PLAN.md`
 - `TOOLS_FLATTENING_PLAN.md`
 - `TOOLS_RANKING_REPORT.md`
-- `TOOLS_USAGE_GUIDE.md`
+- `docs/root/TOOLS_USAGE_GUIDE.md`
 - `docs/TOOL_SURFACES_AND_OVERLAP.md`
 - `docs/CODEBASE_RECON_AND_EXECUTION_PLAN.md`
 - `docs/MCP_TOOLS_ROADMAP.md`
@@ -279,7 +279,7 @@ Generated from current repository docs after legacy archive extraction.
 - ## 📂 proposal_tools (1 tools)
 - ## 📂 consolidation (2 tools)
 
-### `TOOLS_USAGE_GUIDE.md`
+### `docs/root/TOOLS_USAGE_GUIDE.md`
 
 - # 🛠️ Tools Usage Guide - Phase 0A Support
 - ## 📦 Installation

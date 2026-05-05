@@ -393,7 +393,7 @@ python3 tools/analysis/unified_analyzer.py --category all --json > phase0a_repor
 
 ## 📚 Related Documentation
 
-- **Tools Usage Guide**: `TOOLS_USAGE_GUIDE.md`
+- **Tools Usage Guide**: `docs/root/TOOLS_USAGE_GUIDE.md`
 - **Quick Start Phase 0A**: `QUICK_START_PHASE0A.md`
 - **Phase 0A Plan**: `PHASE_0A_ORGANIZATION_PLAN.md`
 - **Environment Tool**: `tools/devops/unified_environment.py`
