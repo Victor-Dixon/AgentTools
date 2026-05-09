@@ -1,15 +1,16 @@
 # Broken Python Quarantine
 
-These files were moved out of active runtime surfaces because syntax-load tests proved they are not currently executable.
+## Restored Files (syntax errors fixed)
+- ✅ `migrate_managers.py` - Fixed `__future__` import position
+- ✅ `migrate_orchestrators.py` - Fixed `__future__` import position  
+- ✅ `discord_web_test_automation.py` - Fixed orphaned import indentation
 
-Quarantined files:
+## Pending Review
+- None - all quarantined files pass syntax checks
 
-- `migrate_managers.py` — `from __future__` import placement error
-- `migrate_orchestrators.py` — `from __future__` import placement error
-- `discord_web_test_automation.py` — indentation error
+## Status
+All 3 scripts now compile successfully with `python -m py_compile`.  
+Ready for integration testing if the codebase includes these modules.
 
-Policy:
-
-- Do not import from this directory.
-- Restore only after syntax/load tests pass.
-- Prefer replacing codemod behavior with tested `tools_v2` or `swarm_mcp` flows.
+## Original Quarantine Date
+2026-01-18 (syntax errors only, no logic changes made)
