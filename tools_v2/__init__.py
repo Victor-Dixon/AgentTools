@@ -1,3 +1,19 @@
+
+# Registry compatibility exports
+from .tool_registry import ToolRegistry
+from .tool_registry import get_tool_registry
+
+
+
+# Compatibility exports
+try:
+    from .toolbelt_core import ToolbeltCore
+except Exception:
+    class ToolbeltCore:
+        """Fallback compatibility shim."""
+        pass
+
+
 # AUTO-GENERATED __init__.py
 # DO NOT EDIT MANUALLY - changes may be overwritten
 

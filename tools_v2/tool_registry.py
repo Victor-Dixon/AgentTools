@@ -77,17 +77,54 @@ class ToolRegistry:
         """List all available tools."""
         return sorted(self._registry_data.keys())
 
-    def list_by_category(self, category: str) -> list[str]:
-        """List tools by category."""
-        tools = []
+    def list_by_category(self, category: str | None = None):
+        """List tools grouped by category or return a single category."""
+
+        grouped: dict[str, list[str]] = {}
+
         for tool_name in self._registry_data.keys():
             try:
                 tool = self.get_tool(tool_name)
-                if tool.get_spec().category == category:
-                    tools.append(tool_name)
+                cat = tool.get_spec().category
+
+                grouped.setdefault(cat, []).append(tool_name)
+
             except Exception:
                 continue
-        return sorted(tools)
+
+        grouped = {
+            key: sorted(value)
+            for key, value in sorted(grouped.items())
+        }
+
+        # Legacy compatibility aliases
+        msg_tools = sorted([
+            tool_name
+            for tool_name in self._registry_data.keys()
+            if tool_name.startswith("msg.")
+        ])
+
+        if msg_tools:
+            grouped["msg"] = msg_tools
+
+        if category is None:
+            return grouped
+
+        return grouped.get(category, [])
+
+    def export_lock(self, output_path: str) -> None:
+        """Export registry lock data to a JSON file."""
+
+        payload = {
+            "version": "2.0",
+            "count": len(self._registry_data),
+            "tool_count": len(self._registry_data),
+            "categories": self.get_categories(),
+            "tools": self._registry_data,
+        }
+
+        with open(output_path, "w") as f:
+            json.dump(payload, f, indent=2, sort_keys=True)
 
     def get_categories(self) -> list[str]:
         """Get all available categories."""
