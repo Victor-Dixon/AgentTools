@@ -79,3 +79,6 @@ pack_messages/
 .ruff_cache/
 .mypy_cache/
 htmlcov/
+
+# TypeScript incremental build cache
+*.tsbuildinfo

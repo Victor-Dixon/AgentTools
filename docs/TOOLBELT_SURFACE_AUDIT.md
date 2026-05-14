@@ -993,7 +993,7 @@
 
 - risk: `keep_active`
 - syntax_ok: `True`
-- classes: `none`
+- classes: `ToolbeltCore`
 - functions: `none`
 
 ### `tools_v2/adapters/__init__.py`
@@ -1589,7 +1589,7 @@
 - risk: `keep_active`
 - syntax_ok: `True`
 - classes: `ToolRegistry`
-- functions: `get_tool_registry, __init__, _load_registry_data, _resolve_tool_class, get_tool_class, get_tool, resolve, list_tools, list_by_category, get_categories, clear_cache`
+- functions: `get_tool_registry, __init__, _load_registry_data, _resolve_tool_class, get_tool_class, get_tool, resolve, list_tools, list_by_category, export_lock, get_categories, clear_cache`
 
 ### `tools_v2/toolbelt_core.py`
 

@@ -3247,9 +3247,15 @@
   {
     "path": "tools_v2/__init__.py",
     "syntax_ok": true,
-    "classes": [],
+    "classes": [
+      "ToolbeltCore"
+    ],
     "functions": [],
-    "imports": [],
+    "imports": [
+      "tool_registry",
+      "tool_registry",
+      "toolbelt_core"
+    ],
     "has_main_guard": false,
     "risk": "keep_active"
   },
@@ -3258,7 +3264,9 @@
     "syntax_ok": true,
     "classes": [],
     "functions": [],
-    "imports": [],
+    "imports": [
+      "base_adapter"
+    ],
     "has_main_guard": false,
     "risk": "keep_active"
   },
@@ -5898,6 +5906,7 @@
       "resolve",
       "list_tools",
       "list_by_category",
+      "export_lock",
       "get_categories",
       "clear_cache"
     ],
