@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import json
 import os
-import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+import requests
 
 
 @dataclass
@@ -16,30 +17,33 @@ class DiscordWebhookResult:
     message: str
 
 
+def _resolve_webhook_url(webhook_url: str | None = None) -> str | None:
+    return (
+        webhook_url
+        or os.environ.get("DISCORD_TRADING_WEBHOOK_URL")
+        or os.environ.get("DISCORD_WEBHOOK_URL")
+    )
+
+
 def send_payload(
     payload: dict[str, Any],
     webhook_url: str | None = None,
     timeout: int = 20,
 ) -> DiscordWebhookResult:
-    url = webhook_url or os.environ.get("DISCORD_TRADING_WEBHOOK_URL") or os.environ.get("DISCORD_WEBHOOK_URL")
+    url = _resolve_webhook_url(webhook_url)
 
     if not url:
         return DiscordWebhookResult(False, None, "missing Discord webhook URL env")
 
-    body = json.dumps(payload).encode("utf-8")
-
-    req = urllib.request.Request(
-        url,
-        data=body,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return DiscordWebhookResult(True, resp.status, "sent")
+        resp = requests.post(url, json=payload, timeout=timeout)
     except Exception as exc:
         return DiscordWebhookResult(False, None, str(exc))
+
+    if 200 <= resp.status_code < 300:
+        return DiscordWebhookResult(True, resp.status_code, "sent")
+
+    return DiscordWebhookResult(False, resp.status_code, resp.text[:500])
 
 
 def send_payload_file(path: str | Path, webhook_url: str | None = None) -> DiscordWebhookResult:

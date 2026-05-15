@@ -1,4 +1,4 @@
-from tools.discord.webhook_sender import send_payload
+from tools.discord.webhook_sender import send_payload, _resolve_webhook_url
 
 
 def test_discord_webhook_sender_missing_env_is_safe(monkeypatch):
@@ -10,3 +10,10 @@ def test_discord_webhook_sender_missing_env_is_safe(monkeypatch):
     assert result.ok is False
     assert result.status_code is None
     assert "missing" in result.message.lower()
+
+
+def test_resolve_prefers_trading_webhook(monkeypatch):
+    monkeypatch.setenv("DISCORD_WEBHOOK_URL", "https://example.com/generic")
+    monkeypatch.setenv("DISCORD_TRADING_WEBHOOK_URL", "https://example.com/trading")
+
+    assert _resolve_webhook_url() == "https://example.com/trading"
