@@ -1,6 +1,6 @@
 # 🐺 MASTER TASK LOG — WE ARE SWARM (SSOT)
 
-**Last Updated:** 2026-03-24
+**Last Updated:** 2026-05-17
 **Status:** Active Development  
 **Package:** swarm-mcp v0.1.0 (not yet published)
 
@@ -22,13 +22,15 @@ This file is the **single source of truth** for project execution status.
 
 ### Where we are now
 - **Phase:** Phase 0A — Consolidation + Packaging Readiness
-- **Date locked:** 2026-03-23
+- **Date locked:** 2026-05-17 audit refresh
 - **Release reality:** core code exists, but public release proof is incomplete because SWARM-003/004 are open.
+- **Workspace reality:** this checkout is a mixed workspace containing the SWARM MCP Python package, local AgentTools/operator tooling, standalone MCP server scripts, and a TypeScript Family Focus Board workspace. SWARM MCP remains the release-critical lane until SWARM-003/004 are complete.
 
 ### What this means
 - We are **not** at launch state.
 - We are in **release-readiness execution** mode.
 - Work that does not unblock SWARM-003/004 is secondary.
+- Cross-lane cleanup is now tracked, but it must not obscure the package release blockers.
 
 ---
 
@@ -40,7 +42,7 @@ Evidence collected 2026-03-23 (reproducible commands + outputs):
    - `control.py`, `memory.py`, `messaging.py`, `tasks.py`, `tools.py`
 2. **CLI subcommands currently implemented:** 12
    - `status`, `send`, `inbox`, `search`, `learn`, `tasks`, `assign`, `vote`, `conflict`, `profile`, `prove`, `patterns`
-3. **Branch state:** local branch set is single-branch (`work` only)
+3. **Branch state at that time:** local branch set was single-branch (`work` only)
 
 > These values replace older stale claims (e.g., "13 MCP servers", "7 CLI commands").
 
@@ -71,11 +73,74 @@ work
 
 ---
 
+## Workspace audit snapshot (2026-05-17)
+
+### Audit deliverables created/updated
+
+- Root actionable task list: `MASTER_TASK_LIST.md`
+- Root roadmap: `ROADMAP.md`
+- Structure reference: `PROJECT_STRUCTURE.md`
+- Comprehensive audit report: `PROJECT_AUDIT_REPORT.md`
+- Dashboard mirror: `NEXT_UP.md`
+
+### Inventory proof collected 2026-05-17
+
+```text
+swarm_mcp_servers 5 ['control.py', 'memory.py', 'messaging.py', 'tasks.py', 'tools.py']
+swarm_cli_subcommands 12 ['status', 'send', 'inbox', 'search', 'learn', 'tasks', 'assign', 'vote', 'conflict', 'profile', 'prove', 'patterns']
+mcp_server_scripts 27
+swarm_mcp_py_files 23
+tests_py_files 20
+tools_py_files 259
+tools_v2_py_files 89
+apps_files 24
+packages_files 7
+mcp_catalog_entries 23
+mcp_catalog_missing_targets 4 [('git-operations', 'swarm_mcp.servers.git_operations'), ('code-quality', 'swarm_mcp.servers.code_quality'), ('observability', 'swarm_mcp.servers.observability'), ('testing', 'swarm_mcp.servers.testing')]
+```
+
+### Verification results collected 2026-05-17
+
+Environment setup performed for audit:
+
+```bash
+python3 -m pip install -e ".[dev]"
+npm ci
+```
+
+Results:
+
+- `python3 -m pytest tests -q` — **BLOCKED/FAIL** during collection: `ModuleNotFoundError: No module named 'dotenv'` via `tools_v2/categories/communication_tools.py`.
+- `python3 tools/swarm/tests/check_import_healer_coverage.py` — **BLOCKED/FAIL** due coverage regression against `tools/swarm/tests/import_healer_coverage_baseline.json`.
+- `PYTHONPATH=. python3 tools/cli.py --security-scan` — **NEEDS TRIAGE**:
+  - no obvious secret patterns found;
+  - fixture `config.py` files flagged as suspicious tracked files;
+  - Python dependency audit skipped because `pip-audit` is not installed;
+  - npm audit findings reported.
+- `PYTHONPATH=. python3 tools/cli.py --audit-imports` — **WEAK PASS**; audited 0 Python files under default `src/` scope.
+- `npm -ws run typecheck` — **PASS** after `npm ci`.
+- `npm -ws run test` — **PARTIAL PASS**; `packages/shared` Vitest passes, while API/web scripts are placeholders.
+- `npm audit --audit-level=moderate` — **FAIL** with 3 vulnerabilities (1 moderate, 2 high) involving `next`, `fast-uri`, and `postcss`.
+
+### Audit conclusions
+
+- SWARM MCP package implementation is substantial but **not release-complete**.
+- Python CI dependency and coverage gates must be restored before release confidence is acceptable.
+- Standalone MCP catalog drift is concrete and actionable.
+- Family Focus Board code is present and partially implemented, but it is not CI-governed and should be treated as a separate product lane unless explicitly promoted.
+- Duplicate/stale planning artifacts remain and should be reduced after current deliverables are reviewed.
+
+---
+
 ## Critical path (must execute in order)
 
 - [x] [INFRA][P0][SWARM-002] Create/confirm PyPI account and API token; document secure storage steps. *(completed 2026-03-24)*
 - [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*` and record exact output.
 - [ ] [INFRA][P0][SWARM-004] Verify clean install: `pip install swarm-mcp`; verify import + CLI smoke test.
+- [ ] [QA][P0][SWARM-014] Restore declared dev test gate: `python3 -m pytest tests -q`.
+- [ ] [QA][P0][SWARM-015] Restore import-healer coverage gate or refresh baseline with documented rationale.
+- [ ] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
+- [ ] [SEC][P0][SWARM-017] Remediate npm audit findings or document accepted risk before any TS deployment.
 
 ### SWARM-002 execution log (2026-03-24)
 
@@ -115,19 +180,21 @@ work
 
 ## Next required agent asks (copy/paste)
 
-1. `Execute SWARM-003 and record the exact build/upload command outputs in MASTER_TASK_LOG.md.`
-2. `Execute SWARM-004 in a clean environment and record install/import/CLI smoke results in MASTER_TASK_LOG.md and NEXT_UP.md.`
+1. `Fix SWARM-014/SWARM-015 so the declared Python test and import-healer gates pass, then record exact command outputs in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
+2. `Execute SWARM-003 and record the exact build/upload command outputs in docs/root/MASTER_TASK_LOG.md.`
+3. `Execute SWARM-004 in a clean environment and record install/import/CLI smoke results in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
 
 ---
 
 ## Transition definition of done
 
 The current transition is done only when:
-- [ ] SSOT status statement is accurate and dated
-- [ ] Inventory proof section is updated and reproducible
+- [x] SSOT status statement is accurate and dated
+- [x] Inventory proof section is updated and reproducible
 - [x] SWARM-002 complete with concrete evidence
 - [ ] SWARM-003 complete with concrete evidence
 - [ ] SWARM-004 complete with concrete evidence
+- [ ] 2026-05-17 audit blockers triaged or linked to follow-up PRs
 
 ---
 

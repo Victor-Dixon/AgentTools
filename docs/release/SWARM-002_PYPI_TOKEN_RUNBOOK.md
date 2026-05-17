@@ -1,8 +1,8 @@
 # SWARM-002 — PyPI Account/Token Secure Storage Runbook
 
 **Task ID:** SWARM-002  
-**Last Updated:** 2026-03-24  
-**Status:** Ready for maintainer execution (credential action required)
+**Last Updated:** 2026-05-17  
+**Status:** Completed per `docs/root/MASTER_TASK_LOG.md`; retained as secure-storage reference
 
 ---
 
@@ -17,7 +17,7 @@ This runbook intentionally excludes raw secrets from logs/docs.
 
 ---
 
-## Required maintainer actions (in order)
+## Required maintainer actions (completed 2026-03-24 per SSOT)
 
 1. Sign in to `https://pypi.org` with the intended publisher account.
 2. Confirm account identity (username + email) in account settings.
@@ -66,7 +66,7 @@ Example step:
 
 ## Evidence template (non-secret)
 
-Fill this after maintainer execution:
+Use this template only if token ownership/storage is rotated in the future:
 
 - **Execution date (UTC):** `YYYY-MM-DD`
 - **PyPI account username:** `<username>`
@@ -80,10 +80,10 @@ Fill this after maintainer execution:
 ## Ready-to-send prompt for Codex agent (SWARM-003 handoff)
 
 ```text
-Proceed with SWARM-003. Use MASTER_TASK_LOG.md as SSOT.
+Proceed with SWARM-003. Use docs/root/MASTER_TASK_LOG.md as SSOT.
 1) Run: python -m build
 2) Run: python -m twine upload dist/*
-3) Record exact command output (redact secrets) in MASTER_TASK_LOG.md under a dated SWARM-003 evidence block.
+3) Record exact command output (redact secrets) in docs/root/MASTER_TASK_LOG.md under a dated SWARM-003 evidence block.
 4) Update NEXT_UP.md to mirror SSOT progress and remaining blocker state.
 Do not change task ordering; SWARM-004 remains next after SWARM-003.
 ```
