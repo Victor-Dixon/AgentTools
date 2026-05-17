@@ -38,7 +38,7 @@ Our goal is to create a self-improving, multi-agent system where every tool is a
     ```bash
     # Security Scan
     python tools/cli.py --security-scan
-    
+
     # Import Validation
     python tools/cli.py --audit-imports
     ```

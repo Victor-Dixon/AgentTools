@@ -49,7 +49,7 @@ High-value automation servers for development workflows.
 
 #### 1. Mission Control Server (Captain)
 Exposes Captain's coordination, mission assignment, and integrity tools.
-- **Tools**: 
+- **Tools**:
   - `assign_mission`: Create structured mission files
   - `check_integrity`: Verify work claims with git history
   - `update_leaderboard`: Manage agent points and achievements

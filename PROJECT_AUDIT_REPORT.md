@@ -1,8 +1,8 @@
 # PROJECT_AUDIT_REPORT
 
-**Audit date:** 2026-05-17  
-**Audited workspace:** `/workspace`  
-**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
+**Audit date:** 2026-05-17
+**Audited workspace:** `/workspace`
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Related deliverables:** `MASTER_TASK_LIST.md`, `ROADMAP.md`, `PROJECT_STRUCTURE.md`
 
 ---
@@ -32,7 +32,7 @@ Overall health is **moderate but unstable**: implementation exists in several la
 | CI/CD | Yellow/red | 50% | Python-only and currently blocked; no Node CI. |
 | Documentation/planning | Yellow/red | 55% | Current audit docs exist, but historical docs and duplicates remain. |
 
-Estimated overall workspace completion: **62%** for a governed multi-lane workspace.  
+Estimated overall workspace completion: **62%** for a governed multi-lane workspace.
 Estimated SWARM MCP package release completion: **80%** before PyPI verification; **not launch-complete**.
 
 ---

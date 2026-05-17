@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE
 
-**Last updated:** 2026-05-17  
+**Last updated:** 2026-05-17
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 
 This file documents the current repository layout, major service relationships, shared libraries, data flow, and infrastructure topology observed during the workspace audit.

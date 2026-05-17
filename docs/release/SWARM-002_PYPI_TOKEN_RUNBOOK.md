@@ -1,7 +1,7 @@
 # SWARM-002 — PyPI Account/Token Secure Storage Runbook
 
-**Task ID:** SWARM-002  
-**Last Updated:** 2026-05-17  
+**Task ID:** SWARM-002
+**Last Updated:** 2026-05-17
 **Status:** Completed per `docs/root/MASTER_TASK_LOG.md`; retained as secure-storage reference
 
 ---

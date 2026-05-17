@@ -1,7 +1,7 @@
 # ROADMAP
 
-**Last updated:** 2026-05-17  
-**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
+**Last updated:** 2026-05-17
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Roadmap scope:** SWARM MCP package release first, workspace stabilization second, product/tooling consolidation third.
 
 ---

@@ -1,7 +1,7 @@
 # 🐺 MASTER TASK LOG — WE ARE SWARM (SSOT)
 
 **Last Updated:** 2026-05-17
-**Status:** Active Development  
+**Status:** Active Development
 **Package:** swarm-mcp v0.1.0 (not yet published)
 
 ---

@@ -1,8 +1,8 @@
 # MASTER_TASK_LIST
 
-**Last updated:** 2026-05-17  
-**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
-**Companion dashboard:** `NEXT_UP.md`  
+**Last updated:** 2026-05-17
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
+**Companion dashboard:** `NEXT_UP.md`
 **Audit deliverables:** `PROJECT_AUDIT_REPORT.md`, `PROJECT_STRUCTURE.md`, `ROADMAP.md`
 
 This task list consolidates the current workspace audit into actionable work. Status values are:

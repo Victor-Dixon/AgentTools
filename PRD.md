@@ -1,6 +1,6 @@
 # PRD - AgentTools
 
-**Last reviewed:** 2026-05-17  
+**Last reviewed:** 2026-05-17
 **Status note:** This PRD describes the AgentTools/operator tooling lane. The current release-critical SSOT for this repository is SWARM MCP (`docs/root/MASTER_TASK_LOG.md`). Family Focus Board is a separate TypeScript product lane under `apps/` and `packages/`.
 
 ## Vision

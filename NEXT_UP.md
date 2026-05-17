@@ -1,7 +1,7 @@
 # NEXT UP — SWARM MCP EXECUTION DASHBOARD
 
 **Updated:** 2026-05-17
-**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Scope:** Packaging readiness first; workspace audit blockers tracked second.
 
 ---
@@ -20,8 +20,8 @@ This dashboard is the human-readable companion to the SSOT task log.
 
 ## Where we are now (accurate status)
 
-**Current phase:** Phase 0A — Consolidation + Packaging Readiness  
-**Release state:** Not yet published to PyPI  
+**Current phase:** Phase 0A — Consolidation + Packaging Readiness
+**Release state:** Not yet published to PyPI
 **Blocking tasks:** SWARM-014, SWARM-015, SWARM-003, SWARM-004
 
 Interpretation: implementation exists and local package workflows exist, but current audit evidence shows the declared Python gate and import-healer gate must be restored before release confidence is acceptable. External release verification remains incomplete.

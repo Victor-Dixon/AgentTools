@@ -1,7 +1,7 @@
 # MASTER TASK LIST — CANONICAL POINTER
 
-**Last updated:** 2026-05-17  
-**Status:** Superseded by current audit deliverables  
+**Last updated:** 2026-05-17
+**Status:** Superseded by current audit deliverables
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 
 This file previously contained a long 2025-era task list with stale counts and statuses. It is intentionally replaced with this pointer to prevent conflicts with the current SSOT.

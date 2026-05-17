@@ -120,11 +120,11 @@ proposal = consensus.propose(
 )
 
 # Agents vote with reasoning
-consensus.vote(proposal.id, "agent-2", VoteType.APPROVE, 
+consensus.vote(proposal.id, "agent-2", VoteType.APPROVE,
                "Agree - ACID is critical for money")
-consensus.vote(proposal.id, "agent-3", VoteType.APPROVE, 
+consensus.vote(proposal.id, "agent-3", VoteType.APPROVE,
                "Good choice, I'm familiar with Postgres")
-consensus.vote(proposal.id, "agent-4", VoteType.REJECT, 
+consensus.vote(proposal.id, "agent-4", VoteType.REJECT,
                "Would prefer MongoDB for flexibility")
 
 # Check the result

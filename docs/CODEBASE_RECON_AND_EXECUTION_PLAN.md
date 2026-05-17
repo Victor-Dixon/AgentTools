@@ -25,7 +25,7 @@ The repository is operating as a mixed workspace rather than a single coherent p
 Primary architecture is **polyglot + multi-track**:
 
 1. **Python swarm runtime path**
-   - Package entry defined in `pyproject.toml` with CLI + MCP scripts pointing to `swarm_mcp.*`. 
+   - Package entry defined in `pyproject.toml` with CLI + MCP scripts pointing to `swarm_mcp.*`.
    - Runtime modules in `swarm_mcp/core/*` (coordination, consensus, conflict, work proof, etc.).
    - MCP transport endpoints in `swarm_mcp/servers/*` and additional standalone servers in `mcp_servers/*.py`.
    - Root CI (`.github/workflows/swarm_ci.yml`) validates this lane only.
