@@ -1,0 +1,19 @@
+{
+  "mutations": [
+    {
+      "timestamp": "2026-05-22T10:49:04.786Z",
+      "mutationType": "channel.ensure",
+      "mode": "dry-run",
+      "ok": true,
+      "channelKey": "master-task-log"
+    },
+    {
+      "timestamp": "2026-05-22T10:49:04.789Z",
+      "mutationType": "webhook.ensure",
+      "mode": "live",
+      "ok": false,
+      "channelKey": "master-task-log"
+    }
+  ],
+  "lastUpdated": "2026-05-22T10:49:04.789Z"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "dreamos.discord_architect.backup.v1",
+  "generated_at": "2026-05-21T12:06:14.366Z",
+  "source_schema": "schemas/current.example.json",
+  "protected": [
+    "rules",
+    "announcements",
+    "general"
+  ],
+  "snapshot": {
+    "schema": "dreamos.discord_architect.server.v1",
+    "server": "Example Current",
+    "protected": [
+      "rules",
+      "announcements",
+      "general"
+    ],
+    "categories": [
+      {
+        "name": "COMMUNITY",
+        "channels": [
+          {
+            "name": "general",
+            "type": "text"
+          },
+          {
+            "name": "old-chat",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "roles": []
+  }
+}

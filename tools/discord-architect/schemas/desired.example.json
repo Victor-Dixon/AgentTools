@@ -1,0 +1,14 @@
+{
+  "server": "Example Community",
+  "protected": ["rules", "announcements", "general"],
+  "categories": [
+    {
+      "name": "COMMUNITY",
+      "channels": [
+        {"name": "general", "type": "text"},
+        {"name": "voice-lounge", "type": "voice"}
+      ]
+    }
+  ],
+  "roles": []
+}

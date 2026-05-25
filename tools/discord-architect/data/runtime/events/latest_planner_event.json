@@ -1,0 +1,28 @@
+{
+  "event_id": "planner_update_20260522_235106",
+  "event_type": "planner_transition",
+  "source": "dreamvault.planner",
+  "target_channel": "master-task-log",
+  "created_at": "2026-05-22T23:51:06.006888+00:00",
+  "severity": "info",
+  "title": "Planner Transition",
+  "summary": "Planner emitted current next-lane state.",
+  "content": "\ud83e\udded **Planner Transition**\n\n**Next Lane**\n```text\n# Planner Next Lane\n\n- closed_lane: `build_autonomous_runtime_manifest_014`\n- closed_commit: `b2504c62`\n- next_lane: `append_only_execution_event_journal`\n- routing_followup: `closeout_master_task_log_route_001`\n- discord_channel_key: `master-task-log`\n```\n\n**Governance**\n- risk: `unknown`\n- next_lane: `authority_aware_canonicalization_001`\n\nRoute: `master-task-log`\nSource task: `planner_discord_architect_bridge_001`",
+  "payload": {
+    "next_lane": "# Planner Next Lane\n\n- closed_lane: `build_autonomous_runtime_manifest_014`\n- closed_commit: `b2504c62`\n- next_lane: `append_only_execution_event_journal`\n- routing_followup: `closeout_master_task_log_route_001`\n- discord_channel_key: `master-task-log`",
+    "runtime_governance_summary": {
+      "governance_packet_available": true,
+      "semantic_owners_available": true,
+      "risk": "medium",
+      "dirty_summary": {
+        "durable": 3,
+        "ephemeral": 15,
+        "total": 34
+      },
+      "next_lane": "authority_aware_canonicalization_001",
+      "authority_conflict_report_available": true,
+      "summary_text": "governance_risk=medium; next_lane=authority_aware_canonicalization_001; semantic_owners=True"
+    },
+    "latest_task_preview": "task_id: planner_discord_architect_bridge_001\ntitle: Planner Discord Architect Bridge\nstatus: active\npriority: P1\nobjective: >\n  Emit planner next-lane and strategic queue updates as Discord Architect events.\noutputs:\n  - discord_architect/data/runtime/events/latest_planner_event.json\n  - discord_architect/data/runtime/events/planner_events.jsonl\n  - data/reports/planner_discord_bridge/latest_receipt.json\nverification:\n  - python runtime/scripts/emit_planner_discord_architect_event_001.py\n  - DISCORD_DISPATCH_MODE=live python runtime/scripts/emit_planner_discord_architect_event_001.py"
+  }
+}

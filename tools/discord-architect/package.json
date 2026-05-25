@@ -1,0 +1,16 @@
+{
+  "name": "discord-architect",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "node tests/mapper.test.js && node tests/diff.test.js && node tests/plan.test.js && node tests/backup.test.js && node tests/manifest.test.js && node tests/apply.test.js && node tests/createChannel.test.js",
+    "plan": "node src/cli/plan.js",
+    "backup": "node src/cli/backup.js",
+    "manifest": "node src/cli/manifest.js",
+    "apply": "node src/cli/apply.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4",
+    "dotenv": "^16.0.0"
+  }
+}
