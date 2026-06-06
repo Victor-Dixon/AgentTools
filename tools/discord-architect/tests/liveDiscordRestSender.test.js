@@ -7,7 +7,7 @@ const {
 
 assert.strictEqual(
   validateWebhookUrl(
-    'https://discord.com/api/webhooks/123/test'
+    'DISCORD_WEBHOOK_URL_PLACEHOLDER_DO_NOT_USE'
   ),
   true
 );
@@ -30,7 +30,7 @@ assert.strictEqual(
   const dry = await sendWebhookMessage({
     content: 'Dream.OS capability evolution event',
     mode: 'dry-run',
-    webhookUrl: 'https://discord.com/api/webhooks/123/test',
+    webhookUrl: 'DISCORD_WEBHOOK_URL_PLACEHOLDER_DO_NOT_USE',
   });
 
   assert.strictEqual(dry.ok, true);
