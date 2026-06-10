@@ -39,6 +39,11 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.0",
 ]
+discord = [
+    "discord.py>=2.0",
+    "requests>=2.28",
+    "python-dotenv>=1.0",
+]
 full = [
     "pyautogui>=0.9",
     "paramiko>=3.0",
@@ -61,7 +66,7 @@ swarm-control-server = "swarm_mcp.servers.control:main"
 swarm-tools-server = "swarm_mcp.servers.tools:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["swarm_mcp"]
+packages = ["swarm_mcp", "src/agent_tools"]
 
 [tool.ruff]
 line-length = 100
@@ -79,5 +84,6 @@ strict = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 python_files = ["test_*.py"]
 addopts = "-v --tb=short"
