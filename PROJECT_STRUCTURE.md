@@ -11,6 +11,8 @@ This file documents the current repository layout, major service relationships, 
 
 This repository currently contains **multiple active and semi-active lanes**:
 
+The `origin/master` version summarizes this repository as **AgentTools**, the Dream.OS canonical toolbelt repository. This audit preserves that boundary as the operator-tooling lane while also documenting the SWARM MCP package and Family Focus Board workspace that are present in this checkout.
+
 1. **SWARM MCP** — Python package and public release lane.
 2. **AgentTools/operator tooling** — local toolbelt, MCP helpers, migration/security/automation scripts.
 3. **Family Focus Board** — TypeScript web/API/shared workspace.
