@@ -120,11 +120,11 @@ proposal = consensus.propose(
 )
 
 # Agents vote with reasoning
-consensus.vote(proposal.id, "agent-2", VoteType.APPROVE, 
+consensus.vote(proposal.id, "agent-2", VoteType.APPROVE,
                "Agree - ACID is critical for money")
-consensus.vote(proposal.id, "agent-3", VoteType.APPROVE, 
+consensus.vote(proposal.id, "agent-3", VoteType.APPROVE,
                "Good choice, I'm familiar with Postgres")
-consensus.vote(proposal.id, "agent-4", VoteType.REJECT, 
+consensus.vote(proposal.id, "agent-4", VoteType.REJECT,
                "Would prefer MongoDB for flexibility")
 
 # Check the result
@@ -374,10 +374,27 @@ Add to your Claude Desktop or Cursor config:
     "swarm-control": {
       "command": "python",
       "args": ["-m", "swarm_mcp.servers.control"]
+    },
+    "swarm-tools": {
+      "command": "python",
+      "args": ["-m", "swarm_mcp.servers.tools"]
     }
   }
 }
 ```
+
+---
+
+## 📌 Current Project Status
+
+The canonical execution status lives in [`docs/root/MASTER_TASK_LOG.md`](docs/root/MASTER_TASK_LOG.md), with a human-readable dashboard in [`NEXT_UP.md`](NEXT_UP.md).
+
+The 2026-05-17 workspace audit also produced:
+
+- [`MASTER_TASK_LIST.md`](MASTER_TASK_LIST.md) — actionable task list and blockers
+- [`ROADMAP.md`](ROADMAP.md) — current sequencing and milestones
+- [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) — repository structure and service relationships
+- [`PROJECT_AUDIT_REPORT.md`](PROJECT_AUDIT_REPORT.md) — comprehensive health review
 
 ---
 

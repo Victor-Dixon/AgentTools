@@ -12,13 +12,13 @@ Our goal is to create a self-improving, multi-agent system where every tool is a
 
 1.  **Clone the Repo**:
     ```bash
-    git clone https://github.com/your-org/swarm-mcp.git
-    cd swarm-mcp
+    git clone https://github.com/Victor-Dixon/AgentTools.git
+    cd AgentTools
     ```
 
 2.  **Install Dependencies**:
     ```bash
-    pip install -e ".[dev]"
+    python3 -m pip install -e ".[dev]"
     ```
 
 3.  **Run the Toolbelt**:
@@ -38,14 +38,14 @@ Our goal is to create a self-improving, multi-agent system where every tool is a
     ```bash
     # Security Scan
     python tools/cli.py --security-scan
-    
+
     # Import Validation
     python tools/cli.py --audit-imports
     ```
 
 2.  **Tests**: Ensure all tests pass.
     ```bash
-    pytest
+    python3 -m pytest tests -q
     ```
 
 3.  **Commit Messages**: Use semantic commits (e.g., `feat: Add new agent`, `fix: Resolve queue deadlock`).

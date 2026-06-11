@@ -2,6 +2,8 @@
 
 This directory contains Model Context Protocol (MCP) servers that expose Agent Swarm capabilities.
 
+**Status note (2026-05-17):** These are standalone/operator MCP server scripts. The packaged PyPI `swarm-mcp` MCP servers live under `swarm_mcp/servers/`. Current task/status SSOT is `docs/root/MASTER_TASK_LOG.md`.
+
 ## 🗂️ Server Organization
 
 The MCP servers are organized into four main categories:
@@ -47,7 +49,7 @@ High-value automation servers for development workflows.
 
 #### 1. Mission Control Server (Captain)
 Exposes Captain's coordination, mission assignment, and integrity tools.
-- **Tools**: 
+- **Tools**:
   - `assign_mission`: Create structured mission files
   - `check_integrity`: Verify work claims with git history
   - `update_leaderboard`: Manage agent points and achievements
@@ -59,7 +61,7 @@ Exposes the swarm messaging system via MCP.
 - **Tools**: `send_agent_message`, `broadcast_message`, `get_agent_coordinates`
 
 #### 3. Task Manager Server
-Exposes the MASTER_TASK_LOG.md system via MCP.
+Exposes the `docs/root/MASTER_TASK_LOG.md` system via MCP.
 - **Tools**: `add_task_to_inbox`, `mark_task_complete`, `move_task_to_waiting`, `get_tasks`
 
 #### 4. Swarm Brain Server

@@ -44,9 +44,9 @@ This document maps **where “tool capabilities” live** in this repository, an
 
 ### `task-manager`
 - **Source**: `mcp_servers/task_manager_server.py`
-- **`add_task_to_inbox`**: Add a task to the INBOX section of MASTER_TASK_LOG.md
-- **`get_tasks`**: Get tasks from MASTER_TASK_LOG.md
-- **`mark_task_complete`**: Mark a task as complete in MASTER_TASK_LOG.md
+- **`add_task_to_inbox`**: Add a task to the INBOX section of `docs/root/MASTER_TASK_LOG.md`
+- **`get_tasks`**: Get tasks from `docs/root/MASTER_TASK_LOG.md`
+- **`mark_task_complete`**: Mark a task as complete in `docs/root/MASTER_TASK_LOG.md`
 - **`move_task_to_waiting`**: Move a task to WAITING ON section
 
 ### `v2-compliance`

@@ -1,9 +1,10 @@
-# MASTER_TASK_LOG
+# MASTER_TASK_LOG — POINTER
 
-## 2026-05-06
-- Inspected AgentTools as operator/control-plane/toolbelt repo.
-- Verified local suite: 65 passed, 1 external sibling repo dependency failure.
-- Added governance baseline artifacts.
+**Last updated:** 2026-05-17
+**Status:** Non-canonical compatibility pointer
 
-## Template
-- Date: action | verification | commit
+The canonical project execution log is:
+
+- `docs/root/MASTER_TASK_LOG.md`
+
+This root file is retained only for readers or tooling that still open `MASTER_TASK_LOG.md` at the repository root. Do not record new status here; update `docs/root/MASTER_TASK_LOG.md` first, then mirror human-readable focus in `NEXT_UP.md`.
