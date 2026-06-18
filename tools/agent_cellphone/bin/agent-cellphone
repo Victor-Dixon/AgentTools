@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+echo "agent-cellphone tool scaffold"
+echo "status=scaffolded"
+echo "next=extract curated commands after secret scan"

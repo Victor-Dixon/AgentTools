@@ -1,0 +1,27 @@
+tool: agent_cellphone
+status: scaffolded
+canonical_repo: AgentTools
+canonical_path: tools/agent_cellphone
+purpose: curated Agent Cellphone operator/device-control tooling
+sources:
+  - repo: Agent_Cellphone
+    local_path: /data/data/com.termux/files/home/projects/Agent_Cellphone
+    head: 4235cf86e9a02e882bd11c760738472859d7964d
+    role: primary_source
+  - repo: Agent_Cellphone_V2_Repository
+    local_path: /data/data/com.termux/files/home/projects/Agent_Cellphone_V2_Repository
+    head: cf63f66059363e1256921caa2d7a48180b4d12ed
+    role: salvage_reference
+agenttools_base:
+  head_before_scaffold: 33e067881397204bcc354a1c5c29e389f1388286
+policy:
+  raw_import: false
+  preserve_source_repos: true
+  destructive_actions: false
+  public_visibility: private_until_secret_scan_passes
+  extraction_strategy: curated_tool_reduction
+gates:
+  - inventory_manifest_exists
+  - secret_scan_before_code_copy
+  - tests_before_commit
+  - pr_before_merge
