@@ -409,3 +409,17 @@ git status
 - **START WITH**: Phase 0A: Organization & Planning before any migration work
 - **Git Status**: ✅ Clean - All branches merged and deleted, ready for Phase 0A
 
+---
+
+## Active (origin/main sync 2026-06-21)
+
+- [ ] Classify active vs deprecated MCP servers.
+- [ ] Inventory `tools_v2` migration status.
+- [ ] Document test gates that require external sibling repos.
+
+## Backlog (origin/main sync 2026-06-21)
+
+- [ ] Unified tool registry.
+- [ ] MCP lifecycle governance.
+- [ ] Discord orchestration expansion.
+- [ ] Cross-repo automation coordination.

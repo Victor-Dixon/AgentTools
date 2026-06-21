@@ -12,10 +12,10 @@ Primary code surfaces:
 
 ## SSOT enforcement policy
 
-- `MASTER_TASK_LOG.md` is the single source of truth for project status.
+- `docs/root/MASTER_TASK_LOG.md` is the single source of truth for project status.
 - `NEXT_UP.md` mirrors SSOT for human-friendly execution focus.
-- Any task/status update must be reflected in `MASTER_TASK_LOG.md` first, then `NEXT_UP.md`.
-- If documents conflict, treat `MASTER_TASK_LOG.md` as canonical and reconcile immediately.
+- Any task/status update must be reflected in `docs/root/MASTER_TASK_LOG.md` first, then `NEXT_UP.md`.
+- If documents conflict, treat `docs/root/MASTER_TASK_LOG.md` as canonical and reconcile immediately.
 
 ## Documentation update guardrails
 

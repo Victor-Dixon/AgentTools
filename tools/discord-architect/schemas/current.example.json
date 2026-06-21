@@ -1,0 +1,15 @@
+{
+  "schema": "dreamos.discord_architect.server.v1",
+  "server": "Example Current",
+  "protected": ["rules", "announcements", "general"],
+  "categories": [
+    {
+      "name": "COMMUNITY",
+      "channels": [
+        {"name": "general", "type": "text"},
+        {"name": "old-chat", "type": "text"}
+      ]
+    }
+  ],
+  "roles": []
+}

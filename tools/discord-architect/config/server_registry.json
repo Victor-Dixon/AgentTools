@@ -1,0 +1,26 @@
+{
+  "schema": "dreamos.discord_architect.server_registry.v1",
+  "generated_by": "discord_architect_registry_bootstrap_001",
+  "servers": [
+    {
+      "server_key": "primary_swarm",
+      "guild_id": "",
+      "name": "",
+      "environment": "production",
+      "classification": "core_runtime",
+      "managed": true,
+      "allow_schema_apply": false,
+      "protected": true,
+      "protected_channels": [
+        "rules",
+        "announcements",
+        "general"
+      ],
+      "tags": [
+        "dreamos",
+        "runtime",
+        "governance"
+      ]
+    }
+  ]
+}
