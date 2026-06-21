@@ -25,9 +25,13 @@ class BotLifecycleManager:
         from agent_tools.discord_commander.commands.agent_management_commands import (
             AgentManagementCommands,
         )
+        from agent_tools.discord_commander.commands.messaging_commands import (
+            MessagingCommands,
+        )
 
         await self.bot.add_cog(AgentManagementCommands(self.bot, gui_controller=None))
-        self.logger.info("Promoted slice: AgentManagementCommands loaded")
+        await self.bot.add_cog(MessagingCommands(self.bot, gui_controller=None))
+        self.logger.info("Promoted slice: AgentManagementCommands + MessagingCommands loaded")
 
     async def send_startup_message(self) -> None:
         channel = self._first_text_channel()
@@ -36,7 +40,7 @@ class BotLifecycleManager:
             return
         embed = discord.Embed(
             title="Discord Commander",
-            description="Toolbelt slice active — use `/help` or `!heal status`",
+            description="Toolbelt slice active — use `/help`, `!message Agent-1 <msg>`, or `!heal status`",
             color=0x5865F2,
         )
         try:

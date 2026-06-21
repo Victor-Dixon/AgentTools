@@ -21,7 +21,7 @@ SLASH_COMMANDS = (
     "/swarm-status",
     "/fleet-audit",
 )
-PREFIX_COMMANDS = ("!ping", "!status", "!help", "!swarm-status")
+PREFIX_COMMANDS = ("!ping", "!status", "!help", "!swarm-status", "!message", "!heal")
 
 
 def _require_discord():
@@ -157,7 +157,7 @@ class UnifiedDiscordBot:
         async def help_prefix(ctx) -> None:
             await ctx.send(
                 "**Discord Commander**\n"
-                "Prefix: `!ping` `!status` `!help` `!swarm-status`\n"
+                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message <agent> <msg>` `!heal`\n"
                 "Slash: `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`"
             )
 
@@ -192,7 +192,7 @@ class UnifiedDiscordBot:
         async def help_slash(interaction) -> None:
             await interaction.response.send_message(
                 "**Discord Commander**\n"
-                "Prefix: `!ping` `!status` `!help` `!swarm-status`\n"
+                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message <agent> <msg>` `!heal`\n"
                 "Slash: `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`"
             )
 

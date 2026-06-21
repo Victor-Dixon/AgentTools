@@ -13,11 +13,16 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
 sys.path.insert(0, str(SRC))
 
+from agent_tools.discord_commander.agent_message_sender import (
+    normalize_agent_id,
+    send_agent_message,
+)
 from agent_tools.discord_commander.cli import build_parser, main
 from agent_tools.discord_commander.config import DiscordEnvConfig, mask_secret
 from agent_tools.discord_commander.inbound_dry_run import inbound_dry_run
 from agent_tools.discord_commander.outbound_dry_run import outbound_dry_run
 from agent_tools.discord_commander.outbound_router import post_to_discord
+from agent_tools.discord_commander.unified_discord_bot import PREFIX_COMMANDS
 
 
 VALID_WEBHOOK = "https://discord.com/api/webhooks/123456789/abcdefghijklmnop"
@@ -140,3 +145,54 @@ class TestCli:
                 ]
             )
         assert code == 0
+
+
+class TestAgentMessageSender:
+    def test_normalize_agent_id(self):
+        assert normalize_agent_id("Agent-1") == "Agent-1"
+        assert normalize_agent_id("agent-3") == "Agent-3"
+        assert normalize_agent_id("3") == "Agent-3"
+        assert normalize_agent_id("Agent-9") is None
+        assert normalize_agent_id("unknown") is None
+
+    def test_send_agent_message_dry_run(self):
+        env = {"DISCORD_WEBHOOK_AGENT_1": VALID_WEBHOOK}
+        with patch.dict(os.environ, env, clear=True):
+            result = send_agent_message(
+                "Agent-1",
+                "Check your inbox",
+                dry_run=True,
+            )
+        assert result.success
+        assert result.agent == "Agent-1"
+        assert result.data["transport"] == "outbound_webhook"
+
+    def test_send_agent_message_invalid_agent(self):
+        result = send_agent_message("Captain", "hello")
+        assert not result.success
+        assert result.error_code == "INVALID_AGENT"
+
+    def test_send_agent_message_empty_body(self):
+        result = send_agent_message("Agent-1", "   ")
+        assert not result.success
+        assert result.error_code == "EMPTY_MESSAGE"
+
+    def test_send_agent_message_transport_adapter(self):
+        class FakeTransport:
+            def send(self, agent_id: str, message: str) -> bool:
+                assert agent_id == "Agent-2"
+                assert message == "ping"
+                return True
+
+        result = send_agent_message(
+            "agent-2",
+            "ping",
+            transport=FakeTransport(),
+        )
+        assert result.success
+        assert result.data["transport"] == "queue_bridge"
+
+
+class TestPrefixCommands:
+    def test_message_in_prefix_commands(self):
+        assert "!message" in PREFIX_COMMANDS
