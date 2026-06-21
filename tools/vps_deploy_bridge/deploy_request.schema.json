@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dreamos.local/schemas/deploy_request.schema.json",
+  "title": "DreamOS VPS Deploy Request",
+  "description": "Signed deploy artifact submitted by agents; executed only by operator-controlled runner.",
+  "type": "object",
+  "required": [
+    "request_id",
+    "agent_id",
+    "repo",
+    "source_path",
+    "target_path",
+    "action",
+    "reason",
+    "created_at",
+    "dry_run"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9._-]+$"
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "upload_file",
+        "upload_dir",
+        "run_command",
+        "restart_service",
+        "healthcheck"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "dry_run": {
+      "type": "boolean",
+      "default": true
+    },
+    "service_name": {
+      "type": "string"
+    },
+    "command": {
+      "type": "string"
+    },
+    "expected_verify": {
+      "type": "string"
+    },
+    "max_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "allowed_extensions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "checksum_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "run_command"
+          }
+        }
+      },
+      "then": {
+        "required": ["command"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "restart_service"
+          }
+        }
+      },
+      "then": {
+        "required": ["service_name"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "healthcheck"
+          }
+        }
+      },
+      "then": {
+        "required": ["service_name"]
+      }
+    }
+  ]
+}
