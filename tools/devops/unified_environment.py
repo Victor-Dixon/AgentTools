@@ -71,6 +71,13 @@ def check_docker_status():
         return "stopped"
 
 def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Verify local dev environment: tools, env vars, Docker."
+    )
+    parser.parse_args()
+
     print("🌍 UNIFIED ENVIRONMENT CHECK")
     print("=" * 60)
     

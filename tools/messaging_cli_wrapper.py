@@ -1,43 +1,64 @@
 #!/usr/bin/env python3
 """
 Messaging CLI Wrapper for Agent Tools
-======================================
+=====================================
 
-Wrapper script that properly calls the messaging CLI from Agent_Cellphone_V2_Repository.
-This fixes the "ModuleNotFoundError: No module named 'src.services'" error.
+Routes toolbelt --message to DreamVault messaging SSOT
+(runtime/scripts/agent_messaging_send_001.py).
 
-Usage: python tools/messaging_cli_wrapper.py [args...]
+Usage:
+    python -m tools.toolbelt --message --help
+    python -m tools.toolbelt --message --agent Agent-2 --message "task text"
+    python -m tools.toolbelt --message --category c2a --agent Agent-2 --task "Do X"
 """
 
-import sys
+from __future__ import annotations
+
 import os
 import subprocess
+import sys
 from pathlib import Path
 
-def main():
-    # Path to the Agent_Cellphone_V2_Repository
-    cellphone_repo = Path("D:/Agent_Cellphone_V2_Repository")
 
-    if not cellphone_repo.exists():
-        print("❌ ERROR: Agent_Cellphone_V2_Repository not found at D:/Agent_Cellphone_V2_Repository", file=sys.stderr)
-        print("   Please ensure the repository is cloned to the correct location.", file=sys.stderr)
+def _dreamvault_roots() -> list[Path]:
+    candidates = [
+        Path(os.environ.get("DREAMVAULT_ROOT", "")),
+        Path("D:/DreamVault"),
+        Path(__file__).resolve().parents[2].parent / "DreamVault",
+    ]
+    seen: set[str] = set()
+    roots: list[Path] = []
+    for root in candidates:
+        key = str(root)
+        if key and key not in seen:
+            seen.add(key)
+            roots.append(root)
+    return roots
+
+
+def _resolve_ssot_script() -> Path | None:
+    for root in _dreamvault_roots():
+        script = root / "runtime/scripts/agent_messaging_send_001.py"
+        if script.is_file():
+            return script
+    return None
+
+
+def main() -> int:
+    script = _resolve_ssot_script()
+    if script is None:
+        print(
+            "ERROR: DreamVault messaging SSOT not found.\n"
+            "Expected: <DreamVault>/runtime/scripts/agent_messaging_send_001.py\n"
+            "Set DREAMVAULT_ROOT or clone DreamVault to D:/DreamVault.",
+            file=sys.stderr,
+        )
         return 1
 
-    # Change to cellphone repo directory and run the messaging CLI
-    try:
-        os.chdir(cellphone_repo)
+    cmd = [sys.executable, str(script), *sys.argv[1:]]
+    result = subprocess.run(cmd, cwd=str(script.parents[2]))
+    return int(result.returncode)
 
-        # Prepare the command to run the messaging CLI from cellphone repo
-        cmd = [sys.executable, "-m", "src.services.messaging_cli"] + sys.argv[1:]
-
-        # Run the command
-        result = subprocess.run(cmd, capture_output=False, text=True)
-
-        return result.returncode
-
-    except Exception as e:
-        print(f"❌ ERROR: Failed to execute messaging CLI: {e}", file=sys.stderr)
-        return 1
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -164,6 +164,13 @@ def print_security_report(results: dict[str, Any], gitignore_check: dict[str, An
 
 def main():
     """Main execution."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Scan git-tracked files for sensitive patterns (tokens, secrets, keys)."
+    )
+    parser.parse_args()
+
     print("Checking for sensitive files in git...")
     print()
     

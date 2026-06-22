@@ -15,7 +15,10 @@ V2 Compliance: <100 lines, focused executor
 """
 
 import logging
+import os
 import subprocess
+import sys
+from pathlib import Path
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -27,6 +30,16 @@ class OnboardingExecutor:
     def __init__(self):
         """Initialize onboarding executor."""
         self.soft_onboard_cli = "python tools/soft_onboard_cli.py"
+
+    def _dreamvault_messaging_script(self) -> Path | None:
+        for root in (
+            Path(os.environ.get("DREAMVAULT_ROOT", "D:/DreamVault")),
+            Path("D:/DreamVault"),
+        ):
+            script = root / "runtime/scripts/agent_messaging_send_001.py"
+            if script.is_file():
+                return script
+        return None
 
     def execute(self, args) -> int:
         """
@@ -78,16 +91,22 @@ class OnboardingExecutor:
             print("    Use --yes to confirm")
             return 1
 
+        script = self._dreamvault_messaging_script()
+        if script is None:
+            print("ERROR: DreamVault messaging SSOT not found for hard onboarding")
+            return 1
+
         cmd = [
-            "python",
-            "-m",
-            "src.services.messaging_cli",
-            "--hard-onboarding",
+            sys.executable,
+            str(script),
+            "--category",
+            "s2a",
+            "--s2a-variant",
+            "onboarding",
             "--agent",
             args.agent,
             "--message",
             args.message,
-            "--yes",
         ]
 
         print(f"🚨 Hard onboarding {args.agent} (COMPLETE RESET)...")
