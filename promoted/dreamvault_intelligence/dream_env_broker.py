@@ -26,6 +26,7 @@ DEFAULT_TEMPLATE_KEYS = [
     "DISCORD_TRADING_WEBHOOK_URL",
     "GEMINI_API_KEY",
     "GITHUB_PAT",
+    "PYPI_API_TOKEN",
 ]
 
 
@@ -154,7 +155,9 @@ def cmd_export(args: argparse.Namespace) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Dream.OS local secret broker")
+    parser = argparse.ArgumentParser(
+        description="Dream.OS local env broker — loads secrets from gitignored runtime/secrets/*.env"
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("init")
