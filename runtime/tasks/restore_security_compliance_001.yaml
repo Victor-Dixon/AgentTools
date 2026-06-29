@@ -1,0 +1,20 @@
+﻿task_id: restore_security_compliance_001
+title: Restore security_compliance from deprecated salvage shelf
+status: ready
+priority: medium
+lane: lost_systems_restore
+repo: D:/agent-tools
+restore_class: security_compliance
+source: tools/deprecated
+safety:
+  - no deletion
+  - no blind promotion
+  - inspect source and active equivalent before change
+  - preserve current hidden worker lifecycle
+  - redact secrets in all reports
+verification:
+  - candidate list reviewed
+  - active target selected
+  - tests or command smoke check pass
+  - report written
+candidate_count: 6

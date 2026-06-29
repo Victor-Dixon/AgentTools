@@ -1,0 +1,20 @@
+﻿task_id: restore_reporting_dashboards_001
+title: Restore reporting_dashboards from deprecated salvage shelf
+status: ready
+priority: medium
+lane: lost_systems_restore
+repo: D:/agent-tools
+restore_class: reporting_dashboards
+source: tools/deprecated
+safety:
+  - no deletion
+  - no blind promotion
+  - inspect source and active equivalent before change
+  - preserve current hidden worker lifecycle
+  - redact secrets in all reports
+verification:
+  - candidate list reviewed
+  - active target selected
+  - tests or command smoke check pass
+  - report written
+candidate_count: 1

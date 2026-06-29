@@ -1,0 +1,3398 @@
+﻿[
+    {
+        "path":  "src\\agent_tools\\discord_commander\\config.py",
+        "role":  "active_commander_package",
+        "restore_priority":  1,
+        "size_bytes":  2485,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "DiscordEnvConfig"
+                    ],
+        "functions":  [
+                          "mask_secret"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\logging_config.py",
+        "role":  "active_commander_package",
+        "restore_priority":  1,
+        "size_bytes":  1480,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "configure_discord_commander_logging"
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\config.py",
+        "role":  "discord_support_tool",
+        "restore_priority":  1,
+        "size_bytes":  1976,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "first_value",
+                          "parse_export_file",
+                          "resolve_discord_config"
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\create_webhook.py",
+        "role":  "discord_support_tool",
+        "restore_priority":  2,
+        "size_bytes":  2021,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN",
+                         "DISCORD_TRADING_CHANNEL_ID",
+                         "DISCORD_TRADING_WEBHOOK_NAME"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\list_channels.py",
+        "role":  "discord_support_tool",
+        "restore_priority":  2,
+        "size_bytes":  2194,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\devlog_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  3,
+        "size_bytes":  22033,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_AGENT1_WEBHOOK",
+                         "DISCORD_AGENT2_WEBHOOK",
+                         "DISCORD_AGENT3_WEBHOOK",
+                         "DISCORD_AGENT4_WEBHOOK",
+                         "DISCORD_AGENT5_WEBHOOK",
+                         "DISCORD_AGENT6_WEBHOOK",
+                         "DISCORD_AGENT7_WEBHOOK",
+                         "DISCORD_AGENT8_WEBHOOK",
+                         "DISCORD_CAPTAIN_WEBHOOK",
+                         "DISCORD_WEBHOOK_AGENT_1",
+                         "DISCORD_WEBHOOK_AGENT_2",
+                         "DISCORD_WEBHOOK_AGENT_3",
+                         "DISCORD_WEBHOOK_AGENT_4",
+                         "DISCORD_WEBHOOK_AGENT_5",
+                         "DISCORD_WEBHOOK_AGENT_6",
+                         "DISCORD_WEBHOOK_AGENT_7",
+                         "DISCORD_WEBHOOK_AGENT_8",
+                         "DISCORD_WEBHOOK_URL"
+                     ],
+        "classes":  [
+                        "DevlogManager"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\devlog_poster.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  3,
+        "size_bytes":  16414,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_CAPTAIN_WEBHOOK"
+                     ],
+        "classes":  [
+                        "DevlogPoster"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\devlog_poster.py",
+        "role":  "related_candidate",
+        "restore_priority":  3,
+        "size_bytes":  13297,
+        "modified":  "2026-06-21T14:54:04.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "post_agent_heartbeat",
+                          "post_devlog_to_discord",
+                          "save_devlog_for_website",
+                          "split_content_into_pages",
+                          "update_agent_status"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\discord_startup_listener.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  4,
+        "size_bytes":  10467,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN",
+                         "DISCORD_CHANNEL_ID"
+                     ],
+        "classes":  [
+                        "StartupCommands",
+                        "StartupListenerBot"
+                    ],
+        "functions":  [
+                          "cleanup_lock",
+                          "create_lock",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\__init__.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  571,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\__main__.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  181,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\agent_message_sender.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  7340,
+        "modified":  "2026-06-28T07:21:38.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "ALLOW_LIVE_CURSOR_INJECTION",
+                         "DISCORD_COMMANDER_WEBHOOK_FALLBACK"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_format_sender",
+                          "_webhook_fallback_enabled",
+                          "normalize_agent_id",
+                          "send_agent_message"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\bot_runner_service.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2578,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN",
+                         "DISCORD_GUILD_ID"
+                     ],
+        "classes":  [
+                        "BotRunnerService"
+                    ],
+        "functions":  [
+                          "create_bot_runner_service",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\cli.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  3844,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_print_result",
+                          "_repo_root",
+                          "build_parser",
+                          "cmd_start_bot",
+                          "cmd_start_queue",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\commands\\__init__.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  56,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\commands\\agent_management_commands.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  3731,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AgentManagementCommands"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\commands\\messaging_commands.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  4328,
+        "modified":  "2026-06-28T03:26:18.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MessagingCommands"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\delivery_preflight.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  3368,
+        "modified":  "2026-06-28T02:54:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "AGENT_GAS_LAYOUT_MODE"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "agent_input_coords",
+                          "get_virtual_screen",
+                          "layout_has_in_bounds_agent",
+                          "load_layouts",
+                          "point_in_virtual_screen",
+                          "resolve_layout_for_agent"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\discord_embeds.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  4065,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "create_agent_status_embed",
+                          "create_coordination_embed",
+                          "create_devlog_embed",
+                          "create_error_embed"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\discord_service.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  1752,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "DiscordService"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\handlers\\__init__.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  58,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\handlers\\discord_event_handlers.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2000,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "DiscordEventHandlers"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\inbound_dry_run.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2969,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_discord_available",
+                          "inbound_dry_run"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\lifecycle\\__init__.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  53,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\lifecycle\\bot_lifecycle.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2247,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "BotLifecycleManager"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\message_bus_bridge.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  3744,
+        "modified":  "2026-06-28T07:21:36.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "AGENT_CELLPHONE_ROOT",
+                         "AGENT_GAS_LAYOUT_MODE",
+                         "ALLOW_LIVE_CURSOR_INJECTION",
+                         "DISCORD_COMMANDER_USE_MESSAGE_BUS"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_ensure_import",
+                          "message_bus_enabled",
+                          "send_via_message_bus"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\message_queue_processor.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  6498,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MessageQueueProcessor",
+                        "MessageQueueStore",
+                        "QueuedMessage"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\messaging_delivery_log.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2111,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_COMMANDER_LOG_DIR"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_log_dir",
+                          "delivery_jsonl_path",
+                          "record_delivery"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\models.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  1409,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CommandResult",
+                        "DeliveryResult",
+                        "PostMessage"
+                    ],
+        "functions":  [
+                          "_utc_now_iso"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\outbound_dry_run.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2179,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_valid_webhook_format",
+                          "outbound_dry_run"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\outbound_router.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  3109,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "OutboundRouter"
+                    ],
+        "functions":  [
+                          "post_to_discord"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\pyautogui_transport.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  5736,
+        "modified":  "2026-06-28T02:54:24.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "AGENT_CELLPHONE_ROOT",
+                         "AGENT_GAS_LAYOUT_MODE"
+                     ],
+        "classes":  [
+                        "PyAutoGUITransport"
+                    ],
+        "functions":  [
+                          "ensure_agent_cellphone_path",
+                          "get_default_transport",
+                          "reset_default_transport",
+                          "resolve_agent_cellphone_root"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\queue_bridge.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  2929,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_COMMANDER_DISABLE_PYAUTOGUI"
+                     ],
+        "classes":  [
+                        "NoOpQueueProcessor",
+                        "QueueProcessor"
+                    ],
+        "functions":  [
+                          "deliver_message",
+                          "get_transport",
+                          "load_queue_processor"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\status.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  1255,
+        "modified":  "2026-06-21T14:54:02.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "collect_status"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\template_bridge.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  3079,
+        "modified":  "2026-06-28T03:26:00.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_COMMANDER_USE_D2A_TEMPLATE",
+                         "DREAMVAULT_ROOT"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_ensure_dreamvault_import",
+                          "d2a_template_enabled",
+                          "list_template_categories",
+                          "resolve_dreamvault_root",
+                          "wrap_d2a_message"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\unified_discord_bot.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  10806,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN",
+                         "DISCORD_GUILD_ID",
+                         "DREAMVAULT_ROOT"
+                     ],
+        "classes":  [
+                        "UnifiedDiscordBot"
+                    ],
+        "functions":  [
+                          "_require_discord",
+                          "_try_fleet_audit",
+                          "_try_swarm_statuses",
+                          "_vault_root"
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\utils\\__init__.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  53,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "src\\agent_tools\\discord_commander\\utils\\message_chunking.py",
+        "role":  "active_commander_package",
+        "restore_priority":  5,
+        "size_bytes":  1536,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "chunk_embed_description",
+                          "chunk_field_value",
+                          "chunk_message",
+                          "format_chunk_header"
+                      ]
+    },
+    {
+        "path":  "tools\\discord_commander\\post_to_discord_router.py",
+        "role":  "active_commander_tool",
+        "restore_priority":  5,
+        "size_bytes":  1244,
+        "modified":  "2026-06-21T14:54:04.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\discord_commander\\run_unified_discord_bot_with_restart.py",
+        "role":  "active_commander_tool",
+        "restore_priority":  5,
+        "size_bytes":  1491,
+        "modified":  "2026-06-21T14:54:04.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "run_bot"
+                      ]
+    },
+    {
+        "path":  "tools\\discord_commander\\start_discord_system.py",
+        "role":  "active_commander_tool",
+        "restore_priority":  5,
+        "size_bytes":  1733,
+        "modified":  "2026-06-21T14:54:04.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_spawn",
+                          "_token_present",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\discord_commander\\start_message_queue_processor.py",
+        "role":  "active_commander_tool",
+        "restore_priority":  5,
+        "size_bytes":  1025,
+        "modified":  "2026-06-27T16:20:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_message_history.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  5,
+        "size_bytes":  10264,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MessageHistoryViewer"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_message_processor.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  5,
+        "size_bytes":  14171,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainMessageProcessor"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\clean_message_queue.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  5,
+        "size_bytes":  5411,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "clean_queue",
+                          "is_system_message",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\message_delivery_verifier.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  5,
+        "size_bytes":  12215,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_queue_status",
+                          "get_delivery_stats",
+                          "main",
+                          "verify_all_recipients",
+                          "verify_inbox_file",
+                          "verify_message_delivery"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\reset_stuck_messages.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  5,
+        "size_bytes":  4045,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "reset_stuck_messages"
+                      ]
+    },
+    {
+        "path":  "tools\\communication\\message_validator.py",
+        "role":  "related_candidate",
+        "restore_priority":  5,
+        "size_bytes":  7320,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MessageValidator"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\debug\\check_stuck_messages.py",
+        "role":  "related_candidate",
+        "restore_priority":  5,
+        "size_bytes":  2711,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_stuck_messages",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\debug\\debug_message_queue.py",
+        "role":  "related_candidate",
+        "restore_priority":  5,
+        "size_bytes":  18058,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "analyze_queue_entries",
+                          "check_lock_files",
+                          "check_queue_file",
+                          "check_queue_processor_running",
+                          "fix_queue_issues",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\debug\\fix_message_queue.py",
+        "role":  "related_candidate",
+        "restore_priority":  5,
+        "size_bytes":  5765,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "clear_lock_files",
+                          "main",
+                          "reset_stuck_messages"
+                      ]
+    },
+    {
+        "path":  "tools\\logs\\queue_processor.log",
+        "role":  "related_candidate",
+        "restore_priority":  5,
+        "size_bytes":  386,
+        "modified":  "2026-01-10T04:49:52.0000000-06:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\verification\\stress_test_messaging_queue.py",
+        "role":  "related_candidate",
+        "restore_priority":  5,
+        "size_bytes":  16244,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "create_mock_delivery_callback",
+                          "create_real_delivery_callback",
+                          "main",
+                          "run_comparison_mode",
+                          "run_stress_test"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\__main__.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  498,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_activity_detector.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5057,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "ActivitySummary",
+                        "AgentActivityDetector"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_checkin.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3683,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_iso_now",
+                          "append_jsonl",
+                          "atomic_write",
+                          "ensure_dirs",
+                          "get_unified_validator",
+                          "load_json_arg",
+                          "main",
+                          "update_index",
+                          "validate_minimum",
+                          "write_json"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_cycle_v2_report_validator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  11477,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CycleV2Validator"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_fuel_monitor.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  12890,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AgentFuelMonitor"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_lifecycle_automator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8132,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AgentLifecycleAutomator",
+                        "PipelineGas",
+                        "StatusUpdater"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_mission_controller.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  21970,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AgentProfile",
+                        "Mission",
+                        "MissionIntelligence",
+                        "MissionRecommendation"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_orient.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8800,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "list_systems",
+                          "list_tools",
+                          "main",
+                          "quick_start",
+                          "search",
+                          "show_help"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\agent_task_finder.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4453,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "calculate_roi",
+                          "find_violations",
+                          "load_project_analysis",
+                          "main",
+                          "rank_tasks_by_roi"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\analysis_toolkit.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  14546,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AnalysisToolkit"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\architecture_review.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3911,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "provide_review",
+                          "request_review"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_assign_next_round.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8376,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "get_agent_status",
+                          "get_task_for_agent",
+                          "main",
+                          "should_assign_next_round"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_fix_missing_imports.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8078,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_if_already_imported",
+                          "check_if_import_needed",
+                          "extract_existing_imports",
+                          "find_python_files",
+                          "fix_file_imports",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_inbox_processor.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  11587,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AutoInboxProcessor"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_learn_preferences.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  16854,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AutomaticPreferenceLearner"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_remediate_loc.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  12530,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "analyze_class_loc",
+                          "analyze_file_loc",
+                          "analyze_function_loc",
+                          "count_lines",
+                          "generate_class_split_suggestion",
+                          "generate_file_split_suggestion",
+                          "generate_function_split_suggestion",
+                          "generate_refactor_plan",
+                          "generate_text_report",
+                          "main",
+                          "should_exclude"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_status_updater.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  10319,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AutoStatusUpdater"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_validate_cycle_v2.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5436,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "auto_validate_cycle_v2",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\auto_workspace_cleanup.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8429,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AutoWorkspaceCleanup"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\autonomous_leaderboard.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5532,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "award_achievement_cli",
+                          "main",
+                          "show_agent_details",
+                          "show_leaderboard"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\autonomous_task_engine.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  27887,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "AgentProfile",
+                        "AutonomousTaskEngine"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\browser_pool_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9178,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "BrowserInstance",
+                        "BrowserPoolManager"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_architectural_checker.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6896,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "extract_class_methods",
+                          "extract_method_calls",
+                          "find_circular_imports",
+                          "find_missing_methods",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_cycle_scheduler.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4136,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "captain_cycle_full",
+                          "captain_cycle_quick",
+                          "main",
+                          "run_auto_assign_next_round",
+                          "run_dependency_chain_monitor",
+                          "run_force_multiplier_monitor"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_find_idle_agents.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5584,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "find_idle_agents",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_gas_check.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4929,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_agent_gas_levels"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_import_validator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5600,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "extract_imports",
+                          "main",
+                          "validate_file_imports",
+                          "validate_import"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_inbox_assistant.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  14988,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainInboxAssistant"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_inbox_helper.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9692,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainInboxHelper"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_inbox_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  7385,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "analyze_inbox",
+                          "categorize_message",
+                          "generate_summary_report",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_leaderboard_update.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4413,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "update_leaderboard"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_loop_closer.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  7914,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainLoopCloser"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_loop_detector.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9822,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainLoopDetector"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_morning_briefing.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6523,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "get_agent_last_activity",
+                          "get_pending_tasks",
+                          "get_recent_completions",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_next_task_picker.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  2955,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "calculate_roi",
+                          "get_next_task_for_agent",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_pattern_optimizer.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5971,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainPatternOptimizer"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_progress_dashboard.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8947,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainProgressDashboard"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_roi_quick_calc.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4410,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "calculate_task_roi"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_send_jet_fuel.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8916,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_snapshot.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3848,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "calculate_staleness",
+                          "format_agent_row",
+                          "get_status_priority",
+                          "load_agents_index",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_swarm_coordinator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  11824,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainSwarmCoordinator"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_swarm_response_generator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  10648,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainSwarmResponseGenerator"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_task_assigner.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8433,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CaptainTaskAssigner"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\captain_update_log.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  1982,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "update_captains_log"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\circular_import_detector.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5936,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CircularImportDetector"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\code_analysis_tool.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  12263,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CodeAnalysisTool",
+                        "CognitiveVisitor",
+                        "ComplexityMetrics",
+                        "ComplexityViolation",
+                        "ComplexityVisitor",
+                        "RefactoringSuggestion"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\compliance_dashboard.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5072,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "ComplianceDashboard"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\compliance_history_tracker.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  7071,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "ComplianceHistoryTracker"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\coverage_analyzer.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  11707,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "CoverageAnalyzer"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\devlog_compressor.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  12790,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "DevlogCompressor"
+                    ],
+        "functions":  [
+                          "compress_and_archive"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\discord_bot_cleanup.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3760,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\discord_bot_troubleshoot.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6252,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_BOT_TOKEN",
+                         "DISCORD_CHANNEL_ID"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\discord_mermaid_renderer.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9129,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "DISCORD_WEBHOOK_URL"
+                     ],
+        "classes":  [
+                        "DiscordMermaidRenderer"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\find_github_token.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9908,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "search_code_files",
+                          "search_config_files",
+                          "search_env_files",
+                          "search_environment_variables"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\gas_messaging.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  770,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "send_gas_message"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\get_swarm_time.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  2610,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\git_work_verifier.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  10336,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "GitEvidence",
+                        "GitWorkVerifier",
+                        "VerificationResult",
+                        "WorkClaim"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\github_consolidation_recovery.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  14222,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "GH_TOKEN",
+                         "GITHUB_TOKEN"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_deferred_queue",
+                          "check_pr_status",
+                          "get_github_token",
+                          "main",
+                          "verify_repo_exists",
+                          "verify_skipped_merges"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\github_create_and_push_repo.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9752,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "GH_TOKEN",
+                         "GITHUB_TOKEN"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "create_github_repo",
+                          "get_github_token",
+                          "main",
+                          "push_to_github"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\github_pr_debugger.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  23585,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "GH_TOKEN",
+                         "GITHUB_TOKEN"
+                     ],
+        "classes":  [
+                        "GitHubPRDebugger"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\github_pusher_agent.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  18464,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "GitHubPusherAgent"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\github_repo_roi_calculator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8783,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "RepoMetrics"
+                    ],
+        "functions":  [
+                          "analyze_repository_portfolio",
+                          "calculate_maintenance_effort",
+                          "calculate_roi",
+                          "calculate_value_score",
+                          "generate_consolidation_strategy"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\import_chain_validator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4072,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "find_import_statements",
+                          "main",
+                          "test_import"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\mcp_tools_self_test.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6386,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "run_git_operations_tests",
+                          "run_swarm_brain_tests",
+                          "run_task_manager_tests",
+                          "run_v2_compliance_tests",
+                          "run_website_manager_tests",
+                          "safe_call"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\memory_leak_scanner.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  4983,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MemoryLeakPattern"
+                    ],
+        "functions":  [
+                          "main",
+                          "print_report",
+                          "scan_directory",
+                          "scan_file"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\meta_tag_completeness_checker.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  10062,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MetaTagCompletenessChecker"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\mission_control.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  15211,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "MissionControl"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\monitor_4agent_dependency_chain.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5754,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_agent_status",
+                          "check_inbox_for_approval",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\monitor_twitch_bot.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  2570,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "monitor_bot_process"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\monitor_twitch_bot_status.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3145,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "TwitchBotMonitor"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\opportunity_scanners.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  1548,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "scan_complexity",
+                          "scan_duplication",
+                          "scan_linter_errors",
+                          "scan_memory_leaks",
+                          "scan_test_coverage",
+                          "scan_todo_comments",
+                          "scan_v2_violations"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\project_scan.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6961,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "ProjectScanner"
+                    ],
+        "functions":  [
+                          "main",
+                          "print_report",
+                          "scan_project"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\repo_safe_merge.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  63510,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "GH_TOKEN",
+                         "GITHUB_TOKEN",
+                         "GITHUB_USERNAME"
+                     ],
+        "classes":  [
+                        "SafeRepoMerge"
+                    ],
+        "functions":  [
+                          "get_github_token",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\repository_analyzer.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  12615,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "RepositoryAnalyzer"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\session_quick_checkin.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  1780,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "send_message"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\sites_registry.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8171,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "SiteEntry"
+                    ],
+        "functions":  [
+                          "cmd_add",
+                          "cmd_list",
+                          "cmd_seed_from_sites_json",
+                          "cmd_validate",
+                          "load_registry",
+                          "main",
+                          "parse_args",
+                          "save_registry",
+                          "validate_registry"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\START_CHAT_BOT_NOW.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  10630,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "TWITCH_ACCESS_TOKEN",
+                         "TWITCH_BOT_USERNAME",
+                         "TWITCH_CHANNEL",
+                         "TWITCH_SWARM_VOICE"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "_mask_token",
+                          "check_config"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\start_github_pusher_service.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  2879,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\start_monitoring_system.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3388,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\start_services_direct.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3502,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "start_discord_bot",
+                          "start_message_queue"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\start_twitchbot_with_fixes.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6377,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "TWITCH_ACCESS_TOKEN",
+                         "TWITCH_BOT_USERNAME",
+                         "TWITCH_CHANNEL"
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "apply_config_fixes",
+                          "extract_channel_name",
+                          "normalize_oauth_token"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\stop_twitchbot.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  1167,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_activity_feed_poster.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8934,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "format_for_public",
+                          "get_or_create_category",
+                          "get_or_create_tags",
+                          "load_posted_devlogs",
+                          "main",
+                          "parse_devlog",
+                          "post_devlog",
+                          "process_new_devlogs",
+                          "save_posted_devlog"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_brain_cli.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5868,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "record_decision",
+                          "search_knowledge",
+                          "share_learning"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_coordination_dashboard.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  11849,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "SwarmCoordinationDashboard"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_orchestrator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  11195,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "SwarmOrchestrator"
+                    ],
+        "functions":  [
+                          "run_orchestrator"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_profile_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  7332,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "SwarmProfileManager"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_site_health_automation.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  19845,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "SwarmSiteHealthAutomation"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_status_broadcaster.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  7985,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "BroadcastMessage",
+                        "SwarmStatusBroadcaster"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_system_inventory.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  19353,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "SwarmSystemInventory"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\swarm_website_auto_update.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  2789,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\task_creator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  794,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "create_inbox_task"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\task_verification_tool.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8614,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "TaskVerifier"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\toolbelt.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3374,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "create_parser",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\toolbelt_help.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3786,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "HelpGenerator"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\toolbelt_runner.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3087,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "ToolRunner"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\unified_blogging_automation.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  16599,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "ContentAdapter",
+                        "UnifiedBloggingAutomation",
+                        "WordPressBlogClient"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\unified_github_pr_creator.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  15866,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "UnifiedGitHubPRCreator"
+                    ],
+        "functions":  [
+                          "check_gh_cli_rate_limit",
+                          "check_graphql_api_rate_limit",
+                          "check_rest_api_rate_limit",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\unified_test_analysis.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  8023,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "UnifiedTestAnalyzer"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\unified_test_coverage.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  12056,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "TestCoverageStatus",
+                        "UnifiedTestCoverage"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\v2_checker_formatters.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  6170,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "format_report",
+                          "get_complexity_analysis",
+                          "get_file_suggestions"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\v2_compliance_checker.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9914,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "V2ComplianceChecker"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\v2_compliance_dashboard_sync.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  7128,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "categorize_violations",
+                          "extract_dashboard_counts",
+                          "find_all_violations",
+                          "main",
+                          "read_dashboard",
+                          "update_dashboard_summary",
+                          "verify_dashboard"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\v2_compliance_summary.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  3579,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "get_summary",
+                          "main",
+                          "print_summary"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\v2_function_size_checker.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  5027,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "check_directory",
+                          "get_function_sizes",
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\web_domain_security_audit.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  9586,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "WebDomainSecurityAudit"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\website_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  24564,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "WebsiteManager"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\wordpress_admin_deployer.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  13207,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "WordPressAdminDeployer"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\wordpress_deployment_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  2290,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "WordPressDeploymentManager"
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\deprecated\\wordpress_manager.py",
+        "role":  "deprecated_salvage_candidate",
+        "restore_priority":  8,
+        "size_bytes":  58460,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+                         "HOST",
+                         "HOSTINGER_HOST",
+                         "HOSTINGER_PASS",
+                         "HOSTINGER_PORT",
+                         "HOSTINGER_USER",
+                         "PASSWORD",
+                         "PORT",
+                         "USERNAME",
+                         "WP_ADMIN_PASSWORD",
+                         "WP_ADMIN_USERNAME"
+                     ],
+        "classes":  [
+                        "ConnectionManager",
+                        "WordPressManager"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\__init__.py",
+        "role":  "discord_support_tool",
+        "restore_priority":  9,
+        "size_bytes":  155,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\CANONICAL_DISCORD_MANAGER.md",
+        "role":  "discord_support_tool",
+        "restore_priority":  9,
+        "size_bytes":  1212,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\unified_discord.py",
+        "role":  "discord_support_tool",
+        "restore_priority":  9,
+        "size_bytes":  10303,
+        "modified":  "2026-03-24T14:57:08.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+                        "UnifiedDiscord"
+                    ],
+        "functions":  [
+                          "main"
+                      ]
+    },
+    {
+        "path":  "tools\\discord\\webhook_sender.py",
+        "role":  "discord_support_tool",
+        "restore_priority":  9,
+        "size_bytes":  1345,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+                         "DISCORD_TRADING_WEBHOOK_URL",
+                         "DISCORD_WEBHOOK_URL"
+                     ],
+        "classes":  [
+                        "DiscordWebhookResult"
+                    ],
+        "functions":  [
+                          "_resolve_webhook_url",
+                          "send_payload",
+                          "send_payload_file"
+                      ]
+    },
+    {
+        "path":  "tools\\coordination\\discord_commands_test_helper.py",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  6113,
+        "modified":  "2026-06-27T16:19:52.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "main",
+                          "test_cog_loading",
+                          "test_command_registration"
+                      ]
+    },
+    {
+        "path":  "tools\\coordination\\discord_commands_tester.py",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  12808,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "analyze_command_file",
+                          "find_discord_command_files",
+                          "generate_test_report",
+                          "main",
+                          "print_report",
+                          "test_commands_in_discord"
+                      ]
+    },
+    {
+        "path":  "tools\\coordination\\discord_simple_test.py",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  4187,
+        "modified":  "2026-03-24T14:57:06.0000000-05:00",
+        "has_main":  true,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+                          "send_discord_command",
+                          "test_commands_interactive"
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\data\\runtime\\discord_mutation_registry.json",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  428,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\data\\runtime\\test_bot_plugin_registry.json",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  950,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\schemas\\backups\\discord_schema_backup_2026-05-21T12-05-17-668Z.json",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  694,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\schemas\\backups\\discord_schema_backup_2026-05-21T12-06-14-365Z.json",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  694,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\src\\runtime\\channelWebhookManager.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  2939,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\src\\runtime\\liveDiscordMutationRuntime.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  2697,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\src\\runtime\\liveDiscordRestSender.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  2786,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\src\\runtime\\unifiedBotSupervisor.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  3064,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\tests\\channelWebhookManager.test.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  2548,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\tests\\liveDiscordMutationRuntime.test.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  1169,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\tests\\liveDiscordRestSender.test.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  942,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    },
+    {
+        "path":  "tools\\discord-architect\\tests\\unifiedBotSupervisor.test.js",
+        "role":  "related_candidate",
+        "restore_priority":  9,
+        "size_bytes":  1276,
+        "modified":  "2026-06-21T16:11:32.0000000-05:00",
+        "has_main":  false,
+        "env_vars":  [
+
+                     ],
+        "classes":  [
+
+                    ],
+        "functions":  [
+
+                      ]
+    }
+]
