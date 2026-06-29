@@ -22,9 +22,9 @@ This dashboard is the human-readable companion to the SSOT task log.
 
 **Current phase:** Phase 0A — Consolidation + Packaging Readiness
 **Release state:** Not yet published to PyPI
-**Blocking tasks:** SWARM-016, SWARM-003, SWARM-004
+**Blocking tasks:** SWARM-003, SWARM-004
 
-Interpretation: Python CI gates (SWARM-014, SWARM-015) are restored. Next blockers are MCP catalog drift (SWARM-016), then PyPI publish (SWARM-003) and clean-install verification (SWARM-004).
+Interpretation: Python CI gates (SWARM-014, SWARM-015) and MCP catalog integrity (SWARM-016) are restored. Remaining blockers are PyPI publish (SWARM-003) and clean-install verification from PyPI (SWARM-004).
 
 ---
 
@@ -42,7 +42,7 @@ These are evidence points, not goals.
 - CLI subcommand count remains **12**.
 - Standalone `mcp_servers/*_server.py` count: **27**.
 - `mcp_servers/all_mcp_servers.json` entries: **23**.
-- Broken MCP catalog targets: **4** (`git-operations`, `code-quality`, `observability`, `testing` pointing to missing `swarm_mcp.servers.*` modules).
+- Broken MCP catalog targets: **0** (repaired 2026-06-29; was 4 missing `swarm_mcp.servers.*` modules).
 - Python test files under `tests/`: **20**.
 - Tooling volume: `tools` **259** Python files, `tools_v2` **89** Python files.
 - TypeScript workspace files: `apps` **24** files, `packages` **7** files.
@@ -55,17 +55,14 @@ Inventory values are SSOT-backed and reproducible using the command block in `do
 
 ## What we should focus on next (strict order)
 
-1. **SWARM-016 — Repair MCP catalog drift**
-   - fix 4 missing targets in `mcp_servers/all_mcp_servers.json`
-   - add validation so missing modules cannot re-enter the catalog
-2. **SWARM-003 — Build and publish**
+1. **SWARM-003 — Build and publish**
    - run `python -m build`
-   - run `twine upload dist/*`
+   - run `twine upload dist/*` (or tag-push to trigger CI publish job)
    - capture exact output in `docs/root/MASTER_TASK_LOG.md`
-3. **SWARM-004 — Fresh install verification**
+2. **SWARM-004 — Fresh install verification**
    - in clean env: `pip install swarm-mcp`
    - verify import + minimal CLI smoke test
-4. **SWARM-017 — Resolve npm audit findings**
+3. **SWARM-017 — Resolve npm audit findings**
    - patch or otherwise remediate `next`, `fast-uri`, and `postcss` advisories before TS deployment
 
 ---
@@ -78,7 +75,7 @@ This transition is complete only when all are true:
 - [x] SWARM-002 marked complete with concrete token setup record
 - [x] SWARM-014 Python test gate restored
 - [x] SWARM-015 import-healer coverage gate restored
-- [ ] SWARM-016 MCP catalog drift fixed
+- [x] SWARM-016 MCP catalog drift fixed
 - [ ] SWARM-003 marked complete with actual publish command output
 - [ ] SWARM-004 marked complete with clean install/import verification output
 - [ ] SWARM-017 npm audit findings resolved or explicitly accepted for non-production use
@@ -87,19 +84,21 @@ This transition is complete only when all are true:
 
 ## Operator handoff note (2026-06-29)
 
-SWARM-014 and SWARM-015 are complete. Python CI gates pass in a clean dev install. Proceed to SWARM-016 (MCP catalog), then SWARM-003/004 (PyPI publish + clean install verification).
+SWARM-014, SWARM-015, and SWARM-016 are complete. Python CI gates and MCP catalog validation pass. Local package build and wheel install smoke test succeeded. Proceed to SWARM-003/004 (PyPI publish + `pip install swarm-mcp` verification).
 
 Evidence (2026-06-29):
 
 ```bash
-python3 -m pip install -e ".[dev]"
 python3 -m pytest tests -q
-python3 tools/swarm/tests/check_import_healer_coverage.py
+python3 -m build
+python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.1.0-py3-none-any.whl
+PYTHONPATH=/tmp/swarm-mcp-install python3 -m swarm_mcp.cli status
 ```
 
 ```text
-70 passed, 1 skipped in 1.96s
-Coverage gate passed
+72 passed, 1 skipped in 2.05s
+Successfully built swarm_mcp-0.1.0.tar.gz and swarm_mcp-0.1.0-py3-none-any.whl
+🐺 Swarm Status — 📊 1/1 agents ready
 ```
 
 ---

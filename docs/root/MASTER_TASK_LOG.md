@@ -139,7 +139,7 @@ Results:
 - [ ] [INFRA][P0][SWARM-004] Verify clean install: `pip install swarm-mcp`; verify import + CLI smoke test.
 - [x] [QA][P0][SWARM-014] Restore declared dev test gate: `python3 -m pytest tests -q`.
 - [x] [QA][P0][SWARM-015] Restore import-healer coverage gate or refresh baseline with documented rationale.
-- [ ] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
+- [x] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
 - [ ] [SEC][P0][SWARM-017] Remediate npm audit findings or document accepted risk before any TS deployment.
 
 ### SWARM-002 execution log (2026-03-24)
@@ -205,6 +205,89 @@ Coverage gate passed
 
 Current status: **complete**.
 
+### SWARM-016 execution log (2026-06-29)
+
+Root cause: four catalog entries (`git-operations`, `code-quality`, `observability`, `testing`) pointed at non-existent `swarm_mcp.servers.*` modules while equivalent standalone scripts already existed under `mcp_servers/`.
+
+Fixes applied:
+- Repointed the four broken entries in `mcp_servers/all_mcp_servers.json` to existing `mcp_servers/*_server.py` scripts.
+- Added `tests/test_mcp_catalog.py` to validate every catalog target resolves to an importable module or existing script.
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pytest tests/test_mcp_catalog.py tests -q
+python3 - <<'PY'
+from pathlib import Path
+import json, importlib.util
+catalog = json.loads(Path('mcp_servers/all_mcp_servers.json').read_text())
+missing = []
+for name, cfg in catalog['mcpServers'].items():
+    args = cfg.get('args', [])
+    if '-m' in args:
+        mod = args[args.index('-m') + 1]
+        if importlib.util.find_spec(mod) is None:
+            missing.append((name, mod))
+    else:
+        for arg in args:
+            if arg.endswith('.py') and not Path(arg).is_file():
+                missing.append((name, arg))
+print('mcp_catalog_entries:', len(catalog['mcpServers']))
+print('mcp_catalog_missing_targets:', len(missing), missing)
+PY
+```
+
+```text
+72 passed, 1 skipped in 2.05s
+mcp_catalog_entries: 23
+mcp_catalog_missing_targets: 0 []
+```
+
+Current status: **complete**.
+
+### SWARM-003 progress log (2026-06-29)
+
+Local build succeeded; PyPI upload not executed in this environment because `PYPI_API_TOKEN` is not available locally. Tag-based publish remains configured in `.github/workflows/swarm_ci.yml`.
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pip install build twine
+python3 -m build
+ls -1 dist/
+```
+
+```text
+Successfully built swarm_mcp-0.1.0.tar.gz and swarm_mcp-0.1.0-py3-none-any.whl
+swarm_mcp-0.1.0-py3-none-any.whl
+swarm_mcp-0.1.0.tar.gz
+```
+
+Current status: **build verified; upload pending maintainer/tag publish action**.
+
+### SWARM-004 progress log (2026-06-29)
+
+Isolated wheel install smoke test passed in a clean target directory (proxy for post-publish install until PyPI upload completes).
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.1.0-py3-none-any.whl
+PYTHONPATH=/tmp/swarm-mcp-install python3 -c "import swarm_mcp; from swarm_mcp.cli import main; print('import_ok')"
+PYTHONPATH=/tmp/swarm-mcp-install python3 -m swarm_mcp.cli status
+```
+
+```text
+import_ok
+🐺 Swarm Status
+========================================
+👑 agent-1: ready
+
+📊 1/1 agents ready
+```
+
+Current status: **local wheel verification complete; PyPI `pip install swarm-mcp` verification pending SWARM-003 upload**.
+
 ---
 
 ## Completed prerequisites
@@ -224,9 +307,8 @@ Current status: **complete**.
 
 ## Next required agent asks (copy/paste)
 
-1. `Execute SWARM-003 and record the exact build/upload command outputs in docs/root/MASTER_TASK_LOG.md.`
-2. `Execute SWARM-004 in a clean environment and record install/import/CLI smoke results in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
-3. `Repair SWARM-016 MCP catalog drift (4 missing targets) and add catalog validation.`
+1. `Execute SWARM-003 publish via tag push or maintainer `twine upload` with `PYPI_API_TOKEN`, then record exact output in docs/root/MASTER_TASK_LOG.md.`
+2. `Execute SWARM-004 in a clean environment with `pip install swarm-mcp` and record install/import/CLI smoke results in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
 
 ---
 
@@ -240,6 +322,7 @@ The current transition is done only when:
 - [ ] SWARM-004 complete with concrete evidence
 - [x] SWARM-014 complete with concrete evidence
 - [x] SWARM-015 complete with concrete evidence
+- [x] SWARM-016 complete with concrete evidence
 - [ ] 2026-05-17 audit blockers triaged or linked to follow-up PRs
 
 ---
