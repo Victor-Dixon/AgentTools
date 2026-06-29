@@ -1,6 +1,6 @@
 # ROADMAP
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-06-29
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Roadmap scope:** SWARM MCP package release first, workspace stabilization second, product/tooling consolidation third.
 
@@ -23,7 +23,7 @@ The 2026-05-17 audit adds an important constraint: this repository is also carry
 
 ## Upcoming milestones
 
-### M0 — Restore deterministic gates (`BLOCKED`)
+### M0 — Restore deterministic gates (`COMPLETE` 2026-06-29)
 
 **Goal:** A clean checkout can run the declared validation commands without hidden setup.
 
@@ -40,20 +40,20 @@ Exit criteria:
 - `npm -ws run typecheck` passes after `npm ci`.
 - `npm -ws run test` runs real tests for every active workspace or explicitly documents placeholder packages.
 
-### M1 — Package release proof (`TODO`)
+### M1 — Package release proof (`BLOCKED` — PyPI secret)
 
 **Goal:** Complete SWARM-003 and SWARM-004.
 
 Dependencies:
-- M0 Python gates are green.
-- Maintainer PyPI token remains configured as documented by SWARM-002.
+- M0 Python gates are green. ✅
+- Maintainer PyPI token must be configured in GitHub secrets (`PYPI_API_TOKEN`). ❌ empty on tag `v0.6.0` publish attempt
 
 Exit criteria:
-- `python3 -m build` output captured in `docs/root/MASTER_TASK_LOG.md`.
-- `twine upload dist/*` or GitHub tag publish output captured with secrets redacted.
-- Clean environment proves `pip install swarm-mcp`, import smoke, CLI smoke, and packaged MCP server smoke.
+- `python3 -m build` output captured in `docs/root/MASTER_TASK_LOG.md`. ✅
+- `twine upload dist/*` or GitHub tag publish output captured with secrets redacted. ❌ 403 — missing token
+- Clean environment proves `pip install swarm-mcp==0.6.0`, import smoke, CLI smoke. ⏳ pending publish
 
-### M2 — MCP and tool surface integrity (`TODO`)
+### M2 — MCP and tool surface integrity (`COMPLETE` 2026-06-29)
 
 **Goal:** Every documented MCP/tool entry either works, is marked legacy, or is removed from active catalogs.
 

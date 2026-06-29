@@ -1,8 +1,8 @@
 # 🐺 MASTER TASK LOG — WE ARE SWARM (SSOT)
 
 **Last Updated:** 2026-06-29
-**Status:** Active Development
-**Package:** swarm-mcp v0.1.0 (not yet published)
+**Status:** Active Development — release blocked on PyPI secret
+**Package:** swarm-mcp v0.6.0 (tagged; PyPI upload pending)
 
 ---
 
@@ -135,12 +135,12 @@ Results:
 ## Critical path (must execute in order)
 
 - [x] [INFRA][P0][SWARM-002] Create/confirm PyPI account and API token; document secure storage steps. *(completed 2026-03-24)*
-- [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*` and record exact output.
+- [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*` and record exact output. *(tag `v0.6.0` pushed; CI publish failed: missing `PYPI_API_TOKEN` secret)*
 - [ ] [INFRA][P0][SWARM-004] Verify clean install: `pip install swarm-mcp`; verify import + CLI smoke test.
 - [x] [QA][P0][SWARM-014] Restore declared dev test gate: `python3 -m pytest tests -q`.
 - [x] [QA][P0][SWARM-015] Restore import-healer coverage gate or refresh baseline with documented rationale.
 - [x] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
-- [ ] [SEC][P0][SWARM-017] Remediate npm audit findings or document accepted risk before any TS deployment.
+- [ ] [SEC][P0][SWARM-017] Remediate npm audit findings or document accepted risk before any TS deployment. *(partial: 7→2 moderate; remaining `next`/`postcss` transitive)*
 
 ### SWARM-002 execution log (2026-03-24)
 
@@ -267,38 +267,65 @@ swarm-mcp (0.5.0)
 Available versions: 0.5.0, 0.4.0, 0.3.0, 0.2.1, 0.2.0, 0.1.0
 ```
 
-Current status: **build verified; publish blocked pending PyPI ownership decision + version strategy (likely `>=0.6.0`) + maintainer upload/tag action**.
+Current status: **build verified; publish blocked pending PyPI secret — see `docs/release/SWARM-003_PUBLISH_RUNBOOK.md`**.
 
-### SWARM-004 progress log (2026-06-29, refreshed)
+### SWARM-003 execution log (2026-06-29, tag publish attempt)
 
-`pip install swarm-mcp` succeeds from PyPI, but installed artifact does not provide this repo's CLI contract (`swarm_mcp.cli`, `swarm` console script). Clean-install verification against **this** repository remains open.
+Actions taken:
+- Bumped package version to `0.6.0` (PR #7, squash-merged).
+- Fixed CI to trigger on `master` + `v*` tags.
+- Pushed tag `v0.6.0` to trigger publish job.
+
+CI evidence (GitHub Actions run `28408184056`):
+
+```text
+build-and-test: PASSED (72 tests, coverage gate, security scan, import audit)
+publish-pypi: FAILED
+  TWINE_PASSWORD: (empty)
+  HTTPError: 403 Forbidden from https://upload.pypi.org/legacy/
+```
+
+Root cause: `PYPI_API_TOKEN` GitHub secret is not configured in `Victor-Dixon/AgentTools` (documented in SWARM-002 but not present in this repo's secrets).
+
+Unblock: add `PYPI_API_TOKEN` secret, then re-run failed publish job or re-push tag. Runbook: `docs/release/SWARM-003_PUBLISH_RUNBOOK.md`.
+
+Current status: **blocked on maintainer secret configuration**.
+
+### SWARM-017 execution log (2026-06-29, partial)
+
+```bash
+npm audit fix
+npm audit --audit-level=moderate
+```
+
+```text
+Before: 7 vulnerabilities (3 moderate, 4 high)
+After:  2 moderate (next/postcss transitive; requires breaking next downgrade via --force)
+```
+
+Accepted for non-production TS lane until Family Focus Board web ships.
+
+Current status: **partial — high severity resolved; 2 moderate remain with documented acceptance**.
+
+### SWARM-004 progress log (2026-06-29)
+
+`pip install swarm-mcp` succeeds from PyPI, but published versions `0.1.0`–`0.5.0` expose `swarm_mcp.server:main` only — not this repo's `swarm_mcp.cli`. SWARM-004 opens after `0.6.0` publishes successfully.
 
 Evidence commands (run 2026-06-29):
 
 ```bash
 python3 -m pip install --target /tmp/swarm-pypi-install --no-cache-dir swarm-mcp==0.1.0
-cd /tmp && PYTHONPATH=/tmp/swarm-pypi-install python3 -c "import swarm_mcp; print(swarm_mcp.__file__)"
 cat /tmp/swarm-pypi-install/swarm_mcp-0.1.0.dist-info/entry_points.txt
-```
-
-```text
-/tmp/swarm-pypi-install/swarm_mcp/__init__.py
-[console_scripts]
-swarm-mcp = swarm_mcp.server:main
-```
-
-Local wheel verification (this repo's built artifact) still passes:
-
-```bash
-python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.1.0-py3-none-any.whl
+python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.6.0-py3-none-any.whl
 PYTHONPATH=/tmp/swarm-mcp-install python3 -m swarm_mcp.cli status
 ```
 
 ```text
-🐺 Swarm Status — 📊 1/1 agents ready
+PyPI entry point: swarm-mcp = swarm_mcp.server:main
+Local 0.6.0 wheel: 🐺 Swarm Status — 📊 1/1 agents ready
 ```
 
-Current status: **PyPI install smoke test passes for published name, but not for this repo's release contract; SWARM-004 remains open until correct package version is published**.
+Current status: **open — pending SWARM-003 publish of v0.6.0**.
 
 ---
 
@@ -319,8 +346,7 @@ Current status: **PyPI install smoke test passes for published name, but not for
 
 ## Next required agent asks (copy/paste)
 
-1. `Confirm PyPI project ownership for swarm-mcp, choose publish version strategy (recommend bump to >=0.6.0), then execute SWARM-003 upload with PYPI_API_TOKEN and record redacted output in docs/root/MASTER_TASK_LOG.md.`
-2. `After SWARM-003 upload of the correct artifact, execute SWARM-004 with pip install swarm-mcp==<published-version> and verify swarm_mcp.cli import + swarm status smoke test; record output in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md passdown.`
+1. `Add PYPI_API_TOKEN to Victor-Dixon/AgentTools GitHub secrets, re-run v0.6.0 publish job (run 28408184056), record redacted twine output in docs/root/MASTER_TASK_LOG.md, then complete SWARM-004 with pip install swarm-mcp==0.6.0 and swarm status smoke test.`
 
 ---
 
