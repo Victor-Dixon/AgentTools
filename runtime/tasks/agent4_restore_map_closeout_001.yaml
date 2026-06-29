@@ -1,0 +1,24 @@
+task_id: agent4_restore_map_closeout_001
+title: Close out lost systems restore map and promotion plan
+owner: Cursor Agent-4
+status: ready
+priority: medium
+repo: D:/agent-tools
+branch_recommendation: docs/agent4-lost-systems-closeout
+scope:
+  - read runtime/manifests/discord_lost_systems_inventory_20260629_065643.json
+  - read runtime/tasks/restore_*_001.yaml
+  - produce runtime/reports/lost_systems_restore_closeout_001.md
+  - define promotion order by class
+  - identify high-risk env/secrets classes
+  - create next 10 task queue for safe restore
+out_of_scope:
+  - do not modify code
+  - do not promote deprecated files
+  - do not print secrets
+verification:
+  - closeout report exists
+  - next 10 tasks are listed
+  - risks and owners are assigned
+done_when:
+  - operators can hand one class at a time to agents without drift

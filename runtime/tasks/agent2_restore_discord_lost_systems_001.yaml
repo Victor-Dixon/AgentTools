@@ -1,0 +1,35 @@
+task_id: agent2_restore_discord_lost_systems_001
+title: Restore Discord Commander lost systems from salvage manifest
+owner: Cursor Agent-2
+status: ready
+priority: high
+repo: D:/agent-tools
+branch_recommendation: restore/agent2-discord-lost-systems
+context:
+  inventory_manifest: runtime/manifests/discord_lost_systems_inventory_20260629_065643.json
+  inventory_report: runtime/reports/discord_lost_systems_inventory_20260629_065643.txt
+  known_blocker: DISCORD_BOT_TOKEN currently rejected by Discord
+scope:
+  - inspect tools/discord/config.py
+  - inspect tools/discord/list_channels.py
+  - inspect tools/discord/create_webhook.py
+  - inspect deprecated Discord/devlog/webhook files only as salvage candidates
+  - design an active config/env bridge for Discord Commander
+  - support DISCORD_BOT_TOKEN, DISCORD_TOKEN, FREERIDEINVESTOR_DISCORD_BOT_TOKEN, FREERIDE_DISCORD_BOT_TOKEN
+  - support DISCORD_GUILD_ID and channel/webhook env routes
+  - create redacted env diagnostics
+  - preserve active Commander behavior
+out_of_scope:
+  - do not promote deprecated runtime files blindly
+  - do not print tokens/webhooks/passwords
+  - do not delete deprecated files
+  - do not change hidden worker lifecycle scripts owned by Agent-1
+verification:
+  - token/env audit prints redacted status only
+  - config loader unit/smoke test passes
+  - Discord utilities can report missing/invalid env cleanly
+  - report written under runtime/reports
+done_when:
+  - active Discord config path is documented
+  - salvage candidates are mapped to active targets
+  - one clean restoration commit is ready

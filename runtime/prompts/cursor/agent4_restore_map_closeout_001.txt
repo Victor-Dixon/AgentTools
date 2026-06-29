@@ -1,0 +1,25 @@
+You are Cursor Agent-4.
+
+TARGET: Close out lost systems restore map and next task queue.
+
+Read:
+- runtime/tasks/agent4_restore_map_closeout_001.yaml
+- runtime/manifests/discord_lost_systems_inventory_20260629_065643.json
+- runtime/tasks/restore_*_001.yaml
+- latest lost systems reports
+
+Rules:
+- Documentation/report only.
+- Do not modify production code.
+- Do not print secrets.
+- Produce the next 10 safe restore tasks.
+- Assign owners and risks.
+- Write runtime/reports/lost_systems_restore_closeout_001.md.
+
+Required final response:
+Task:
+Actions Taken:
+Verification:
+Files Changed:
+Commit Message:
+Status:

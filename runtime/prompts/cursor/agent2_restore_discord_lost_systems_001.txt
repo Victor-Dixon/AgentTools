@@ -1,0 +1,29 @@
+You are Cursor Agent-2.
+
+TARGET: Restore Discord Commander lost systems safely from salvage manifest.
+
+Read:
+- runtime/tasks/agent2_restore_discord_lost_systems_001.yaml
+- runtime/manifests/discord_lost_systems_inventory_20260629_065643.json
+- runtime/reports/discord_lost_systems_inventory_20260629_065643.txt
+- tools/discord/config.py
+- tools/discord/list_channels.py
+- tools/discord/create_webhook.py
+- relevant deprecated Discord/devlog/webhook files only as references
+
+Rules:
+- No blind deprecated promotion.
+- No deletion.
+- No token/webhook/password printing.
+- Build active config/env bridge if missing.
+- Prefer active Commander package paths over deprecated runtime shapes.
+- Produce a clear restoration plan and minimal code patch.
+- Write report under runtime/reports/agent2_discord_lost_systems_restore_001.txt.
+
+Required final response:
+Task:
+Actions Taken:
+Verification:
+Files Changed:
+Commit Message:
+Status:
