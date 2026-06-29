@@ -1,6 +1,6 @@
 # NEXT UP — SWARM MCP EXECUTION DASHBOARD
 
-**Updated:** 2026-06-29
+**Updated:** 2026-06-29 (passdown refresh)
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Scope:** Packaging readiness first; workspace audit blockers tracked second.
 
@@ -24,7 +24,7 @@ This dashboard is the human-readable companion to the SSOT task log.
 **Release state:** Not yet published to PyPI
 **Blocking tasks:** SWARM-003, SWARM-004
 
-Interpretation: Python CI gates (SWARM-014, SWARM-015) and MCP catalog integrity (SWARM-016) are restored. Remaining blockers are PyPI publish (SWARM-003) and clean-install verification from PyPI (SWARM-004).
+Interpretation: Python CI gates (SWARM-014, SWARM-015) and MCP catalog integrity (SWARM-016) are restored. SWARM-003/004 remain open: PyPI name `swarm-mcp` already hosts a different package (`swarm_mcp.server` only); this repo's coordination CLI has not been published under that name yet.
 
 ---
 
@@ -82,23 +82,51 @@ This transition is complete only when all are true:
 
 ---
 
-## Operator handoff note (2026-06-29)
+## Agent passdown (2026-06-29 UTC)
 
-SWARM-014, SWARM-015, and SWARM-016 are complete. Python CI gates and MCP catalog validation pass. Local package build and wheel install smoke test succeeded. Proceed to SWARM-003/004 (PyPI publish + `pip install swarm-mcp` verification).
+**Branch/PR:** `cursor/restore-python-ci-gates-5822` — [PR #6](https://github.com/Victor-Dixon/AgentTools/pull/6)
 
-Evidence (2026-06-29):
+### Completed this session
+
+| Task | Outcome |
+|---|---|
+| SWARM-014 | Python test gate restored (`72 passed, 1 skipped`) |
+| SWARM-015 | Import-healer coverage gate restored |
+| SWARM-016 | MCP catalog drift fixed; `tests/test_mcp_catalog.py` added |
+| SWARM-003 (partial) | Local `python -m build` + `twine check` pass |
+| SWARM-004 (partial) | Local wheel install smoke test passes; PyPI install exposes wrong artifact |
+
+### Evidence
 
 ```bash
+python3 -m pip install -e ".[dev]"
 python3 -m pytest tests -q
-python3 -m build
-python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.1.0-py3-none-any.whl
-PYTHONPATH=/tmp/swarm-mcp-install python3 -m swarm_mcp.cli status
+python3 -m build && python3 -m twine check dist/*
+python3 -m pip index versions swarm-mcp
+python3 -m pip install --target /tmp/swarm-pypi-install --no-cache-dir swarm-mcp==0.1.0
 ```
 
 ```text
 72 passed, 1 skipped in 2.05s
-Successfully built swarm_mcp-0.1.0.tar.gz and swarm_mcp-0.1.0-py3-none-any.whl
-🐺 Swarm Status — 📊 1/1 agents ready
+twine check: PASSED (wheel + sdist)
+PyPI versions: 0.5.0, 0.4.0, 0.3.0, 0.2.1, 0.2.0, 0.1.0
+PyPI entry point: swarm-mcp = swarm_mcp.server:main  (NOT this repo's swarm CLI)
+```
+
+### Blockers
+
+1. **PyPI name collision:** `pip install swarm-mcp` installs a minimal `server.py` package, not this repo's `swarm_mcp.cli` + MCP servers.
+2. **Version conflict:** This repo is `0.1.0`, but PyPI already has `0.1.0`–`0.5.0` for the other artifact.
+3. **No local token:** `PYPI_API_TOKEN` not available in agent environment for upload.
+
+### Next agent ask (copy/paste)
+
+```text
+Confirm PyPI ownership for swarm-mcp, bump version to >=0.6.0 in pyproject.toml if appropriate, publish with PYPI_API_TOKEN (or tag-push CI job), then complete SWARM-004 by verifying:
+  pip install swarm-mcp==<new-version>
+  python -c "from swarm_mcp.cli import main"
+  swarm status
+Record evidence in docs/root/MASTER_TASK_LOG.md and leave a new Agent passdown in NEXT_UP.md.
 ```
 
 ---
@@ -145,12 +173,13 @@ Successfully built swarm_mcp-0.1.0.tar.gz and swarm_mcp-0.1.0-py3-none-any.whl
 - `npm -ws run test` *(partial pass: shared Vitest passes; API/web placeholders)*
 - `npm audit --audit-level=moderate` *(fail: 3 vulnerabilities)*
 
-### Current highest-risk blockers
-1. Python test gate fails under declared dev dependencies.
-2. Import-healer coverage baseline no longer passes.
-3. MCP catalog has missing targets.
-4. Node dependency audit fails.
-5. API/web code lacks real tests and linting.
+### Current highest-risk blockers (refreshed 2026-06-29)
+
+1. PyPI publish strategy unresolved: existing `swarm-mcp` releases do not match this repository's package surface.
+2. SWARM-004 cannot pass until the correct artifact is published to PyPI.
+3. Node dependency audit fails (`npm audit --audit-level=moderate`).
+4. API/web code lacks real tests and linting.
+5. Pre-commit hook dependencies remain missing in some environments.
 
 ---
 

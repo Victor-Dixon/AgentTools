@@ -245,48 +245,60 @@ mcp_catalog_missing_targets: 0 []
 
 Current status: **complete**.
 
-### SWARM-003 progress log (2026-06-29)
+### SWARM-003 progress log (2026-06-29, refreshed)
 
-Local build succeeded; PyPI upload not executed in this environment because `PYPI_API_TOKEN` is not available locally. Tag-based publish remains configured in `.github/workflows/swarm_ci.yml`.
+Local build and `twine check` pass with current `twine`/build tooling. Upload not executed in this environment (`PYPI_API_TOKEN` absent).
+
+**New blocker discovered (2026-06-29):** PyPI project `swarm-mcp` already exists (versions `0.1.0`–`0.5.0`), but published artifacts expose `swarm_mcp.server:main` and do **not** include this repository's `swarm_mcp.cli` coordination CLI. Uploading this repo's current `0.1.0` wheel would conflict with an existing release and would not satisfy SWARM-004 expectations.
 
 Evidence commands (run 2026-06-29):
 
 ```bash
-python3 -m pip install build twine
+python3 -m pip install -U build twine hatchling
 python3 -m build
-ls -1 dist/
+python3 -m twine check dist/*
+python3 -m pip index versions swarm-mcp
 ```
 
 ```text
-Successfully built swarm_mcp-0.1.0.tar.gz and swarm_mcp-0.1.0-py3-none-any.whl
-swarm_mcp-0.1.0-py3-none-any.whl
-swarm_mcp-0.1.0.tar.gz
+Checking dist/swarm_mcp-0.1.0-py3-none-any.whl: PASSED
+Checking dist/swarm_mcp-0.1.0.tar.gz: PASSED
+swarm-mcp (0.5.0)
+Available versions: 0.5.0, 0.4.0, 0.3.0, 0.2.1, 0.2.0, 0.1.0
 ```
 
-Current status: **build verified; upload pending maintainer/tag publish action**.
+Current status: **build verified; publish blocked pending PyPI ownership decision + version strategy (likely `>=0.6.0`) + maintainer upload/tag action**.
 
-### SWARM-004 progress log (2026-06-29)
+### SWARM-004 progress log (2026-06-29, refreshed)
 
-Isolated wheel install smoke test passed in a clean target directory (proxy for post-publish install until PyPI upload completes).
+`pip install swarm-mcp` succeeds from PyPI, but installed artifact does not provide this repo's CLI contract (`swarm_mcp.cli`, `swarm` console script). Clean-install verification against **this** repository remains open.
 
 Evidence commands (run 2026-06-29):
 
 ```bash
+python3 -m pip install --target /tmp/swarm-pypi-install --no-cache-dir swarm-mcp==0.1.0
+cd /tmp && PYTHONPATH=/tmp/swarm-pypi-install python3 -c "import swarm_mcp; print(swarm_mcp.__file__)"
+cat /tmp/swarm-pypi-install/swarm_mcp-0.1.0.dist-info/entry_points.txt
+```
+
+```text
+/tmp/swarm-pypi-install/swarm_mcp/__init__.py
+[console_scripts]
+swarm-mcp = swarm_mcp.server:main
+```
+
+Local wheel verification (this repo's built artifact) still passes:
+
+```bash
 python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.1.0-py3-none-any.whl
-PYTHONPATH=/tmp/swarm-mcp-install python3 -c "import swarm_mcp; from swarm_mcp.cli import main; print('import_ok')"
 PYTHONPATH=/tmp/swarm-mcp-install python3 -m swarm_mcp.cli status
 ```
 
 ```text
-import_ok
-🐺 Swarm Status
-========================================
-👑 agent-1: ready
-
-📊 1/1 agents ready
+🐺 Swarm Status — 📊 1/1 agents ready
 ```
 
-Current status: **local wheel verification complete; PyPI `pip install swarm-mcp` verification pending SWARM-003 upload**.
+Current status: **PyPI install smoke test passes for published name, but not for this repo's release contract; SWARM-004 remains open until correct package version is published**.
 
 ---
 
@@ -307,8 +319,8 @@ Current status: **local wheel verification complete; PyPI `pip install swarm-mcp
 
 ## Next required agent asks (copy/paste)
 
-1. `Execute SWARM-003 publish via tag push or maintainer `twine upload` with `PYPI_API_TOKEN`, then record exact output in docs/root/MASTER_TASK_LOG.md.`
-2. `Execute SWARM-004 in a clean environment with `pip install swarm-mcp` and record install/import/CLI smoke results in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
+1. `Confirm PyPI project ownership for swarm-mcp, choose publish version strategy (recommend bump to >=0.6.0), then execute SWARM-003 upload with PYPI_API_TOKEN and record redacted output in docs/root/MASTER_TASK_LOG.md.`
+2. `After SWARM-003 upload of the correct artifact, execute SWARM-004 with pip install swarm-mcp==<published-version> and verify swarm_mcp.cli import + swarm status smoke test; record output in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md passdown.`
 
 ---
 
