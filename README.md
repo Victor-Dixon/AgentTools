@@ -441,3 +441,44 @@ MIT License - see [LICENSE](LICENSE).
 - **Zero ML dependencies** - pure algorithmic intelligence
 - **File-based** - works with any LLM that can read/write files
 - **MCP-ready** - integrates with Claude, Cursor, etc.
+
+<!-- DREAMVAULT_PORTFOLIO_README:BEGIN schema=v1 generated="2026-06-29T13:21:31Z" -->
+## Portfolio status
+
+**Agent toolbelt utilities** — Toolbelt repository for agent utilities, adapters, command helpers, and reusable automation support scripts.
+
+| Field | Value |
+|---|---|
+| **Canonical ID** | `AgentTools` |
+| **Bucket** | toolbelt |
+| **Action** | keep_as_toolbelt |
+| **GitHub** | [AgentTools](https://github.com/Victor-Dixon/AgentTools) |
+
+### Repository inventory
+
+*Filesystem scan at `2026-06-29T13:21:31Z` — regenerate via `python runtime/scripts/sync_portfolio_readmes_001.py`.*
+
+| Signal | Value |
+|---|---|
+| Python files | 651 |
+| Test files | 30 |
+| CI workflows | 1 |
+| runtime/tasks YAML | 1 |
+| pyproject.toml | yes |
+| package.json | yes |
+| tests/ directory | yes |
+| Git branch | docs/portfolio-readme-sync-20260629 |
+| Working tree | clean |
+
+**Top-level directories:** .benchmarks, .github, _ops, agent_workspaces, apps, config, data, deploy, devlogs, docs, examples, integration, mcp_servers, pack_messages, packages, promoted, reports, runtime, screenshots, scripts, src, swarm_brain, swarm_command_tools, swarm_mcp
+
+**Top-level files:** .coverage, .env, .env.example, .gitignore, AGENTS.md, BLOG_DADUDEKC.md, BLOG_DREAMSCAPE.md, BLOG_WEARESWARM.md, BRANCH_CLEANUP_STATUS.md, CHANGELOG.md, CODEBASE_AUDIT_REPORT.md, CONTRIBUTING.md, DEPENDENCIES.md, EXECUTION_SUMMARY.md, LICENSE, LICENSE.md, MASTER_TASK_LIST.md, MASTER_TASK_LOG.md, MCP_CONVERSION_MASTER_PLAN.md, MCP_CONVERSION_STATUS_REPORT.md, MCP_CONVERSION_TEAM_ACTIVATION.md, MISSION_BRIEF_FIRST_CONTACT.md, NEXT_UP.md, PHASE_0A_ORGANIZATION_PLAN.md
+
+### Consolidation signals
+
+- 1 runtime/tasks YAML files — may overlap DreamVault lanes.
+
+### Run / verify
+
+- `pip install -e .` then `pytest -q` (if tests present).
+<!-- DREAMVAULT_PORTFOLIO_README:END schema=v1 generated="2026-06-29T13:21:31Z" -->
