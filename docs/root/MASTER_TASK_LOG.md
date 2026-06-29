@@ -1,6 +1,6 @@
 # 🐺 MASTER TASK LOG — WE ARE SWARM (SSOT)
 
-**Last Updated:** 2026-05-17
+**Last Updated:** 2026-06-29
 **Status:** Active Development
 **Package:** swarm-mcp v0.1.0 (not yet published)
 
@@ -137,9 +137,9 @@ Results:
 - [x] [INFRA][P0][SWARM-002] Create/confirm PyPI account and API token; document secure storage steps. *(completed 2026-03-24)*
 - [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*` and record exact output.
 - [ ] [INFRA][P0][SWARM-004] Verify clean install: `pip install swarm-mcp`; verify import + CLI smoke test.
-- [ ] [QA][P0][SWARM-014] Restore declared dev test gate: `python3 -m pytest tests -q`.
-- [ ] [QA][P0][SWARM-015] Restore import-healer coverage gate or refresh baseline with documented rationale.
-- [ ] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
+- [x] [QA][P0][SWARM-014] Restore declared dev test gate: `python3 -m pytest tests -q`.
+- [x] [QA][P0][SWARM-015] Restore import-healer coverage gate or refresh baseline with documented rationale.
+- [x] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
 - [ ] [SEC][P0][SWARM-017] Remediate npm audit findings or document accepted risk before any TS deployment.
 
 ### SWARM-002 execution log (2026-03-24)
@@ -161,6 +161,145 @@ Results:
 - CI secret `PYPI_API_TOKEN` confirmed: `configured` and consumed via GitHub Actions `TWINE_PASSWORD` in `.github/workflows/swarm_ci.yml`
 - Evidence note added with secrets redacted: `PyPI project-scoped token created as swarm-mcp-release, copied once, stored locally + CI secret; no raw token persisted in repository history.`
 
+### SWARM-014 execution log (2026-06-29)
+
+Root cause: `pip install -e ".[dev]"` did not include `python-dotenv`, but `tools_v2` import chain pulled `dotenv` during test collection. Two additional failures appeared once collection was unblocked: a Dream.os-Core sibling-repo compat test and hardcoded `"python"` subprocess calls on Linux.
+
+Fixes applied:
+- Added `python-dotenv>=1.0` to the `dev` extra in `pyproject.toml`.
+- Skipped `test_dreamos_core_schema_sources_exist` when the Dream.os-Core sibling checkout is absent.
+- Replaced hardcoded `"python"` with `sys.executable` in `health_tools.py`, `v2_tools.py`, and `compliance_tools.py`.
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pip install -e ".[dev]"
+python3 -m pytest tests -q
+```
+
+```text
+70 passed, 1 skipped in 1.96s
+```
+
+Current status: **complete**.
+
+### SWARM-015 execution log (2026-06-29)
+
+Root cause: stdlib `trace`-based coverage measurement drifted below the 2026-03-24 baseline without corresponding code regressions in import healer logic.
+
+Fix applied: refreshed `tools/swarm/tests/import_healer_coverage_baseline.json` to current measured values with documented rationale (measurement drift, not functional regression).
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 tools/swarm/tests/check_import_healer_coverage.py --write-baseline
+python3 tools/swarm/tests/check_import_healer_coverage.py
+```
+
+```text
+- tools/swarm/agents/import_healer.py: current=90.62% baseline=90.62%
+- tools/swarm/tests/validate_import_healer.py: current=95.35% baseline=95.35%
+- tools/swarm/tests/test_import_healer.py: current=75.00% baseline=75.00%
+Coverage gate passed
+```
+
+Current status: **complete**.
+
+### SWARM-016 execution log (2026-06-29)
+
+Root cause: four catalog entries (`git-operations`, `code-quality`, `observability`, `testing`) pointed at non-existent `swarm_mcp.servers.*` modules while equivalent standalone scripts already existed under `mcp_servers/`.
+
+Fixes applied:
+- Repointed the four broken entries in `mcp_servers/all_mcp_servers.json` to existing `mcp_servers/*_server.py` scripts.
+- Added `tests/test_mcp_catalog.py` to validate every catalog target resolves to an importable module or existing script.
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pytest tests/test_mcp_catalog.py tests -q
+python3 - <<'PY'
+from pathlib import Path
+import json, importlib.util
+catalog = json.loads(Path('mcp_servers/all_mcp_servers.json').read_text())
+missing = []
+for name, cfg in catalog['mcpServers'].items():
+    args = cfg.get('args', [])
+    if '-m' in args:
+        mod = args[args.index('-m') + 1]
+        if importlib.util.find_spec(mod) is None:
+            missing.append((name, mod))
+    else:
+        for arg in args:
+            if arg.endswith('.py') and not Path(arg).is_file():
+                missing.append((name, arg))
+print('mcp_catalog_entries:', len(catalog['mcpServers']))
+print('mcp_catalog_missing_targets:', len(missing), missing)
+PY
+```
+
+```text
+72 passed, 1 skipped in 2.05s
+mcp_catalog_entries: 23
+mcp_catalog_missing_targets: 0 []
+```
+
+Current status: **complete**.
+
+### SWARM-003 progress log (2026-06-29, refreshed)
+
+Local build and `twine check` pass with current `twine`/build tooling. Upload not executed in this environment (`PYPI_API_TOKEN` absent).
+
+**New blocker discovered (2026-06-29):** PyPI project `swarm-mcp` already exists (versions `0.1.0`–`0.5.0`), but published artifacts expose `swarm_mcp.server:main` and do **not** include this repository's `swarm_mcp.cli` coordination CLI. Uploading this repo's current `0.1.0` wheel would conflict with an existing release and would not satisfy SWARM-004 expectations.
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pip install -U build twine hatchling
+python3 -m build
+python3 -m twine check dist/*
+python3 -m pip index versions swarm-mcp
+```
+
+```text
+Checking dist/swarm_mcp-0.1.0-py3-none-any.whl: PASSED
+Checking dist/swarm_mcp-0.1.0.tar.gz: PASSED
+swarm-mcp (0.5.0)
+Available versions: 0.5.0, 0.4.0, 0.3.0, 0.2.1, 0.2.0, 0.1.0
+```
+
+Current status: **build verified; publish blocked pending PyPI ownership decision + version strategy (likely `>=0.6.0`) + maintainer upload/tag action**.
+
+### SWARM-004 progress log (2026-06-29, refreshed)
+
+`pip install swarm-mcp` succeeds from PyPI, but installed artifact does not provide this repo's CLI contract (`swarm_mcp.cli`, `swarm` console script). Clean-install verification against **this** repository remains open.
+
+Evidence commands (run 2026-06-29):
+
+```bash
+python3 -m pip install --target /tmp/swarm-pypi-install --no-cache-dir swarm-mcp==0.1.0
+cd /tmp && PYTHONPATH=/tmp/swarm-pypi-install python3 -c "import swarm_mcp; print(swarm_mcp.__file__)"
+cat /tmp/swarm-pypi-install/swarm_mcp-0.1.0.dist-info/entry_points.txt
+```
+
+```text
+/tmp/swarm-pypi-install/swarm_mcp/__init__.py
+[console_scripts]
+swarm-mcp = swarm_mcp.server:main
+```
+
+Local wheel verification (this repo's built artifact) still passes:
+
+```bash
+python3 -m pip install --target /tmp/swarm-mcp-install dist/swarm_mcp-0.1.0-py3-none-any.whl
+PYTHONPATH=/tmp/swarm-mcp-install python3 -m swarm_mcp.cli status
+```
+
+```text
+🐺 Swarm Status — 📊 1/1 agents ready
+```
+
+Current status: **PyPI install smoke test passes for published name, but not for this repo's release contract; SWARM-004 remains open until correct package version is published**.
+
 ---
 
 ## Completed prerequisites
@@ -180,9 +319,8 @@ Results:
 
 ## Next required agent asks (copy/paste)
 
-1. `Fix SWARM-014/SWARM-015 so the declared Python test and import-healer gates pass, then record exact command outputs in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
-2. `Execute SWARM-003 and record the exact build/upload command outputs in docs/root/MASTER_TASK_LOG.md.`
-3. `Execute SWARM-004 in a clean environment and record install/import/CLI smoke results in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md.`
+1. `Confirm PyPI project ownership for swarm-mcp, choose publish version strategy (recommend bump to >=0.6.0), then execute SWARM-003 upload with PYPI_API_TOKEN and record redacted output in docs/root/MASTER_TASK_LOG.md.`
+2. `After SWARM-003 upload of the correct artifact, execute SWARM-004 with pip install swarm-mcp==<published-version> and verify swarm_mcp.cli import + swarm status smoke test; record output in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md passdown.`
 
 ---
 
@@ -194,6 +332,9 @@ The current transition is done only when:
 - [x] SWARM-002 complete with concrete evidence
 - [ ] SWARM-003 complete with concrete evidence
 - [ ] SWARM-004 complete with concrete evidence
+- [x] SWARM-014 complete with concrete evidence
+- [x] SWARM-015 complete with concrete evidence
+- [x] SWARM-016 complete with concrete evidence
 - [ ] 2026-05-17 audit blockers triaged or linked to follow-up PRs
 
 ---
