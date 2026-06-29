@@ -10,6 +10,7 @@ Author: Agent-7 - Repository Cloning Specialist
 
 import logging
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -49,7 +50,7 @@ class HealthPingTool(IToolAdapter):
             # Check snapshots
             if params.get("check_snapshots", True):
                 snapshot_check = subprocess.run(
-                    ["python", "tools/check_snapshot_up_to_date.py"], capture_output=True
+                    [sys.executable, "tools/check_snapshot_up_to_date.py"], capture_output=True
                 )
                 health_status["snapshots_current"] = snapshot_check.returncode == 0
 
@@ -87,9 +88,9 @@ class SnapshotTool(IToolAdapter):
         """Execute snapshot operation."""
         try:
             if params.get("validate"):
-                cmd = ["python", "tools/check_snapshot_up_to_date.py"]
+                cmd = [sys.executable, "tools/check_snapshot_up_to_date.py"]
             else:
-                cmd = ["python", "tools/captain_snapshot.py"]
+                cmd = [sys.executable, "tools/captain_snapshot.py"]
                 if params.get("update"):
                     cmd.append("--update")
 

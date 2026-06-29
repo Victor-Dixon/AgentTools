@@ -38,6 +38,7 @@ dev = [
     "coverage>=7.6",
     "ruff>=0.1.0",
     "mypy>=1.0",
+    "python-dotenv>=1.0",
 ]
 full = [
     "pyautogui>=0.9",
