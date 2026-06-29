@@ -1,0 +1,24 @@
+﻿task_id: windows_hidden_workers_hardening_001
+title: Harden Dream worker launch mode for PyAutoGUI stability
+status: ready
+priority: high
+lane: windows_ops
+repo: D:/agent-tools
+problem:
+  symptom: "Visible Python worker consoles steal focus and break PyAutoGUI messaging."
+  cause: "Discord Commander workers launched as foreground console processes."
+target_state:
+  - Discord bot runs hidden
+  - queue processor runs hidden
+  - worker restart is repeatable
+  - workers restart at user logon
+  - PyAutoGUI target window remains foreground
+safety:
+  - do not run PyAutoGUI as Windows service
+  - use logged-in user session only
+  - stop only matching Dream worker commands
+verification:
+  - worker processes exist
+  - no visible console windows required
+  - logs continue updating
+  - report written under runtime/reports
