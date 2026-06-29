@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-06-29
+
+### Added
+- MCP catalog validation test (`tests/test_mcp_catalog.py`)
+- `python-dotenv` in dev dependencies for deterministic test collection
+
+### Fixed
+- Repaired 4 broken MCP catalog entries in `mcp_servers/all_mcp_servers.json`
+- Restored Python CI test gate (SWARM-014) and import-healer coverage gate (SWARM-015)
+- Replaced hardcoded `python` subprocess calls with `sys.executable` in toolbelt health/v2/compliance tools
+- CI workflow now triggers on `master` branch and `v*` release tags
+
+### Changed
+- Publish version bumped to `0.6.0` to ship this repository's coordination CLI/MCP servers on PyPI under `swarm-mcp`
+
 ## [0.1.0] - 2026-01-11
 
 ### Added
