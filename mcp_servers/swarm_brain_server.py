@@ -71,9 +71,26 @@ def record_decision(
 
 
 def search_swarm_knowledge(agent_id: str, query: str, limit: int = 10) -> Dict[str, Any]:
-    """Search Swarm Brain knowledge base."""
+    """Search Swarm Brain knowledge base via dreamos-brain API, with local fallback."""
+    try:
+        from mcp_servers.dreamos_brain_advisory_client import (
+            is_api_available,
+            map_search_results,
+            search_advisory,
+        )
+
+        if is_api_available():
+            api_payload = search_advisory(query, limit=limit)
+            return map_search_results(api_payload, agent_id, query)
+    except Exception:
+        pass
+
     if not HAS_SWARM_BRAIN:
-        return {"success": False, "error": "Swarm Brain not available"}
+        return {
+            "success": False,
+            "error": "Swarm Brain not available (dreamos-brain API unreachable and local SwarmMemory missing)",
+            "non_canonical": True,
+        }
 
     try:
         memory = SwarmMemory(agent_id=agent_id)
@@ -98,9 +115,11 @@ def search_swarm_knowledge(agent_id: str, query: str, limit: int = 10) -> Dict[s
             "query": query,
             "results_count": len(results_dict),
             "results": results_dict,
+            "non_canonical": True,
+            "source": "agenttools-local-swarm-memory",
         }
     except Exception as e:
-        return {"success": False, "error": str(e)}
+        return {"success": False, "error": str(e), "non_canonical": True}
 
 
 def take_note(agent_id: str, content: str, note_type: str = "important") -> Dict[str, Any]:

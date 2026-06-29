@@ -1,0 +1,36 @@
+task_id: proxy_agenttools_swarm_knowledge_to_dreamos_brain_001
+title: Proxy AgentTools swarm knowledge search to dreamos-brain advisory API
+owner: Cursor Agent-2
+status: ready
+priority: high
+lane: swarm_brain_runtime_bridge
+source_repo: D:/agent-tools
+target_api:
+  base_env: DREAMOS_BRAIN_URL
+  default: http://127.0.0.1:8000
+  health: /advisory/health
+  search: /advisory/search?q={query}&limit={limit}
+  entry: /advisory/entries/{entry_id}
+context:
+  dreamos_brain_commits:
+    - ba7a8b4 promote advisory corpus
+    - 5064554 advisory read/search API stub
+    - 6351099 packaging baseline closeout
+requirements:
+  - find AgentTools search_swarm_knowledge / share_learning implementation
+  - add API proxy mode using DREAMOS_BRAIN_URL
+  - keep read-only behavior for search
+  - preserve local fallback if dreamos-brain API is unavailable
+  - do not delete AgentTools corpus yet
+  - do not relocate MCP runtime yet
+  - all responses must preserve non_canonical/advisory status
+verification:
+  - dreamos-brain API health check succeeds when server is running
+  - search_swarm_knowledge calls /advisory/search
+  - fallback path works when API is unavailable
+  - no destructive file movement
+  - report written to runtime/reports/proxy_agenttools_swarm_knowledge_to_dreamos_brain_001.txt
+done_when:
+  - AgentTools can search canonical advisory corpus through dreamos-brain
+  - local duplicate corpus is no longer primary SSOT
+commit_message: "feat(swarm-brain): proxy knowledge search to dreamos-brain advisory API"

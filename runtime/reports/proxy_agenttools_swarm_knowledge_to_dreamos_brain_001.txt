@@ -1,0 +1,24 @@
+PROXY AGENTTOOLS SWARM KNOWLEDGE TO DREAMOS-BRAIN
+===============================================
+TIME=2026-06-29T22:15:00+00:00
+API_BASE=http://127.0.0.1:8000
+ENV=DREAMOS_BRAIN_URL
+
+PROXY_TEST=PASS source=dreamos-brain-advisory-api results_count=5 query=MCP
+FALLBACK_TEST=PASS api_unreachable no_crash success=false (local SwarmMemory unavailable on this host)
+
+FILES_CHANGED:
+- mcp_servers/dreamos_brain_advisory_client.py
+- mcp_servers/swarm_brain_server.py
+- tools_v2/categories/swarm_brain_tools.py
+- runtime/tasks/proxy_agenttools_swarm_knowledge_to_dreamos_brain_001.yaml
+- runtime/prompts/cursor/agent2_proxy_agenttools_swarm_knowledge_to_dreamos_brain_001.txt
+
+GUARDRAILS:
+- no AgentTools corpus deletion
+- no MCP runtime relocation
+- search read-only via dreamos-brain /advisory/search
+- non_canonical preserved on responses
+
+VERIFY=PASS_AGENTTOOLS_SWARM_KNOWLEDGE_PROXY
+STATUS=BRIDGE_READY_LOCAL
