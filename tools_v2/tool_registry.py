@@ -11,12 +11,15 @@ Author: Agent-5 (Business Intelligence Specialist)
 import importlib
 import json
 import logging
+from pathlib import Path
 from typing import Any
 
 from .adapters.base_adapter import IToolAdapter
 from .adapters.error_types import ToolNotFoundError
 
 logger = logging.getLogger(__name__)
+
+_LOCK_PATH = Path(__file__).resolve().parent / "tool_registry.lock.json"
 
 # Singleton instance
 _registry_instance = None
@@ -33,7 +36,7 @@ class ToolRegistry:
     def _load_registry_data(self) -> dict[str, list[str]]:
         """Load tool registry data from JSON file."""
         try:
-            with open("tools_v2/tool_registry.lock.json", "r") as f:
+            with open(_LOCK_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 return data.get("tools", {})
         except (FileNotFoundError, json.JSONDecodeError) as e:
