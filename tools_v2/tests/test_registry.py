@@ -55,6 +55,16 @@ class TestToolRegistry:
         assert "vector" in categories
         assert "msg" in categories  # msg.send -> "msg" category
 
+    def test_list_by_category_single_filter(self):
+        """Legacy signature: list_by_category(category) returns tool names only."""
+        registry = ToolRegistry()
+        vector_tools = registry.list_by_category("vector")
+        all_categories = registry.list_by_category()
+
+        assert isinstance(vector_tools, list)
+        assert vector_tools == all_categories["vector"]
+        assert registry.list_by_category("nonexistent") == []
+
     def test_resolve_valid_tool(self):
         """Test resolving a valid tool."""
         registry = ToolRegistry()
