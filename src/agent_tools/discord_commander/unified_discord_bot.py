@@ -20,8 +20,17 @@ SLASH_COMMANDS = (
     "/help",
     "/swarm-status",
     "/fleet-audit",
+    "/send",
+    "/swarm",
+    "/agents",
+    "/agent-status",
+    "/commands",
+    "/swarm-help",
+    "/info",
+    "/gui",
+    "/connect",
 )
-PREFIX_COMMANDS = ("!ping", "!status", "!help", "!swarm-status", "!message", "!heal")
+PREFIX_COMMANDS = ("!ping", "!status", "!help", "!swarm-status", "!message", "!heal", "!gui")
 
 
 def _require_discord():
@@ -135,6 +144,7 @@ class UnifiedDiscordBot:
 
             lifecycle = BotLifecycleManager(self)
             await lifecycle.setup_hook()
+            await lifecycle.send_startup_message()
             self._slice_loaded = True
             logger.info("Promoted Commander slice loaded")
         except Exception as exc:
@@ -157,8 +167,10 @@ class UnifiedDiscordBot:
         async def help_prefix(ctx) -> None:
             await ctx.send(
                 "**Discord Commander**\n"
-                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message <agent> <msg>` `!heal`\n"
-                "Slash: `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`"
+                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message` `!heal` `!gui`\n"
+                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`\n"
+                "Slash (restored): `/send` `/swarm` `/agents` `/agent-status` `/commands` "
+                "`/swarm-help` `/info` `/gui`"
             )
 
         @self.bot.command(name="swarm-status")
@@ -192,8 +204,10 @@ class UnifiedDiscordBot:
         async def help_slash(interaction) -> None:
             await interaction.response.send_message(
                 "**Discord Commander**\n"
-                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message <agent> <msg>` `!heal`\n"
-                "Slash: `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`"
+                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message` `!heal` `!gui`\n"
+                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`\n"
+                "Slash (restored): `/send` `/swarm` `/agents` `/agent-status` `/commands` "
+                "`/swarm-help` `/info` `/gui`"
             )
 
         @slash(name="swarm-status", description="Agent workspace status from status.json")
