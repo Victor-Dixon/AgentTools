@@ -1,7 +1,8 @@
 # ROADMAP
 
-**Last updated:** 2026-06-29
-**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
+**Last updated:** 2026-07-03  
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
+**Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`  
 **Roadmap scope:** SWARM MCP package release first, workspace stabilization second, product/tooling consolidation third.
 
 ---
@@ -10,118 +11,120 @@
 
 ### Phase 0A — Consolidation + Packaging Readiness (`IN_PROGRESS`)
 
-The canonical release lane is still **SWARM MCP** (`swarm-mcp`), a Python package with:
+The canonical release lane is **SWARM MCP** (`swarm-mcp`), a Python package for multi-agent coordination over MCP.
 
-- core coordination logic in `swarm_mcp/core/`,
-- operator CLI in `swarm_mcp/cli.py`,
-- packaged MCP servers in `swarm_mcp/servers/`,
-- release status tracked in `docs/root/MASTER_TASK_LOG.md`.
+Primary release surfaces:
 
-The 2026-05-17 audit adds an important constraint: this repository is also carrying a TypeScript Family Focus Board workspace and multiple tool/MCP surfaces. Those lanes should not block the PyPI release unless they are part of the package test/release contract.
+- `swarm_mcp/core/` — coordination domain and application services,
+- `swarm_mcp/cli.py` — operator CLI,
+- `swarm_mcp/servers/` — packaged MCP servers,
+- `pyproject.toml` — package metadata and console scripts,
+- `docs/root/MASTER_TASK_LOG.md` — execution SSOT.
+
+Repository reality:
+
+- **SWARM MCP** is the release-critical lane.
+- **AgentTools/operator tooling** (`mcp_servers/`, `tools/`, `tools_v2/`) is active but secondary to the PyPI release.
+- **Family Focus Board** (`apps/`, `packages/`) is a separate TypeScript product lane and should not block SWARM MCP release unless explicitly promoted.
 
 ---
 
-## Upcoming milestones
+## Milestones
 
-### M0 — Restore deterministic gates (`COMPLETE` 2026-06-29)
+### M0 — Restore deterministic Python gates (`COMPLETE` 2026-06-29)
 
-**Goal:** A clean checkout can run the declared validation commands without hidden setup.
+**Goal:** A clean checkout can run the declared Python validation commands without hidden setup.
 
-Dependencies:
-- Python dev dependency path must include everything imported by `tests/`.
-- Import-healer coverage baseline must match intended behavior.
-- Node workspace dependencies must be installed via `npm ci` when Node gates are used.
+Completed evidence in SSOT:
 
-Exit criteria:
-- `pip install -e ".[dev]"` succeeds.
-- `python3 -m pytest tests -q` passes.
-- `python3 tools/swarm/tests/check_import_healer_coverage.py` passes or has a reviewed baseline update.
-- `PYTHONPATH=. python3 tools/cli.py --security-scan` has no untriaged high-risk findings.
-- `npm -ws run typecheck` passes after `npm ci`.
-- `npm -ws run test` runs real tests for every active workspace or explicitly documents placeholder packages.
+- `python3 -m pip install -e ".[dev]"` succeeds.
+- `python3 -m pytest tests -q` reported `72 passed, 1 skipped`.
+- `python3 tools/swarm/tests/check_import_healer_coverage.py` passes after reviewed baseline refresh.
 
-### M1 — Package release proof (`BLOCKED` — PyPI secret)
+### M1 — Package release proof (`BLOCKED` — PyPI secret/configuration)
 
 **Goal:** Complete SWARM-003 and SWARM-004.
 
-Dependencies:
-- M0 Python gates are green. ✅
-- Maintainer PyPI token must be configured in GitHub secrets (`PYPI_API_TOKEN`). ❌ empty on tag `v0.6.0` publish attempt
+Current state:
+
+- Package version is `0.6.0`.
+- Tag `v0.6.0` was pushed.
+- CI build/test passed.
+- PyPI publish failed because `TWINE_PASSWORD` was empty in the tag publish job.
 
 Exit criteria:
-- `python3 -m build` output captured in `docs/root/MASTER_TASK_LOG.md`. ✅
-- `twine upload dist/*` or GitHub tag publish output captured with secrets redacted. ❌ 403 — missing token
-- Clean environment proves `pip install swarm-mcp==0.6.0`, import smoke, CLI smoke. ⏳ pending publish
+
+- `python3 -m build` and `twine check` output captured in SSOT. Done locally.
+- PyPI upload or GitHub tag publish output captured with secrets redacted. Blocked.
+- Clean environment proves `pip install swarm-mcp==0.6.0`, import smoke, and `swarm status`. Pending publish.
 
 ### M2 — MCP and tool surface integrity (`COMPLETE` 2026-06-29)
 
-**Goal:** Every documented MCP/tool entry either works, is marked legacy, or is removed from active catalogs.
+**Goal:** Every active MCP catalog target resolves to an existing module/script.
 
-Dependencies:
-- M0 test environment fixed.
-- Product boundary decision recorded.
+Completed evidence in SSOT:
 
-Exit criteria:
-- `mcp_servers/all_mcp_servers.json` has no missing targets.
-- Catalog validation test is in CI.
-- `mcp_servers/` README classifies packaged vs standalone servers.
-- `tools_v2` registry health test is added or failing entries are marked disabled with rationale.
-- `tools/deprecated/` is excluded from active scans unless explicitly selected.
+- `mcp_servers/all_mcp_servers.json` has 23 catalog entries.
+- Catalog validation reports 0 missing targets.
+- `tests/test_mcp_catalog.py` exists.
+- Broken `tools_v2` registry entries are documented in `docs/TOOLS_V2_DISABLED_REGISTRY_ENTRIES.md`.
 
 ### M3 — Family Focus Board validation (`TODO`)
 
-**Goal:** If the TS workspace remains active, it has real quality gates and minimal product integration.
-
-Dependencies:
-- Node dependency vulnerabilities resolved.
-- CI includes Node gates.
+**Goal:** If the TypeScript workspace remains active, it has real quality gates and minimal product integration.
 
 Exit criteria:
+
 - API/web lint scripts run real linters.
-- API has integration tests around org, board, list, card, timer, activity, and auth flows.
+- API has integration tests around org, board, list, card, timer, activity, inventory, and auth flows.
 - Web reads/writes at least one board flow through the API.
 - Shared timer state remains covered by Vitest.
 - Deployment docs define `DATABASE_URL`, migrations, seed, and runtime ports.
+- Remaining npm audit risk is remediated or explicitly accepted for the deployment target.
 
-### M4 — Documentation and governance cleanup (`TODO`)
+### M4 — Documentation and governance cleanup (`IN_PROGRESS` 2026-07-03)
 
-**Goal:** Maintainers can identify the active product and next task without reading obsolete plans.
+**Goal:** Maintainers can identify the repository domain model, active product lanes, current status, completed work, remaining work, and next task without reading obsolete plans.
 
-Dependencies:
-- M1/M2 decisions are complete.
+Completed in the 2026-07-03 documentation audit:
 
-Exit criteria:
-- Root `MASTER_TASK_LOG.md` is a redirect-only stub or removed after references are fixed.
-- `docs/root/MASTER_TASK_LIST.md` no longer contradicts the SSOT.
-- PRD clearly labels AgentTools, SWARM MCP, and Family Focus Board relationships.
-- Historical docs with stale path references are marked as archived snapshots.
-- `PROJECT_STRUCTURE.md` and `PROJECT_AUDIT_REPORT.md` are refreshed after major architecture changes.
+- Added canonical domain model: `docs/architecture/DOMAIN_MODEL.md`.
+- Updated PRD to distinguish SWARM MCP, AgentTools/operator tooling, and Family Focus Board.
+- Refreshed roadmap/task/dashboard documents to remove stale Python gate and MCP catalog blockers.
+- Updated repository description guidance in `docs/governance/github_description.md`.
+
+Remaining exit criteria:
+
+- Classify or banner remaining historical docs that still look actionable.
+- Reconcile task-log mutation code paths with `docs/root/MASTER_TASK_LOG.md` policy.
+- Complete classification of standalone MCP servers and legacy tool scripts.
 
 ---
 
 ## Short-term initiatives
 
-1. **Make Python gates green.**
-   - Add/adjust test dependencies for `dotenv`.
-   - Re-run full `tests/` suite.
-   - Fix import-healer coverage regression.
+1. **Unblock SWARM-003 PyPI publish.**
+   - Add/configure `PYPI_API_TOKEN` for `Victor-Dixon/AgentTools`.
+   - Re-run the failed `v0.6.0` publish job or re-trigger tag publish.
+   - Record redacted output in `docs/root/MASTER_TASK_LOG.md`.
 
-2. **Repair release path.**
-   - Build wheel/sdist.
-   - Publish to PyPI.
-   - Prove clean install.
+2. **Complete SWARM-004 clean install proof.**
+   - Install `swarm-mcp==0.6.0` from PyPI after publish.
+   - Verify import and CLI smoke.
+   - Record output in SSOT and mirror `NEXT_UP.md`.
 
-3. **Fix MCP catalog drift.**
-   - Replace missing `swarm_mcp.servers.*` catalog targets with existing `mcp_servers/*_server.py` targets or implement the missing packaged modules.
-   - Add a catalog validation test.
+3. **Continue documentation governance.**
+   - Keep `docs/architecture/DOMAIN_MODEL.md` current.
+   - Add historical/non-canonical banners to older plans as they are touched.
+   - Keep `docs/root/MASTER_TASK_LOG.md` first and `NEXT_UP.md` second for status changes.
 
-4. **Patch Node security issues.**
-   - Update vulnerable `next`/transitive packages with `npm audit fix` or reviewed manual upgrades.
-   - Re-run typecheck/tests/audit.
+4. **Patch or accept remaining TS dependency risk.**
+   - Re-run Node checks after dependency changes.
+   - Document accepted risk if Family Focus Board remains non-production.
 
-5. **Remove documentation ambiguity.**
-   - Keep `docs/root/MASTER_TASK_LOG.md` as SSOT.
-   - Make root shadows and historical plans explicitly non-canonical.
+5. **Classify secondary tool surfaces.**
+   - Mark standalone MCP servers and legacy tools as active, adapter-only, legacy, archive, or unknown.
+   - Keep disabled `tools_v2` adapters out of active registry until fixed.
 
 ---
 
@@ -130,22 +133,22 @@ Exit criteria:
 1. **Toolbelt consolidation.**
    - Promote stable tools into one registry.
    - Convert legacy scripts to adapters only when actively used.
-   - Archive unreferenced or duplicate tools.
+   - Archive or quarantine unreferenced duplicates after classification.
 
-2. **TS product maturity.**
-   - Build Family Focus Board UI workflows.
+2. **Family Focus Board maturity.**
+   - Build API-backed web workflows.
    - Add API integration/e2e coverage.
    - Define deployment topology and observability.
 
 3. **Operational MCP platform.**
-   - Separate packaged public MCP servers from local/operator MCP servers.
+   - Keep packaged public MCP servers separate from local/operator MCP servers.
    - Version catalogs and validate server boot in CI.
    - Add compatibility policy for external MCP clients.
 
 4. **Documentation governance.**
-   - Add doc freshness dates and canonical/non-canonical banners.
-   - Add docs contract tests for required files and path references.
-   - Keep `PROJECT_AUDIT_REPORT.md` updated after large migrations.
+   - Keep freshness dates and canonical/non-canonical banners on planning docs.
+   - Add docs contract tests for required domain/status docs if drift recurs.
+   - Refresh audit reports after major architecture changes.
 
 ---
 
@@ -153,33 +156,33 @@ Exit criteria:
 
 | Dependency | Required by | Current risk |
 |---|---|---|
-| PyPI maintainer token | SWARM-003 publish | Completed per SSOT, but publish remains open. |
-| Python dev dependencies | Tests, CI, release confidence | Missing `dotenv` in current dev test path. |
-| Import-healer baseline | CI gate | Current coverage numbers are below baseline. |
-| Node dependencies | TS typecheck/tests/audit | `npm ci` required; audit has vulnerabilities. |
-| PostgreSQL / `DATABASE_URL` | `apps/api` runtime | No `.env.example` or deployment runbook in current docs. |
-| MCP catalog accuracy | MCP client setup | 4 missing targets in catalog. |
+| `PYPI_API_TOKEN` GitHub secret/configuration | SWARM-003 publish | Missing or not passed to tag publish job; CI log showed empty `TWINE_PASSWORD`. |
+| PyPI `swarm-mcp` project ownership | SWARM-003 publish | Existing versions `0.1.0`-`0.5.0` do not expose this repo's current CLI; `0.6.0` must publish before clean proof. |
+| Python dev dependencies | Tests, CI, release confidence | Green as of 2026-06-29 SSOT evidence. |
+| Import-healer baseline | CI gate | Green as of 2026-06-29 SSOT evidence. |
+| MCP catalog accuracy | MCP client setup | 0 missing targets as of 2026-06-29 SSOT evidence. |
+| Node dependencies | TS typecheck/tests/audit | 2 moderate advisories remain; API/web tests and lint are placeholders. |
+| PostgreSQL / `DATABASE_URL` | `apps/api` runtime | Required; deployment status and `.env.example` coverage incomplete. |
 
 ---
 
 ## Risk areas
 
-- **Release risk:** Package is implemented but not externally published or clean-install verified.
-- **CI risk:** Declared workflow likely fails or misses important active surfaces.
-- **Security risk:** npm advisories remain open; Python audit is skipped without `pip-audit`.
-- **Architecture risk:** Multiple product narratives obscure priorities.
+- **Release risk:** `swarm-mcp==0.6.0` is implemented and tagged but not externally published or clean-install verified.
+- **Documentation risk:** Some historical docs still contain stale claims; the active canonical set now points to SSOT and domain model.
+- **Architecture risk:** Three lanes share one repository; contributors must avoid treating FFB cards, SWARM tasks, and AgentTools task logs as one model.
 - **Maintenance risk:** Large legacy/deprecated tool volume increases false positives and duplicate fixes.
-- **Documentation risk:** Stale historical docs still look actionable.
+- **Security risk:** Remaining npm advisories are accepted only while the TS lane is non-production.
+- **Runtime unknowns:** Live MCP/server deployment topology is not documented in this repository.
 
 ---
 
 ## Suggested sequencing
 
-1. Restore Python gate determinism.
-2. Complete PyPI publish and clean install proof.
-3. Repair MCP catalog and package/server docs.
-4. Add Node CI and remediate npm audit issues.
-5. Replace placeholder API/web quality gates.
-6. Decide product boundary and archive policy.
-7. Consolidate tool registries and legacy scripts.
-8. Refresh docs after each milestone, with SSOT first and `NEXT_UP.md` second.
+1. Complete SWARM-003 publish.
+2. Complete SWARM-004 clean install proof.
+3. Keep the domain model and SSOT synchronized after publish evidence changes.
+4. Resolve or accept remaining npm audit risk before any TS deployment.
+5. Replace API/web placeholder quality gates.
+6. Classify standalone MCP servers and legacy tools.
+7. Reconcile task-log mutation code with `docs/root/MASTER_TASK_LOG.md`.

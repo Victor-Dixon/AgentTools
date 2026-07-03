@@ -1,5 +1,7 @@
 # 🐺 COMPREHENSIVE PROJECT REVIEW - WE ARE SWARM
 
+**Historical snapshot notice (reviewed 2026-07-03):** This 2025 review is retained for context only. Counts, version, tags, test status, and release blockers are stale. Use `docs/root/MASTER_TASK_LOG.md`, `NEXT_UP.md`, `MASTER_TASK_LIST.md`, `ROADMAP.md`, and `docs/architecture/DOMAIN_MODEL.md` for current status and domain model.
+
 **Review Date:** 2025-12-29  
 **Project:** AgentTools / swarm-mcp  
 **Version:** 0.1.0 (pre-release)  

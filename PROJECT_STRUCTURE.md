@@ -1,9 +1,9 @@
 # PROJECT_STRUCTURE
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-07-03
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 
-This file documents the current repository layout, major service relationships, shared libraries, data flow, and infrastructure topology observed during the workspace audit.
+This file documents the current repository layout, major service relationships, shared libraries, data flow, and infrastructure topology observed during the workspace audit. The canonical domain model lives in `docs/architecture/DOMAIN_MODEL.md`.
 
 ---
 
@@ -30,9 +30,9 @@ The canonical project-status SSOT is `docs/root/MASTER_TASK_LOG.md`. Root-level 
 | `swarm_mcp/core/` | Coordination primitives and domain/application logic. | Active. |
 | `swarm_mcp/servers/` | Packaged MCP server modules exposed by `pyproject.toml` console scripts. | Active; 5 server modules. |
 | `swarm_mcp/cli.py` | `swarm` operator CLI. | Active; 12 subcommands. |
-| `tests/` | Python test suite for package, docs/contracts, MCP servers, and tool compatibility. | Active but currently blocked by missing dev dependency. |
+| `tests/` | Python test suite for package, docs/contracts, MCP servers, and tool compatibility. | Active; SSOT evidence on 2026-06-29 reports `72 passed, 1 skipped`. |
 | `integration/` | Example MCP host/server configs and integration bridge. | Secondary active. |
-| `mcp_servers/` | Standalone MCP server scripts for local/operator workflows. | Active/secondary; catalog drift exists. |
+| `mcp_servers/` | Standalone MCP server scripts for local/operator workflows. | Active/secondary; catalog validation currently reports 0 missing targets. |
 | `tools/` | Legacy and current automation scripts plus CLI dispatcher. | Mixed active and legacy. |
 | `tools_v2/` | Adapter-driven toolbelt V2 registry and categories. | In-progress; not yet fully healthy. |
 | `apps/api/` | Fastify/Postgres API for Family Focus Board. | Active scaffold/product lane; lacks tests. |
@@ -134,14 +134,10 @@ Major categories:
 - DevOps automation: dependency management, release management, CI/CD helper, environment setup, security scanner, docs generator, database operations;
 - secondary/game/community surfaces: mod deployment, server monitoring, backup automation, Discord integration, player analytics.
 
-Known drift:
+Catalog status:
 
 - `mcp_servers/all_mcp_servers.json` has 23 catalog entries.
-- 4 catalog entries point to missing packaged modules:
-  - `swarm_mcp.servers.git_operations`
-  - `swarm_mcp.servers.code_quality`
-  - `swarm_mcp.servers.observability`
-  - `swarm_mcp.servers.testing`
+- 2026-06-29 SSOT evidence reports 0 missing catalog targets after SWARM-016.
 
 ---
 
@@ -211,8 +207,8 @@ Current status:
 
 - substantial implementation exists;
 - tests exist under `tools_v2/tests/`;
-- registry/docs report known failing entries;
-- root test collection currently imports `tools_v2` and requires missing optional dependency `dotenv`.
+- disabled registry entries are documented in `docs/TOOLS_V2_DISABLED_REGISTRY_ENTRIES.md`;
+- root Python test collection is green per 2026-06-29 SSOT evidence.
 
 ---
 
@@ -282,7 +278,7 @@ Current implementation notes:
 | `MASTER_TASK_LIST.md` | Current audit-backed actionable task list. | Active deliverable. |
 | `ROADMAP.md` | Current audit-backed roadmap. | Active deliverable. |
 | `PROJECT_STRUCTURE.md` | Current structure documentation. | Active deliverable. |
-| `PROJECT_AUDIT_REPORT.md` | Current audit report. | Active deliverable. |
+| `PROJECT_AUDIT_REPORT.md` | 2026-05-17 audit report. | Historical snapshot; see SSOT/domain model for current status. |
 | `PRD.md` | AgentTools product framing. | Needs reconciliation with SWARM MCP and Family Focus Board lanes. |
 | `docs/mvp.md` | Family Focus Board MVP plan. | Active if TS product lane remains active. |
 | `docs/architecture/adr/0001-production-architecture.md` | AgentTools architecture ADR. | Mostly useful, but references absent legacy paths. |
@@ -297,7 +293,7 @@ Current implementation notes:
 
 `.github/workflows/swarm_ci.yml`:
 
-- triggers on `main` pushes and PRs targeting `main`;
+- triggers on `master` and `main` pushes, PRs targeting `master` or `main`, `v*` tags, and manual dispatch;
 - installs Python 3.10 and `pip install -e ".[dev]"`;
 - runs `pytest tests/ -v`;
 - runs import-healer coverage gate;
@@ -308,9 +304,8 @@ Current implementation notes:
 Gaps:
 
 - no Node workspace install/typecheck/test/audit gate;
-- Python dependency gap for current tests;
-- import audit default scope scans 0 files locally;
-- `pip-audit` is not installed even though security scan tries to audit Python dependencies.
+- import audit default scope and security scan triage still need review;
+- PyPI publish job failed for tag `v0.6.0` because `TWINE_PASSWORD` was empty.
 
 ### Runtime/deployment assumptions
 
@@ -327,9 +322,9 @@ Gaps:
 | Lane | Classification | Confidence |
 |---|---|---|
 | `swarm_mcp/` package | Active, release-critical | High |
-| `tests/` package/docs contracts | Active, currently blocked | High |
+| `tests/` package/docs contracts | Active, green per 2026-06-29 SSOT evidence | High |
 | `swarm_mcp/servers/` packaged MCP | Active, release-critical | High |
-| `mcp_servers/` standalone MCP | Active/secondary with drift | Medium-high |
+| `mcp_servers/` standalone MCP | Active/secondary; catalog targets currently resolve | Medium-high |
 | `tools/cli.py`, security/import audit, import healer | Active CI tooling | High |
 | `tools_v2/` | In-progress migration surface | Medium-high |
 | `apps/api` | Active TS product backend lane | Medium |

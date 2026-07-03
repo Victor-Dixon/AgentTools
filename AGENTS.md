@@ -2,7 +2,7 @@
 
 ## What this project even is
 
-This repository maintains **SWARM MCP** (`swarm-mcp`), a Python package for multi-agent coordination workflows over MCP.
+This repository maintains **SWARM MCP** (`swarm-mcp`), a Python package for multi-agent coordination workflows over MCP, and also contains secondary AgentTools/operator tooling plus a separate Family Focus Board TypeScript product lane.
 
 Primary code surfaces:
 - `swarm_mcp/core/` → coordination logic
@@ -10,10 +10,16 @@ Primary code surfaces:
 - `swarm_mcp/cli.py` → operational CLI
 - `tests/` and `integration/` → verification
 
+Secondary workspace surfaces:
+- `mcp_servers/`, `tools/`, `tools_v2/` → local/operator MCP and automation tooling
+- `apps/api/`, `apps/web/`, `packages/shared/` → Family Focus Board product lane
+- `docs/architecture/DOMAIN_MODEL.md` → canonical domain model and documentation audit
+
 ## SSOT enforcement policy
 
 - `docs/root/MASTER_TASK_LOG.md` is the single source of truth for project status.
 - `NEXT_UP.md` mirrors SSOT for human-friendly execution focus.
+- `docs/architecture/DOMAIN_MODEL.md` is the canonical repository domain model.
 - Any task/status update must be reflected in `docs/root/MASTER_TASK_LOG.md` first, then `NEXT_UP.md`.
 - If documents conflict, treat `docs/root/MASTER_TASK_LOG.md` as canonical and reconcile immediately.
 
@@ -40,4 +46,6 @@ When editing project status docs:
 2. Include concrete dates (`YYYY-MM-DD`).
 3. Prefer evidence-backed inventory snapshots (commands and outputs).
 4. Keep next actions constrained to the active critical path.
+5. Mark unverifiable architecture, runtime topology, external integration status, or product intent as `Unknown` instead of inferring it.
+6. Preserve the lane boundary: SWARM MCP tasks, AgentTools/operator tooling, and Family Focus Board cards/timers are related by repository location, not by a single shared domain model.
 

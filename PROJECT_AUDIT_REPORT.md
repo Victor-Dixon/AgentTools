@@ -5,6 +5,8 @@
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Related deliverables:** `MASTER_TASK_LIST.md`, `ROADMAP.md`, `PROJECT_STRUCTURE.md`
 
+**Historical snapshot notice (reviewed 2026-07-03):** This report preserves the 2026-05-17 audit findings. Several blockers listed below were resolved after this report: Python test collection, import-healer coverage, and MCP catalog missing targets are complete per 2026-06-29 SSOT evidence. Use `docs/root/MASTER_TASK_LOG.md`, `NEXT_UP.md`, `MASTER_TASK_LIST.md`, `ROADMAP.md`, and `docs/architecture/DOMAIN_MODEL.md` for current execution status and domain boundaries.
+
 ---
 
 ## Executive summary
