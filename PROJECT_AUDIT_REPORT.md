@@ -11,7 +11,7 @@
 
 ## Executive summary
 
-This workspace is a **mixed polyglot repository**. The clearest release-critical product is **SWARM MCP**, a Python package for multi-agent coordination over MCP. It has implemented core modules, CLI commands, packaged MCP server modules, tests, package metadata, and CI configuration. However, it is not release-complete: PyPI publish and clean-install verification remain open, and the current test gate is blocked by dependency/config drift.
+This workspace is a **mixed polyglot repository**. The clearest release-critical product is **SWARM MCP**, a Python package for multi-agent coordination over MCP. It has implemented core modules, CLI commands, packaged MCP server modules, tests, package metadata, and CI configuration. At audit time it was not release-complete because PyPI publish, clean-install verification, Python gate repair, and MCP catalog repair were open. As of the 2026-07-03 review, PyPI publish and clean-install verification remain open; Python gate repair and MCP catalog repair are complete per SSOT evidence.
 
 The repository also contains a substantial **AgentTools/operator tooling** layer (`tools/`, `tools_v2/`, `mcp_servers/`) and a **Family Focus Board** TypeScript workspace (`apps/api`, `apps/web`, `packages/shared`). Those lanes have useful code but are not aligned with the Python-only CI contract and are inconsistently represented across planning docs.
 
@@ -25,7 +25,7 @@ Overall health is **moderate but unstable**: implementation exists in several la
 |---|---:|---:|---|
 | SWARM MCP Python package | Yellow | 80% | Core/package exists; release proof and clean install remain incomplete. |
 | Packaged MCP servers | Yellow | 75% | 5 servers exist; more smoke/console-script tests needed. |
-| Standalone `mcp_servers` | Yellow/red | 60% | 27 scripts; catalog has 4 missing targets and docs need classification. |
+| Standalone `mcp_servers` | Yellow/red | 60% at audit time | 27 scripts; audit found 4 missing targets, fixed later in SWARM-016. Classification still needed. |
 | Legacy/current `tools` CLI | Yellow | 65% | CI uses it, but security/import audit behavior needs cleanup. |
 | Toolbelt V2 | Yellow/red | 55% | Architecture exists; registry/import health not production-stable. |
 | Family Focus Board API | Yellow | 60% | Substantial Fastify/Postgres routes; no real tests/lint/deployment docs. |
@@ -152,7 +152,7 @@ Commands were run on 2026-05-17 after installing declared dependencies with `pyt
 
 | Check | Result | Notes |
 |---|---|---|
-| Inventory script | PASS | Confirmed 5 packaged servers, 12 CLI subcommands, 27 standalone MCP server scripts, 23 catalog entries, and 4 missing catalog targets. |
+| Inventory script | PASS | Confirmed 5 packaged servers, 12 CLI subcommands, 27 standalone MCP server scripts, 23 catalog entries, and 4 missing catalog targets at audit time. SWARM-016 later reduced missing targets to 0. |
 | `python3 -m pytest tests -q` | FAIL | Collection fails: `ModuleNotFoundError: No module named 'dotenv'` from `tools_v2/categories/communication_tools.py`. |
 | `python3 tools/swarm/tests/check_import_healer_coverage.py` | FAIL | Coverage regressions vs baseline for import healer, validator, and test file. |
 | `PYTHONPATH=. python3 tools/cli.py --security-scan` | FAIL/needs triage | No obvious secrets found; flags 2 fixture `config.py` files; skips Python audit because `pip-audit` missing; reports npm vulnerabilities. |
@@ -172,15 +172,15 @@ Environment setup notes:
 ## Critical issues
 
 1. **Release is not complete.** SWARM-003 and SWARM-004 remain open.
-2. **Python test suite fails under declared dev dependencies.** Missing `dotenv` breaks test collection.
-3. **Import-healer coverage gate currently fails.** CI confidence is blocked until this is fixed or justified.
-4. **MCP catalog contains broken targets.** Four `swarm_mcp.servers.*` entries do not exist.
-5. **npm audit has high-severity advisories.** `next`, `fast-uri`, and `postcss` need remediation before production.
+2. **Python test suite failed under declared dev dependencies at audit time.** Resolved by SWARM-014; 2026-06-29 SSOT evidence reports `72 passed, 1 skipped`.
+3. **Import-healer coverage gate failed at audit time.** Resolved by SWARM-015; 2026-06-29 SSOT evidence reports coverage gate passed.
+4. **MCP catalog contained broken targets at audit time.** Resolved by SWARM-016; 2026-06-29 SSOT evidence reports 0 missing targets.
+5. **npm audit had high-severity advisories at audit time.** SWARM-017 reduced this to 2 moderate advisories; production TS deployment still needs risk review.
 6. **Node workspace is not represented in CI.** TypeScript code can regress without CI feedback.
 7. **API/web tests and lint scripts are placeholders.** Product confidence is low outside shared timer logic.
-8. **Documentation has conflicting product narratives.** SWARM MCP, AgentTools, and Family Focus Board are all represented as primary in different docs.
-9. **Duplicate task-log artifacts created ambiguity.** Root `MASTER_TASK_LOG.md` is now a pointer, but remaining docs/tooling references still need cleanup.
-10. **Security/import audit commands need tuning.** One scans fixture names as suspicious; the other scans 0 files.
+8. **Documentation had conflicting product narratives.** SWARM-018 added a canonical domain model and synchronized active docs; older historical docs may still need banners as touched.
+9. **Duplicate task-log artifacts created ambiguity.** Root `MASTER_TASK_LOG.md` is a pointer, but task-log mutation code/docs still need cleanup.
+10. **Security/import audit commands need tuning.** Fixture false-positive and scan-scope review remains open.
 
 ---
 

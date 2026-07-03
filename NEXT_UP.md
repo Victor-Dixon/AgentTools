@@ -1,6 +1,6 @@
 # NEXT UP — SWARM MCP EXECUTION DASHBOARD
 
-**Updated:** 2026-07-03 (documentation/domain model audit)  
+**Updated:** 2026-07-03 (documentation/domain model audit validated)  
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
 **Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`  
 **Scope:** Packaging readiness first; workspace documentation/tooling blockers tracked second.
@@ -28,7 +28,7 @@ This dashboard is the human-readable companion to the SSOT task log.
 **Current phase:** Phase 0A — Consolidation + Packaging Readiness  
 **Release state:** v0.6.0 tagged; PyPI upload blocked on missing/unused GitHub secret configuration  
 **Blocking tasks:** SWARM-003 (publish), SWARM-004 (PyPI install verify)  
-**Documentation state:** SWARM-018 domain model/status synchronization implemented on branch `cursor/domain-model-doc-audit-84b4`
+**Documentation state:** SWARM-018 domain model/status synchronization validated on branch `cursor/domain-model-doc-audit-84b4` / PR #8
 
 Interpretation: M0 (Python gates) and M2 (MCP catalog) are complete. Package built and tagged; CI publish failed because `PYPI_API_TOKEN` was not available to `TWINE_PASSWORD` in `Victor-Dixon/AgentTools`.
 
@@ -71,7 +71,7 @@ Interpretation: M0 (Python gates) and M2 (MCP catalog) are complete. Package bui
 - [x] SWARM-015 import-healer coverage gate
 - [x] SWARM-016 MCP catalog drift fixed
 - [x] SWARM-018 documentation/domain model audit implemented
-- [ ] SWARM-018 validation evidence recorded
+- [x] SWARM-018 validation evidence recorded
 - [ ] SWARM-003 PyPI publish with evidence
 - [ ] SWARM-004 clean PyPI install verification
 - [ ] SWARM-017 npm audit resolved or accepted for deployment target
@@ -80,7 +80,7 @@ Interpretation: M0 (Python gates) and M2 (MCP catalog) are complete. Package bui
 
 ## Agent passdown (2026-07-03 UTC)
 
-**Branch/PR:** `cursor/domain-model-doc-audit-84b4` — PR pending validation
+**Branch/PR:** `cursor/domain-model-doc-audit-84b4` — PR #8
 
 ### Completed this session
 
@@ -89,10 +89,26 @@ Interpretation: M0 (Python gates) and M2 (MCP catalog) are complete. Package bui
 | SWARM-018 | Added canonical domain model and synchronized active docs around SWARM MCP, AgentTools/operator tooling, and Family Focus Board boundaries. |
 | SWARM-002/SWARM-003 docs | Reconciled token contradiction: local token runbook exists, but CI secret/configuration is not confirmed and blocked publish. |
 | Historical docs | Added freshness/non-canonical notices to stale planning and audit docs. |
+| Validation | Focused docs/catalog tests, full Python suite, import-healer coverage gate, and stale-claim scan completed. |
 
 ### Evidence
 
-Validation evidence will be recorded after this branch is tested.
+```bash
+python3 -m pip install -e ".[dev]"
+python3 -m pytest tests/test_docs_contract.py tests/test_project_artifact_contract.py tests/test_mcp_catalog.py -q
+python3 -m pytest tests -q
+python3 tools/swarm/tests/check_import_healer_coverage.py
+targeted markdown stale-claim scan for old Python/MCP blocker phrases
+```
+
+```text
+Dev dependency install succeeded; pytest was absent before install.
+Focused docs/catalog tests: 9 passed in 0.05s.
+Inventory check: 5 packaged servers, 12 CLI subcommands, 23 MCP catalog entries, 0 missing targets.
+Full Python suite: 72 passed, 1 skipped in 2.21s.
+Import healer coverage gate: 1 passed; coverage gate passed.
+Stale-claim scan: remaining matches are historical-context lines only.
+```
 
 ### Blockers
 
@@ -103,11 +119,11 @@ Validation evidence will be recorded after this branch is tested.
 ### Next agent ask (copy/paste)
 
 ```text
-Validate and finish SWARM-018 on branch cursor/domain-model-doc-audit-84b4: run the docs/tests checks, record exact evidence in docs/root/MASTER_TASK_LOG.md and NEXT_UP.md, then keep SWARM-003 as the next blocker:
-  add/configure PYPI_API_TOKEN in GitHub secrets,
-  re-run the failed v0.6.0 publish job,
-  record redacted publish output,
-  then complete SWARM-004 clean install proof.
+SWARM-018 is complete on PR #8. Next, unblock SWARM-003:
+  add/configure PYPI_API_TOKEN in GitHub secrets for Victor-Dixon/AgentTools,
+  re-run the failed v0.6.0 publish job or re-trigger the v0.6.0 tag publish,
+  record redacted publish output in docs/root/MASTER_TASK_LOG.md,
+  then complete SWARM-004 clean install proof with pip install swarm-mcp==0.6.0, import smoke, and swarm status.
 ```
 
 ---
