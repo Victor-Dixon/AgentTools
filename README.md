@@ -14,6 +14,8 @@ A framework that enables **multiple AI agents** (Claude, GPT, Gemini, etc.) to w
 
 Think of it as the **nervous system for an AI swarm**.
 
+Repository scope note: this checkout also contains secondary AgentTools/operator tooling (`mcp_servers/`, `tools/`, `tools_v2/`) and a separate Family Focus Board TypeScript product lane (`apps/`, `packages/`). The canonical domain model and lane boundary live in [`docs/architecture/DOMAIN_MODEL.md`](docs/architecture/DOMAIN_MODEL.md).
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     WE ARE SWARM 🐺                         │
@@ -89,6 +91,10 @@ proposal = consensus.propose("agent-1", "Use PostgreSQL", "Need ACID transaction
 | **PackCoordinator** | Central orchestration - assign tasks, check status, broadcast messages |
 | **MessageQueue** | Agent-to-agent async messaging with priority levels |
 | **PackMemory** | Shared knowledge base - learnings persist across sessions |
+| **SwarmBrain** | Learning and decision records used by memory/brain MCP surfaces |
+| **TaskScorer** | ROI/priority scoring helper for tasks |
+| **VerificationHarness** | Command, file, import, and page-fetch verification helper |
+| **RecoveryManager** | Backup, rollback, and failure recovery helper |
 
 ### IP-Level Modules (The Goldmines 💎)
 
@@ -389,9 +395,18 @@ Add to your Claude Desktop or Cursor config:
 
 The canonical execution status lives in [`docs/root/MASTER_TASK_LOG.md`](docs/root/MASTER_TASK_LOG.md), with a human-readable dashboard in [`NEXT_UP.md`](NEXT_UP.md).
 
-The 2026-05-17 workspace audit also produced:
+Current status as of 2026-07-03:
 
-- [`MASTER_TASK_LIST.md`](MASTER_TASK_LIST.md) — actionable task list and blockers
+- SWARM MCP package version is `0.6.0`.
+- M0 Python gates and M2 MCP catalog integrity are complete per SSOT evidence.
+- PyPI publish for `v0.6.0` is blocked because the tag publish job did not receive `PYPI_API_TOKEN`.
+- Clean install proof for `swarm-mcp==0.6.0` remains blocked until publish succeeds.
+- AgentTools/operator tooling and Family Focus Board remain secondary lanes documented in the domain model.
+
+Current documentation entry points:
+
+- [`docs/architecture/DOMAIN_MODEL.md`](docs/architecture/DOMAIN_MODEL.md) — canonical domain model and repository audit
+- [`MASTER_TASK_LIST.md`](MASTER_TASK_LIST.md) — current actionable task list and blockers
 - [`ROADMAP.md`](ROADMAP.md) — current sequencing and milestones
 - [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) — repository structure and service relationships
 - [`PROJECT_AUDIT_REPORT.md`](PROJECT_AUDIT_REPORT.md) — comprehensive health review
@@ -408,10 +423,15 @@ swarm_mcp/
 │   ├── coordinator.py       # PackCoordinator
 │   ├── messaging.py         # MessageQueue
 │   ├── memory.py            # PackMemory
+│   ├── brain.py             # SwarmBrain
 │   ├── consensus.py         # ConsensusEngine 💎
 │   ├── conflict.py          # ConflictDetector 💎
 │   ├── agent_dna.py         # AgentDNA 💎
 │   ├── work_proof.py        # WorkProofSystem 💎
+│   ├── verification.py      # VerificationHarness
+│   ├── recovery.py          # RecoveryManager
+│   ├── task_scoring.py      # TaskScorer
+│   ├── messaging_templates.py # Structured message templates
 │   └── pattern_miner.py     # PatternMiner 💎
 ├── servers/                 # MCP server implementations
 └── tools/                   # Additional utilities
@@ -453,8 +473,8 @@ MIT License - see [LICENSE](LICENSE).
 
 ### Stats
 
-- **5 IP-level modules** with novel algorithms
-- **~4,000 lines** of coordination logic
-- **Zero ML dependencies** - pure algorithmic intelligence
-- **File-based** - works with any LLM that can read/write files
-- **MCP-ready** - integrates with Claude, Cursor, etc.
+- **5 packaged MCP server modules** exposed by `pyproject.toml`
+- **12 CLI subcommands** for coordination workflows
+- **Zero required runtime dependencies** in the Python package metadata
+- **File-backed** coordination state
+- **MCP-ready** integration surface for Claude, Cursor, and other MCP clients

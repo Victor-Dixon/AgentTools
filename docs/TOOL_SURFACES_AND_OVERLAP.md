@@ -2,6 +2,8 @@
 
 _Generated: 2025-12-21 12:24 UTC_
 
+**Freshness notice (reviewed 2026-07-03):** This map is useful for locating overlapping tool surfaces, but some counts and failing-entry notes predate SWARM-016 and later registry cleanup. Use `docs/architecture/DOMAIN_MODEL.md`, `docs/root/MASTER_TASK_LOG.md`, `mcp_servers/all_mcp_servers.json`, and `docs/TOOLS_V2_DISABLED_REGISTRY_ENTRIES.md` for current canonical status.
+
 This document maps **where “tool capabilities” live** in this repository, and where the **same capability is exposed through multiple surfaces** (MCP vs Toolbelt V2 vs legacy CLI vs app/runtime code).
 
 **Canonical source-of-truth files (start here):**

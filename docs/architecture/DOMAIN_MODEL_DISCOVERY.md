@@ -1,32 +1,29 @@
-# AgentTools Domain Model Discovery
+# Domain Model Discovery
 
-## Product Thesis
+**Last reviewed:** 2026-07-03  
+**Status:** Superseded by canonical model
 
-AgentTools is the Dream.OS toolbelt and MCP runtime for coordinating agents, tasks, messages, tools, memory, verification, consensus, and operational control surfaces.
+The complete repository domain model now lives at:
 
-## Candidate Domains
+- `docs/architecture/DOMAIN_MODEL.md`
 
-| Domain | Current Code Surface | Responsibility |
+This discovery stub is retained for compatibility with older references. Use the canonical model for:
+
+- core domain and subdomains,
+- major entities and value objects,
+- services,
+- relationships,
+- data flow,
+- user interactions,
+- external integrations,
+- feature-to-domain mapping,
+- repository audit findings,
+- unknowns.
+
+Current verified lane split:
+
+| Lane | Domain | Primary paths |
 |---|---|---|
-| Agent | `swarm_mcp/core/agent_dna.py` | Agent identity, traits, capabilities |
-| Task | `swarm_mcp/core/task_scoring.py`, `swarm_mcp/servers/tasks.py` | Task scoring, routing, lifecycle |
-| Message | `swarm_mcp/core/messaging.py`, `swarm_mcp/core/messaging_templates.py`, `swarm_mcp/servers/messaging.py` | Agent communication and routing |
-| Memory | `swarm_mcp/core/memory.py`, `swarm_mcp/servers/memory.py`, `swarm_brain/knowledge_base.json` | Persistent knowledge and retrieval |
-| Consensus | `swarm_mcp/core/consensus.py`, `swarm_mcp/core/conflict.py` | Voting, disagreement, conflict resolution |
-| Work Proof | `swarm_mcp/core/work_proof.py`, `swarm_mcp/core/verification.py` | Evidence, validation, completion proof |
-| Coordinator | `swarm_mcp/core/coordinator.py`, `start_swarm.py` | Runtime orchestration |
-| Tool Registry | `swarm_mcp/servers/tools.py`, `tools_v2/`, `mcp_servers/` | Tool exposure and execution surface |
-| API/UI | `apps/api/`, `apps/web/`, `packages/shared/` | Product control plane |
-
-## Architecture Principle
-
-Keep current modules stable. Add tests and seams before moving code.
-
-## Refactor Policy
-
-1. Characterize existing behavior first.
-2. Add domain-level tests.
-3. Extract pure functions/classes only after tests exist.
-4. Preserve public imports.
-5. Do not delete legacy surfaces until mapped.
-6. Commit every closed seam separately.
+| SWARM MCP | Multi-agent AI coordination over MCP | `swarm_mcp/`, `tests/`, `integration/` |
+| AgentTools/operator tooling | Local MCP servers, tool registries, repo automation | `mcp_servers/`, `tools/`, `tools_v2/` |
+| Family Focus Board | Kanban plus shared Pomodoro/focus room product | `apps/api/`, `apps/web/`, `packages/shared/` |

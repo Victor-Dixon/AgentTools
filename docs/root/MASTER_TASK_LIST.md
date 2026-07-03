@@ -1,6 +1,6 @@
 # MASTER TASK LIST — CANONICAL POINTER
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-07-03
 **Status:** Superseded by current audit deliverables
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
 
@@ -10,8 +10,9 @@ Use these files instead:
 
 - `docs/root/MASTER_TASK_LOG.md` — canonical project execution status.
 - `NEXT_UP.md` — human-readable dashboard mirroring the SSOT.
-- `MASTER_TASK_LIST.md` — current audit-backed actionable task list using `DONE`, `IN_PROGRESS`, `BLOCKED`, `TODO`, and `DEPRECATED`.
+- `MASTER_TASK_LIST.md` — current actionable task list using `DONE`, `IN_PROGRESS`, `BLOCKED`, `TODO`, `PARTIAL`, and `UNKNOWN`.
 - `ROADMAP.md` — current sequencing and milestones.
+- `docs/architecture/DOMAIN_MODEL.md` — canonical repository domain model.
 - `PROJECT_AUDIT_REPORT.md` — detailed audit findings and completion estimates.
 - `PROJECT_STRUCTURE.md` — current structure, relationships, and topology.
 

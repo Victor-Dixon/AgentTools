@@ -1,8 +1,9 @@
 # 🐺 MASTER TASK LOG — WE ARE SWARM (SSOT)
 
-**Last Updated:** 2026-06-29
-**Status:** Active Development — release blocked on PyPI secret
+**Last Updated:** 2026-07-03
+**Status:** Active Development — release blocked on PyPI secret/configuration; documentation/domain model audit validated
 **Package:** swarm-mcp v0.6.0 (tagged; PyPI upload pending)
+**Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`
 
 ---
 
@@ -22,9 +23,9 @@ This file is the **single source of truth** for project execution status.
 
 ### Where we are now
 - **Phase:** Phase 0A — Consolidation + Packaging Readiness
-- **Date locked:** 2026-05-17 audit refresh
+- **Date locked:** 2026-07-03 documentation/domain model audit refresh
 - **Release reality:** core code exists, but public release proof is incomplete because SWARM-003/004 are open.
-- **Workspace reality:** this checkout is a mixed workspace containing the SWARM MCP Python package, local AgentTools/operator tooling, standalone MCP server scripts, and a TypeScript Family Focus Board workspace. SWARM MCP remains the release-critical lane until SWARM-003/004 are complete.
+- **Workspace reality:** this checkout is a mixed workspace containing the SWARM MCP Python package, local AgentTools/operator tooling, standalone MCP server scripts, and a TypeScript Family Focus Board workspace. SWARM MCP remains the release-critical lane until SWARM-003/004 are complete. The canonical lane/domain model is documented in `docs/architecture/DOMAIN_MODEL.md`.
 
 ### What this means
 - We are **not** at launch state.
@@ -141,6 +142,7 @@ Results:
 - [x] [QA][P0][SWARM-015] Restore import-healer coverage gate or refresh baseline with documented rationale.
 - [x] [MCP][P0][SWARM-016] Repair `mcp_servers/all_mcp_servers.json` missing targets and add catalog validation.
 - [ ] [SEC][P0][SWARM-017] Remediate npm audit findings or document accepted risk before any TS deployment. *(partial: 7→2 moderate; remaining `next`/`postcss` transitive)*
+- [x] [DOCS][P0][SWARM-018] Complete documentation/domain model audit and synchronize active status docs. *(completed 2026-07-03)*
 
 ### SWARM-002 execution log (2026-03-24)
 
@@ -150,7 +152,7 @@ Results:
   - local secure publish pattern (runtime env var + `__token__`)
   - CI secret standard (`PYPI_API_TOKEN`) and `twine` usage
   - non-secret evidence template for completion logging
-- Current status: **complete** (maintainer credential action executed and secure storage evidence recorded).
+- Current status: **complete for local token creation/storage runbook only**. CI secret configuration was later disproven by the `v0.6.0` publish job; see SWARM-003 execution log.
 
 #### SWARM-002 completion gate (must be filled after maintainer action)
 
@@ -158,8 +160,8 @@ Results:
 - PyPI account username: `swarm-mcp-maintainer` *(maintainer-confirmed; token value redacted)*
 - Token scope confirmed: `project: swarm-mcp`
 - Local secure storage confirmed: `PYPI_API_TOKEN` set at runtime shell scope for publish command; value never written to repo files
-- CI secret `PYPI_API_TOKEN` confirmed: `configured` and consumed via GitHub Actions `TWINE_PASSWORD` in `.github/workflows/swarm_ci.yml`
-- Evidence note added with secrets redacted: `PyPI project-scoped token created as swarm-mcp-release, copied once, stored locally + CI secret; no raw token persisted in repository history.`
+- CI secret `PYPI_API_TOKEN` status: **not confirmed in live repo**. The workflow references it as `TWINE_PASSWORD`, but the 2026-06-29 publish job received an empty password.
+- Evidence note added with secrets redacted: `PyPI project-scoped token created as swarm-mcp-release, copied once, stored locally; no raw token persisted in repository history.`
 
 ### SWARM-014 execution log (2026-06-29)
 
@@ -326,6 +328,69 @@ Local 0.6.0 wheel: 🐺 Swarm Status — 📊 1/1 agents ready
 ```
 
 Current status: **open — pending SWARM-003 publish of v0.6.0**.
+
+### SWARM-018 execution log (2026-07-03)
+
+Scope: documentation-first domain model audit with no behavior changes.
+
+Fixes applied:
+- Added canonical domain model: `docs/architecture/DOMAIN_MODEL.md`.
+- Converted `docs/architecture/DOMAIN_MODEL_DISCOVERY.md` into a compatibility pointer to the canonical model.
+- Updated active repository docs to align on the three-lane model:
+  - SWARM MCP as release-critical multi-agent coordination package,
+  - AgentTools/operator tooling as secondary local MCP/tooling lane,
+  - Family Focus Board as separate TypeScript Kanban/Pomodoro lane.
+- Synchronized current status in `PRD.md`, `ROADMAP.md`, `MASTER_TASK_LIST.md`, `PROJECT_STRUCTURE.md`, `README.md`, `AGENTS.md`, `docs/governance/github_description.md`, and `NEXT_UP.md`.
+- Marked stale historical docs with freshness/historical notices so they no longer look like current execution status.
+- Reconciled SWARM-002/SWARM-003 contradiction: local PyPI token runbook exists, but live GitHub secret/configuration is not confirmed and blocked the `v0.6.0` publish job.
+
+Evidence commands (run 2026-07-03):
+
+```bash
+python3 -m pip install -e ".[dev]"
+python3 -m pytest tests/test_docs_contract.py tests/test_project_artifact_contract.py tests/test_mcp_catalog.py -q
+python3 - <<'PY'
+from pathlib import Path
+import json, re, importlib.util
+servers = sorted(p.name for p in Path('swarm_mcp/servers').glob('*.py') if p.name != '__init__.py')
+cmds = re.findall(r'subparsers\.add_parser\("([^"]+)"', Path('swarm_mcp/cli.py').read_text())
+catalog = json.loads(Path('mcp_servers/all_mcp_servers.json').read_text())
+missing = []
+for name, cfg in catalog['mcpServers'].items():
+    args = cfg.get('args', [])
+    if '-m' in args:
+        mod = args[args.index('-m') + 1]
+        if importlib.util.find_spec(mod) is None:
+            missing.append((name, mod))
+    else:
+        for arg in args:
+            if arg.endswith('.py') and not Path(arg).is_file():
+                missing.append((name, arg))
+print('server_count:', len(servers), servers)
+print('cli_subcommands_count:', len(cmds), cmds)
+print('mcp_catalog_entries:', len(catalog['mcpServers']))
+print('mcp_catalog_missing_targets:', len(missing), missing)
+PY
+python3 -m pytest tests -q
+python3 tools/swarm/tests/check_import_healer_coverage.py
+```
+
+```text
+python3 -m pip install -e ".[dev]" — succeeded; installed pytest/dev tooling in user site; console scripts installed under /home/ubuntu/.local/bin, which is not on PATH.
+Focused docs/catalog tests: 9 passed in 0.05s.
+server_count: 5 ['control.py', 'memory.py', 'messaging.py', 'tasks.py', 'tools.py']
+cli_subcommands_count: 12 ['status', 'send', 'inbox', 'search', 'learn', 'tasks', 'assign', 'vote', 'conflict', 'profile', 'prove', 'patterns']
+mcp_catalog_entries: 23
+mcp_catalog_missing_targets: 0 []
+Full Python suite: 72 passed, 1 skipped in 2.21s.
+Import healer coverage gate: 1 passed; current values matched baseline and Coverage gate passed.
+```
+
+Stale-claim scan: targeted markdown scan for old Python/MCP blocker phrases found only historical-context statements:
+- `PROJECT_AUDIT_REPORT.md` references four missing catalog targets "at audit time" and notes SWARM-016 fixed them.
+- `MASTER_TASK_LIST.md` records the missing-dotenv issue as DONE/fixed before 2026-06-29 evidence.
+
+Current status: **complete and validated in branch `cursor/domain-model-doc-audit-84b4` / PR #8**.
 
 ---
 
