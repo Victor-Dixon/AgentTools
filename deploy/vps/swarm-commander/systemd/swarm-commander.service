@@ -1,0 +1,26 @@
+[Unit]
+Description=Dream.OS Swarm Commander (Discord inbound bot)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=dreamos
+Group=dreamos
+WorkingDirectory=/opt/dreamos/repos/agent-tools
+Environment=PYTHONPATH=/opt/dreamos/repos/agent-tools/src
+Environment=DREAMVAULT_ROOT=/opt/dreamos/DreamVault
+EnvironmentFile=-/opt/dreamos/secrets/swarm-commander.env
+ExecStart=/opt/dreamos/repos/agent-tools/.venv/bin/python -m agent_tools.discord_commander.bot_runner_service
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=swarm-commander
+
+# Hardening (no GUI / no new privileges)
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

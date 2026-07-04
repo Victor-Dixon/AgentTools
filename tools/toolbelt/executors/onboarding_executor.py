@@ -15,7 +15,10 @@ V2 Compliance: <100 lines, focused executor
 """
 
 import logging
+import os
 import subprocess
+import sys
+from pathlib import Path
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -26,7 +29,17 @@ class OnboardingExecutor:
 
     def __init__(self):
         """Initialize onboarding executor."""
-        self.messaging_cli = "python -m src.services.messaging_cli"
+        self.soft_onboard_cli = "python tools/soft_onboard_cli.py"
+
+    def _dreamvault_messaging_script(self) -> Path | None:
+        for root in (
+            Path(os.environ.get("DREAMVAULT_ROOT", "D:/DreamVault")),
+            Path("D:/DreamVault"),
+        ):
+            script = root / "runtime/scripts/agent_messaging_send_001.py"
+            if script.is_file():
+                return script
+        return None
 
     def execute(self, args) -> int:
         """
@@ -51,23 +64,19 @@ class OnboardingExecutor:
             return 1
 
     def _soft_onboarding(self, args) -> int:
-        """Execute soft onboarding (session cleanup)."""
-        if not args.agent or not args.message:
-            print("❌ --agent and --message required for soft onboarding")
+        """Execute soft onboarding with integrated S2A v2.3 + PyAutoGUI."""
+        if not args.agent:
+            print("❌ --agent required for soft onboarding")
             return 1
 
         cmd = [
             "python",
-            "-m",
-            "src.services.messaging_cli",
-            "--soft-onboarding",
+            "tools/soft_onboard_cli.py",
             "--agent",
             args.agent,
-            "--message",
-            args.message,
         ]
 
-        print(f"🔄 Soft onboarding {args.agent}...")
+        print(f"🚀 Soft onboarding {args.agent} with S2A v2.3 + PyAutoGUI...")
         result = subprocess.run(cmd, capture_output=False)
         return result.returncode
 
@@ -82,16 +91,22 @@ class OnboardingExecutor:
             print("    Use --yes to confirm")
             return 1
 
+        script = self._dreamvault_messaging_script()
+        if script is None:
+            print("ERROR: DreamVault messaging SSOT not found for hard onboarding")
+            return 1
+
         cmd = [
-            "python",
-            "-m",
-            "src.services.messaging_cli",
-            "--hard-onboarding",
+            sys.executable,
+            str(script),
+            "--category",
+            "s2a",
+            "--s2a-variant",
+            "onboarding",
             "--agent",
             args.agent,
             "--message",
             args.message,
-            "--yes",
         ]
 
         print(f"🚨 Hard onboarding {args.agent} (COMPLETE RESET)...")

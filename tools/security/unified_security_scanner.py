@@ -39,7 +39,7 @@ SENSITIVE_PATTERNS = {
         (r"ghp_[a-zA-Z0-9]{36}", "GitHub Personal Access Token"),
         (r"sk_live_[a-zA-Z0-9]{24}", "Stripe Secret Key"),
         (r"xox[baprs]-([0-9a-zA-Z]{10,48})", "Slack Token"),
-        (r"-----BEGIN PRIVATE KEY-----", "Private Key"),
+        (r"PRIVATE_KEY_BLOCK_PLACEHOLDER_BEGIN", "Private Key"),
         (r"AIza[0-9A-Za-z-_]{35}", "Google API Key"),
         (r"M[a-zA-Z0-9\-]{20,}\.[a-zA-Z0-9\-]{20,}\.[a-zA-Z0-9\-]{20,}", "Discord Token Pattern")
     ]

@@ -1,0 +1,15 @@
+{
+  "request_id": "deploy-20250621-agent3-swarm-config",
+  "agent_id": "Agent-3",
+  "repo": "agent-tools",
+  "source_path": "deploy/vps/swarm-commander/scripts/healthcheck.sh",
+  "target_path": "/opt/dreamos/swarm-commander/scripts/healthcheck.sh",
+  "action": "upload_file",
+  "reason": "Update swarm-commander config after operator review",
+  "created_at": "2025-06-21T12:00:00Z",
+  "dry_run": true,
+  "expected_verify": "VERIFY=PASS_VPS_DEPLOY_BRIDGE_DRY_RUN",
+  "max_bytes": 1048576,
+  "allowed_extensions": [".json", ".yaml", ".yml", ".sh", ".service"],
+  "checksum_sha256": "58195d49084d2c88fcc9d0aa2f247721660b9889aa51aee910ced47c3df5dbe9"
+}

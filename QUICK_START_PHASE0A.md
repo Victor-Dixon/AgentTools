@@ -66,6 +66,8 @@ python3 tools/monitoring/unified_monitor.py --category all --json > phase0a_repo
 | **Analyze usage** | `python3 tools/analysis/unified_analyzer.py --category structure --json` |
 | **Find duplicates** | `python3 tools/analysis/unified_analyzer.py --category overlaps --json` |
 | **Check V2 compliance** | `python3 tools/validation/unified_validator.py --category all --json` |
+| **🤖 AI coordination analysis** | `mcp --server ai-orchestration analyze_task --task-description "your task"` |
+| **🤖 Generate coordination message** | `mcp --server ai-orchestration generate_coordination_message --task "task" --agent-ids "[\"agent-1\",\"agent-2\"]"` |
 
 ---
 

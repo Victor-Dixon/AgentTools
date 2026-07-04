@@ -59,16 +59,31 @@ def check_tracked_sensitive_files() -> dict[str, Any]:
         "unified_security_scanner.py",
         "check_sensitive_files.py",
         "find_github_token.py",
-        "oauth_token_checker.ts"
+        "oauth_token_checker.ts",
+        "SWARM-002_PYPI_PUBLISH_RUNBOOK.md",
+        "dream_env_broker.py",
     ]
+
+    # Classified safe paths (filename heuristic only; no secret values in repo)
+    classified_allowlist = {
+        "docs/release/SWARM-002_PYPI_PUBLISH_RUNBOOK.md": "SECRET_RUNBOOK_NO_SECRET_VALUE",
+        "promoted/dreamvault_intelligence/dream_env_broker.py": "FALSE_POSITIVE",
+    }
     
     found_files = []
-    
+    allowlisted: list[dict[str, str]] = []
+
     for file in tracked_files:
         if not file:
             continue
-        
-        # Check whitelist
+
+        if file in classified_allowlist:
+            allowlisted.append(
+                {"file": file, "classification": classified_allowlist[file]}
+            )
+            continue
+
+        # Check whitelist (substring match for utility modules)
         if any(w in file for w in whitelist):
             continue
         
@@ -85,6 +100,7 @@ def check_tracked_sensitive_files() -> dict[str, Any]:
     return {
         "total_tracked": len(tracked_files),
         "sensitive_files": found_files,
+        "allowlisted_files": allowlisted,
         "count": len(found_files),
     }
 
@@ -147,6 +163,13 @@ def print_security_report(results: dict[str, Any], gitignore_check: dict[str, An
     else:
         print("✅ No sensitive files found in git tracking")
         print()
+
+    allowlisted = results.get("allowlisted_files") or []
+    if allowlisted:
+        print("Allowlisted (classified safe — filename heuristic only):")
+        for item in allowlisted:
+            print(f"  [{item['classification']}] {item['file']}")
+        print()
     
     print("Gitignore Coverage:")
     if gitignore_check.get("error"):
@@ -164,6 +187,13 @@ def print_security_report(results: dict[str, Any], gitignore_check: dict[str, An
 
 def main():
     """Main execution."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Scan git-tracked files for sensitive patterns (tokens, secrets, keys)."
+    )
+    parser.parse_args()
+
     print("Checking for sensitive files in git...")
     print()
     

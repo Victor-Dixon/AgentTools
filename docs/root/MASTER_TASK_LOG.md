@@ -146,7 +146,7 @@ Results:
 
 ### SWARM-002 execution log (2026-03-24)
 
-- SSOT-aligned secure storage runbook added: `docs/release/SWARM-002_PYPI_TOKEN_RUNBOOK.md`
+- SSOT-aligned secure storage runbook added: `docs/release/SWARM-002_PYPI_PUBLISH_RUNBOOK.md`
 - Runbook defines:
   - project-scoped token requirement (`swarm-mcp`)
   - local secure publish pattern (runtime env var + `__token__`)

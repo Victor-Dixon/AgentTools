@@ -1,0 +1,4 @@
+# Headless Swarm Commander (VPS baseline)
+discord.py>=2.3,<3
+requests>=2.28
+python-dotenv>=1.0
