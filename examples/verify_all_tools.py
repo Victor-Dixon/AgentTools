@@ -1,82 +1,52 @@
-import sys
-import os
+#!/usr/bin/env python3
+"""Verify every toolbelt registry entry responds to --help with exit code 0."""
+
+from __future__ import annotations
+
 import subprocess
-import json
+import sys
 from pathlib import Path
 
-# Add workspace to path
-sys.path.append(os.getcwd())
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
-try:
-    from tools.toolbelt_registry import TOOLS_REGISTRY
-except ImportError:
-    print("❌ Could not import TOOLS_REGISTRY")
-    sys.exit(1)
+from tools.toolbelt_registry import TOOLS_REGISTRY  # noqa: E402
 
-def verify_all_tools():
-    print("🧪 Verifying All Tools in Registry")
+
+def verify_all_tools() -> int:
+    print("Verifying All Tools in Registry")
     print("================================")
-    
-    results = []
-    
-    # Ensure we run from workspace root
-    cwd = os.getcwd()
-    env = os.environ.copy()
-    env["PYTHONPATH"] = str(cwd) + os.pathsep + env.get("PYTHONPATH", "")
-    
-    total = len(TOOLS_REGISTRY)
-    passed = 0
-    failed = 0
-    
-    for tool_id, config in TOOLS_REGISTRY.items():
-        name = config["name"]
-        flag = config["flags"][0] # Use the first flag
-        
-        print(f"Testing {name:<30} (ID: {tool_id})")
-        
-        # Special handling for tools that might exit 1 on "success" (e.g. security scanners finding issues)
-        args = ["--help"]
-        if tool_id == "security-scan":
-            args = ["--warn-only"]
-            
-        cmd = [sys.executable, "-m", "tools.toolbelt", flag] + args
-        
-        try:
-            result = subprocess.run(
-                cmd,
-                cwd=cwd,
-                env=env,
-                capture_output=True,
-                text=True,
-                check=False
-            )
-            
-            if result.returncode == 0:
-                print(f"  ✅ OK")
-                passed += 1
-                results.append({"id": tool_id, "status": "ok"})
-            else:
-                print(f"  ❌ FAILED (Exit Code: {result.returncode})")
-                print(f"     Error: {result.stderr.strip()[:200]}")
-                failed += 1
-                results.append({"id": tool_id, "status": "failed", "error": result.stderr})
-                
-        except Exception as e:
-             print(f"  ❌ EXCEPTION: {e}")
-             failed += 1
-             results.append({"id": tool_id, "status": "exception", "error": str(e)})
+    env = dict(**__import__("os").environ)
+    env["PYTHONPATH"] = str(ROOT) + __import__("os").pathsep + env.get("PYTHONPATH", "")
 
-    print("\n📊 Verification Summary")
-    print("=======================")
-    print(f"Total Tools: {total}")
-    print(f"Passed:      {passed}")
-    print(f"Failed:      {failed}")
-    
-    if failed > 0:
-        print("\n❌ Failures:")
-        for res in results:
-            if res["status"] != "ok":
-                print(f"  - {res['id']}: {res.get('error', '').strip().splitlines()[0] if res.get('error') else 'Unknown error'}")
+    passed = 0
+    failed: list[str] = []
+
+    for tool_id, config in TOOLS_REGISTRY.items():
+        flag = config["flags"][0]
+        args = ["--warn-only"] if tool_id == "security-scan" else ["--help"]
+        cmd = [sys.executable, "-m", "tools.toolbelt", flag, *args]
+        result = subprocess.run(cmd, cwd=str(ROOT), env=env, capture_output=True, text=True)
+        if result.returncode == 0:
+            print(f"  OK  {tool_id}")
+            passed += 1
+        else:
+            print(f"  FAIL {tool_id} (exit {result.returncode})")
+            err = (result.stderr or result.stdout or "").strip().splitlines()
+            failed.append(f"{tool_id}: {err[0] if err else 'unknown'}")
+            print(f"       {failed[-1]}")
+
+    total = len(TOOLS_REGISTRY)
+    print("\nSummary")
+    print(f"  Total:  {total}")
+    print(f"  Passed: {passed}")
+    print(f"  Failed: {len(failed)}")
+    if failed:
+        for line in failed:
+            print(f"    - {line}")
+        return 1
+    return 0
+
 
 if __name__ == "__main__":
-    verify_all_tools()
+    raise SystemExit(verify_all_tools())

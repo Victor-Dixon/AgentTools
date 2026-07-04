@@ -40,6 +40,21 @@ class TestToolbelt:
                 main()
             assert exc_info.value.code == 0
 
+    def test_onboarding_help(self):
+        """Onboarding tools should expose argparse --help via toolbelt."""
+        with patch("sys.argv", ["tools.toolbelt", "--onboard-soft", "--help"]):
+            with pytest.raises(SystemExit) as exc_info:
+                from tools.toolbelt.__main__ import main as toolbelt_main
+                toolbelt_main()
+            assert exc_info.value.code == 0
+
+    def test_toolbelt_top_level_help(self):
+        with patch("sys.argv", ["tools.toolbelt", "--help"]):
+            with pytest.raises(SystemExit) as exc_info:
+                from tools.toolbelt.__main__ import main as toolbelt_main
+                toolbelt_main()
+            assert exc_info.value.code == 0
+
     def test_list_tools(self):
         """Test that tool listing runs without error."""
         with patch("sys.argv", ["tools/cli.py", "--list"]):

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Swarm Command Dashboard - Agent-4 Strategic Coordination Lead</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .status-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .status-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-card .metric {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .health-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .health-optimal { background-color: #4CAF50; }
+        .health-active { background-color: #2196F3; }
+        .health-degraded { background-color: #FF9800; }
+        .health-critical { background-color: #F44336; }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .agent-name {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .agent-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-active { background: #4CAF50; color: white; }
+        .status-idle { background: #9E9E9E; color: white; }
+        .status-error { background: #F44336; color: white; }
+        .status-unknown { background: #FF9800; color: white; }
+
+        .agent-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .workstreams-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .workstream-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .workstream-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            transition: width 0.3s ease;
+        }
+
+        .coordination-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .emergency-controls {
+            background: linear-gradient(135deg, #F44336 0%, #E91E63 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .emergency-controls h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .emergency-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .emergency-form select,
+        .emergency-form input,
+        .emergency-form button {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .emergency-form button {
+            background: white;
+            color: #F44336;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .emergency-form button:hover {
+            background: #f0f0f0;
+        }
+
+        .last-updated {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-left: 20px;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Swarm Command Dashboard</h1>
+            <p class="subtitle">Agent-4 Strategic Coordination Lead - Real-time Swarm Intelligence</p>
+            <button class="refresh-btn" onclick="refreshDashboard()">🔄 Refresh Data</button>
+        </div>
+
+        <div class="status-overview">
+            <div class="status-card">
+                <h3>
+                    <span class="health-indicator {{ 'health-' + swarm_status.system_health.lower() }}"></span>
+                    System Health
+                </h3>
+                <div class="metric">{{ swarm_status.system_health.title() }}</div>
+                <p>Overall swarm operational status</p>
+            </div>
+
+            <div class="status-card">
+                <h3>👥 Active Agents</h3>
+                <div class="metric">{{ swarm_status.agents|length }}</div>
+                <p>Total agents in swarm</p>
+            </div>
+
+            <div class="status-card">
+                <h3>⚡ Active Workstreams</h3>
+                <div class="metric">{{ swarm_status.active_workstreams|length }}</div>
+                <p>Concurrent operations running</p>
+            </div>
+
+            <div class="status-card">
+                <h3>📨 Recent Messages</h3>
+                <div class="metric">{{ swarm_status.coordination_metrics.recent_messages }}</div>
+                <p>Last hour coordination activity</p>
+            </div>
+        </div>
+
+        <div class="workstreams-section">
+            <h2 style="margin-bottom: 20px; font-size: 1.5em;">🔄 Active Workstreams</h2>
+
+            {% for workstream_name, workstream in workstream_progress.items() %}
+            <div class="workstream-item">
+                <div class="workstream-header">
+                    <h4>{{ workstream.name }}</h4>
+                    <span>{{ workstream.progress_percentage }}% Complete</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ workstream.progress_percentage }}%"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.9em;">
+                    <span>{{ workstream.assigned_agents|length }} agents assigned</span>
+                    <span>Deadline: {{ workstream.deadline }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="agents-grid">
+            {% for agent_id, agent in swarm_status.agents.items() %}
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-name">{{ agent_id }}</div>
+                    <div class="agent-status status-{{ agent.status.lower() }}">
+                        {{ agent.status.upper() }}
+                    </div>
+                </div>
+
+                <div class="agent-metrics">
+                    <div class="metric-item">
+                        <span>Inbox:</span>
+                        <span>{{ agent.inbox_count }}</span>
+                    </div>
+                    <div class="metric-item">
+                        <span>Last Seen:</span>
+                        <span>{{ agent.last_seen or 'Never' }}</span>
+                    </div>
+                    <div class="metric-item">
+                        <span>Mission:</span>
+                        <span>{{ agent.current_mission[:20] }}...</span>
+                    </div>
+                    <div class="metric-item">
+                        <span>Workstream:</span>
+                        <span>{{ agent.current_workstream or 'None' }}</span>
+                    </div>
+                </div>
+
+                {% if agent.current_workstream %}
+                <div style="margin-top: 15px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ agent.progress }}%"></div>
+                    </div>
+                    <div style="text-align: center; font-size: 0.8em; margin-top: 5px;">
+                        Progress: {{ agent.progress }}%
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="coordination-metrics">
+            <div class="metric-card">
+                <h4>💬 Total Messages</h4>
+                <div class="metric-value">{{ swarm_status.coordination_metrics.total_messages }}</div>
+                <p>All-time coordination activity</p>
+            </div>
+
+            <div class="metric-card">
+                <h4>🔗 Active Conversations</h4>
+                <div class="metric-value">{{ swarm_status.coordination_metrics.active_conversations }}</div>
+                <p>Current communication channels</p>
+            </div>
+
+            <div class="metric-card">
+                <h4>⚡ Messages/Hour</h4>
+                <div class="metric-value">{{ swarm_status.coordination_metrics.messages_per_hour }}</div>
+                <p>Current coordination velocity</p>
+            </div>
+
+            <div class="metric-card">
+                <h4>🎯 Parallel Acceleration</h4>
+                <div class="metric-value">8x</div>
+                <p>Target swarm multiplication factor</p>
+            </div>
+        </div>
+
+        <div class="emergency-controls">
+            <h3>🚨 Emergency Coordination Controls</h3>
+            <p>Use these controls only for critical swarm coordination issues requiring immediate intervention.</p>
+
+            <div class="emergency-form">
+                <select id="emergency-agent">
+                    <option value="">Select Agent</option>
+                    {% for agent_id in swarm_status.agents.keys() %}
+                    <option value="{{ agent_id }}">{{ agent_id }}</option>
+                    {% endfor %}
+                </select>
+
+                <select id="emergency-action">
+                    <option value="">Select Action</option>
+                    <option value="reassign_task">Reassign Task</option>
+                    <option value="pause_workstream">Pause Workstream</option>
+                    <option value="emergency_sync">Emergency Sync</option>
+                    <option value="override_deadline">Override Deadline</option>
+                </select>
+
+                <input type="text" id="emergency-reason" placeholder="Reason for emergency action" style="flex: 1;">
+
+                <button onclick="executeEmergencyOverride()">Execute Emergency Override</button>
+            </div>
+        </div>
+
+        <div class="last-updated">
+            Last Updated: <span id="last-updated">{{ timestamp }}</span>
+        </div>
+    </div>
+
+    <script>
+        // Auto-refresh functionality
+        let autoRefreshInterval;
+
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(refreshDashboard, 30000); // Refresh every 30 seconds
+        }
+
+        function stopAutoRefresh() {
+            clearInterval(autoRefreshInterval);
+        }
+
+        async function refreshDashboard() {
+            try {
+                const response = await fetch('/swarm/api/status');
+                const data = await response.json();
+
+                // Update key metrics
+                updateSystemHealth(data.system_health);
+                updateActiveWorkstreams(data.active_workstreams.length);
+                updateAgents(data.agents);
+
+                // Update timestamp
+                document.getElementById('last-updated').textContent = new Date().toISOString();
+
+                console.log('Dashboard refreshed successfully');
+            } catch (error) {
+                console.error('Failed to refresh dashboard:', error);
+            }
+        }
+
+        function updateSystemHealth(health) {
+            const healthIndicator = document.querySelector('.health-indicator');
+            healthIndicator.className = `health-indicator health-${health.toLowerCase()}`;
+            healthIndicator.nextSibling.textContent = `System Health: ${health}`;
+        }
+
+        function updateActiveWorkstreams(count) {
+            const workstreamsCard = document.querySelectorAll('.status-card')[2];
+            const metric = workstreamsCard.querySelector('.metric');
+            metric.textContent = count;
+        }
+
+        function updateAgents(agents) {
+            // Update agent cards with new data
+            Object.entries(agents).forEach(([agentId, agentData]) => {
+                const agentCard = document.querySelector(`[data-agent="${agentId}"]`);
+                if (agentCard) {
+                    // Update status, inbox count, etc.
+                    const statusElement = agentCard.querySelector('.agent-status');
+                    statusElement.textContent = agentData.status.toUpperCase();
+                    statusElement.className = `agent-status status-${agentData.status.toLowerCase()}`;
+                }
+            });
+        }
+
+        async function executeEmergencyOverride() {
+            const agentId = document.getElementById('emergency-agent').value;
+            const action = document.getElementById('emergency-action').value;
+            const reason = document.getElementById('emergency-reason').value;
+
+            if (!agentId || !action || !reason) {
+                alert('Please fill in all emergency override fields');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/swarm/api/emergency/${agentId}?action=${action}&reason=${encodeURIComponent(reason)}`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(`Emergency override executed successfully for ${agentId}`);
+                    // Clear form
+                    document.getElementById('emergency-agent').value = '';
+                    document.getElementById('emergency-action').value = '';
+                    document.getElementById('emergency-reason').value = '';
+                } else {
+                    alert(`Emergency override failed: ${result.error}`);
+                }
+            } catch (error) {
+                alert(`Error executing emergency override: ${error.message}`);
+            }
+        }
+
+        // Start auto-refresh when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            startAutoRefresh();
+        });
+
+        // Stop auto-refresh when page unloads
+        window.addEventListener('beforeunload', function() {
+            stopAutoRefresh();
+        });
+    </script>
+</body>
+</html>

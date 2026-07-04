@@ -67,6 +67,11 @@ coverage/
 .env.*
 !.env.example
 
+# Env/local secrets (broker writes secrets.local.env — never commit)
+runtime/secrets/*.env
+!runtime/secrets/.env.example
+
+
 # Python
 __pycache__/
 *.py[cod]

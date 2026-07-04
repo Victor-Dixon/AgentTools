@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "supervisor": "discord_architect",
+  "plugins": [
+    {
+      "id": "capability_feed",
+      "type": "discord_feed",
+      "status": "enabled",
+      "entrypoint": "discord_architect/src/runtime/liveCapabilityEventDispatcher.js",
+      "outputs": [
+        "discord:master-task-log"
+      ],
+      "loadPolicy": "manifest_only"
+    }
+  ]
+}

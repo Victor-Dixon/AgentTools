@@ -1,0 +1,74 @@
+{
+  "event_id": "dreamclose_20260522_171606",
+  "event_type": "master_task_closed",
+  "source": "dreamvault.dreamclose",
+  "target_channel": "master-task-log",
+  "created_at": "2026-05-22T17:16:06.231732+00:00",
+  "severity": "info",
+  "title": "Auto Master Task Discord Post Proof",
+  "summary": "Status: closed | Task: auto_master_task_post_proof_001 | Next: unspecified",
+  "content": "\u2705 **Master Task Closed**\n**Auto Master Task Discord Post Proof**\n\n**Status**\n- `closed`\n\n**Task**\n- `auto_master_task_post_proof_001`\n\n**Score**\n- `85`\n\n**Actions Taken**\n- Created a synthetic closeout packet.\n- Ingested the packet through dreamvault_closeout.py.\n- Verified DreamClose auto-emitted a Discord Architect master_task_closed event.\n\n**Verification**\n- `0` Closeout ingest completed and auto-dispatched Discord event.\n  - `python dreamvault_closeout.py ingest runtime/test_packets/auto_master_task_post_proof_001.json`\n\n**Next Lane**\n- `unspecified`\n\nRoute: `master-task-log`\nSource task: `dreamvault.dreamclose`",
+  "payload": {
+    "actions_taken": [
+      "Created a synthetic closeout packet.",
+      "Ingested the packet through dreamvault_closeout.py.",
+      "Verified DreamClose auto-emitted a Discord Architect master_task_closed event."
+    ],
+    "branch": "cursor/train-agent-in-environment-with-more-gpu-2c6d",
+    "commit": {
+      "no_commit_reason": "synthetic proof packet"
+    },
+    "evidence": [
+      {
+        "path": "data/reports/cpc/latest/latest.txt",
+        "type": "terminal_output"
+      }
+    ],
+    "files_touched": [
+      "dreamvault_closeout.py",
+      "discord_architect/src/runtime/liveDiscordRestSender.js",
+      "runtime/scripts/emit_latest_closeout_discord_architect_001.py"
+    ],
+    "final_status": {
+      "closed": true,
+      "reason": "automatic master-task-log Discord post verified"
+    },
+    "ingested_at": "2026-05-22T15:38:00.618712+00:00",
+    "next_up": [
+      {
+        "priority": "P2",
+        "title": "Commit master task closeout Discord routing proof"
+      }
+    ],
+    "original_goal": "Prove that completing a DreamClose task automatically posts a master-task-log Discord event.",
+    "owner_agent": "operator-1",
+    "publish_candidates": [],
+    "repo": "DreamVault",
+    "resume_events": [],
+    "risks": [],
+    "schema": "dreamos.agent_closeout.v1",
+    "score": {
+      "accepted": true,
+      "reasons": [
+        "+25 passing verification",
+        "+20 evidence present",
+        "+15 files_touched present",
+        "+15 commit/no-commit captured",
+        "+10 next_up present"
+      ],
+      "score": 85
+    },
+    "skill_events": [],
+    "status": "closed",
+    "task_id": "auto_master_task_post_proof_001",
+    "title": "Auto Master Task Discord Post Proof",
+    "verification": [
+      {
+        "command": "python dreamvault_closeout.py ingest runtime/test_packets/auto_master_task_post_proof_001.json",
+        "exit_code": 0,
+        "result_summary": "Closeout ingest completed and auto-dispatched Discord event."
+      }
+    ],
+    "work_log": {}
+  }
+}

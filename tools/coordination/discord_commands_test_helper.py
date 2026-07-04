@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 def test_command_registration():
     """Test that all commands are properly registered."""
     try:
-        from src.discord_commander.unified_discord_bot import UnifiedDiscordBot
+        from agent_tools.discord_commander.unified_discord_bot import UnifiedDiscordBot
         
         # Create bot instance (won't actually connect)
         bot = UnifiedDiscordBot(token="TEST_TOKEN", channel_id=None)
@@ -115,9 +115,7 @@ def test_cog_loading():
     print("=" * 60)
     
     cogs_to_check = [
-        ("MessagingCommands", "src.discord_commander.unified_discord_bot"),
-        ("SwarmShowcaseCommands", "src.discord_commander.swarm_showcase_commands"),
-        ("GitHubBookCommands", "src.discord_commander.github_book_viewer"),
+        ("MessagingCommands", "agent_tools.discord_commander.commands.messaging_commands"),
     ]
     
     all_loaded = True

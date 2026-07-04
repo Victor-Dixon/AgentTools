@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "supervisor": "discord_architect",
+  "policy": {
+    "one_control_plane": true,
+    "plugins_not_terminals": true,
+    "discord_and_websites_share_event_bus": true
+  },
+  "plugins": [
+    {
+      "id": "capability_evolution_feed",
+      "type": "discord_feed",
+      "status": "enabled",
+      "entrypoint": "discord_architect/src/runtime/liveCapabilityEventDispatcher.js",
+      "outputs": [
+        "discord:master-task-log"
+      ]
+    },
+    {
+      "id": "trading_tool",
+      "type": "project_bot_plugin",
+      "status": "planned",
+      "entrypoint": "runtime/scripts/trading",
+      "outputs": [
+        "discord:trading",
+        "website:trading"
+      ]
+    },
+    {
+      "id": "public_website_event_bridge",
+      "type": "website_bridge",
+      "status": "planned",
+      "entrypoint": "data/public/events/latest.json",
+      "outputs": [
+        "website:weareswarm",
+        "website:dadudekc"
+      ]
+    }
+  ]
+}

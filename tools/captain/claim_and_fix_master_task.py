@@ -324,7 +324,14 @@ if __name__ == "__main__":
 
 def main():
     """Main execution."""
-    agent_id = "Agent-5"  # Could be passed as argument
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Claim and scaffold fixes for MASTER_TASK_LOG items."
+    )
+    parser.add_argument("--agent", default="Agent-5", help="Agent claiming the task")
+    args = parser.parse_args()
+    agent_id = args.agent
     
     print("🎯 Claim and Fix Master Task Log Task")
     print()

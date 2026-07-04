@@ -1,0 +1,113 @@
+{
+  "url": "https://weareswarm.online",
+  "timestamp": 1768256248,
+  "success": true,
+  "parsed_content": {
+    "title": "Home - weareswarm.online",
+    "meta_description": "Welcome to our Restaurant AboutusDonec vehicula vulputate hendrerit. Phasellus dictum vitae augue non aliquet. Aenean sodales magna ac ipsum sollicitudin, id eleifend lorem dapibus. Suspendisse id posuere ex. Vestibulum tempus elementum tortor a convallis. Nam mattis ultricies tincidunt. Ut quis viverra lorem, vitae sagittis sapien. Nam lacinia consequat est sollicitudin aliquam. Etiam id elit malesuada,",
+    "headings": {
+      "h1": [
+        "We Are Swarm"
+      ],
+      "h2": [
+        "🔴 Live Build Feed"
+      ],
+      "h3": [
+        "Jan 12, 2026\nLIVE",
+        "Jan 11, 2026",
+        "🔧 Currently Building"
+      ]
+    },
+    "links": [
+      {
+        "url": "https://weareswarm.online/",
+        "text": "weareswarm.online"
+      },
+      {
+        "url": "https://weareswarm.online/#capabilities",
+        "text": "Capabilities"
+      },
+      {
+        "url": "https://weareswarm.online/#activity",
+        "text": "Live Activity"
+      },
+      {
+        "url": "https://weareswarm.online/#agents",
+        "text": "Agents"
+      },
+      {
+        "url": "https://weareswarm.online/about",
+        "text": "About"
+      },
+      {
+        "url": "https://weareswarm.online/swarm-manifesto",
+        "text": "Read the Manifesto"
+      },
+      {
+        "url": "https://weareswarm.online/how-the-swarm-works",
+        "text": "How It Works"
+      },
+      {
+        "url": "https://github.com/Victor-Dixon",
+        "text": "📦 View GitHub →"
+      },
+      {
+        "url": "https://dadudekc.com",
+        "text": "🚀 See Live Sites →"
+      }
+    ],
+    "has_cta": false,
+    "has_form": false,
+    "images": [],
+    "word_count": 2138,
+    "html_size": 40868
+  },
+  "analyses": {
+    "seo_analysis": {
+      "score": 85,
+      "issues": [
+        "Title too short (< 30 characters)",
+        "Meta description too long (> 160 characters)"
+      ],
+      "recommendations": [
+        "Add descriptive meta description (120-160 characters)",
+        "Ensure single H1 heading per page",
+        "Add alt text to all images",
+        "Optimize title length (30-60 characters)"
+      ]
+    },
+    "ux_analysis": {
+      "score": 60,
+      "issues": [
+        "No clear call-to-action elements found",
+        "No contact/lead capture forms found",
+        "Limited internal linking structure"
+      ],
+      "recommendations": [
+        "Add prominent call-to-action buttons",
+        "Include contact/lead capture forms",
+        "Expand content depth and quality",
+        "Improve internal linking structure"
+      ]
+    },
+    "design_analysis": " Based on the HTML sample provided, I would rate the design quality of this website as a 7 out of 10. Here are some specific recommendations for improvement:\n\n1. Use semantic HTML tags: Instead of using generic div elements, use semantic HTML tags like header, nav, main, and footer to improve accessibility and search engine optimization (SEO).\n2. Improve typography: The font size is small, which can be difficult for some users to read. Consider increasing the font size or adding a responsive design feature that adjusts the font size based on screen size.\n3. Use consistent colors: The website uses a variety of colors that may not have enough contrast for accessibility purposes. Ensure that there is sufficient contrast between text and background colors.\n4. Optimize images: While the website has a style rule to contain intrinsic sizes, it would be better to optimize images for performance by using appropriate image formats (e.",
+    "performance_analysis": " Based on the HTML provided, here are some potential performance issues to consider:\n\n1. Images: The image tag does not have an explicit width or height attribute. This can cause the browser to download and render the full-sized image even if it's not needed for the layout. To optimize this, you could use a responsive image technique such as using the `srcset` attribute to serve different sizes of the same image based on the device screen size.\n2. Scripts: There are no scripts included in the HTML. If there are any scripts that need to be loaded, make sure they are loaded asynchronously or deferred to avoid blocking the rendering of the page.\n3. Loading Optimization: The HTML includes several links to external resources such as Google Fonts and All in One SEO. Make sure these resources are loaded efficiently by using preloading techniques like `rel=\"preload\"` for font files, which can help reduce the number of requests",
+    "accessibility_analysis": " Based on the HTML content provided, here are some accessibility issues that can be identified:\n\n1. Missing alt text for images: There is an image in the HTML code, but it does not have any alt text. This makes the image inaccessible to users who rely on screen readers or other assistive technologies. It's important to provide alternative text for all images to ensure accessibility.\n2. Lack of semantic structure: The HTML code does not use semantic elements such as <header>, <nav>, <main>, and <footer> to define the different sections of the page. This can make it difficult for users to understand the structure of the content and navigate the page.\n3. No focus indicator: There is no indication in the HTML code that specifies where the keyboard focus should be when interacting with the page. This can cause confusion and frustration for users who rely on the keyboard to navigate the page.\n4. No ARIA"
+  },
+  "scores": {
+    "overall_score": "Overall Score: 72.5/100",
+    "seo_score": "SEO Score: 85/100 - Title too short (< 30 characters), Meta description too long (> 160 characters)",
+    "ux_score": "UX Score: 60/100 - No clear call-to-action elements found, No contact/lead capture forms found"
+  },
+  "recommendations": [
+    "Add descriptive meta description (120-160 characters)",
+    "Ensure single H1 heading per page",
+    "Add alt text to all images",
+    "Optimize title length (30-60 characters)",
+    "Add prominent call-to-action buttons",
+    "Include contact/lead capture forms",
+    "Expand content depth and quality",
+    "Improve internal linking structure"
+  ],
+  "method": "hybrid_manual_ollama"
+}
