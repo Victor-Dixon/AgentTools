@@ -325,15 +325,19 @@ class DependencyMapper:
 
     def _find_tool_by_module(self, module: str) -> str:
         """Find tool_id that matches a module path."""
+        def _normalize_module_path(path: str) -> str:
+            return path.replace("\\", ".").replace("/", ".").replace(".py", "")
+
         # Try exact match first
         for tool_id, node in self.nodes.items():
-            if module in node.path or node.path.replace("/", ".").replace(".py", "") == module:
+            normalized = _normalize_module_path(node.path)
+            if module in normalized or normalized == module:
                 return tool_id
 
         # Try partial match
         module_parts = module.split(".")
         for tool_id, node in self.nodes.items():
-            node_parts = node.path.replace("/", ".").replace(".py", "").split(".")
+            node_parts = _normalize_module_path(node.path).split(".")
             if any(part in node_parts for part in module_parts):
                 return tool_id
 

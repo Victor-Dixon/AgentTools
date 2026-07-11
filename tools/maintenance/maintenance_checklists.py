@@ -789,7 +789,7 @@ async def main():
 
             print(f"🔍 MAINTENANCE COMPLIANCE: {args.site}")
             print(f"Status: {status_emoji} {compliance['compliance_status'].replace('_', ' ').title()}")
-            print(".1f")
+            print(f"Compliance: {compliance['compliance_percentage']:.1f}%")
             print(f"Completed: {compliance['completed_tasks']}/{compliance['total_tasks']} tasks")
             if compliance["overdue_tasks"] > 0:
                 print(f"Overdue: {compliance['overdue_tasks']} tasks")
@@ -811,10 +811,15 @@ async def main():
                     "critical_attention": "🔴", "no_checklist": "⚪", "error": "❌"
                 }.get(compliance["compliance_status"], "⚪")
 
-                print(".1f"                total_compliance += compliance["compliance_percentage"]
+                print(
+                    f"{status_emoji} {website}: "
+                    f"{compliance['compliance_percentage']:.1f}% "
+                    f"({compliance['compliance_status'].replace('_', ' ')})"
+                )
+                total_compliance += compliance["compliance_percentage"]
 
             avg_compliance = total_compliance / len(websites)
-            print(".1f"
+            print(f"\nAverage Compliance: {avg_compliance:.1f}%")
     except Exception as e:
         logger.error(f"Maintenance system error: {e}")
         sys.exit(1)

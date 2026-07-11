@@ -5,6 +5,29 @@ Adapted from Agent_Cellphone_V2_Repository/tools/run_unified_discord_bot_with_re
 """
 
 from __future__ import annotations
+# C2A_SELF_GAS_ROOT_DEFAULTS_041
+# Canonical desktop roots for C2A/S2A hard onboard and self-gas routes.
+import os as _c2a_self_gas_env_041
+_c2a_self_gas_env_041.environ["DREAMVAULT_ROOT"] = r"D:\DreamVault"
+_c2a_self_gas_env_041.environ["DREAMOS_VAULT_ROOT"] = r"D:\DreamVault"
+_c2a_self_gas_env_041.environ["VAULT_ROOT"] = r"D:\DreamVault"
+_c2a_self_gas_env_041.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+_c2a_self_gas_env_041.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
+_c2a_self_gas_env_041.environ.setdefault("DEFAULT_MODE", "pyautogui")
+_c2a_self_gas_env_041.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
+_c2a_self_gas_env_041.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
+_c2a_self_gas_env_041.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
+
+# D2A_AGENTTOOLS_BRIDGE_ENV_DEFAULTS_035
+# Canonical visible-session D2A delivery defaults.
+import os as _dreamos_d2a_env_035
+_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+_dreamos_d2a_env_035.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
+_dreamos_d2a_env_035.environ.setdefault("DEFAULT_MODE", "pyautogui")
+_dreamos_d2a_env_035.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
+_dreamos_d2a_env_035.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
+_dreamos_d2a_env_035.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
+_dreamos_d2a_env_035.environ.setdefault("PYTHONPATH", r"D:\agent-tools\src;D:\DreamVault\src")
 
 import subprocess
 import sys
@@ -15,6 +38,10 @@ ROOT = Path(__file__).resolve().parents[2]
 SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
+
+from agent_tools.discord_commander.env_bootstrap import bootstrap_commander_env
+
+bootstrap_commander_env()
 
 
 def run_bot() -> int:

@@ -21,7 +21,9 @@ from agent_tools.discord_commander.delivery_preflight import (
     load_layouts,
     point_in_virtual_screen,
     resolve_layout_for_agent,
+    validate_pyautogui_readiness,
 )
+from agent_tools.discord_commander.messaging_roots import resolve_agent_tools_root
 from agent_tools.discord_commander.messaging_delivery_log import delivery_jsonl_path, record_delivery
 from agent_tools.discord_commander.models import DeliveryResult
 from agent_tools.discord_commander.pyautogui_transport import PyAutoGUITransport
@@ -143,7 +145,21 @@ class TestPyAutoGUITransportSSOT:
 
 
 class TestSendAgentMessageDelivery:
+    def _mock_ready(self, monkeypatch) -> None:
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.validate_pyautogui_readiness",
+            lambda agent_id, coords_root=None: SimpleNamespace(
+                ready=True,
+                coords_root=Path(r"D:\DreamVault"),
+                layout_mode="4-agent-1monitor",
+                error_code=None,
+                detail=None,
+                warnings=[],
+            ),
+        )
+
     def test_pyautogui_fail_returns_fail_no_webhook(self, monkeypatch) -> None:
+        self._mock_ready(monkeypatch)
         class FailTransport:
             def send(self, agent_id: str, message: str, *, high_priority: bool = False) -> DeliveryResult:
                 return DeliveryResult(
@@ -158,10 +174,12 @@ class TestSendAgentMessageDelivery:
         monkeypatch.setattr("agent_tools.discord_commander.outbound_router.DiscordService.send_embed", webhook)
         result = send_agent_message("Agent-1", "hi", transport=FailTransport())
         assert result.success is False
+        assert result.data["final_status"] == "FAILED"
         assert result.error_code == "COORDS_OUT_OF_BOUNDS"
         webhook.assert_not_called()
 
     def test_pyautogui_success_does_not_hit_webhook(self, monkeypatch) -> None:
+        self._mock_ready(monkeypatch)
         class OkTransport:
             def send(self, agent_id: str, message: str, *, high_priority: bool = False) -> DeliveryResult:
                 return DeliveryResult(success=True)
@@ -171,17 +189,30 @@ class TestSendAgentMessageDelivery:
         monkeypatch.setattr("agent_tools.discord_commander.outbound_router.DiscordService.send_embed", webhook)
         result = send_agent_message("Agent-1", "hi", transport=OkTransport())
         assert result.success is True
+        assert result.data["final_status"] == "SENT"
         assert result.data["transport"] == "pyautogui"
         webhook.assert_not_called()
 
-    def test_bus_fail_falls_back_to_direct_pyautogui(self, monkeypatch) -> None:
+    def test_bus_fail_falls_back_to_direct_pyautogui_single_audit(self, monkeypatch, tmp_path: Path) -> None:
         monkeypatch.setenv("DISCORD_COMMANDER_USE_MESSAGE_BUS", "1")
         monkeypatch.setenv("ALLOW_LIVE_CURSOR_INJECTION", "1")
+        monkeypatch.setenv("DISCORD_COMMANDER_LOG_DIR", str(tmp_path))
 
         class OkTransport:
             def send(self, agent_id: str, message: str, *, high_priority: bool = False) -> DeliveryResult:
                 return DeliveryResult(success=True)
 
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.validate_pyautogui_readiness",
+            lambda agent_id, coords_root=None: SimpleNamespace(
+                ready=True,
+                coords_root=Path(r"D:\DreamVault"),
+                layout_mode="4-agent-1monitor",
+                error_code=None,
+                detail=None,
+                warnings=[],
+            ),
+        )
         monkeypatch.setattr(
             "agent_tools.discord_commander.agent_message_sender.send_via_message_bus",
             lambda **kwargs: (False, "bus failed", {"transport": "message_bus_processor_failed"}),
@@ -192,7 +223,103 @@ class TestSendAgentMessageDelivery:
         )
         result = send_agent_message("Agent-1", "hi")
         assert result.success is True
-        assert result.data["transport"] == "pyautogui"
+        assert result.data["final_status"] == "SENT"
+        assert result.data["transport"] == "pyautogui_bus_fallback"
+        lines = delivery_jsonl_path().read_text(encoding="utf-8").strip().splitlines()
+        assert len(lines) == 1
+        payload = json.loads(lines[0])
+        assert payload["success"] is True
+        assert payload["extra"]["final_status"] == "SENT"
+
+    def test_processor_timeout_skips_pyautogui_fallback_no_double_paste(
+        self, monkeypatch, tmp_path: Path
+    ) -> None:
+        """Regression: processor-owned D2A must not fall back to direct PyAutoGUI (double paste)."""
+        monkeypatch.setenv("DISCORD_COMMANDER_USE_MESSAGE_BUS", "1")
+        monkeypatch.setenv("ALLOW_LIVE_CURSOR_INJECTION", "1")
+        monkeypatch.setenv("DISCORD_COMMANDER_LOG_DIR", str(tmp_path))
+
+        class FailTransport:
+            def send(self, agent_id: str, message: str, *, high_priority: bool = False) -> DeliveryResult:
+                raise AssertionError("PyAutoGUI fallback must not run when processor owns delivery")
+
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.validate_pyautogui_readiness",
+            lambda agent_id, coords_root=None: SimpleNamespace(
+                ready=True,
+                coords_root=Path(r"D:\DreamVault"),
+                layout_mode="4-agent-1monitor",
+                error_code=None,
+                detail=None,
+                warnings=[],
+            ),
+        )
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.send_via_message_bus",
+            lambda **kwargs: (
+                False,
+                "D2A enqueued but processor did not complete within 20s",
+                {
+                    "transport": "message_bus_processor_timeout",
+                    "processor_running": True,
+                    "bus_message_id": "d2a_discord_test_timeout_001",
+                    "bus_final_status": "timeout",
+                },
+            ),
+        )
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender._bus_message_terminal_status",
+            lambda bus_message_id: "running",
+        )
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.get_transport",
+            lambda transport=None: FailTransport(),
+        )
+        result = send_agent_message("Agent-1", "hi")
+        assert result.success is False
+        assert result.error_code == "BUS_PROCESSOR_PENDING"
+        assert result.data.get("fallback_suppressed") in (
+            "processor_owns_delivery_no_fallback",
+            "bus_status_running_no_fallback",
+        )
+        lines = delivery_jsonl_path().read_text(encoding="utf-8").strip().splitlines()
+        assert len(lines) == 1
+
+    def test_preflight_fail_single_failed_audit(self, monkeypatch, tmp_path: Path) -> None:
+        monkeypatch.setenv("DISCORD_COMMANDER_USE_MESSAGE_BUS", "0")
+        monkeypatch.setenv("DISCORD_COMMANDER_LOG_DIR", str(tmp_path))
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.validate_pyautogui_readiness",
+            lambda agent_id, coords_root=None: SimpleNamespace(
+                ready=False,
+                coords_root=Path(r"D:\DreamVault"),
+                layout_mode="8-agent",
+                error_code="COORDS_OUT_OF_BOUNDS",
+                detail="off screen",
+                warnings=[],
+            ),
+        )
+        result = send_agent_message("Agent-1", "hi")
+        assert result.success is False
+        assert result.data["final_status"] == "FAILED"
+        assert result.error_code == "COORDS_OUT_OF_BOUNDS"
+        lines = delivery_jsonl_path().read_text(encoding="utf-8").strip().splitlines()
+        assert len(lines) == 1
+        assert json.loads(lines[0])["success"] is False
+
+
+class TestMessagingRoots:
+    def test_resolve_agent_tools_root_from_package(self) -> None:
+        root = resolve_agent_tools_root()
+        assert (root / "src" / "agent_tools").is_dir()
+
+
+class TestPyAutoGUIReadinessGate:
+    def test_live_injection_required(self, monkeypatch) -> None:
+        monkeypatch.delenv("ALLOW_LIVE_CURSOR_INJECTION", raising=False)
+        result = validate_pyautogui_readiness("Agent-1")
+        assert result.ready is False
+        assert result.error_code == "LIVE_INJECTION_DISABLED"
 
 
 class TestMessagingDeliveryLog:

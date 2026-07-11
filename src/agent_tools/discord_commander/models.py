@@ -26,6 +26,39 @@ class CommandResult:
 
 
 @dataclass
+class DeliveryResult:
+    """Outcome of a single transport attempt (PyAutoGUI lane)."""
+
+    success: bool
+    transport: str = "pyautogui"
+    error_code: Optional[str] = None
+    detail: Optional[str] = None
+
+
+@dataclass
+class BroadcastResult:
+    """Outcome of fan-out messaging to multiple agents."""
+
+    success: bool
+    message: str
+    delivered: list[str] = field(default_factory=list)
+    failed: list[str] = field(default_factory=list)
+    results: list[CommandResult] = field(default_factory=list)
+    error_code: Optional[str] = None
+
+
+@dataclass
+class OnboardResult:
+    """Outcome of a local PyAutoGUI onboard operation."""
+
+    success: bool
+    message: str
+    action: str
+    data: Optional[dict[str, Any]] = None
+    error_code: Optional[str] = None
+
+
+@dataclass
 class PostMessage:
     agent: str
     title: str

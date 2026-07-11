@@ -1,14 +1,16 @@
 """Queue bridge adapter — PyAutoGUI transport stays at the adapter boundary.
 
-Agent_Cellphone_V2_Repository remains canonical for PyAutoGUI lane injection.
-This module provides a thin interface the toolbelt can call without importing
-PyAutoGUI as a core dependency.
+Canonical queue processor lives in agent-tools (`message_queue_processor.py`).
+PyAutoGUI delivery delegates to Agent_Cellphone via `pyautogui_transport.py`.
 """
 
 from __future__ import annotations
 
 import logging
+import os
 from typing import Any, Optional, Protocol
+
+from .models import DeliveryResult
 
 logger = logging.getLogger(__name__)
 
@@ -34,29 +36,49 @@ class NoOpQueueProcessor:
     ) -> int:
         logger.warning(
             "PyAutoGUI queue transport not available. "
-            "Install Agent_Cellphone_V2 transport adapter or run from that repo."
+            "Set AGENT_CELLPHONE_ROOT to D:\\Agent_Cellphone and ensure coordinates exist."
         )
         return 0
 
 
 def load_queue_processor() -> QueueProcessor:
-    """Attempt to load the legacy queue processor from Agent Cellphone transport."""
+    """Load the Discord Commander queue processor."""
     try:
-        from src.core.legacy_message_queue_processor import MessageQueueProcessor
+        from .message_queue_processor import MessageQueueProcessor
 
         return MessageQueueProcessor()
     except ImportError:
-        logger.debug("Agent_Cellphone_V2 queue processor not importable")
+        logger.debug("Discord Commander queue processor not importable")
     return NoOpQueueProcessor()
 
 
-def deliver_message(message: str, agent_id: str, transport: Optional[Any] = None) -> bool:
-    """Deliver a single message via optional PyAutoGUI transport adapter."""
-    if transport is None:
-        logger.info("No transport adapter bound; message queued for external delivery")
-        return False
+def get_transport(transport: Optional[Any] = None) -> Any | None:
+    """Resolve an explicit or default PyAutoGUI transport."""
+    if transport is not None:
+        return transport
+    if os.environ.get("DISCORD_COMMANDER_DISABLE_PYAUTOGUI", "").strip() in ("1", "true", "True"):
+        return None
     try:
-        return bool(transport.send(agent_id=agent_id, message=message))
-    except Exception:
-        logger.exception("Transport delivery failed")
-        return False
+        from .pyautogui_transport import get_default_transport
+
+        return get_default_transport()
+    except ImportError:
+        return None
+
+
+def deliver_message(message: str, agent_id: str, transport: Optional[Any] = None) -> DeliveryResult:
+    """Deliver a single message via optional PyAutoGUI transport adapter."""
+    resolved = get_transport(transport)
+    if resolved is None:
+        detail = "PyAutoGUI transport not bound — !message requires live PyAutoGUI (no webhook fallback)"
+        logger.info("No transport adapter bound for %s — %s", agent_id, detail)
+        return DeliveryResult(success=False, transport="none", error_code="NO_TRANSPORT", detail=detail)
+    try:
+        outcome = resolved.send(agent_id=agent_id, message=message)
+        if isinstance(outcome, DeliveryResult):
+            return outcome
+        ok = bool(outcome)
+        return DeliveryResult(success=ok, error_code=None if ok else "TRANSPORT_FALSE")
+    except Exception as exc:
+        logger.exception("Transport delivery failed for %s", agent_id)
+        return DeliveryResult(success=False, error_code="TRANSPORT_EXCEPTION", detail=str(exc))

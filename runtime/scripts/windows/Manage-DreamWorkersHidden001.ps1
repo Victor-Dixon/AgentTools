@@ -35,11 +35,11 @@ $Python = Get-PythonExe
 
 $Workers = @(
   [pscustomobject]@{
-    Name = "discord_queue_processor"
-    Cwd = $Root
-    Script = "D:\agent-tools\tools\discord_commander\start_message_queue_processor.py"
-    Match = "start_message_queue_processor.py"
-    LogPath = "D:\agent-tools\runtime\logs\discord_commander_queue.log"
+    Name = "message_bus_processor"
+    Cwd = "D:\DreamVault"
+    Script = "D:\agent-tools\tools\discord_commander\start_message_bus_processor.py"
+    Match = "start_message_bus_processor.py|message_bus_queue_processor_001.py"
+    LogPath = "D:\DreamVault\runtime\logs\message_bus_queue_processor.log"
   },
   [pscustomobject]@{
     Name = "discord_bot_restart_wrapper"
@@ -47,6 +47,14 @@ $Workers = @(
     Script = "D:\agent-tools\tools\discord_commander\run_unified_discord_bot_with_restart.py"
     Match = "run_unified_discord_bot_with_restart.py|bot_runner|unified_discord_bot"
     LogPath = "D:\agent-tools\runtime\logs\discord_commander_bot.log"
+  },
+  [pscustomobject]@{
+    Name = "message_router_backup_bot"
+    Cwd = $Root
+    Script = "D:\agent-tools\tools\discord_commander\run_message_router_discord_bot_with_restart.py"
+    Match = "run_message_router_discord_bot_with_restart.py|message_router_discord_bot"
+    LogPath = "D:\agent-tools\runtime\logs\discord_message_router_bot.log"
+    OptionalEnv = "DISCORD_MESSAGE_ROUTER_BOT_TOKEN"
   }
 )
 
@@ -122,6 +130,17 @@ function Start-DreamWorkersHidden {
     if (-not (Test-Path $w.Script)) {
       Log "VERIFY=FAIL_SCRIPT_MISSING worker=$($w.Name) script=$($w.Script)"
       continue
+    }
+
+    if ($w.PSObject.Properties.Name -contains "OptionalEnv" -and $w.OptionalEnv) {
+      $optionalVal = [Environment]::GetEnvironmentVariable($w.OptionalEnv, "User")
+      if (-not $optionalVal) {
+        $optionalVal = [Environment]::GetEnvironmentVariable($w.OptionalEnv, "Process")
+      }
+      if (-not $optionalVal) {
+        Log "SKIP_OPTIONAL worker=$($w.Name) env=$($w.OptionalEnv) not set"
+        continue
+      }
     }
 
     $current = @(Get-DreamWorkerProcesses)

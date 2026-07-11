@@ -156,8 +156,8 @@ class TestAgentMessageSender:
         assert normalize_agent_id("unknown") is None
 
     def test_send_agent_message_dry_run(self):
-        env = {"DISCORD_WEBHOOK_AGENT_1": VALID_WEBHOOK}
-        with patch.dict(os.environ, env, clear=True):
+        monkeypatch_env = {"DISCORD_COMMANDER_USE_MESSAGE_BUS": "0"}
+        with patch.dict(os.environ, monkeypatch_env, clear=False):
             result = send_agent_message(
                 "Agent-1",
                 "Check your inbox",
@@ -165,7 +165,7 @@ class TestAgentMessageSender:
             )
         assert result.success
         assert result.agent == "Agent-1"
-        assert result.data["transport"] == "outbound_webhook"
+        assert result.data["transport"] == "pyautogui_dry_run"
 
     def test_send_agent_message_invalid_agent(self):
         result = send_agent_message("Captain", "hello")
@@ -181,16 +181,17 @@ class TestAgentMessageSender:
         class FakeTransport:
             def send(self, agent_id: str, message: str) -> bool:
                 assert agent_id == "Agent-2"
-                assert message == "ping"
+                assert "ping" in message
                 return True
 
-        result = send_agent_message(
-            "agent-2",
-            "ping",
-            transport=FakeTransport(),
-        )
+        with patch.dict(os.environ, {"DISCORD_COMMANDER_USE_MESSAGE_BUS": "0"}, clear=False):
+            result = send_agent_message(
+                "agent-2",
+                "ping",
+                transport=FakeTransport(),
+            )
         assert result.success
-        assert result.data["transport"] == "queue_bridge"
+        assert result.data["transport"] == "pyautogui"
 
 
 class TestPrefixCommands:

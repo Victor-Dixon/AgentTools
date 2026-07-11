@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 
@@ -104,4 +105,78 @@ def resolve_layout_for_agent(root: Path, agent_id: str) -> tuple[str, Optional[s
     return env_layout, env_warning or (
         f"No layout has on-screen input coords for {agent_id} on virtual screen "
         f"{get_virtual_screen()}. Re-calibrate with DreamVault set_agent_coords.py"
+    )
+
+
+@dataclass
+class PyAutoGUIReadiness:
+    """Outcome of pre-send PyAutoGUI readiness gate."""
+
+    ready: bool
+    coords_root: Path
+    layout_mode: str
+    error_code: Optional[str] = None
+    detail: Optional[str] = None
+    warnings: list[str] = field(default_factory=list)
+
+
+def validate_pyautogui_readiness(
+    agent_id: str,
+    *,
+    coords_root: Path | None = None,
+) -> PyAutoGUIReadiness:
+    """Validate live injection + coords before !message send (fail fast)."""
+    from .messaging_roots import resolve_coords_root
+
+    root = coords_root or resolve_coords_root()
+    agent = agent_id if agent_id.startswith("Agent-") else f"Agent-{agent_id}"
+
+    if os.environ.get("ALLOW_LIVE_CURSOR_INJECTION", "").strip() != "1":
+        return PyAutoGUIReadiness(
+            ready=False,
+            coords_root=root,
+            layout_mode=os.environ.get("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor"),
+            error_code="LIVE_INJECTION_DISABLED",
+            detail="Set ALLOW_LIVE_CURSOR_INJECTION=1 for live PyAutoGUI delivery",
+        )
+
+    layouts = load_layouts(root)
+    if not layouts:
+        return PyAutoGUIReadiness(
+            ready=False,
+            coords_root=root,
+            layout_mode=os.environ.get("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor"),
+            error_code="COORDS_MISSING",
+            detail=f"No cursor_agent_coords.json under {root}",
+        )
+
+    layout, warning = resolve_layout_for_agent(root, agent)
+    warnings = [warning] if warning else []
+    if not layout_has_in_bounds_agent(layouts, layout, agent):
+        coords = agent_input_coords(layouts, layout, agent)
+        xy = f"({coords[0]}, {coords[1]})" if coords else "missing"
+        return PyAutoGUIReadiness(
+            ready=False,
+            coords_root=root,
+            layout_mode=layout,
+            error_code="COORDS_OUT_OF_BOUNDS",
+            detail=f"{agent} input {xy} off-screen for layout {layout}. Re-calibrate coords.",
+            warnings=warnings,
+        )
+
+    if agent not in layouts.get(layout, {}):
+        return PyAutoGUIReadiness(
+            ready=False,
+            coords_root=root,
+            layout_mode=layout,
+            error_code="AGENT_NOT_IN_LAYOUT",
+            detail=f"{agent} not in layout {layout} at {root}",
+            warnings=warnings,
+        )
+
+    return PyAutoGUIReadiness(
+        ready=True,
+        coords_root=root,
+        layout_mode=layout,
+        warnings=warnings,
     )

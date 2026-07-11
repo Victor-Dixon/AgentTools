@@ -1,6 +1,16 @@
 """PyAutoGUI transport adapter — legacy Agent_Cellphone or DreamVault SSOT salvage."""
 
 from __future__ import annotations
+# D2A_AGENTTOOLS_BRIDGE_ENV_DEFAULTS_035
+# Canonical visible-session D2A delivery defaults.
+import os as _dreamos_d2a_env_035
+_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+_dreamos_d2a_env_035.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
+_dreamos_d2a_env_035.environ.setdefault("DEFAULT_MODE", "pyautogui")
+_dreamos_d2a_env_035.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
+_dreamos_d2a_env_035.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
+_dreamos_d2a_env_035.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
+_dreamos_d2a_env_035.environ.setdefault("PYTHONPATH", r"D:\agent-tools\src;D:\DreamVault\src")
 
 import logging
 import os
@@ -105,6 +115,18 @@ class PyAutoGUITransport:
 
     def send(self, agent_id: str, message: str, *, high_priority: bool = False) -> DeliveryResult:
         preflight_warning = self._ensure_layout_for_agent(agent_id)
+        if self._use_ssot:
+            try:
+                import sys
+
+                dv = self._root
+                if str(dv) not in sys.path:
+                    sys.path.insert(0, str(dv))
+                from tools.agent_transport.shift_enter import force_bulk_paste_transport
+
+                force_bulk_paste_transport()
+            except Exception:
+                pass
         agent = self._acp._fmt_id(agent_id)
         if agent not in self._acp._coords:
             detail = f"Agent {agent} not in layout {self._layout_mode}"

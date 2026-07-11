@@ -1,0 +1,19 @@
+{
+  "schema": "agenttools.pyautogui_dispatch_plan.v1",
+  "description": "Example multi-agent PyAutoGUI dispatch plan for automate_pyautogui_dispatch.py",
+  "steps": [
+    {
+      "agent": "Agent-2",
+      "kind": "input_box",
+      "message": "[A2A] Example dispatch — resume assigned lane with artifact proof.",
+      "pause_before_paste": 0.35,
+      "pause_after_paste": 0.5
+    },
+    {
+      "agent": "Agent-3",
+      "kind": "input_box",
+      "message": "[A2A] Example dispatch — execute infra slice and reply with verify output.",
+      "outbox_step": "post_inbox"
+    }
+  ]
+}

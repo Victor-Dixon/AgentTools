@@ -35,6 +35,12 @@ class BotLifecycleManager:
         from agent_tools.discord_commander.commands.maskzero_connect_commands import (
             MaskZeroConnectCommands,
         )
+        from agent_tools.discord_commander.commands.onboarding_commands import (
+            OnboardingCommands,
+        )
+        from agent_tools.discord_commander.commands.prompt_library_commands import (
+            PromptLibraryCommands,
+        )
         from agent_tools.discord_commander.commands.restored_legacy_commands import (
             RestoredLegacyCommands,
         )
@@ -42,9 +48,11 @@ class BotLifecycleManager:
         await self.bot.add_cog(AgentManagementCommands(self.bot, gui_controller=None))
         await self.bot.add_cog(MessagingCommands(self.bot, gui_controller=None))
         await self.bot.add_cog(RestoredLegacyCommands(self.bot))
+        await self.bot.add_cog(OnboardingCommands(self.bot))
+        await self.bot.add_cog(PromptLibraryCommands(self.bot))
         await self.bot.add_cog(MaskZeroConnectCommands(self.bot))
         self.logger.info(
-            "Promoted slice: AgentManagement + Messaging + RestoredLegacyCommands + MaskZeroConnect loaded"
+            "Promoted slice: AgentManagement + Messaging + RestoredLegacy + Onboarding + PromptLibrary + MaskZeroConnect loaded (focus=core bot command)"
         )
 
     def _views_approved(self, view_id: str) -> bool:
@@ -81,6 +89,110 @@ class BotLifecycleManager:
             self.logger.warning(
                 "No approved startup views — check discord_view_controllers_approved.json"
             )
+
+        await self._post_timeblock_panels()
+        await self._post_planner_cockpit_panel()
+
+    async def _post_timeblock_panels(self) -> None:
+        from agent_tools.discord_commander.views.flowr_timeblock_view import (
+            CHANNEL_DEFAULTS,
+            VIEW_BY_ID,
+        )
+
+        for channel_name, (view_id, owner) in CHANNEL_DEFAULTS.items():
+            if not self._views_approved(view_id):
+                continue
+            target = self._resolve_channel_by_name(channel_name)
+            if target is None:
+                self.logger.warning("Timeblock channel missing: #%s", channel_name)
+                continue
+            await self._post_flowr_timeblock_panel(target, view_id, owner)
+
+    async def _post_planner_cockpit_panel(self) -> None:
+        if not self._views_approved("DailyCommandHubView"):
+            return
+        channel = self._resolve_channel_by_name(
+            os.getenv("DISCORD_PLANNER_CHANNEL_NAME", "planner-cockpit").strip()
+        )
+        if channel is None:
+            self.logger.warning("Planner cockpit channel missing")
+            return
+        await self._post_daily_command_hub_panel(channel)
+
+    async def _post_flowr_timeblock_panel(
+        self,
+        channel: discord.TextChannel,
+        view_id: str,
+        owner: str,
+    ) -> None:
+        from agent_tools.discord_commander.views.flowr_timeblock_view import VIEW_BY_ID
+
+        view_cls = VIEW_BY_ID.get(view_id)
+        if view_cls is None:
+            return
+        view = view_cls()
+        self.bot.add_view(view)
+        try:
+            summary = self._flowr_panel_summary(owner)
+        except Exception as exc:
+            self.logger.warning("Flowr summary failed owner=%s: %s", owner, exc)
+            summary = f"Flowr timeblock panel for **{owner.title()}**."
+        embed = discord.Embed(
+            title=f"Flowr Timeblock — {owner.title()}",
+            description=summary,
+            color=0xA78BFA,
+        )
+        embed.set_footer(text="Persistent panel — planner + pomodoro blocks")
+        try:
+            await channel.send(embed=embed, view=view)
+            self.logger.info("%s posted to #%s", view_id, channel.name)
+        except discord.HTTPException as exc:
+            self.logger.warning("%s skipped: %s", view_id, exc)
+
+    async def _post_daily_command_hub_panel(self, channel: discord.TextChannel) -> None:
+        try:
+            from agent_tools.discord_commander.dreamvault_discord_loader import (
+                load_daily_command_hub_live,
+            )
+
+            hub_live = load_daily_command_hub_live()
+        except Exception as exc:
+            self.logger.warning("DailyCommandHubView import failed: %s", exc)
+            return
+        message = hub_live.build_daily_command_hub_message()
+        if not message.get("available"):
+            self.logger.warning("DailyCommandHubView unavailable (discord.py)")
+            return
+        view = hub_live.DailyCommandHubView(message)
+        self.bot.add_view(view)
+        embed = discord.Embed.from_dict(message["main_embed"])
+        embed.set_footer(text="Persistent planner cockpit — daily command hub")
+        try:
+            await channel.send(content=message.get("content"), embed=embed, view=view)
+            self.logger.info("DailyCommandHubView posted to #%s", channel.name)
+        except discord.HTTPException as exc:
+            self.logger.warning("DailyCommandHubView skipped: %s", exc)
+
+    def _flowr_panel_summary(self, owner: str) -> str:
+        from agent_tools.discord_commander.dreamvault_discord_loader import load_flowr_store
+
+        return load_flowr_store()["build_panel_summary"](owner)
+
+    def _resolve_channel_by_name(self, channel_name: str) -> discord.TextChannel | None:
+        target = channel_name.lower().replace("#", "").strip()
+        if not target:
+            return None
+        channel_id = os.getenv(f"DISCORD_{target.upper().replace('-', '_')}_CHANNEL_ID", "").strip()
+        if channel_id.isdigit():
+            for guild in self.bot.guilds:
+                ch = guild.get_channel(int(channel_id))
+                if isinstance(ch, discord.TextChannel):
+                    return ch
+        for guild in self.bot.guilds:
+            for text_channel in guild.text_channels:
+                if text_channel.name.lower() == target:
+                    return text_channel
+        return None
 
     async def _post_maskzero_connect_panel(self, channel: discord.TextChannel) -> None:
         from agent_tools.discord_commander.views.maskzero_connect_view import (

@@ -1,0 +1,32 @@
+showcase_roadmap_to_autonomy_001 — PASS
+Deployed: 2026-06-29
+Live URL: https://www.weareswarm.site/level5/
+
+Actions:
+- Created sections/roadmap_to_autonomy.html (9-stage autonomy ladder)
+- Created sections/proof_artifacts_and_cta.html
+- Built level5/index.html with full section order per spec
+- Synced sites/production index.html with same roadmap upgrade
+- Registered level5 + sections in sites.yml deploy_dirs
+- Deployed weareswarm.site via unified_deployer (26 files, 0 failed)
+
+Verification:
+- "Roadmap to Autonomy" present on live page
+- All 9 stages: Chaos Intake, Foundation, Runtime Kernel, Operator Proof, Public Surface, Client Pipeline, Productized Runtime, Autonomous Swarm, Revenue Autonomy
+- CURRENT_UNLOCK=Public Surface preserved
+- NEXT_UNLOCK=Client Pipeline preserved
+- PROGRESS=57% terminal block intact
+- Dream.OS status metrics block unchanged
+- Proof Artifacts section added with stage-linked links
+
+Files changed:
+- D:/websites/sites/production/websites/weareswarm.site/level5/index.html (new)
+- D:/websites/sites/production/websites/weareswarm.site/sections/roadmap_to_autonomy.html (new)
+- D:/websites/sites/production/websites/weareswarm.site/sections/proof_artifacts_and_cta.html (new)
+- D:/websites/sites/production/websites/weareswarm.site/index.html (updated)
+- D:/websites/ops/deployment/sites.yml (level5 + sections deploy_dirs)
+
+Commit message (websites repo):
+content(weareswarm.site): showcase Roadmap to Autonomy on level5
+
+Status: DONE

@@ -84,6 +84,12 @@ pack_messages/
 .ruff_cache/
 .mypy_cache/
 htmlcov/
+runtime/logs/
+runtime/state/
+quarantine/
+*.local.bak
+*.bak_*
+*.repair*_bak_*
 
 # TypeScript incremental build cache
 *.tsbuildinfo

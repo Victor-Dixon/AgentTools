@@ -42,10 +42,10 @@ def main() -> int:
     if bot is None:
         return 1
     time.sleep(3)
-    queue = _spawn("start_message_queue_processor.py")
+    queue = _spawn("start_message_bus_processor.py")
 
     print(f"Bot PID: {bot.pid}")
-    print(f"Queue PID: {queue.pid if queue else 'FAILED'}")
+    print(f"Message bus processor PID: {queue.pid if queue else 'FAILED'}")
 
     try:
         while True:

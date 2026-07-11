@@ -98,78 +98,85 @@ def scout_territory(path: str = ".") -> Dict[str, Any]:
 
 def main():
     """MCP server main loop."""
-    print(
-        json.dumps(
-            {
-                "jsonrpc": "2.0",
-                "method": "initialize",
-                "result": {
-                    "protocolVersion": "2024-11-05",
-                    "capabilities": {
-                        "tools": {
-                            "check_pack_status": {
-                                "description": "Check status of all agents in the pack",
-                                "inputSchema": {"type": "object", "properties": {}},
+    def emit(payload: Dict[str, Any]) -> None:
+        sys.stdout.write(json.dumps(payload) + "\n")
+        sys.stdout.flush()
+
+    emit(
+        {
+            "jsonrpc": "2.0",
+            "method": "initialize",
+            "result": {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {
+                    "tools": {
+                        "check_pack_status": {
+                            "description": "Check status of all agents in the pack",
+                            "inputSchema": {"type": "object", "properties": {}},
+                        },
+                        "assign_hunt": {
+                            "description": "Assign a task (hunt) to an agent",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "agent_id": {"type": "string"},
+                                    "task": {"type": "string"},
+                                    "difficulty": {"type": "integer", "default": 3},
+                                },
+                                "required": ["agent_id", "task"],
                             },
-                            "assign_hunt": {
-                                "description": "Assign a task (hunt) to an agent",
-                                "inputSchema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "agent_id": {"type": "string"},
-                                        "task": {"type": "string"},
-                                        "difficulty": {"type": "integer", "default": 3},
-                                    },
-                                    "required": ["agent_id", "task"],
+                        },
+                        "scout_territory": {
+                            "description": "Scan codebase for TODOs and FIXMEs",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {"type": "string", "default": "."},
                                 },
                             },
-                            "scout_territory": {
-                                "description": "Scan codebase for TODOs and FIXMEs",
-                                "inputSchema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "path": {"type": "string", "default": "."},
-                                    },
-                                },
-                            },
-                        }
-                    },
-                    "serverInfo": {"name": "swarm-control", "version": "1.0.0"},
+                        },
+                    }
                 },
-            }
-        )
+                "serverInfo": {"name": "swarm-control", "version": "1.0.0"},
+            },
+        }
     )
 
-    for line in sys.stdin:
-        try:
-            request = json.loads(line)
-            method = request.get("method")
-            params = request.get("params", {})
+    try:
+        for line in sys.stdin:
+            request: Dict[str, Any] | None = None
+            try:
+                request = json.loads(line)
+                method = request.get("method")
+                params = request.get("params", {})
 
-            if method == "tools/call":
-                tool_name = params.get("name")
-                arguments = params.get("arguments", {})
+                if method == "tools/call":
+                    tool_name = params.get("name")
+                    arguments = params.get("arguments", {})
 
-                if tool_name == "check_pack_status":
-                    result = check_pack_status()
-                elif tool_name == "assign_hunt":
-                    result = assign_hunt(**arguments)
-                elif tool_name == "scout_territory":
-                    result = scout_territory(**arguments)
-                else:
-                    result = {"success": False, "error": f"Unknown tool: {tool_name}"}
+                    if tool_name == "check_pack_status":
+                        result = check_pack_status()
+                    elif tool_name == "assign_hunt":
+                        result = assign_hunt(**arguments)
+                    elif tool_name == "scout_territory":
+                        result = scout_territory(**arguments)
+                    else:
+                        result = {"success": False, "error": f"Unknown tool: {tool_name}"}
 
-                print(json.dumps({
+                    emit({
+                        "jsonrpc": "2.0",
+                        "id": request.get("id"),
+                        "result": {"content": [{"type": "text", "text": json.dumps(result)}]}
+                    })
+            except Exception as e:
+                emit({
                     "jsonrpc": "2.0",
-                    "id": request.get("id"),
-                    "result": {"content": [{"type": "text", "text": json.dumps(result)}]}
-                }))
-        except Exception as e:
-            print(json.dumps({
-                "jsonrpc": "2.0",
-                "id": request.get("id"),
-                "error": {"code": -32603, "message": str(e)}
-            }))
+                    "id": request.get("id") if request else None,
+                    "error": {"code": -32603, "message": str(e)}
+                })
+    except OSError as exc:
+        if "reading from stdin" not in str(exc):
+            raise
 
 if __name__ == "__main__":
     main()

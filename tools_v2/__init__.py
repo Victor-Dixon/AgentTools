@@ -1,7 +1,6 @@
 
 # Registry compatibility exports
-from .tool_registry import ToolRegistry
-from .tool_registry import get_tool_registry
+from .tool_registry import ToolRegistry, get_tool_registry
 
 
 
@@ -25,6 +24,9 @@ from . import tool_registry
 from . import toolbelt_core
 
 __all__ = [
+    'ToolRegistry',
+    'get_tool_registry',
+    'ToolbeltCore',
     'advisor_cli',
     'demo_swarm_pulse',
     'test_bi_tools',
