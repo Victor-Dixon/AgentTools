@@ -205,3 +205,56 @@ hook binary missing
 Blocker + mitigation:
 - Blocker: git hook invokes `./node_modules/@fastify/pre-commit/hook`, but executable is missing; python `pre_commit` CLI is also not installed in this environment.
 - Mitigation: treat pre-commit as non-enforceable in this container and rely on explicit command-based checks (`py_compile`, `pytest`, coverage gate) until hook dependencies are restored.
+
+---
+
+## Documentation synchronization update - 2026-07-14
+
+### Evidence inspected
+
+- Repository root: `D:\agent-tools`
+- Branch: `main`
+- Initial dirty worktree paths:
+  - `pyproject.toml`
+  - `runtime/reports/dream_workers_hidden_control_20260714_051125.txt`
+  - `src/agenttools/`
+  - `tests/test_website_qa.py`
+- ProjectScanner command: `python D:\projectscanner\main.py --scan D:\agent-tools`
+- ProjectScanner result: scan completed; transient generated scanner files were removed from the repository and not treated as documentation changes.
+- Live implementation evidence:
+  - `swarm_mcp/servers/` has 5 package server files excluding `__init__.py`.
+  - `swarm_mcp/cli.py` defines 12 CLI subcommands.
+  - `mcp_servers/` has 29 Python server files excluding `__init__.py`.
+  - `apps/api/`, `apps/web/`, and `packages/shared/` exist.
+
+### Files updated
+
+- `PRD.md`
+- `PROJECT_STRUCTURE.md`
+- `NEXT_UP.md`
+- `MASTER_TASK_LIST.md`
+- `docs/root/MASTER_TASK_LOG.md`
+
+### Stale claims corrected
+
+- Root task-list launch/count claims are now explicitly marked historical unless reconciled to this SSOT.
+- `NEXT_UP.md` is bounded to active 3-7 tasks and mirrors this SSOT.
+- Documentation distinguishes package MCP servers from broader legacy/expanded MCP servers.
+
+### Current active queue
+
+- `SWARM-003`: build and publish `swarm-mcp`; record exact non-secret output.
+- `SWARM-004`: verify clean install/import/CLI smoke after publish.
+- `AGENTTOOLS-MCP-001`: classify active vs legacy MCP server surfaces.
+- `AGENTTOOLS-TV2-001`: inventory `tools_v2` migration status and select the next characterized adapter seam.
+- `AGENTTOOLS-DOCSYNC-001`: keep root docs aligned with SSOT and live implementation evidence.
+
+### Verification status
+
+- `git diff --check`: pass.
+- `pytest -q tests`: failed with 2 failures, 198 passed, 11 skipped.
+
+Failures recorded for follow-up:
+
+- `tests/compat/test_dreamos_message_contract_boundary.py::test_dreamos_core_schema_sources_exist` expects Dream.OS Core at stale `D:\Dream.os-Core`; canonical local path is `D:\repos\Dream.os-Core`.
+- `tests/test_messaging_delivery_tdd.py::TestPyAutoGUITransportSSOT::test_ssot_test_mode_send` fails because `tools.agent_transport` is not importable in this environment.

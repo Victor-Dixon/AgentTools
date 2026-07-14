@@ -1,4 +1,30 @@
-# 🐺 MASTER TASK LIST - WE ARE SWARM
+# MASTER TASK LIST - WE ARE SWARM
+
+## 2026-07-14 Documentation Repair Reconciliation
+
+**Status:** historical ledger with current projection note.
+**Execution SSOT:** `docs/root/MASTER_TASK_LOG.md`.
+
+The historical task body below is preserved for evidence. Current execution status should be read from `docs/root/MASTER_TASK_LOG.md` first, then mirrored through `NEXT_UP.md`.
+
+Current high-priority projection:
+
+| Priority | Status | Task ID | Objective | Verification |
+|---|---|---|---|---|
+| P0 | pending | SWARM-003 | Build and publish `swarm-mcp`; record exact non-secret output. | `python -m build`; `twine upload dist/*` |
+| P0 | pending | SWARM-004 | Clean install/import/CLI smoke after publish. | `pip install swarm-mcp`; `python -c "import swarm_mcp"`; `swarm --help` |
+| P1 | active | AGENTTOOLS-MCP-001 | Classify package MCP servers vs expanded legacy MCP servers. | `pytest -q tests/test_mcp_servers.py` |
+| P1 | active | AGENTTOOLS-TV2-001 | Inventory `tools_v2` migration and choose next characterized adapter seam. | `pytest -q tools_v2/tests tests/test_tools_v2_registry_contract.py` |
+
+Stale lower-body claims corrected by this note:
+
+- Branch/count claims from 2026-01 and 2026-03 are historical evidence, not current status.
+- PyPI publish and clean install remain incomplete until SWARM-003/SWARM-004 have command-output evidence.
+- Active-vs-legacy MCP classification remains open.
+
+---
+
+# Historical Task Ledger - WE ARE SWARM
 
 **Last Updated:** 2026-01-11
 **Status:** Active Development

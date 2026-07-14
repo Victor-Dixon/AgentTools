@@ -14,6 +14,21 @@ A framework that enables **multiple AI agents** (Claude, GPT, Gemini, etc.) to w
 
 Think of it as the **nervous system for an AI swarm**.
 
+## Canonical documentation
+
+AgentTools is the Dream.OS operator/control-plane toolbelt. It is not the canonical DreamOS runtime and it is not the DreamVault intelligence vault.
+
+| Need | Canonical document |
+|---|---|
+| Product boundary and requirements | `PRD.md` |
+| Current execution focus | `NEXT_UP.md` |
+| Repository shape | `PROJECT_STRUCTURE.md` and `PROJECT_STRUCTURE_TREE.md` |
+| Architecture/domain inventory | `docs/architecture/DOMAIN_MODEL_DISCOVERY.md` and `docs/architecture/CODE_INVENTORY.md` |
+| Production architecture decision | `docs/architecture/adr/0001-production-architecture.md` |
+| Agent operating rules | `AGENTS.md` |
+
+Legacy reports, devlogs, archived tools, generated runtime reports, and agent workspace inbox notes are evidence, not canonical onboarding surfaces.
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     WE ARE SWARM 🐺                         │
