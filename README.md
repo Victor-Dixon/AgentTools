@@ -72,6 +72,16 @@ Legacy reports, devlogs, archived tools, generated runtime reports, and agent wo
 pip install swarm-mcp
 ```
 
+### Smoke (clone-and-run)
+
+From a local checkout of this repo (not the PyPI package alone):
+
+```bash
+python -m tools.toolbelt --list
+```
+
+Expected: toolbelt lists operator commands and exits 0.
+
 ```python
 from swarm_mcp import PackCoordinator, AgentDNA, ConsensusEngine
 
