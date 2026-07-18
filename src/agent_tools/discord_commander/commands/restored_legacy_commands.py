@@ -12,7 +12,7 @@ from discord.ext import commands
 from agent_tools.discord_commander.agent_message_sender import (
     broadcast_agent_messages,
     normalize_agent_id,
-    send_agent_message,
+    send_agent_message_async,
 )
 from agent_tools.discord_commander.swarm_status_helper import (
     agent_row,
@@ -68,19 +68,22 @@ class RestoredLegacyCommands(commands.Cog):
         if not normalized:
             await interaction.response.send_message(f"Invalid agent: {agent}", ephemeral=True)
             return
-        result = send_agent_message(
+        await interaction.response.defer(ephemeral=True)
+        result = await send_agent_message_async(
             normalized,
             message,
             discord_user=interaction.user,
             source="discord_slash_send",
         )
+        data = result.data or {}
+        status = str(data.get("final_status") or ("SENT" if result.success else "FAILED"))
         if result.success:
-            await interaction.response.send_message(
-                f"✅ Sent to **{normalized}** ({result.data.get('transport', '?')})",
+            await interaction.followup.send(
+                f"✅ {status} to **{normalized}** ({data.get('transport', '?')})",
                 ephemeral=True,
             )
         else:
-            await interaction.response.send_message(f"❌ {result.message}", ephemeral=True)
+            await interaction.followup.send(f"❌ {result.message}", ephemeral=True)
 
     @app_commands.command(name="swarm", description="Broadcast message to all agents")
     @app_commands.describe(message="Message for the swarm")

@@ -10,7 +10,7 @@ import discord
 from agent_tools.discord_commander.agent_message_sender import (
     broadcast_agent_messages,
     normalize_agent_id,
-    send_agent_message,
+    send_agent_message_async,
 )
 from agent_tools.discord_commander.onboard_bridge import quad_onboard_status
 
@@ -32,19 +32,22 @@ class AgentMessageModal(discord.ui.Modal, title="Send Agent Message"):
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
         body = self.message_input.value.strip()
-        result = send_agent_message(
+        await interaction.response.defer(ephemeral=True)
+        result = await send_agent_message_async(
             self.agent_id,
             body,
             discord_user=interaction.user,
             source="discord_gui_modal",
         )
+        data = result.data or {}
+        status = str(data.get("final_status") or ("SENT" if result.success else "FAILED"))
         if result.success:
-            await interaction.response.send_message(
-                f"✅ Message sent to **{result.agent}** via {result.data.get('transport', 'unknown')}",
+            await interaction.followup.send(
+                f"✅ {status} to **{result.agent}** via {data.get('transport', 'unknown')}",
                 ephemeral=True,
             )
         else:
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 f"❌ Failed: {result.message}",
                 ephemeral=True,
             )
@@ -107,13 +110,16 @@ class QuickSendModal(discord.ui.Modal, title="Send to Agent"):
         if not agent:
             await interaction.response.send_message("Invalid agent ID.", ephemeral=True)
             return
-        result = send_agent_message(
+        await interaction.response.defer(ephemeral=True)
+        result = await send_agent_message_async(
             agent,
             self.message_field.value,
             discord_user=interaction.user,
             source="discord_quick_send_modal",
         )
+        data = result.data or {}
+        status = str(data.get("final_status") or ("SENT" if result.success else "FAILED"))
         if result.success:
-            await interaction.response.send_message(f"✅ Sent to **{agent}**", ephemeral=True)
+            await interaction.followup.send(f"✅ {status} to **{agent}**", ephemeral=True)
         else:
-            await interaction.response.send_message(f"❌ {result.message}", ephemeral=True)
+            await interaction.followup.send(f"❌ {result.message}", ephemeral=True)

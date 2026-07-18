@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from typing import Any
 
 import discord
@@ -20,12 +19,6 @@ def _dreamvault_store() -> dict[str, Any]:
     from agent_tools.discord_commander.dreamvault_discord_loader import load_flowr_store
 
     return load_flowr_store()
-
-
-def _persistent_timeout() -> float | None:
-    if os.environ.get("DISCORD_PERSISTENT_VIEWS", "").strip().lower() in {"1", "true", "yes"}:
-        return None
-    return 300
 
 
 class AddTimeblockModal(discord.ui.Modal):
@@ -75,7 +68,7 @@ def _build_flowr_timeblock_view(owner: str) -> type:
         """Always-on Flowr + planner timeblock panel."""
 
         def __init__(self) -> None:
-            super().__init__(timeout=_persistent_timeout())
+            super().__init__(timeout=None)
             self.add_item(
                 discord.ui.Button(
                     label="Open Flowr",

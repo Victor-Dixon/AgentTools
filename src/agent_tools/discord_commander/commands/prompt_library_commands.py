@@ -12,7 +12,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from agent_tools.discord_commander.agent_message_sender import send_agent_message
+from agent_tools.discord_commander.agent_message_sender import send_agent_message_async
 from agent_tools.discord_commander.template_bridge import resolve_dreamvault_root
 
 _COMMANDS_FILE = Path("runtime/scripts/verify_vps_discord_prompt_library_parity_001.py")
@@ -207,19 +207,22 @@ class PromptLibraryCommands(commands.Cog):
         ) -> None:
             payload = show_prompt(domain, rendered=True)
             message = payload["body"] if not note.strip() else note.strip() + "\n\n" + payload["body"]
-            result = send_agent_message(
+            await interaction.response.defer(ephemeral=True)
+            result = await send_agent_message_async(
                 agent,
                 message,
                 discord_user=interaction.user,
                 source="discord_prompt_library_send",
             )
+            data = result.data or {}
+            status = str(data.get("final_status") or ("SENT" if result.success else "FAILED"))
             if result.success:
-                await interaction.response.send_message(
-                    f"✅ Rendered `{domain}` and sent it to **{result.agent}**.",
+                await interaction.followup.send(
+                    f"✅ Rendered `{domain}` — {status} to **{result.agent}**.",
                     ephemeral=True,
                 )
             else:
-                await interaction.response.send_message(f"❌ {result.message}", ephemeral=True)
+                await interaction.followup.send(f"❌ {result.message}", ephemeral=True)
 
         @self.prompts.command(name="parity", description="Run the DreamVault prompt parity self-check")
         async def slash_parity(interaction: discord.Interaction) -> None:

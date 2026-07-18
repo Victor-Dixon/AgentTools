@@ -10,9 +10,10 @@ from discord.ext import commands
 
 from agent_tools.discord_commander.agent_message_sender import (
     broadcast_agent_messages,
-    send_agent_message,
+    send_agent_message_async,
 )
 from agent_tools.discord_commander.messaging_delivery_log import delivery_jsonl_path
+from agent_tools.discord_commander.models import DELIVERY_QUEUED
 from agent_tools.discord_commander.utils.message_chunking import chunk_field_value
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,8 @@ class MessagingCommands(commands.Cog):
     @commands.command(name="message", description="Send message to agent")
     async def message(self, ctx: commands.Context, agent_id: str, *, message: str) -> None:
         """Send direct message to agent: `!message Agent-1 Check your inbox`."""
+        import asyncio
+
         try:
             logger.info(
                 "!message invoked by=%s agent=%s len=%d",
@@ -36,7 +39,8 @@ class MessagingCommands(commands.Cog):
                 agent_id,
                 len(message),
             )
-            result = send_agent_message(
+            # Never run sync bus/PyAutoGUI work on the Discord gateway loop.
+            result = await send_agent_message_async(
                 agent_id=agent_id,
                 message=message,
                 discord_user=ctx.author,
@@ -45,11 +49,20 @@ class MessagingCommands(commands.Cog):
             )
 
             data = result.data or {}
-            final_status = str(data.get("final_status") or ("SENT" if result.success else "FAILED"))
+            final_status = str(
+                data.get("final_status")
+                or data.get("delivery_status")
+                or ("SENT" if result.success else "FAILED")
+            )
             agent = result.agent or agent_id
             transport = data.get("transport", "unknown")
             template_cat = data.get("message_template") or data.get("template_category") or "raw"
-            color = discord.Color.green() if final_status == "SENT" else discord.Color.red()
+            if final_status in (DELIVERY_QUEUED, "DISPATCHING"):
+                color = discord.Color.gold()
+            elif final_status in ("SENT", "LIVE_SENT", "DELIVERED"):
+                color = discord.Color.green()
+            else:
+                color = discord.Color.red()
 
             embed = discord.Embed(
                 title=f"!message {final_status}",
@@ -59,6 +72,9 @@ class MessagingCommands(commands.Cog):
             embed.add_field(name="Target", value=f"**{agent}**", inline=True)
             embed.add_field(name="Transport", value=str(transport), inline=True)
             embed.add_field(name="Template", value=str(template_cat), inline=True)
+            bus_id = data.get("bus_message_id") or data.get("message_id")
+            if bus_id:
+                embed.add_field(name="Bus message", value=f"`{bus_id}`", inline=False)
             roots = data.get("messaging_roots")
             if isinstance(roots, dict):
                 embed.add_field(
@@ -102,6 +118,10 @@ class MessagingCommands(commands.Cog):
                     result.error_code,
                     result.message,
                 )
+        except asyncio.TimeoutError:
+            await ctx.reply(
+                "Message accepted, but live delivery confirmation is still pending."
+            )
         except Exception as exc:
             self.logger.error("message command failed: %s", exc, exc_info=True)
             await ctx.send(f"Error: {exc}")
@@ -117,7 +137,7 @@ class MessagingCommands(commands.Cog):
                 getattr(ctx.author, "name", "unknown"),
                 len(message),
             )
-            await ctx.send("Broadcasting to swarm via PyAutoGUI (sequential)…")
+            await ctx.send("Broadcasting to swarm (enqueue / sequential off-loop)…")
             result = await asyncio.to_thread(
                 broadcast_agent_messages,
                 message,

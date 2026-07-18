@@ -2,10 +2,11 @@
 
 Delivery order:
 1. PyAutoGUI readiness preflight (fail fast)
-2. DreamVault unified message bus (D2A template) + inline live dispatch when processor idle
-3. Direct PyAutoGUI fallback only when bus times out (single audit line — SENT or FAILED)
+2. DreamVault unified message bus — enqueue-and-observe (processor owns live paste)
+3. Direct PyAutoGUI fallback only when bus fails and processor does not own delivery
 
-!message is PyAutoGUI-only — no Discord webhook fallback.
+Discord commands must call ``send_agent_message_async`` so sync work never blocks
+the gateway heartbeat. !message is PyAutoGUI/bus-only — no Discord webhook fallback.
 """
 
 from __future__ import annotations
@@ -18,10 +19,15 @@ from typing import Any, Optional
 from .delivery_preflight import validate_pyautogui_readiness
 from .messaging_delivery_log import record_delivery
 from .messaging_roots import apply_messaging_roots
-from .models import CommandResult, DeliveryResult, BroadcastResult
+from .models import (
+    DELIVERY_QUEUED,
+    BroadcastResult,
+    CommandResult,
+    DeliveryResult,
+)
 from .message_bus_bridge import message_bus_enabled, send_via_message_bus
 from .queue_bridge import deliver_message, get_transport
-from .template_bridge import wrap_d2a_message
+from .template_bridge import resolve_dreamvault_root, wrap_d2a_message
 
 logger = logging.getLogger(__name__)
 
@@ -60,8 +66,30 @@ def _format_sender(discord_user: Any | None) -> str:
     return "Discord Commander"
 
 
-def _final_status(success: bool) -> str:
+def _final_status(success: bool, *, delivery_status: str | None = None) -> str:
+    if delivery_status in (
+        DELIVERY_QUEUED,
+        "DISPATCHING",
+        "LIVE_SENT",
+        "DELIVERED",
+        "FAILED",
+        "UNKNOWN",
+        "SENT",
+    ):
+        if delivery_status == "DELIVERED":
+            return "SENT"
+        if delivery_status == DELIVERY_QUEUED:
+            return DELIVERY_QUEUED
+        if delivery_status == "LIVE_SENT":
+            return "SENT"
+        if delivery_status == "FAILED":
+            return "FAILED"
+        if delivery_status == "SENT":
+            return "SENT"
     return "SENT" if success else "FAILED"
+
+
+DISCORD_SEND_TIMEOUT_SEC = 8.0
 
 
 def _record_final_delivery(
@@ -84,7 +112,13 @@ def _record_final_delivery(
         message_preview=message_preview,
         error_code=error_code,
         detail=detail,
-        extra={**extra, "final_status": _final_status(success)},
+        extra={
+            **extra,
+            "final_status": _final_status(
+                success,
+                delivery_status=str(extra.get("delivery_status") or "") or None,
+            ),
+        },
     )
 
 
@@ -136,7 +170,10 @@ def _build_command_result(
 ) -> CommandResult:
     data = dict(extra or {})
     data["transport"] = transport
-    data["final_status"] = _final_status(success)
+    data["final_status"] = _final_status(
+        success,
+        delivery_status=str(data.get("delivery_status") or "") or None,
+    )
     return CommandResult(
         success=success,
         message=message,
@@ -233,6 +270,9 @@ def send_agent_message(
         )
         bus_attempt = {"ok": bus_ok, "detail": bus_detail, **bus_meta}
         if bus_ok:
+            delivery_status = str(bus_meta.get("delivery_status") or DELIVERY_QUEUED)
+            # Enqueue-ack is success even when live paste is still pending.
+            label = "QUEUED" if delivery_status == DELIVERY_QUEUED and not bus_meta.get("confirmed") else "SENT"
             _record_final_delivery(
                 source=source,
                 agent_id=normalized,
@@ -241,14 +281,18 @@ def send_agent_message(
                 message_preview=bus_meta.get("body_preview") or body,
                 error_code=None,
                 detail=bus_detail,
-                extra={"messaging_roots": roots, "bus_attempt": bus_attempt},
+                extra={
+                    "messaging_roots": roots,
+                    "bus_attempt": bus_attempt,
+                    "delivery_status": delivery_status,
+                },
             )
             return _build_command_result(
                 success=True,
                 agent=normalized,
                 transport=str(bus_meta.get("transport", "message_bus")),
-                message=f"SENT: {bus_detail}",
-                extra={**bus_meta, "messaging_roots": roots},
+                message=f"{label}: {bus_detail}",
+                extra={**bus_meta, "messaging_roots": roots, "delivery_status": delivery_status},
             )
         skip_fallback, skip_reason = _skip_pyautogui_bus_fallback(bus_meta)
         if skip_fallback:
@@ -374,6 +418,56 @@ def send_agent_message(
             "bus_attempt": bus_attempt,
         },
     )
+
+
+async def send_agent_message_async(
+    agent_id: str,
+    message: str,
+    *,
+    discord_user: Any | None = None,
+    priority: str = "regular",
+    transport: Any | None = None,
+    dry_run: bool = False,
+    source: str = "discord_commander",
+    timeout: float = DISCORD_SEND_TIMEOUT_SEC,
+) -> CommandResult:
+    """Offload sync delivery work off the Discord event loop with a hard timeout.
+
+    Timeout does not cancel a queued bus message — persistence happens before
+    any confirmation wait (enqueue-only by default).
+    """
+    import asyncio
+
+    try:
+        return await asyncio.wait_for(
+            asyncio.to_thread(
+                send_agent_message,
+                agent_id,
+                message,
+                discord_user=discord_user,
+                priority=priority,
+                transport=transport,
+                dry_run=dry_run,
+                source=source,
+            ),
+            timeout=timeout,
+        )
+    except asyncio.TimeoutError:
+        normalized = normalize_agent_id(agent_id) or agent_id
+        return CommandResult(
+            success=True,
+            message="Message accepted, but live delivery confirmation is still pending.",
+            agent=normalized,
+            error_code="DELIVERY_CONFIRMATION_PENDING",
+            data={
+                "final_status": DELIVERY_QUEUED,
+                "delivery_status": DELIVERY_QUEUED,
+                "accepted": True,
+                "queued": True,
+                "confirmed": False,
+                "transport": "message_bus_timeout_pending",
+            },
+        )
 
 
 def broadcast_agent_messages(

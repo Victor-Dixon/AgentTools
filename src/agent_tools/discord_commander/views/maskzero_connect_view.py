@@ -2,19 +2,11 @@
 
 from __future__ import annotations
 
-import os
-
 import discord
 
 from agent_tools.discord_commander.maskzero_link_client import consume_link_code
 
 CONNECT_PAGE_URL = "https://maskzero.site/discord/connect/"
-
-
-def _persistent_timeout() -> float | None:
-    if os.environ.get("DISCORD_PERSISTENT_VIEWS", "").strip().lower() in {"1", "true", "yes"}:
-        return None
-    return 300
 
 
 class MaskZeroConnectCodeModal(discord.ui.Modal, title="Link MaskZero Account"):
@@ -51,7 +43,7 @@ class MaskZeroConnectView(discord.ui.View):
     """Always-on MaskZero link panel — complements /connect slash command."""
 
     def __init__(self) -> None:
-        super().__init__(timeout=_persistent_timeout())
+        super().__init__(timeout=None)
         self.add_item(
             discord.ui.Button(
                 label="Get Link Code",

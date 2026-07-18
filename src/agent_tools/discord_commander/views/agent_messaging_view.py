@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import os
 
 import discord
 
@@ -20,20 +19,15 @@ from agent_tools.discord_commander.views.message_modals import (
 
 logger = logging.getLogger(__name__)
 
-VIEW_TIMEOUT = 300
-
-
-def _view_timeout() -> float | None:
-    if os.environ.get("DISCORD_PERSISTENT_VIEWS", "").strip() in {"1", "true", "yes"}:
-        return None
-    return VIEW_TIMEOUT
-
-
 class AgentMessagingGUIView(discord.ui.View):
-    """Interactive control panel: agent select, broadcast, status, refresh."""
+    """Interactive control panel: agent select, broadcast, status, refresh.
+
+    Persistent view: timeout=None + stable custom_id on every item (required for
+    bot.add_view registration across restarts).
+    """
 
     def __init__(self) -> None:
-        super().__init__(timeout=_view_timeout())
+        super().__init__(timeout=None)
         self.statuses = read_swarm_statuses()
         self.agents = [agent_row(a, self.statuses) for a in list_swarm_agents()]
         self.agent_select = discord.ui.Select(
