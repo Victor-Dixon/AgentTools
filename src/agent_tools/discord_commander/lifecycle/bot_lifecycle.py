@@ -29,11 +29,15 @@ class BotLifecycleManager:
         from agent_tools.discord_commander.commands.agent_management_commands import (
             AgentManagementCommands,
         )
+        from agent_tools.discord_commander.commands.bump_commands import BumpCommands
         from agent_tools.discord_commander.commands.messaging_commands import (
             MessagingCommands,
         )
         from agent_tools.discord_commander.commands.maskzero_connect_commands import (
             MaskZeroConnectCommands,
+        )
+        from agent_tools.discord_commander.commands.maskzero_play_commands import (
+            MaskZeroPlayCommands,
         )
         from agent_tools.discord_commander.commands.onboarding_commands import (
             OnboardingCommands,
@@ -49,10 +53,12 @@ class BotLifecycleManager:
         await self.bot.add_cog(MessagingCommands(self.bot, gui_controller=None))
         await self.bot.add_cog(RestoredLegacyCommands(self.bot))
         await self.bot.add_cog(OnboardingCommands(self.bot))
+        await self.bot.add_cog(BumpCommands(self.bot))
         await self.bot.add_cog(PromptLibraryCommands(self.bot))
         await self.bot.add_cog(MaskZeroConnectCommands(self.bot))
+        await self.bot.add_cog(MaskZeroPlayCommands(self.bot))
         self.logger.info(
-            "Promoted slice: AgentManagement + Messaging + RestoredLegacy + Onboarding + PromptLibrary + MaskZeroConnect loaded (focus=core bot command)"
+            "Promoted slice: AgentManagement + Messaging + RestoredLegacy + Onboarding + Bump + PromptLibrary + MaskZeroConnect + MaskZeroPlay loaded (focus=core bot command)"
         )
 
     def _views_approved(self, view_id: str) -> bool:
@@ -83,9 +89,14 @@ class BotLifecycleManager:
         if self._views_approved("MaskZeroConnectView"):
             await self._post_maskzero_connect_panel(channel)
 
+        if self._views_approved("MaskZeroPlayView"):
+            await self._post_maskzero_play_panel(channel)
+
         if self._views_approved("AgentMessagingGUIView"):
             await self._post_agent_messaging_panel(channel)
-        elif not self._views_approved("MaskZeroConnectView"):
+        elif not self._views_approved("MaskZeroConnectView") and not self._views_approved(
+            "MaskZeroPlayView"
+        ):
             self.logger.warning(
                 "No approved startup views — check discord_view_controllers_approved.json"
             )
@@ -216,6 +227,28 @@ class BotLifecycleManager:
             self.logger.info("MaskZeroConnectView posted to #%s", channel.name)
         except discord.HTTPException as exc:
             self.logger.warning("MaskZeroConnectView skipped: %s", exc)
+
+    async def _post_maskzero_play_panel(self, channel: discord.TextChannel) -> None:
+        from agent_tools.discord_commander.views.maskzero_play_view import (
+            PIN_FALLBACK_TEXT,
+            PLAY_CAMPAIGN_URL,
+            MaskZeroPlayView,
+        )
+
+        view = MaskZeroPlayView()
+        self.bot.add_view(view)
+        embed = discord.Embed(
+            title="MaskZero — Play Campaign",
+            description=PIN_FALLBACK_TEXT,
+            color=0x7DFFBE,
+            url=PLAY_CAMPAIGN_URL,
+        )
+        embed.set_footer(text="Persistent panel — distribution.discord canonical /play only")
+        try:
+            await channel.send(embed=embed, view=view)
+            self.logger.info("MaskZeroPlayView posted to #%s url=%s", channel.name, PLAY_CAMPAIGN_URL)
+        except discord.HTTPException as exc:
+            self.logger.warning("MaskZeroPlayView skipped: %s", exc)
 
     async def _post_agent_messaging_panel(self, channel: discord.TextChannel) -> None:
         from agent_tools.discord_commander.views.agent_messaging_view import (

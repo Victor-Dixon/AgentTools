@@ -55,6 +55,7 @@ PREFIX_COMMANDS = (
     "!message",
     "!broadcast",
     "!onboard",
+    "!bump",
     "!heal",
     "!gui",
 )
@@ -173,6 +174,15 @@ class UnifiedDiscordBot:
     async def _sync_slash_commands(self, *, label: str) -> None:
         if self.guild_id:
             guild = self._discord.Object(id=int(self.guild_id))
+            # Cog @app_commands land on the global tree. Guild sync alone only
+            # publishes guild-scoped commands (base /ping etc.). copy_global_to
+            # is required so promoted cogs (/play, /connect, restored) appear.
+            if label == "promoted":
+                self.bot.tree.copy_global_to(guild=guild)
+                logger.info(
+                    "Promoted: copied global app commands onto guild %s before sync",
+                    self.guild_id,
+                )
             pending = self.bot.tree.get_commands(guild=guild)
             logger.info("%s guild tree pending commands: %d", label.title(), len(pending))
             synced = await self.bot.tree.sync(guild=guild)
@@ -182,6 +192,12 @@ class UnifiedDiscordBot:
             synced = await self.bot.tree.sync()
         names = ", ".join(c.name for c in synced) if synced else "(none)"
         logger.info("%s sync registered %d slash commands: %s", label.title(), len(synced), names)
+        if label == "promoted" and synced:
+            play_ok = any(getattr(c, "name", "") == "play" for c in synced)
+            logger.info(
+                "Promoted /play slash registration: %s",
+                "PASS" if play_ok else "MISSING",
+            )
 
     async def _load_promoted_slice(self) -> None:
         if self._slice_loaded:
@@ -219,7 +235,7 @@ class UnifiedDiscordBot:
             await ctx.send(
                 "**Discord Commander**\n"
                 "Prefix: `!ping` `!status` `!help` `!swarm-status` `!focus` `!message` `!heal` `!gui`\n"
-                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/focus` `/fleet-audit` `/prompts`\n"
+                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/focus` `/fleet-audit` `/prompts` `/play`\n"
                 "Slash (restored): `/send` `/swarm` `/agents` `/agent-status` `/commands` "
                 "`/swarm-help` `/info` `/gui`"
             )
@@ -266,7 +282,7 @@ class UnifiedDiscordBot:
             await interaction.response.send_message(
                 "**Discord Commander**\n"
                 "Prefix: `!ping` `!status` `!help` `!swarm-status` `!focus` `!message` `!heal` `!gui`\n"
-                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/focus` `/fleet-audit` `/prompts`\n"
+                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/focus` `/fleet-audit` `/prompts` `/play`\n"
                 "Slash (restored): `/send` `/swarm` `/agents` `/agent-status` `/commands` "
                 "`/swarm-help` `/info` `/gui`"
             )
