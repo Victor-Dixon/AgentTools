@@ -140,6 +140,12 @@ class UnifiedDiscordBot:
         self.token = token or os.getenv("DISCORD_BOT_TOKEN", "")
         self.guild_id = guild_id or os.getenv("DISCORD_GUILD_ID", "")
         self.bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
+        from .online_receipt import OnlineReceiptPublisher
+
+        self._online_receipts = OnlineReceiptPublisher(
+            self.bot,
+            os.getenv("DISCORD_BOT_RECEIPT_CHANNEL_NAME", "bot-dreamos-commander"),
+        )
         self._discord = discord
         self._app_commands = app_commands
         self.connection_healthy = False
@@ -155,6 +161,8 @@ class UnifiedDiscordBot:
         @self.bot.event
         async def on_ready() -> None:
             logger.info("Discord Commander bot ready as %s", self.bot.user)
+            receipt = await self._online_receipts.emit_state_change()
+            logger.info("Discord Commander online receipt: %s", receipt)
             try:
                 await self._sync_slash_commands(label="base")
             except Exception as exc:
@@ -170,6 +178,18 @@ class UnifiedDiscordBot:
                     await self._sync_slash_commands(label="promoted")
                 except Exception as exc:
                     logger.error("Promoted slash command sync failed: %s", exc)
+
+        @self.bot.event
+        async def on_disconnect() -> None:
+            self.connection_healthy = False
+            self._online_receipts.mark_disconnected()
+            logger.warning("Discord Commander disconnected")
+
+        @self.bot.event
+        async def on_resumed() -> None:
+            self.connection_healthy = True
+            receipt = await self._online_receipts.emit_state_change()
+            logger.info("Discord Commander reconnect receipt: %s", receipt)
 
     async def _sync_slash_commands(self, *, label: str) -> None:
         if self.guild_id:
