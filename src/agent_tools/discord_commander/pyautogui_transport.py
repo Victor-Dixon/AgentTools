@@ -3,8 +3,25 @@
 from __future__ import annotations
 # D2A_AGENTTOOLS_BRIDGE_ENV_DEFAULTS_035
 # Canonical visible-session D2A delivery defaults.
+# Roots: AgentTools owns commander/transport code. Coords SSOT: DreamVault.
 import os as _dreamos_d2a_env_035
-_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+from pathlib import Path as _Path_d2a_env_035
+
+_DREAMVAULT_DEFAULT_035 = _Path_d2a_env_035(r"D:\DreamVault")
+_SSOT_COORDS_035 = (
+    _DREAMVAULT_DEFAULT_035
+    / "runtime"
+    / "config"
+    / "agent_transport"
+    / "cursor_agent_coords.json"
+)
+if _SSOT_COORDS_035.is_file():
+    # Prefer DreamVault calibrated coords — never force legacy Agent_Cellphone over SSOT.
+    _dreamos_d2a_env_035.environ.setdefault("DREAMVAULT_AGENT_TRANSPORT_SSOT", "1")
+    _dreamos_d2a_env_035.environ.setdefault("DREAMVAULT_REPO_ROOT", str(_DREAMVAULT_DEFAULT_035))
+    _dreamos_d2a_env_035.environ.setdefault("AGENT_CELLPHONE_ROOT", str(_DREAMVAULT_DEFAULT_035))
+else:
+    _dreamos_d2a_env_035.environ.setdefault("AGENT_CELLPHONE_ROOT", r"D:\repos\Agent_Cellphone")
 _dreamos_d2a_env_035.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
 _dreamos_d2a_env_035.environ.setdefault("DEFAULT_MODE", "pyautogui")
 _dreamos_d2a_env_035.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")

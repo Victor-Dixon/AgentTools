@@ -56,9 +56,11 @@ def apply_messaging_roots() -> dict[str, Any]:
     if dreamvault.is_dir():
         os.environ.setdefault("DREAMVAULT_ROOT", str(dreamvault.resolve()))
     if dreamvault.is_dir() and ssot_coords_available(dreamvault):
+        # Force DreamVault coords SSOT even if a legacy import polluted AGENT_CELLPHONE_ROOT.
         os.environ["DREAMVAULT_AGENT_TRANSPORT_SSOT"] = "1"
         os.environ["DREAMVAULT_REPO_ROOT"] = str(dreamvault.resolve())
         os.environ["AGENT_CELLPHONE_ROOT"] = str(dreamvault.resolve())
+        os.environ["AGENT_MESSAGING_SSOT_LEGACY"] = "0"
     elif acp is not None:
         os.environ.setdefault("AGENT_CELLPHONE_ROOT", str(acp.resolve()))
 

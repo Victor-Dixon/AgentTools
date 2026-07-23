@@ -140,6 +140,90 @@ def test_send_via_message_bus_enqueue_only_no_dispatch(monkeypatch, tmp_path: Pa
     dispatch_mock.assert_not_called()
 
 
+def test_send_via_message_bus_inline_when_processor_down(monkeypatch, tmp_path: Path) -> None:
+    """Dead processor must not claim QUEUED success — inline live dispatch instead."""
+    monkeypatch.setenv("DISCORD_COMMANDER_DELIVERY_WAIT_SEC", "0")
+    monkeypatch.setenv("DISCORD_COMMANDER_DISPATCH_LEDGER", str(tmp_path / "ledger.json"))
+    monkeypatch.setenv("ALLOW_LIVE_CURSOR_INJECTION", "1")
+    monkeypatch.setenv("AGENT_TOOLS_ROOT", r"D:\agent-tools")
+    monkeypatch.setenv("DREAMVAULT_REPO_ROOT", str(tmp_path))
+    monkeypatch.setenv("DREAMVAULT_AGENT_TRANSPORT_SSOT", "1")
+
+    bus_msg = SimpleNamespace(
+        id="bus_msg_inline_no_proc_001",
+        category=SimpleNamespace(value="D2A"),
+        body="hello",
+    )
+    ingest_result = SimpleNamespace(bus_message=bus_msg, verify_markers=["D2A"])
+
+    monkeypatch.setattr(
+        "agent_tools.discord_commander.message_bus_bridge.resolve_dreamvault_root",
+        lambda: tmp_path,
+    )
+    monkeypatch.setattr(
+        "agent_tools.discord_commander.message_bus_bridge.bootstrap_commander_env",
+        lambda: None,
+    )
+    monkeypatch.setattr(
+        "agent_tools.discord_commander.message_bus_bridge.apply_messaging_roots",
+        lambda: {
+            "agent_tools_root": r"D:\agent-tools",
+            "coords_root": str(tmp_path),
+        },
+    )
+    monkeypatch.setattr(
+        "agent_tools.discord_commander.message_bus_bridge.message_bus_processor_running",
+        lambda root: False,
+    )
+
+    import agent_tools.discord_commander.message_bus_bridge as bridge
+
+    monkeypatch.setattr(bridge, "_ensure_import", lambda root: None)
+
+    class FakeIngress:
+        @staticmethod
+        def ingest_discord_message_command(*args, **kwargs):
+            return ingest_result
+
+    class FakeDispatcher:
+        @staticmethod
+        def default_bus_paths(root):
+            return SimpleNamespace(state_path=tmp_path / "bus_state.json", repo_root=root)
+
+    class FakeBootstrap:
+        @staticmethod
+        def bootstrap_d2a_transport_env(root):
+            return None
+
+    monkeypatch.setitem(sys.modules, "dreamvault.discord.d2a_transport_bootstrap", FakeBootstrap)
+    monkeypatch.setitem(sys.modules, "dreamvault.discord.d2a_ingress_adapter", FakeIngress)
+    monkeypatch.setitem(sys.modules, "dreamvault.message_bus.dispatcher", FakeDispatcher)
+
+    def fake_inline(*, paths, bus_message_id, agent_id, meta):
+        meta["transport"] = "message_bus_enqueue_and_live_dispatch"
+        meta["delivery_status"] = "LIVE_SENT"
+        meta["live_dispatched"] = True
+        meta["confirmed"] = True
+        meta["dispatch_target"] = agent_id
+        return True, f"D2A delivered to {agent_id} via PyAutoGUI (ssot_live_sent)", meta
+
+    monkeypatch.setattr(bridge, "_inline_dispatch_with_claim", fake_inline)
+
+    ok, detail, meta = send_via_message_bus(
+        agent_id="Agent-2",
+        raw_content="hello from discord",
+        sender="test",
+        live=True,
+    )
+
+    assert ok is True
+    assert meta["processor_running"] is False
+    assert meta["transport"] == "message_bus_enqueue_and_live_dispatch"
+    assert meta["delivery_status"] == "LIVE_SENT"
+    assert meta["messaging_roots"]["agent_tools_root"] == r"D:\agent-tools"
+    assert "PyAutoGUI" in detail
+
+
 def test_send_agent_message_async_timeout_does_not_fail_accept(monkeypatch) -> None:
     import asyncio
 

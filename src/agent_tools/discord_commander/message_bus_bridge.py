@@ -49,11 +49,27 @@ def _delivery_wait_requested(wait_for_delivery: bool | None) -> bool:
 
 
 def _ensure_import(root: Path) -> None:
-    src = str(root / "src")
-    scripts = str(root / "runtime" / "scripts")
-    for path in (src, scripts):
-        if path not in sys.path:
-            sys.path.insert(0, path)
+    """Prefer ``root/src`` over cwd-shadowed ``DreamVault/dreamvault`` packages."""
+    src = str((root / "src").resolve())
+    scripts = str((root / "runtime" / "scripts").resolve())
+    for path in (scripts, src):
+        while path in sys.path:
+            sys.path.remove(path)
+        sys.path.insert(0, path)
+
+    src_pkg = str((root / "src" / "dreamvault").resolve())
+    for name in list(sys.modules):
+        if name != "dreamvault" and not name.startswith("dreamvault."):
+            continue
+        mod = sys.modules.get(name)
+        file = getattr(mod, "__file__", None) or ""
+        if not file:
+            # namespace / partial — drop so src can bind
+            del sys.modules[name]
+            continue
+        resolved = str(Path(file).resolve())
+        if not resolved.startswith(src_pkg):
+            del sys.modules[name]
 
 
 def get_message_status(message_id: str, state_path: Path) -> dict[str, Any] | None:
@@ -235,13 +251,48 @@ def send_via_message_bus(
         processor_up = message_bus_processor_running(root)
         meta["processor_running"] = processor_up
         live = live or os.environ.get("ALLOW_LIVE_CURSOR_INJECTION", "").strip() == "1"
+        # Roots contract: AgentTools owns commander code; DreamVault owns calibrated coords.
+        meta["messaging_roots"] = {
+            "agent_tools_root": os.environ.get("AGENT_TOOLS_ROOT"),
+            "dreamvault_root": str(root),
+            "coords_root": os.environ.get("DREAMVAULT_REPO_ROOT") or str(root),
+            "transport_ssot": os.environ.get("DREAMVAULT_AGENT_TRANSPORT_SSOT", "") == "1",
+        }
 
-        # Primary path: acknowledge after enqueue — never block Discord on UI delivery.
+        # Primary path: acknowledge after enqueue — never block Discord on UI delivery
+        # when the standalone processor is alive and owns PyAutoGUI.
         if not _delivery_wait_requested(wait_for_delivery):
+            if not processor_up:
+                # Silent failure mode: QUEUED success with a dead processor never pastes.
+                # When live injection is allowed, inline-dispatch once (off gateway via to_thread).
+                if live:
+                    meta["transport"] = "message_bus_inline_no_processor"
+                    return _inline_dispatch_with_claim(
+                        paths=paths,
+                        bus_message_id=bus_message_id,
+                        agent_id=agent_id,
+                        meta=meta,
+                    )
+                meta["transport"] = "message_bus_enqueue_no_processor"
+                meta["delivery_status"] = "FAILED"
+                meta["accepted"] = True
+                meta["queued"] = True
+                meta["confirmed"] = False
+                return (
+                    False,
+                    (
+                        f"D2A queued for {agent_id} but message-bus processor is not running; "
+                        "start processor or set ALLOW_LIVE_CURSOR_INJECTION=1 for inline paste "
+                        f"(coords={meta['messaging_roots'].get('coords_root')})"
+                    ),
+                    meta,
+                )
             meta["transport"] = "message_bus_enqueue_only"
             detail = (
                 f"D2A accepted for {agent_id}; queued on message bus "
-                f"(processor_running={processor_up}; processor owns live delivery)"
+                f"(processor_running={processor_up}; processor owns live delivery; "
+                f"agent-tools={meta['messaging_roots'].get('agent_tools_root')}; "
+                f"coords={meta['messaging_roots'].get('coords_root')})"
             )
             return True, detail, meta
 

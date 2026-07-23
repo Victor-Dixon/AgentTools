@@ -307,6 +307,50 @@ class TestSendAgentMessageDelivery:
         assert len(lines) == 1
         assert json.loads(lines[0])["success"] is False
 
+    def test_bus_enqueues_even_when_preflight_not_ready(self, monkeypatch, tmp_path: Path) -> None:
+        """Regression: FAILED preflight must not drop D2A before the queue."""
+        monkeypatch.setenv("DISCORD_COMMANDER_USE_MESSAGE_BUS", "1")
+        monkeypatch.setenv("DISCORD_COMMANDER_LOG_DIR", str(tmp_path))
+        monkeypatch.delenv("ALLOW_LIVE_CURSOR_INJECTION", raising=False)
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.bootstrap_commander_env",
+            lambda: None,
+        )
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.validate_pyautogui_readiness",
+            lambda agent_id, coords_root=None: SimpleNamespace(
+                ready=False,
+                coords_root=Path(r"D:\DreamVault"),
+                layout_mode="4-agent-1monitor",
+                error_code="LIVE_INJECTION_DISABLED",
+                detail="Set ALLOW_LIVE_CURSOR_INJECTION=1 for live PyAutoGUI delivery",
+                warnings=[],
+            ),
+        )
+        monkeypatch.setattr(
+            "agent_tools.discord_commander.agent_message_sender.send_via_message_bus",
+            lambda **kwargs: (
+                True,
+                "D2A accepted for Agent-1; queued on message bus",
+                {
+                    "transport": "message_bus_enqueue_only",
+                    "delivery_status": "QUEUED",
+                    "bus_message_id": "d2a_preflight_bypass_001",
+                    "message_id": "d2a_preflight_bypass_001",
+                    "queued": True,
+                    "confirmed": False,
+                },
+            ),
+        )
+        result = send_agent_message("Agent-1", "hi from discord")
+        assert result.success is True
+        assert result.data["final_status"] == "QUEUED"
+        assert result.data["transport"] == "message_bus_enqueue_only"
+        assert result.data["bus_message_id"] == "d2a_preflight_bypass_001"
+        lines = delivery_jsonl_path().read_text(encoding="utf-8").strip().splitlines()
+        assert len(lines) == 1
+        assert json.loads(lines[0])["success"] is True
+
 
 class TestMessagingRoots:
     def test_resolve_agent_tools_root_from_package(self) -> None:
@@ -339,6 +383,25 @@ class TestMessagingDeliveryLog:
         payload = json.loads(lines[0])
         assert payload["success"] is False
         assert payload["error_code"] == "COORDS_OUT_OF_BOUNDS"
+
+
+class TestMessagingRootsCoordsSSOT:
+    def test_apply_messaging_roots_prefers_dreamvault_over_legacy_pollution(self, monkeypatch) -> None:
+        """AgentTools = code root; DreamVault = coords SSOT even if legacy env was forced."""
+        from agent_tools.discord_commander.messaging_roots import apply_messaging_roots
+
+        dv = Path(r"D:\DreamVault")
+        if not (dv / "runtime" / "config" / "agent_transport" / "cursor_agent_coords.json").is_file():
+            pytest.skip("DreamVault SSOT coords not present")
+        monkeypatch.setenv("AGENT_CELLPHONE_ROOT", r"D:\repos\Agent_Cellphone")
+        monkeypatch.setenv("DREAMVAULT_ROOT", str(dv))
+        roots = apply_messaging_roots()
+        assert Path(roots["agent_tools_root"]).name.lower() in {"agent-tools", "agent_tools"} or "agent-tools" in roots[
+            "agent_tools_root"
+        ].lower()
+        assert Path(roots["coords_root"]).resolve() == dv.resolve()
+        assert Path(os.environ["AGENT_CELLPHONE_ROOT"]).resolve() == dv.resolve()
+        assert roots["transport_ssot"] is True
 
 
 class TestQueueBridgeDeliveryResult:

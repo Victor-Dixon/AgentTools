@@ -1,9 +1,9 @@
 """Agent message delivery for toolbelt Commander (no GUI dependency).
 
 Delivery order:
-1. PyAutoGUI readiness preflight (fail fast)
-2. DreamVault unified message bus — enqueue-and-observe (processor owns live paste)
-3. Direct PyAutoGUI fallback only when bus fails and processor does not own delivery
+1. DreamVault unified message bus — enqueue-and-observe (processor owns live paste)
+2. Direct PyAutoGUI fallback only when bus is disabled/fails and processor does not own delivery
+3. PyAutoGUI readiness is required for direct paste only — never block bus enqueue
 
 Discord commands must call ``send_agent_message_async`` so sync work never blocks
 the gateway heartbeat. !message is PyAutoGUI/bus-only — no Discord webhook fallback.
@@ -17,6 +17,7 @@ import re
 from typing import Any, Optional
 
 from .delivery_preflight import validate_pyautogui_readiness
+from .env_bootstrap import bootstrap_commander_env
 from .messaging_delivery_log import record_delivery
 from .messaging_roots import apply_messaging_roots
 from .models import (
@@ -193,8 +194,9 @@ def send_agent_message(
     dry_run: bool = False,
     source: str = "discord_commander",
 ) -> CommandResult:
-    """Send a direct message to an agent via PyAutoGUI (message bus or direct transport)."""
+    """Send a direct message to an agent via message bus (preferred) or PyAutoGUI."""
     roots = apply_messaging_roots()
+    bootstrap_commander_env()
     normalized = normalize_agent_id(agent_id)
     if not normalized:
         return CommandResult(
@@ -216,9 +218,12 @@ def send_agent_message(
         )
 
     sender = _format_sender(discord_user)
+    # Advisory for layout / dry-run. Must NOT block bus enqueue (processor owns paste).
+    readiness = validate_pyautogui_readiness(normalized)
+    if readiness.ready and readiness.layout_mode:
+        os.environ["AGENT_GAS_LAYOUT_MODE"] = readiness.layout_mode
 
     if dry_run:
-        readiness = validate_pyautogui_readiness(normalized)
         return CommandResult(
             success=True,
             message=f"Dry-run: would deliver D2A to {normalized} via PyAutoGUI",
@@ -232,36 +237,10 @@ def send_agent_message(
             },
         )
 
-    readiness = validate_pyautogui_readiness(normalized)
-    if not readiness.ready:
-        detail = readiness.detail or "PyAutoGUI not ready"
-        _record_final_delivery(
-            source=source,
-            agent_id=normalized,
-            success=False,
-            transport="preflight_blocked",
-            message_preview=body,
-            error_code=readiness.error_code,
-            detail=detail,
-            extra={"messaging_roots": roots, "layout_mode": readiness.layout_mode},
-        )
-        return _build_command_result(
-            success=False,
-            agent=normalized,
-            transport="preflight_blocked",
-            message=f"FAILED: {detail}",
-            error_code=readiness.error_code,
-            extra={
-                "messaging_roots": roots,
-                "layout_mode": readiness.layout_mode,
-                "readiness_warnings": readiness.warnings,
-            },
-        )
-
-    os.environ["AGENT_GAS_LAYOUT_MODE"] = readiness.layout_mode
     bus_attempt: dict[str, Any] | None = None
 
     if message_bus_enabled():
+        # Enqueue first — never require live PyAutoGUI readiness to accept D2A.
         bus_ok, bus_detail, bus_meta = send_via_message_bus(
             agent_id=normalized,
             raw_content=body,
@@ -285,6 +264,8 @@ def send_agent_message(
                     "messaging_roots": roots,
                     "bus_attempt": bus_attempt,
                     "delivery_status": delivery_status,
+                    "preflight_ready": readiness.ready,
+                    "preflight_detail": readiness.detail,
                 },
             )
             return _build_command_result(
@@ -331,6 +312,37 @@ def send_agent_message(
                 extra={**bus_meta, "messaging_roots": roots, "fallback_suppressed": skip_reason},
             )
         logger.warning("Message bus delivery failed (%s) — trying direct PyAutoGUI once", bus_detail)
+
+    # Direct paste path (bus off or bus failed without processor ownership).
+    if not readiness.ready:
+        detail = readiness.detail or "PyAutoGUI not ready"
+        _record_final_delivery(
+            source=source,
+            agent_id=normalized,
+            success=False,
+            transport="preflight_blocked",
+            message_preview=body,
+            error_code=readiness.error_code,
+            detail=detail,
+            extra={
+                "messaging_roots": roots,
+                "layout_mode": readiness.layout_mode,
+                "bus_attempt": bus_attempt,
+            },
+        )
+        return _build_command_result(
+            success=False,
+            agent=normalized,
+            transport="preflight_blocked",
+            message=f"FAILED: {detail}",
+            error_code=readiness.error_code,
+            extra={
+                "messaging_roots": roots,
+                "layout_mode": readiness.layout_mode,
+                "readiness_warnings": readiness.warnings,
+                "bus_attempt": bus_attempt,
+            },
+        )
 
     body, template_meta = wrap_d2a_message(agent_id=normalized, raw_content=body, sender=sender)
 

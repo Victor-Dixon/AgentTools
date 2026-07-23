@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 # C2A_SELF_GAS_ROOT_DEFAULTS_041
-# Canonical desktop roots for C2A/S2A hard onboard and self-gas routes.
+# AgentTools = commander/code root; DreamVault = coords + message bus SSOT.
 import os as _c2a_self_gas_env_041
 _c2a_self_gas_env_041.environ["DREAMVAULT_ROOT"] = r"D:\DreamVault"
 _c2a_self_gas_env_041.environ["DREAMOS_VAULT_ROOT"] = r"D:\DreamVault"
 _c2a_self_gas_env_041.environ["VAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+_c2a_self_gas_env_041.environ["AGENT_TOOLS_ROOT"] = r"D:\agent-tools"
+_c2a_self_gas_env_041.environ["AGENT_CELLPHONE_ROOT"] = r"D:\DreamVault"
+_c2a_self_gas_env_041.environ["DREAMVAULT_AGENT_TRANSPORT_SSOT"] = "1"
+_c2a_self_gas_env_041.environ["DREAMVAULT_REPO_ROOT"] = r"D:\DreamVault"
+_c2a_self_gas_env_041.environ["AGENT_MESSAGING_SSOT_LEGACY"] = "0"
 _c2a_self_gas_env_041.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
 _c2a_self_gas_env_041.environ.setdefault("DEFAULT_MODE", "pyautogui")
 _c2a_self_gas_env_041.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
@@ -15,9 +19,13 @@ _c2a_self_gas_env_041.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1moni
 _c2a_self_gas_env_041.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
 
 # D2A_AGENTTOOLS_BRIDGE_ENV_DEFAULTS_035
-# Canonical visible-session D2A delivery defaults.
+# Canonical visible-session D2A delivery defaults (coords SSOT = DreamVault).
 import os as _dreamos_d2a_env_035
-_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+_dreamos_d2a_env_035.environ["AGENT_TOOLS_ROOT"] = r"D:\agent-tools"
+_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\DreamVault"
+_dreamos_d2a_env_035.environ["DREAMVAULT_AGENT_TRANSPORT_SSOT"] = "1"
+_dreamos_d2a_env_035.environ["DREAMVAULT_REPO_ROOT"] = r"D:\DreamVault"
+_dreamos_d2a_env_035.environ["AGENT_MESSAGING_SSOT_LEGACY"] = "0"
 _dreamos_d2a_env_035.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
 _dreamos_d2a_env_035.environ.setdefault("DEFAULT_MODE", "pyautogui")
 _dreamos_d2a_env_035.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
@@ -73,14 +81,22 @@ def bootstrap_commander_env(*, dreamvault_root: Path | None = None) -> Path | No
     secrets = root / "runtime" / "secrets" / "secrets.local.env"
     _load_dotenv_file(secrets, force_keys=_SECRETS_FORCE_KEYS)
 
-    os.environ.setdefault("DREAMVAULT_ROOT", str(root))
-    os.environ.setdefault("AGENT_CELLPHONE_ROOT", r"D:\repos\Agent_Cellphone")
+    os.environ["DREAMVAULT_ROOT"] = str(root)
+    os.environ["AGENT_TOOLS_ROOT"] = str(
+        Path(os.environ.get("AGENT_TOOLS_ROOT", r"D:\agent-tools")).resolve()
+        if Path(os.environ.get("AGENT_TOOLS_ROOT", r"D:\agent-tools")).is_dir()
+        else Path(r"D:\agent-tools")
+    )
+    # Coords SSOT is DreamVault — never pin paste roots to legacy Agent_Cellphone.
+    os.environ["AGENT_CELLPHONE_ROOT"] = str(root)
+    os.environ["DREAMVAULT_REPO_ROOT"] = str(root)
+    os.environ["DREAMVAULT_AGENT_TRANSPORT_SSOT"] = "1"
+    os.environ["AGENT_MESSAGING_SSOT_LEGACY"] = "0"
     os.environ.setdefault("DISCORD_COMMANDER_USE_MESSAGE_BUS", "1")
     os.environ.setdefault("DISCORD_COMMANDER_USE_D2A_TEMPLATE", "1")
     os.environ.setdefault("DISCORD_COMMANDER_WEBHOOK_FALLBACK", "0")  # !message is PyAutoGUI-only
     os.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
     os.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
-    os.environ.setdefault("DREAMVAULT_AGENT_TRANSPORT_SSOT", "1")
     os.environ["AGENT_TRANSPORT_LINE_BY_LINE"] = "0"
     os.environ["AGENT_TRANSPORT_BULK_PASTE_FORCE"] = "1"
 
