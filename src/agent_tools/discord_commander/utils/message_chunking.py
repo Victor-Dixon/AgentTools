@@ -16,6 +16,13 @@ def chunk_message(content: str, max_size: int = SAFE_MESSAGE_CHUNK) -> list[str]
     chunks: list[str] = []
     current = ""
     for line in content.split("\n"):
+        # Force-split oversized lines so Discord embed fields never exceed max_size.
+        while len(line) > max_size:
+            if current:
+                chunks.append(current.strip())
+                current = ""
+            chunks.append(line[:max_size])
+            line = line[max_size:]
         if len(current) + len(line) + 1 > max_size:
             if current:
                 chunks.append(current.strip())
@@ -25,6 +32,16 @@ def chunk_message(content: str, max_size: int = SAFE_MESSAGE_CHUNK) -> list[str]
     if current.strip():
         chunks.append(current.strip())
     return chunks if chunks else [content[:max_size]]
+
+
+def truncate_embed_field(value: str, max_size: int = MAX_FIELD_VALUE) -> str:
+    """Hard-cap a Discord embed field value (≤1024). Preserves full text elsewhere."""
+    text = value if value is not None else ""
+    if len(text) <= max_size:
+        return text
+    marker = "…[truncated]"
+    keep = max(0, max_size - len(marker))
+    return text[:keep] + marker
 
 
 def chunk_field_value(value: str, max_size: int = SAFE_FIELD_CHUNK) -> list[str]:
@@ -44,6 +61,7 @@ __all__ = [
     "chunk_field_value",
     "chunk_embed_description",
     "format_chunk_header",
+    "truncate_embed_field",
     "MAX_MESSAGE_LENGTH",
     "MAX_FIELD_VALUE",
     "MAX_EMBED_DESCRIPTION",

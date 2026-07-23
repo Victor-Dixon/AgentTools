@@ -14,7 +14,11 @@ from agent_tools.discord_commander.agent_message_sender import (
 )
 from agent_tools.discord_commander.messaging_delivery_log import delivery_jsonl_path
 from agent_tools.discord_commander.models import DELIVERY_QUEUED
-from agent_tools.discord_commander.utils.message_chunking import chunk_field_value
+from agent_tools.discord_commander.utils.message_chunking import (
+    MAX_EMBED_DESCRIPTION,
+    MAX_FIELD_VALUE,
+    truncate_embed_field,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -66,50 +70,86 @@ class MessagingCommands(commands.Cog):
 
             embed = discord.Embed(
                 title=f"!message {final_status}",
-                description=result.message[:2000],
+                description=truncate_embed_field(result.message, MAX_EMBED_DESCRIPTION),
                 color=color,
             )
-            embed.add_field(name="Target", value=f"**{agent}**", inline=True)
-            embed.add_field(name="Transport", value=str(transport), inline=True)
-            embed.add_field(name="Template", value=str(template_cat), inline=True)
+            embed.add_field(
+                name="Target",
+                value=truncate_embed_field(f"**{agent}**"),
+                inline=True,
+            )
+            embed.add_field(
+                name="Transport",
+                value=truncate_embed_field(str(transport)),
+                inline=True,
+            )
+            embed.add_field(
+                name="Template",
+                value=truncate_embed_field(str(template_cat)),
+                inline=True,
+            )
             bus_id = data.get("bus_message_id") or data.get("message_id")
             if bus_id:
-                embed.add_field(name="Bus message", value=f"`{bus_id}`", inline=False)
+                embed.add_field(
+                    name="Bus message",
+                    value=truncate_embed_field(f"`{bus_id}`"),
+                    inline=False,
+                )
             roots = data.get("messaging_roots")
             if isinstance(roots, dict):
                 embed.add_field(
                     name="Roots",
-                    value=(
+                    value=truncate_embed_field(
                         f"agent-tools: `{roots.get('agent_tools_root', '?')}`\n"
                         f"coords: `{roots.get('coords_root', '?')}`"
-                    )[:900],
+                    ),
                     inline=False,
                 )
             layout_note = data.get("layout_note")
             if layout_note:
-                embed.add_field(name="Layout note", value=str(layout_note)[:900], inline=False)
+                embed.add_field(
+                    name="Layout note",
+                    value=truncate_embed_field(str(layout_note)),
+                    inline=False,
+                )
             bus_attempt = data.get("bus_attempt")
             if isinstance(bus_attempt, dict) and not bus_attempt.get("ok"):
                 embed.add_field(
                     name="Bus note",
-                    value=str(bus_attempt.get("detail") or "bus unavailable")[:900],
+                    value=truncate_embed_field(
+                        str(bus_attempt.get("detail") or "bus unavailable")
+                    ),
                     inline=False,
                 )
             if result.error_code:
-                embed.add_field(name="Error", value=str(result.error_code), inline=True)
+                embed.add_field(
+                    name="Error",
+                    value=truncate_embed_field(str(result.error_code)),
+                    inline=True,
+                )
             embed.add_field(
                 name="Audit log",
-                value=f"`{delivery_jsonl_path()}`",
+                value=truncate_embed_field(f"`{delivery_jsonl_path()}`"),
                 inline=False,
             )
-            message_chunks = chunk_field_value(message)
-            embed.add_field(name="Message", value=message_chunks[0], inline=False)
-            for index, chunk in enumerate(message_chunks[1:], start=2):
-                embed.add_field(
-                    name=f"Message (continued {index}/{len(message_chunks)})",
-                    value=chunk,
-                    inline=False,
+            # Truncate preview only — full D2A body remains on bus/payload disk.
+            preview = truncate_embed_field(message, MAX_FIELD_VALUE)
+            note = ""
+            if len(message) > MAX_FIELD_VALUE:
+                note = (
+                    f"\n_(preview truncated; full payload on bus"
+                    f"{f' `{bus_id}`' if bus_id else ''})_"
                 )
+                preview = truncate_embed_field(message, MAX_FIELD_VALUE - len(note))
+            embed.add_field(name="Message preview", value=preview + note, inline=False)
+            delivery_state = truncate_embed_field(
+                f"final_status={final_status} "
+                f"delivery_status={data.get('delivery_status')} "
+                f"live_dispatched={data.get('live_dispatched')} "
+                f"confirmed={data.get('confirmed')} "
+                f"processor_running={data.get('processor_running')}"
+            )
+            embed.add_field(name="Delivery receipt", value=delivery_state, inline=False)
             await ctx.send(embed=embed)
             if final_status == "FAILED":
                 logger.warning(
