@@ -1,4 +1,4 @@
-"""Bot lifecycle — promoted slice (loads agent-management cog only)."""
+﻿"""Bot lifecycle - promoted slice (loads agent-management cog only)."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ DEFAULT_COMMANDER_CHANNEL_NAME = "command-controller"
 
 
 class BotLifecycleManager:
-    """Toolbelt lifecycle: promote slice cogs only — no GUI/trading/webhook loads."""
+    """Toolbelt lifecycle: promote slice cogs only - no GUI/trading/webhook loads."""
 
     def __init__(self, commander: "UnifiedDiscordBot") -> None:
         self.commander = commander
@@ -26,18 +26,14 @@ class BotLifecycleManager:
         self.logger = logging.getLogger(__name__)
 
     async def setup_hook(self) -> None:
+        # Keep MaskZero command imports out of Discord Commander (missing modules
+        # previously aborted the entire promoted slice, including !message).
         from agent_tools.discord_commander.commands.agent_management_commands import (
             AgentManagementCommands,
         )
         from agent_tools.discord_commander.commands.bump_commands import BumpCommands
         from agent_tools.discord_commander.commands.messaging_commands import (
             MessagingCommands,
-        )
-        from agent_tools.discord_commander.commands.maskzero_connect_commands import (
-            MaskZeroConnectCommands,
-        )
-        from agent_tools.discord_commander.commands.maskzero_play_commands import (
-            MaskZeroPlayCommands,
         )
         from agent_tools.discord_commander.commands.onboarding_commands import (
             OnboardingCommands,
@@ -55,10 +51,9 @@ class BotLifecycleManager:
         await self.bot.add_cog(OnboardingCommands(self.bot))
         await self.bot.add_cog(BumpCommands(self.bot))
         await self.bot.add_cog(PromptLibraryCommands(self.bot))
-        await self.bot.add_cog(MaskZeroConnectCommands(self.bot))
-        await self.bot.add_cog(MaskZeroPlayCommands(self.bot))
         self.logger.info(
-            "Promoted slice: AgentManagement + Messaging + RestoredLegacy + Onboarding + Bump + PromptLibrary + MaskZeroConnect + MaskZeroPlay loaded (focus=core bot command)"
+            "Promoted slice: AgentManagement + Messaging + RestoredLegacy + "
+            "Onboarding + Bump + PromptLibrary loaded (focus=core bot command)"
         )
 
     def _views_approved(self, view_id: str) -> bool:
@@ -86,19 +81,12 @@ class BotLifecycleManager:
             self.logger.info("No commander channel for startup message (toolbelt mode)")
             return
 
-        if self._views_approved("MaskZeroConnectView"):
-            await self._post_maskzero_connect_panel(channel)
-
-        if self._views_approved("MaskZeroPlayView"):
-            await self._post_maskzero_play_panel(channel)
-
+        # MaskZero panels/commands belong to Emergence bot - never import here.
         if self._views_approved("AgentMessagingGUIView"):
             await self._post_agent_messaging_panel(channel)
-        elif not self._views_approved("MaskZeroConnectView") and not self._views_approved(
-            "MaskZeroPlayView"
-        ):
-            self.logger.warning(
-                "No approved startup views — check discord_view_controllers_approved.json"
+        else:
+            self.logger.info(
+                "AgentMessagingGUIView not approved - skipping commander startup panel"
             )
 
         await self._post_timeblock_panels()
@@ -149,11 +137,11 @@ class BotLifecycleManager:
             self.logger.warning("Flowr summary failed owner=%s: %s", owner, exc)
             summary = f"Flowr timeblock panel for **{owner.title()}**."
         embed = discord.Embed(
-            title=f"Flowr Timeblock — {owner.title()}",
+            title=f"Flowr Timeblock - {owner.title()}",
             description=summary,
             color=0xA78BFA,
         )
-        embed.set_footer(text="Persistent panel — planner + pomodoro blocks")
+        embed.set_footer(text="Persistent panel - planner + pomodoro blocks")
         try:
             await channel.send(embed=embed, view=view)
             self.logger.info("%s posted to #%s", view_id, channel.name)
@@ -177,7 +165,7 @@ class BotLifecycleManager:
         view = hub_live.DailyCommandHubView(message)
         self.bot.add_view(view)
         embed = discord.Embed.from_dict(message["main_embed"])
-        embed.set_footer(text="Persistent planner cockpit — daily command hub")
+        embed.set_footer(text="Persistent planner cockpit - daily command hub")
         try:
             await channel.send(content=message.get("content"), embed=embed, view=view)
             self.logger.info("DailyCommandHubView posted to #%s", channel.name)
@@ -205,51 +193,6 @@ class BotLifecycleManager:
                     return text_channel
         return None
 
-    async def _post_maskzero_connect_panel(self, channel: discord.TextChannel) -> None:
-        from agent_tools.discord_commander.views.maskzero_connect_view import (
-            CONNECT_PAGE_URL,
-            MaskZeroConnectView,
-        )
-
-        view = MaskZeroConnectView()
-        self.bot.add_view(view)
-        embed = discord.Embed(
-            title="MaskZero Account Link",
-            description=(
-                "Link your Discord to your MaskZero site character.\n"
-                f"Site panel: {CONNECT_PAGE_URL}"
-            ),
-            color=0x57F287,
-        )
-        embed.set_footer(text="Persistent panel — survives bot restarts")
-        try:
-            await channel.send(embed=embed, view=view)
-            self.logger.info("MaskZeroConnectView posted to #%s", channel.name)
-        except discord.HTTPException as exc:
-            self.logger.warning("MaskZeroConnectView skipped: %s", exc)
-
-    async def _post_maskzero_play_panel(self, channel: discord.TextChannel) -> None:
-        from agent_tools.discord_commander.views.maskzero_play_view import (
-            PIN_FALLBACK_TEXT,
-            PLAY_CAMPAIGN_URL,
-            MaskZeroPlayView,
-        )
-
-        view = MaskZeroPlayView()
-        self.bot.add_view(view)
-        embed = discord.Embed(
-            title="MaskZero — Play Campaign",
-            description=PIN_FALLBACK_TEXT,
-            color=0x7DFFBE,
-            url=PLAY_CAMPAIGN_URL,
-        )
-        embed.set_footer(text="Persistent panel — distribution.discord canonical /play only")
-        try:
-            await channel.send(embed=embed, view=view)
-            self.logger.info("MaskZeroPlayView posted to #%s url=%s", channel.name, PLAY_CAMPAIGN_URL)
-        except discord.HTTPException as exc:
-            self.logger.warning("MaskZeroPlayView skipped: %s", exc)
-
     async def _post_agent_messaging_panel(self, channel: discord.TextChannel) -> None:
         from agent_tools.discord_commander.views.agent_messaging_view import (
             AgentMessagingGUIView,
@@ -260,7 +203,7 @@ class BotLifecycleManager:
         embed = discord.Embed(
             title="Discord Commander",
             description=(
-                "Swarm Commander — `/gui`, `/help`, `!message Agent-1 <msg>`, `!heal status`"
+                "Swarm Commander - `/gui`, `/help`, `!message Agent-1 <msg>`, `!heal status`"
             ),
             color=0x5865F2,
         )

@@ -17,6 +17,7 @@ from agent_tools.discord_commander.models import DELIVERY_QUEUED
 from agent_tools.discord_commander.utils.message_chunking import (
     MAX_EMBED_DESCRIPTION,
     MAX_FIELD_VALUE,
+    preview_for_embed,
     truncate_embed_field,
 )
 
@@ -133,15 +134,11 @@ class MessagingCommands(commands.Cog):
                 inline=False,
             )
             # Truncate preview only — full D2A body remains on bus/payload disk.
-            preview = truncate_embed_field(message, MAX_FIELD_VALUE)
-            note = ""
-            if len(message) > MAX_FIELD_VALUE:
-                note = (
-                    f"\n_(preview truncated; full payload on bus"
-                    f"{f' `{bus_id}`' if bus_id else ''})_"
-                )
-                preview = truncate_embed_field(message, MAX_FIELD_VALUE - len(note))
-            embed.add_field(name="Message preview", value=preview + note, inline=False)
+            embed.add_field(
+                name="Message preview",
+                value=preview_for_embed(message, bus_id=str(bus_id) if bus_id else None),
+                inline=False,
+            )
             delivery_state = truncate_embed_field(
                 f"final_status={final_status} "
                 f"delivery_status={data.get('delivery_status')} "
@@ -150,6 +147,20 @@ class MessagingCommands(commands.Cog):
                 f"processor_running={data.get('processor_running')}"
             )
             embed.add_field(name="Delivery receipt", value=delivery_state, inline=False)
+            # Fail-closed before Discord API: EmbedProxy.value assignment is a no-op —
+            # must use set_field_at so oversized confirmation fields never reach Discord.
+            for index, field in enumerate(list(embed.fields)):
+                if len(field.value or "") > MAX_FIELD_VALUE:
+                    embed.set_field_at(
+                        index,
+                        name=field.name,
+                        value=truncate_embed_field(field.value, MAX_FIELD_VALUE),
+                        inline=field.inline,
+                    )
+            if embed.description and len(embed.description) > MAX_EMBED_DESCRIPTION:
+                embed.description = truncate_embed_field(
+                    embed.description, MAX_EMBED_DESCRIPTION
+                )
             await ctx.send(embed=embed)
             if final_status == "FAILED":
                 logger.warning(

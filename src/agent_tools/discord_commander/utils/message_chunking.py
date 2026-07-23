@@ -36,12 +36,30 @@ def chunk_message(content: str, max_size: int = SAFE_MESSAGE_CHUNK) -> list[str]
 
 def truncate_embed_field(value: str, max_size: int = MAX_FIELD_VALUE) -> str:
     """Hard-cap a Discord embed field value (≤1024). Preserves full text elsewhere."""
-    text = value if value is not None else ""
+    text = "" if value is None else str(value)
     if len(text) <= max_size:
         return text
     marker = "…[truncated]"
     keep = max(0, max_size - len(marker))
     return text[:keep] + marker
+
+
+def preview_for_embed(
+    message: str,
+    *,
+    bus_id: str | None = None,
+    max_size: int = MAX_FIELD_VALUE,
+) -> str:
+    """Discord preview only — never exceeds ``max_size``; full body stays on bus/payload."""
+    text = "" if message is None else str(message)
+    note = ""
+    if len(text) > max_size:
+        suffix = f" `{bus_id}`" if bus_id else ""
+        note = f"\n_(preview truncated; full payload on bus{suffix})_"
+    budget = max(0, max_size - len(note))
+    body = truncate_embed_field(text, budget)
+    # Final hard-cap after note concatenation (guards marker/edge cases).
+    return truncate_embed_field(body + note, max_size)
 
 
 def chunk_field_value(value: str, max_size: int = SAFE_FIELD_CHUNK) -> list[str]:
@@ -62,6 +80,7 @@ __all__ = [
     "chunk_embed_description",
     "format_chunk_header",
     "truncate_embed_field",
+    "preview_for_embed",
     "MAX_MESSAGE_LENGTH",
     "MAX_FIELD_VALUE",
     "MAX_EMBED_DESCRIPTION",
