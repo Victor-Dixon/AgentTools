@@ -67,7 +67,7 @@ TOOLS_REGISTRY: dict[str, dict[str, Any]] = {
         "name": "Agent Onboarding Status",
         "module": "tools.toolbelt.cli.onboarding_cli",
         "main_function": "cmd_status",
-        "description": "Show onboarding/rehydration readiness for an agent",
+        "description": "Show onboarding/rehydration readiness (status.json + inbox paths)",
         "flags": ["--onboard-status"],
         "args_passthrough": True,
     },

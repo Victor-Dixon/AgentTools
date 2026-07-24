@@ -18,6 +18,9 @@ This directory contains comprehensive documentation for all CLI tools available 
 ### 🛠️ Maintenance Tools
 - **[Maintenance Checklists](./maintenance/maintenance_checklists.md)** - Automated maintenance scheduling and compliance tracking
 
+### 🧭 Onboarding Tools
+- **[Toolbelt onboard-status](./onboarding/toolbelt_onboard_status.md)** - `python -m tools.toolbelt --onboard-status --agent Agent-N`
+
 ## Quick Start
 
 Each tool includes:
