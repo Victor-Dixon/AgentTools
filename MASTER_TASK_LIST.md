@@ -1,55 +1,58 @@
-# MASTER TASK LIST — AgentTools
+# MASTER TASK LIST — AgentTools strategic inventory
 
 **Last reconciled:** 2026-08-11
-**Canonical execution status:** `docs/root/MASTER_TASK_LOG.md`
-**Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`
-**Active handoff:** `NEXT_UP.md`
+**Purpose:** Backlog and strategic inventory — what work exists
+**Execution-status SSOT:** `docs/root/MASTER_TASK_LOG.md`
+**Immediate-action mirror:** `NEXT_UP.md`
+**Domain-model SSOT:** `docs/architecture/DOMAIN_MODEL.md`
 
-## Planning truth
+This file inventories work; it does not claim execution status. Record status and evidence in the execution SSOT first, then reflect no more than five immediate actions in `NEXT_UP.md`.
 
-The previous root task list contained January 2026 counts, version claims, agent assignments, and deadlines that no longer matched the repository. This file is now a concise actionable surface; historical detail remains available in Git history and project reports.
+## Toolbelt/runtime helpers
 
-## Active
+- [ ] Inventory maintained helpers across `tools/`, `tools_v2/`, and operator surfaces; label ownership and supported entry points.
+- [ ] Revalidate salvaged and scaffolded helpers before treating them as promoted runtime capabilities.
+- [ ] Remove or quarantine generated/runtime artifacts only after provenance and consumer checks.
+- [ ] Resolve or explicitly accept remaining npm audit risk before a TypeScript deployment.
 
-- [ ] Complete `SWARM-003`: publish the currently intended `swarm-mcp` release with redacted evidence.
-- [ ] Complete `SWARM-004`: verify clean installation of the published release.
-- [ ] Audit existing AgentTools integrations against the marketing capability needs discovered from DreamVault and `socialmediamanager`.
-- [ ] Classify relevant API/MCP catalog candidates before promotion: purpose, provenance, auth model, maintenance state, risk, and overlap.
-- [ ] Deduplicate candidates against capabilities already present in AgentTools and the Social Media Manager.
-- [ ] Promote only narrow, verified, reusable capabilities with tests/evidence.
-- [ ] Preserve the boundary: AgentTools provides reusable capabilities; DreamVault owns governed task/context/approval state.
+## CPC/cliprun/operator workflow
 
-## Marketing capability promotion lane
+- [ ] Confirm what CPC and cliprun mean in the current phone and desktop lanes; mark intent `Unknown` until an owner/evidence source confirms it.
+- [ ] Map current phone/desktop entry points, configuration, credential boundaries, and failure recovery.
+- [ ] Verify that helper contracts still match their current consumers before consolidation or promotion.
+- [ ] Document a narrow smoke test for each retained operator workflow.
 
-### Target
+## MCP/API capability registry
 
-Support the evidence-backed marketing loop:
+- [ ] Inventory registry entries by purpose, provenance, authentication model, maintenance state, risk, and overlap.
+- [ ] Validate every promoted MCP target and API wrapper through a narrow operation and recorded evidence.
+- [ ] Require a promotion manifest; do not bulk-ingest discovery catalogs.
+- [ ] Reconcile task-log mutation paths with the canonical `docs/root/MASTER_TASK_LOG.md` location.
 
-`DreamVault WorkReceipt -> approved content packet -> socialmediamanager execution -> publication evidence -> analytics signal`
+## Marketing capability audit
 
-### Rules
+- [ ] Compare the verified bridge requirements with existing AgentTools capabilities and `Victor-Dixon/socialmediamanager` ownership.
+- [ ] Classify each candidate as `EXISTING | DUPLICATE | PROMOTION_CANDIDATE | BLOCKED | REJECTED | UNKNOWN`.
+- [ ] Verify provenance, authentication, platform terms/risk, deduplication, and the narrow operation before promotion.
+- [ ] Keep social execution in `socialmediamanager`; expose only reusable capability from AgentTools.
 
-- External API/MCP lists are discovery inputs, not trusted dependencies.
-- No bulk import of integrations.
-- No credentials in source, task artifacts, reports, or prompts.
-- Prefer existing capabilities over duplicate wrappers.
-- Add a promotion manifest before admitting a new integration.
-- Verify the narrow capability before exposing it to Dream.OS.
+## Validation/testing
 
-### Definition of done
+- [ ] Preserve Python test, import-healer coverage, and MCP catalog gates established for SWARM-014 through SWARM-016.
+- [ ] Complete SWARM-003 with redacted publish evidence; do not infer success from a tag or runbook.
+- [ ] Complete SWARM-004 with clean install, import, and CLI smoke evidence after publication.
+- [ ] Add evidence-backed tests for each promoted helper or integration.
 
-- [ ] Existing relevant AgentTools capabilities inventoried.
-- [ ] Candidate marketing integrations classified and deduplicated.
-- [ ] At least one missing capability, if actually required, promoted through a verified manifest/test lane.
-- [ ] No duplicate marketing integration added where `socialmediamanager` already owns execution.
+## Repo cleanup/planning
 
-## Existing release lane
+- [ ] Reconcile the six `Needs verification` history groups recorded in the execution SSOT.
+- [ ] Decide and document the remote/upstream policy for local branch `work`.
+- [ ] Keep this inventory, the execution SSOT, `NEXT_UP.md`, and the domain model aligned without duplicating roles.
+- [ ] Review historical planning artifacts and label them non-canonical rather than silently treating them as current.
 
-- [ ] `SWARM-003` — publish with CI evidence.
-- [ ] `SWARM-004` — clean install/import/CLI verification.
-- [ ] `SWARM-017` — resolve or explicitly accept remaining npm audit risk for its deployment target.
+## Dream.OS integration boundaries
 
-## Governance
-
-- [ ] Keep `docs/architecture/DOMAIN_MODEL.md`, `NEXT_UP.md`, and `docs/root/MASTER_TASK_LOG.md` synchronized when execution priorities change.
-- [ ] Mark historical planning docs as non-canonical instead of maintaining competing task truths.
+- [ ] Verify AgentTools boundaries against Dream.OS core and projectscanner using current repositories/contracts; otherwise record them as `Unknown`.
+- [ ] Preserve ownership: DreamVault/Dream.OS owns governed task, context, and approval state; AgentTools owns reusable tools/integrations.
+- [ ] Characterize message/task/work-proof schemas at adapter boundaries and avoid duplicating core orchestration.
+- [ ] Record external runtime topology and deployment state as `Unknown` until directly evidenced.
