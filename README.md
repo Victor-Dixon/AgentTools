@@ -395,13 +395,15 @@ Add to your Claude Desktop or Cursor config:
 
 The canonical execution status lives in [`docs/root/MASTER_TASK_LOG.md`](docs/root/MASTER_TASK_LOG.md), with a human-readable dashboard in [`NEXT_UP.md`](NEXT_UP.md).
 
-Current status as of 2026-07-03:
+Current status as of 2026-08-11:
 
 - SWARM MCP package version is `0.6.0`.
 - M0 Python gates and M2 MCP catalog integrity are complete per SSOT evidence.
 - PyPI publish for `v0.6.0` is blocked because the tag publish job did not receive `PYPI_API_TOKEN`.
 - Clean install proof for `swarm-mcp==0.6.0` remains blocked until publish succeeds.
-- AgentTools/operator tooling and Family Focus Board remain secondary lanes documented in the domain model.
+- AgentTools/operator tooling and Family Focus Board remain separate lanes documented in the domain model.
+- The AgentTools strategic inventory is grouped in `MASTER_TASK_LIST.md`; `NEXT_UP.md` is limited to five immediate actions rather than serving as a backlog or history log.
+- Six reconstructed history groups remain `Needs verification`; CPC/cliprun ownership and current runtime use are `Unknown`.
 
 Current documentation entry points:
 

@@ -114,30 +114,9 @@ Generated from current repository docs after legacy archive extraction.
 
 ### `NEXT_UP.md`
 
-- # NEXT UP — SWARM MCP EXECUTION DASHBOARD
-- ## What this project even is
-- ## Where we are now (accurate status)
-- ## Inventory proof snapshot (evidence as of 2026-03-23)
-- ### Reproducibility note
-- ## What we should focus on next (strict order)
-- ## Definition of done for this transition
-- ## Operator handoff note (2026-03-24)
-- ## Tooling stream update (mirrors SSOT, 2026-03-24 UTC)
-- ### Completed now
-- ### Commands run (2026-03-24 UTC)
-- ### Active blocker
-- # Production Restoration Backlog
-- ## Objective
-- ## Current Architecture Decision
-- ## Active Product Spine
-- ## TDD Rule
-- ## Next Workstream
-- ### 1. Agent domain
-- ### 2. Message domain
-- ### 3. Task domain
-- ### 4. Work proof / verification
-- ### 5. MCP adapter consolidation
-- ## Exit Criteria
+- Immediate-action mirror of `docs/root/MASTER_TASK_LOG.md`; it is not a backlog or historical log.
+- Contains five or fewer current actions, operational guardrails, and the latest required agent passdown.
+- Strategic inventory belongs in `MASTER_TASK_LIST.md`; dated execution evidence belongs in the SSOT.
 
 ### `TOOLBELT_UNIFICATION_PLAN.md`
 
@@ -483,4 +462,3 @@ Generated from current repository docs after legacy archive extraction.
 - ## Testing Strategy
 - ## Refactor Constraint
 - ## Consequences
-

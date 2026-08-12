@@ -1,53 +1,29 @@
-# MASTER TASK LOG — AgentTools execution SSOT
+# MASTER TASK LOG population proposal — AgentTools
 
-**Last updated:** 2026-08-11
-**Status:** Active planning and verification; historical reconstruction applied
-**Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`
-**Strategic inventory:** `MASTER_TASK_LIST.md`
-**Immediate-action mirror:** `NEXT_UP.md`
+**Report date (UTC):** 2026-08-11
+**Mode used for history review:** Read-only first pass
+**Target SSOT for a later, separately approved write pass:** `docs/root/MASTER_TASK_LOG.md`
 
-This file is the single source of truth for repository execution status and evidence. It preserves the lane boundary between SWARM MCP, AgentTools/operator tooling, and Family Focus Board. A commit proves that content changed; it does not by itself prove tests, publication, deployment, or live operation.
+## Repository snapshot
 
-## Current status
+- Repository: `/workspace/AgentTools`
+- Branch: `work`
+- HEAD before review: `f5a2a33eac926b5f0a6b3df44ab87caab480020c`
+- Dirty count before review: `0`
+- Upstream branch: `None`
+- History command: `git log --date=short --pretty=format:"%h%x09%ad%x09%an%x09%s" --all --max-count=200`
+- Commits inspected: `171` (the repository had fewer than the 200-commit limit)
 
-- `SWARM-003` remains open: publication success requires redacted PyPI/CI evidence.
-- `SWARM-004` remains blocked on publication: clean install, import, and CLI smoke evidence is still required.
-- The marketing capability audit is active as a bounded reusable-capability lane; bulk catalog ingestion is prohibited.
-- CPC/cliprun ownership, current phone/desktop consumers, and runtime use are `Unknown` pending verification.
-- Branch `work` has no configured upstream; remote/upstream policy remains undecided.
-- The six uncertainty groups below remain explicitly `Needs verification`.
+## Review method and boundaries
 
-## Interpretation rules
+- Entries below group related commits by date and outcome rather than treating each commit as a project milestone.
+- Merge commits are normally supporting provenance, not separate accomplishments.
+- Commit subjects and changed-file summaries establish that work was committed; they do not prove deployment, production operation, or every completion claim made inside historical documentation.
+- Test results are included only when a commit subject or a committed SSOT/runbook makes them visible. Otherwise the entry says `Needs verification`.
+- This proposal preserves the repository's three lane boundary: SWARM MCP, AgentTools/operator tooling, and Family Focus Board are not treated as one product.
+- No proposal below is approved for the SSOT merely by appearing in this report.
 
-- Existing evidence that conflicts with a later commit is retained as dated evidence, not current truth.
-- Historical headings group related commits and are not claims that every component remains supported.
-- Tests/checks are stated only where visible in committed evidence; otherwise they are `Needs verification`.
-- External architecture, topology, deployment, and integration status are `Unknown` unless directly evidenced.
-- Current work inventory belongs in `MASTER_TASK_LIST.md`; immediate actions belong in `NEXT_UP.md`.
-
-## Reconciled history from the approved proposal
-
-## Preserved dated evidence not replaced by the proposal
-
-### 2026-03-23 inventory snapshot
-
-- Five packaged MCP server files were observed: `control.py`, `memory.py`, `messaging.py`, `tasks.py`, and `tools.py`.
-- Twelve CLI subcommands were observed: `status`, `send`, `inbox`, `search`, `learn`, `tasks`, `assign`, `vote`, `conflict`, `profile`, `prove`, and `patterns`.
-- The local branch set contained `work`. This is dated inventory, not a current remote/upstream claim.
-
-### 2026-03-24 SWARM-002 and import-healer evidence
-
-- The project-scoped PyPI token/storage runbook was completed with token values redacted; later CI evidence showed the live `PYPI_API_TOKEN` was not available to the publish job.
-- `python -m pytest -q tools/swarm/tests/test_import_healer.py` recorded `1 passed`.
-- `python tools/swarm/tests/check_import_healer_coverage.py` recorded a passing baseline gate; a deliberately strict temporary baseline recorded a regression, demonstrating the gate's failure path.
-- Pre-commit enforcement was unavailable in that environment because the configured hook executable and Python `pre_commit` CLI were missing. Explicit command checks were used as mitigation.
-
-### 2026-05-17 workspace-audit snapshot
-
-- The audit observed five packaged SWARM MCP servers, twelve CLI subcommands, 27 standalone MCP scripts, 23 catalog entries, and four missing catalog targets.
-- Python test collection was blocked by missing `dotenv`; import-healer coverage regressed against its then-current baseline.
-- TypeScript workspace typecheck passed after `npm ci`; shared-package tests passed while API/web test scripts were placeholders.
-- `npm audit --audit-level=moderate` reported three findings. Later 2026-06-29 evidence below supersedes the Python, coverage, catalog, and partial npm states.
+## Proposed historical entries
 
 ## 2025-12-20 to 2025-12-22 - Initial integrations, MCP surfaces, and tool inventory
 
@@ -317,30 +293,28 @@ This file is the single source of truth for repository execution status and evid
 
 ## Entries explicitly marked uncertain
 
-The following six grouped claims must not be treated as verified facts without additional evidence:
+The following six grouped claims should not be copied into the SSOT as verified facts without additional evidence:
 
-1. **Needs verification:** The stability and final status of the broad 2025-12-20 through 2025-12-29 MCP/toolbelt feature expansion.
-2. **Needs verification:** The operational/security meaning of the 2025-12-31 through 2026-01-01 warn-only CI security scan.
-3. **Needs verification:** The 2026-01-12 “Full Infrastructure Deployment Complete” claim.
-4. **Needs verification:** The precise distinction between the two 2026-05-03 legacy archive extraction commits.
-5. **Needs verification:** The promotion/readiness state of the 2026-06-13 salvage review candidates.
-6. **Needs verification:** The shipped/runtime status of components and deployments included in the 2026-07-04 scaffold merge.
+1. The stability and final status of the broad 2025-12-20 through 2025-12-29 MCP/toolbelt feature expansion.
+2. The operational/security meaning of the 2025-12-31 through 2026-01-01 warn-only CI security scan.
+3. The 2026-01-12 “Full Infrastructure Deployment Complete” claim.
+4. The precise distinction between the two 2026-05-03 legacy archive extraction commits.
+5. The promotion/readiness state of the 2026-06-13 salvage review candidates.
+6. The shipped/runtime status of components and deployments included in the 2026-07-04 scaffold merge.
 
-## Write-pass evidence (2026-08-11)
+## Write-pass recommendation
 
-### Completed
+- **Safe for a docs-only write pass:** Yes, after a human approves or rejects individual sections and the write pass reconciles them against existing dated entries instead of blindly appending duplicates.
+- Prefer the strongly evidenced 2026-03-15 onward entries first; older grouped entries are useful chronology but have more ambiguous completion language.
+- Keep all six uncertain groups labeled `Needs verification` unless stronger evidence is collected.
+- Preserve existing SSOT entries and current blocker state.
+- Do not infer that a merge, test file, runbook, tag, or deployment-labeled subject proves live operation.
 
-- Applied all 13 approved historical sections to this SSOT without treating ambiguous subjects as verified success.
-- Reorganized `MASTER_TASK_LIST.md` as strategic inventory and constrained `NEXT_UP.md` to five immediate actions.
+## Read-only-pass verification
 
-### Evidence
-
-- source proposal: `_reports/task_log_population/AgentTools_master_task_log_proposal_20260811.md`
-- commit inspected at start: `6c9dbf83dbf062720c72f047a595743a1967c7b7`
-- checks: `git diff --check`; legacy filename/casing reference scan; required-file checks; docs-only changed-path audit.
-
-### Remaining blockers
-
-- Six grouped historical claims remain `Needs verification`.
-- CPC/cliprun ownership and current runtime use are `Unknown`.
-- Branch `work` has no configured upstream.
+- HEAD immediately before report creation: `f5a2a33eac926b5f0a6b3df44ab87caab480020c`
+- HEAD immediately after history inspection and before report creation: `f5a2a33eac926b5f0a6b3df44ab87caab480020c`
+- Dirty count immediately before report creation: `0`
+- Expected dirty count after report creation: `1` (this authorized report only)
+- Product/runtime files expected to change: none
+- SSOT files expected to change: none
