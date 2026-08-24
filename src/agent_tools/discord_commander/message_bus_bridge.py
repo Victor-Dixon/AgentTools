@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+from .bilateral_sent_proof import classify_bilateral_sent, extract_verification_mode, is_bilateral_sent
 from .delivery_claim_ledger import default_ledger
 from .env_bootstrap import bootstrap_commander_env, message_bus_processor_running
 from .messaging_roots import apply_messaging_roots
@@ -171,18 +172,38 @@ def _inline_dispatch_with_claim(
             return False, f"D2A dispatch failed for {agent_id}: {exc}", meta
 
     if dispatch_result and dispatch_result.success:
-        ledger.mark_live_sent(bus_message_id, detail=str(dispatch_result.detail or ""))
+        mode = extract_verification_mode(str(dispatch_result.detail or ""))
+        proof = classify_bilateral_sent(
+            dispatch_success=True,
+            verification_mode=mode,
+            inbox_path=meta.get("inbox_path"),
+            partner_reply=bool(meta.get("partner_reply")),
+        )
         meta["transport"] = "message_bus_enqueue_and_live_dispatch"
         meta["dispatch_target"] = dispatch_result.target_agent
         meta["dispatch_detail"] = dispatch_result.detail
-        meta["delivery_status"] = "LIVE_SENT"
+        meta["verification_mode"] = mode
+        meta["bilateral_sent"] = proof
         meta["accepted"] = True
         meta["queued"] = True
         meta["live_dispatched"] = True
-        meta["confirmed"] = True
+        if is_bilateral_sent(proof):
+            ledger.mark_live_sent(bus_message_id, detail=str(dispatch_result.detail or ""))
+            meta["delivery_status"] = "LIVE_SENT"
+            meta["confirmed"] = True
+            return (
+                True,
+                f"D2A SENT to {dispatch_result.target_agent} via PyAutoGUI ({dispatch_result.detail})",
+                meta,
+            )
+        meta["delivery_status"] = "DISPATCH_UNCONFIRMED"
+        meta["confirmed"] = False
         return (
             True,
-            f"D2A delivered to {dispatch_result.target_agent} via PyAutoGUI ({dispatch_result.detail})",
+            (
+                f"D2A dispatched to {dispatch_result.target_agent} but SENT unconfirmed "
+                f"(reason={proof.get('reason')}; DISPATCH≠SENT)"
+            ),
             meta,
         )
     if dispatch_result and not dispatch_result.success:
