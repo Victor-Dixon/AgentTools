@@ -344,3 +344,10 @@ The following six grouped claims must not be treated as verified facts without a
 - Six grouped historical claims remain `Needs verification`.
 - CPC/cliprun ownership and current runtime use are `Unknown`.
 - Branch `work` has no configured upstream.
+
+### 2026-08-24 - Portfolio standardization NEXT_UP harden
+
+- Hardened root `NEXT_UP.md` to a single-lane 7-question contract for marketing/API/MCP promotion candidate verification.
+- Recognized draft PR #13 as the active report owner for that lane; did not invent feature work or rewrite `PRD.md`/`ROADMAP.md`.
+- Added root `PROJECT_STATUS.md` with branch hygiene classification (no deletes).
+- Local `D:\agent-tools` dirty/diverged workspace was not mutated.

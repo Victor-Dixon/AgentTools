@@ -56,3 +56,10 @@ This file inventories work; it does not claim execution status. Record status an
 - [ ] Preserve ownership: DreamVault/Dream.OS owns governed task, context, and approval state; AgentTools owns reusable tools/integrations.
 - [ ] Characterize message/task/work-proof schemas at adapter boundaries and avoid duplicating core orchestration.
 - [ ] Record external runtime topology and deployment state as `Unknown` until directly evidenced.
+
+## Portfolio standardization (docs-only)
+
+| ID | Task | Status |
+|---|---|---|
+| STD-NEXTUP-001 | Harden NEXT_UP to 7-question single-lane contract | In progress (2026-08-24 branch) |
+| STD-STATUS-001 | Add PROJECT_STATUS + branch hygiene classify-only | In progress (2026-08-24 branch) |
