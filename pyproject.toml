@@ -3,18 +3,21 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "swarm-mcp"
+name = "we-are-swarm-agenttools"
 version = "0.6.0"
-description = "🐺 WE ARE SWARM - Multi-Agent AI Coordination Framework with consensus voting, conflict detection, capability learning, and work verification"
+description = "Multi-agent AI coordination framework with MCP servers, task messaging, conflict detection, consensus, shared memory, and verifiable work."
 readme = "README.md"
 license = "MIT"
 authors = [
-    { name = "The Swarm" }
+    { name = "Victor Dixon" }
+]
+maintainers = [
+    { name = "Victor Dixon" }
 ]
 keywords = [
     "ai", "agents", "multi-agent", "swarm", "mcp", "model-context-protocol",
     "coordination", "llm", "claude", "gpt", "automation", "consensus",
-    "conflict-detection", "machine-learning-free", "ai-orchestration"
+    "conflict-detection", "work-verification", "ai-orchestration"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -53,10 +56,10 @@ full = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/swarm-team/swarm-mcp"
-Documentation = "https://github.com/swarm-team/swarm-mcp#readme"
-Repository = "https://github.com/swarm-team/swarm-mcp"
-Issues = "https://github.com/swarm-team/swarm-mcp/issues"
+Homepage = "https://github.com/Victor-Dixon/AgentTools"
+Documentation = "https://github.com/Victor-Dixon/AgentTools#readme"
+Repository = "https://github.com/Victor-Dixon/AgentTools"
+Issues = "https://github.com/Victor-Dixon/AgentTools/issues"
 
 [project.scripts]
 swarm = "swarm_mcp.cli:main"
