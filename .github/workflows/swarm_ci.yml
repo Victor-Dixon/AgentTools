@@ -10,7 +10,7 @@ on:
 
 jobs:
   # Keep this job id stable so any existing required-check configuration
-  # continues to resolve while the blocking signal becomes package-focused.
+  # continues to resolve while the blocking signal stays package-focused.
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -31,6 +31,47 @@ jobs:
       run: |
         python -m build
         python -m twine check dist/*
+
+    - name: Verify clean wheel install
+      shell: bash
+      run: |
+        set -euo pipefail
+        wheel="$(find dist -maxdepth 1 -type f -name '*.whl' -print -quit)"
+        test -n "$wheel"
+
+        python -m venv /tmp/swarm-wheel-venv
+        /tmp/swarm-wheel-venv/bin/python -m pip install --upgrade pip
+        /tmp/swarm-wheel-venv/bin/python -m pip install "$wheel"
+
+        /tmp/swarm-wheel-venv/bin/python - <<'PY'
+        from importlib import metadata
+        import agent_tools
+        import swarm_mcp
+
+        dist = metadata.distribution("we-are-swarm-agenttools")
+        assert dist.metadata["Name"] == "we-are-swarm-agenttools"
+
+        expected = {
+            "swarm",
+            "swarm-messaging-server",
+            "swarm-memory-server",
+            "swarm-tasks-server",
+            "swarm-control-server",
+            "swarm-tools-server",
+        }
+        actual = {ep.name for ep in dist.entry_points if ep.group == "console_scripts"}
+        missing = expected - actual
+        assert not missing, f"missing console entry points: {sorted(missing)}"
+
+        print("CLEAN_WHEEL_IMPORT=PASS")
+        print("DISTRIBUTION_NAME=we-are-swarm-agenttools")
+        print("CONSOLE_ENTRY_POINTS=PASS")
+        PY
+
+        /tmp/swarm-wheel-venv/bin/swarm --help >/dev/null
+        /tmp/swarm-wheel-venv/bin/python -m pip check
+        echo "CLEAN_WHEEL_CLI=PASS"
+        echo "CLEAN_WHEEL_PIP_CHECK=PASS"
 
     - name: Package import smoke
       run: |
@@ -100,9 +141,20 @@ jobs:
         exit "$status"
 
   publish-pypi:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    # First publication is deliberately fail-closed. An ordinary v* tag is not
+    # publication authority. PYPI_RELEASE_ENABLED must be set to true only after
+    # the documented account/preflight gate is complete.
+    if: >-
+      github.event_name == 'push' &&
+      startsWith(github.ref, 'refs/tags/v') &&
+      vars.PYPI_RELEASE_ENABLED == 'true'
     needs: build-and-test
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+    permissions:
+      contents: read
+      id-token: write
     steps:
     - uses: actions/checkout@v4
 
@@ -114,12 +166,9 @@ jobs:
     - name: Build distribution
       run: |
         python -m pip install --upgrade pip
-        pip install 'build>=1.0' 'twine>=6.0' hatchling
+        python -m pip install 'build>=1.0' 'twine>=6.0' hatchling
         python -m build
         python -m twine check dist/*
 
-    - name: Publish to PyPI
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-      run: python -m twine upload dist/*
+    - name: Publish with PyPI Trusted Publishing
+      uses: pypa/gh-action-pypi-publish@release/v1
