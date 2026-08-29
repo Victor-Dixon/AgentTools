@@ -12,7 +12,7 @@ The Python **import package** remains:
 import swarm_mcp
 ```
 
-The repository distribution metadata is now named:
+The repository distribution metadata is:
 
 ```text
 we-are-swarm-agenttools
@@ -46,22 +46,38 @@ python -m pip install -e ".[dev]"
 Verify the package and CLI:
 
 ```bash
-python -c "import swarm_mcp; print('swarm_mcp import: PASS')"
+python -c "import swarm_mcp; import agent_tools; print('imports: PASS')"
 swarm --help
 ```
 
-## Verification
+## Engineering verification
 
-The repository CI installs the package in editable mode and runs the engineering gates used for the public project:
+The public CI deliberately separates two signals instead of collapsing the entire historical repository into one ambiguous red/green badge.
 
-```bash
-pytest tests/ -v
-python tools/swarm/tests/check_import_healer_coverage.py
-python tools/cli.py --security-scan
-python tools/cli.py --audit-imports
-```
+### Blocking package/core gate
 
-See [`.github/workflows/swarm_ci.yml`](.github/workflows/swarm_ci.yml) for the current CI contract.
+`build-and-test` must pass before package/release work is considered healthy. It verifies:
+
+- editable source installation;
+- wheel + source-distribution build;
+- `twine check`;
+- installation of the built wheel into a **fresh virtual environment**;
+- installed distribution metadata for `we-are-swarm-agenttools`;
+- clean imports of `swarm_mcp` and `agent_tools`;
+- expected console entry points;
+- `swarm --help` from the clean wheel install;
+- `pip check`;
+- focused package/core regression tests.
+
+This clean-wheel step is intentionally separate from the editable source checkout. It catches packaging errors that a source-tree import can hide.
+
+### Advisory legacy repository audit
+
+The repository also retains a broader historical audit lane covering the full legacy pytest surface and older operator/audit tools. Known legacy failures remain visible there, but they do not overwrite the health signal for the distributable package.
+
+See [`.github/workflows/swarm_ci.yml`](.github/workflows/swarm_ci.yml) for the exact blocking/advisory contract.
+
+For first-release rules and the public PyPI identity probe, see [`docs/release/PYPI_FIRST_RELEASE.md`](docs/release/PYPI_FIRST_RELEASE.md) and [`.github/workflows/pypi_first_release_preflight.yml`](.github/workflows/pypi_first_release_preflight.yml).
 
 ## Core capabilities
 
@@ -139,8 +155,9 @@ This project is intentionally presented with explicit maturity boundaries:
 
 - implemented behavior is separated from planned or reconstructed behavior;
 - CI/test evidence is preferred over unsupported completion claims;
-- package publication is not claimed until a clean external install is verified;
-- blockers remain visible instead of being hidden behind marketing language;
+- built artifacts are tested outside the source checkout;
+- package publication is fail-closed behind explicit release authorization and PyPI account configuration;
+- blockers and legacy debt remain visible instead of being hidden behind marketing language;
 - unrelated repository lanes are documented rather than blended into one product claim.
 
 ## Current status
@@ -149,15 +166,19 @@ This project is intentionally presented with explicit maturity boundaries:
 - Import namespace: `swarm_mcp`
 - Distribution metadata: `we-are-swarm-agenttools`
 - Public source repository: `Victor-Dixon/AgentTools`
-- PyPI release under corrected identity: **not yet verified/published**
+- Clean built-wheel install gate: **passing in CI**
+- PyPI release under corrected identity: **not yet published**
+- Public PyPI search/project evidence for corrected identity: **no public project/release observed in the latest preflight research; not proof of account ownership or reservation**
 - Source installation: supported through editable install
-- CI: pytest + import coverage + security scan + import audit
+- CI: strict package/core gate + visible advisory legacy audit
+- Production PyPI publication: requires explicit `PYPI_RELEASE_ENABLED=true`, dedicated `pypi` environment, and PyPI Trusted Publisher configuration
 
-The previous `swarm-mcp` distribution name was invalid for this project because that PyPI name is already owned by an unrelated project. Publication should remain gated until the corrected distribution identity is explicitly reserved and a clean install is verified.
+The previous `swarm-mcp` distribution name was invalid for this project because that PyPI name is already owned by an unrelated project. The corrected identity is not represented as owned on PyPI until the authenticated PyPI account gate establishes that fact.
 
 ## Project documentation
 
 - [`docs/architecture/DOMAIN_MODEL.md`](docs/architecture/DOMAIN_MODEL.md) — canonical domain model and repository boundary
+- [`docs/release/PYPI_FIRST_RELEASE.md`](docs/release/PYPI_FIRST_RELEASE.md) — first-release safety/ownership gate
 - [`PRD.md`](PRD.md) — product requirements and scope
 - [`ROADMAP.md`](ROADMAP.md) — roadmap
 - [`MASTER_TASK_LIST.md`](MASTER_TASK_LIST.md) — strategic task inventory
