@@ -12,6 +12,12 @@ import logging
 import subprocess
 from typing import Any
 
+from tools.messaging_ssot_bridge import (
+    build_hard_onboard_cmd,
+    build_soft_onboard_cmd,
+    live_injection_env,
+)
+
 from ..adapters.base_adapter import IToolAdapter, ToolResult, ToolSpec
 from ..adapters.error_types import ToolExecutionError
 
@@ -40,20 +46,8 @@ class SoftOnboardTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         """Execute soft onboarding."""
         try:
-            cmd = [
-                "python",
-                "-m",
-                "src.services.messaging_cli",
-                "--soft-onboarding",
-                "--agent",
-                params["agent_id"],
-                "--message",
-                params["message"],
-                "--priority",
-                params.get("priority", "regular"),
-            ]
-
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            cmd = build_soft_onboard_cmd(params["agent_id"], params["message"])
+            result = subprocess.run(cmd, capture_output=True, text=True, env=live_injection_env())
 
             return ToolResult(
                 success=result.returncode == 0,
@@ -94,19 +88,8 @@ class HardOnboardTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         """Execute hard onboarding."""
         try:
-            cmd = [
-                "python",
-                "-m",
-                "src.services.messaging_cli",
-                "--hard-onboarding",
-                "--agent",
-                params["agent_id"],
-                "--message",
-                params["message"],
-                "--yes",
-            ]
-
-            result = subprocess.run(cmd, capture_output=True, text=True)
+            cmd = build_hard_onboard_cmd(params["agent_id"], params["message"])
+            result = subprocess.run(cmd, capture_output=True, text=True, env=live_injection_env())
 
             return ToolResult(
                 success=result.returncode == 0,
