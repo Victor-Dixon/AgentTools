@@ -34,6 +34,7 @@ from agent_tools.repo import (
     compare_refs,
     list_branches,
     list_worktrees,
+    remote_default_branch,
     repo_identity,
     repo_status,
 )
@@ -49,7 +50,11 @@ Returns raw porcelain status facts with tracked-dirty and untracked counts. It d
 
 ### `list_branches(path)`
 
-Returns local branches and one remote's tracking branches with SHA, commit timestamp, and upstream facts.
+Returns local branches and one remote's tracking branches with SHA, commit timestamp, and upstream facts. The symbolic `origin/HEAD` ref is not counted as a branch.
+
+### `remote_default_branch(path)`
+
+Returns the configured `<remote>/HEAD` target when present. It does not guess a fallback if the remote symbolic HEAD is unavailable.
 
 ### `compare_refs(path, base=..., head=...)`
 
@@ -87,3 +92,5 @@ python -m pytest tests/test_repo_git_tools.py -q
 ```
 
 The tests use disposable Git repositories and worktrees. No production repository mutation is required.
+
+The real VPS proof is recorded in [`REPO_GIT_TOOLBELT_VPS_PROOF.md`](REPO_GIT_TOOLBELT_VPS_PROOF.md).
