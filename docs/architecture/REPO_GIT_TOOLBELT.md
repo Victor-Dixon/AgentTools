@@ -86,7 +86,9 @@ A registry-only consumer must not need unrelated optional dependencies just to d
 
 `tools_v2` and `tools_v2.categories` therefore use lazy package loading. Importing `tools_v2.tool_registry` or resolving `tools_v2.categories.repo_tools` no longer eagerly imports optional advisor, Discord, HTTP, demo, or other category modules.
 
-A subprocess regression test deliberately blocks `requests` while loading all five repository registry tools. This protects the minimal-runtime path used by the managed ProjectScanner VPS environment.
+The registry lock is resolved relative to the installed `tools_v2` package rather than the process working directory. The wheel includes `tools_v2`, its registry lock, and the repo adapters so consumers do not need an AgentTools source checkout to use the registered tool surface.
+
+Regression coverage deliberately blocks `requests`, changes away from the repository working directory, and loads the five repo tools from a clean wheel environment.
 
 ## Safety contract
 
@@ -119,6 +121,19 @@ python -m pytest \
   -q
 ```
 
-The tests use disposable Git repositories/worktrees plus a registry-only subprocess with optional HTTP imports blocked. No production repository mutation is required.
+The blocking CI also builds a wheel, installs it into a clean virtual environment, changes outside the source checkout, and proves `ToolRegistry().get_tool("repo.identity")` resolves successfully.
 
 The real VPS proof is recorded in [`REPO_GIT_TOOLBELT_VPS_PROOF.md`](REPO_GIT_TOOLBELT_VPS_PROOF.md).
+
+## Merge gate
+
+Before merge:
+
+1. blocking AgentTools CI must be green on the exact PR head;
+2. ProjectScanner consumer CI must be green against the accepted AgentTools contract;
+3. VPS parity must show raw Git == AgentTools facts == ProjectScanner inputs for the managed checkout;
+4. explicit merge authorization is still required.
+
+```text
+MERGE_AUTHORIZED=NO
+```
