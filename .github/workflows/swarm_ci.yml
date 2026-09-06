@@ -38,15 +38,19 @@ jobs:
         set -euo pipefail
         wheel="$(find dist -maxdepth 1 -type f -name '*.whl' -print -quit)"
         test -n "$wheel"
+        wheel="$(realpath "$wheel")"
 
         python -m venv /tmp/swarm-wheel-venv
         /tmp/swarm-wheel-venv/bin/python -m pip install --upgrade pip
         /tmp/swarm-wheel-venv/bin/python -m pip install "$wheel"
 
+        pushd /tmp >/dev/null
         /tmp/swarm-wheel-venv/bin/python - <<'PY'
         from importlib import metadata
+
         import agent_tools
         import swarm_mcp
+        from tools_v2.tool_registry import ToolRegistry
 
         dist = metadata.distribution("we-are-swarm-agenttools")
         assert dist.metadata["Name"] == "we-are-swarm-agenttools"
@@ -63,10 +67,23 @@ jobs:
         missing = expected - actual
         assert not missing, f"missing console entry points: {sorted(missing)}"
 
+        repo_tools = {
+            "repo.identity",
+            "repo.status",
+            "repo.branches",
+            "repo.compare",
+            "repo.worktrees",
+        }
+        registry = ToolRegistry()
+        assert repo_tools.issubset(set(registry.list_tools()))
+        assert registry.get_tool("repo.identity").get_spec().name == "repo.identity"
+
         print("CLEAN_WHEEL_IMPORT=PASS")
+        print("CLEAN_WHEEL_TOOLREGISTRY=PASS")
         print("DISTRIBUTION_NAME=we-are-swarm-agenttools")
         print("CONSOLE_ENTRY_POINTS=PASS")
         PY
+        popd >/dev/null
 
         /tmp/swarm-wheel-venv/bin/swarm --help >/dev/null
         /tmp/swarm-wheel-venv/bin/python -m pip check
@@ -94,7 +111,10 @@ jobs:
           tests/test_toolbelt.py \
           tests/test_tools_v2_registry_contract.py \
           tests/test_tools_v2_safe_execution_contract.py \
-          tests/test_work_proof.py
+          tests/test_work_proof.py \
+          tests/test_repo_git_tools.py \
+          tests/test_repo_tool_adapters.py \
+          tests/test_repo_tool_registry.py
 
   legacy-audit:
     name: Legacy repository audit (advisory)
