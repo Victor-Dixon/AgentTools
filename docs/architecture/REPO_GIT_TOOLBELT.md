@@ -80,6 +80,14 @@ These adapters live in `tools_v2.categories.repo_tools` and contain no independe
 
 `remote_default_branch()` remains a Python-level helper in v1 because ProjectScanner consumes it while resolving canonical branch context; it can receive a registry adapter later if another operator-facing consumer needs it.
 
+### Dependency-isolation contract
+
+A registry-only consumer must not need unrelated optional dependencies just to discover or execute repository tools.
+
+`tools_v2` and `tools_v2.categories` therefore use lazy package loading. Importing `tools_v2.tool_registry` or resolving `tools_v2.categories.repo_tools` no longer eagerly imports optional advisor, Discord, HTTP, demo, or other category modules.
+
+A subprocess regression test deliberately blocks `requests` while loading all five repository registry tools. This protects the minimal-runtime path used by the managed ProjectScanner VPS environment.
+
 ## Safety contract
 
 The v1 module is read-only. It does not call:
@@ -111,6 +119,6 @@ python -m pytest \
   -q
 ```
 
-The tests use disposable Git repositories and worktrees. No production repository mutation is required.
+The tests use disposable Git repositories/worktrees plus a registry-only subprocess with optional HTTP imports blocked. No production repository mutation is required.
 
 The real VPS proof is recorded in [`REPO_GIT_TOOLBELT_VPS_PROOF.md`](REPO_GIT_TOOLBELT_VPS_PROOF.md).
