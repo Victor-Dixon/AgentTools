@@ -1,34 +1,23 @@
+"""AgentTools v2 registry package.
 
-# Registry compatibility exports
-from .tool_registry import ToolRegistry
-from .tool_registry import get_tool_registry
+Keep package import dependency-light: registry consumers should not have to import
+optional advisor/demo/category modules just to discover a tool. Optional legacy
+surfaces are loaded only when explicitly requested.
+"""
 
+from __future__ import annotations
 
+from .tool_registry import ToolRegistry, get_tool_registry
 
-# Compatibility exports
-try:
-    from .toolbelt_core import ToolbeltCore
-except Exception:
-    class ToolbeltCore:
-        """Fallback compatibility shim."""
-        pass
+__all__ = ["ToolRegistry", "get_tool_registry", "ToolbeltCore", "get_toolbelt_core"]
 
 
-# AUTO-GENERATED __init__.py
-# DO NOT EDIT MANUALLY - changes may be overwritten
+def __getattr__(name: str):
+    """Lazy compatibility exports for the legacy toolbelt core."""
+    if name in {"ToolbeltCore", "get_toolbelt_core"}:
+        from .toolbelt_core import ToolbeltCore, get_toolbelt_core
 
-from . import advisor_cli
-from . import demo_swarm_pulse
-from . import test_bi_tools
-from . import test_toolbelt_basic
-from . import tool_registry
-from . import toolbelt_core
-
-__all__ = [
-    'advisor_cli',
-    'demo_swarm_pulse',
-    'test_bi_tools',
-    'test_toolbelt_basic',
-    'tool_registry',
-    'toolbelt_core',
-]
+        globals()["ToolbeltCore"] = ToolbeltCore
+        globals()["get_toolbelt_core"] = get_toolbelt_core
+        return globals()[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
