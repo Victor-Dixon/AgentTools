@@ -18,7 +18,7 @@ from ._run import run
 _PROBE = (
     "hostname; "
     "echo '---RUNNER_PROC---'; pgrep -af 'Runner.Listener|run.sh' 2>/dev/null | head -5; "
-    "echo '---RUNNER_FILES---'; ls -1 {runner_dir} 2>/dev/null | head -20; "
+    "echo '---RUNNER_FILES---'; ls -1a {runner_dir} 2>/dev/null | head -20; "
     "echo '---BRAIN---'; pgrep -af 'uvicorn|dreamosd|dreamos-brain' 2>/dev/null | head -5; "
     "echo '---SYSTEMD---'; systemctl is-active dreamos-brain 2>/dev/null; "
     "echo '---REPOS---'; ls -1 ~/projects 2>/dev/null | head -20; "
