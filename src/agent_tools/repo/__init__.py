@@ -10,6 +10,7 @@ from .git import (
     repo_root,
     repo_status,
 )
+from .refs import remote_default_branch
 
 __all__ = [
     "GitRepoToolError",
@@ -17,6 +18,7 @@ __all__ = [
     "list_branches",
     "list_worktrees",
     "parse_worktree_porcelain",
+    "remote_default_branch",
     "repo_identity",
     "repo_root",
     "repo_status",
