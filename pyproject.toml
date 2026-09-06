@@ -68,9 +68,19 @@ swarm-memory-server = "swarm_mcp.servers.memory:main"
 swarm-tasks-server = "swarm_mcp.servers.tasks:main"
 swarm-control-server = "swarm_mcp.servers.control:main"
 swarm-tools-server = "swarm_mcp.servers.tools:main"
+dreamctl = "dream_control.cli:main"
+passdown = "dream_control.cli:main"
+dreamstate = "dream_control.cli:main"
+dreamevent = "dream_control.cli:main"
+agentstart = "dream_control.cli:main"
+agentstatus = "dream_control.cli:main"
+dreamagents = "dream_control.cli:main"
+dreamscan = "dream_control.cli:main"
+dreamcap = "dream_control.cli:main"
+dreamlane = "dream_control.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["swarm_mcp", "src/agent_tools"]
+packages = ["swarm_mcp", "src/agent_tools", "dream_control"]
 
 [tool.ruff]
 line-length = 100
