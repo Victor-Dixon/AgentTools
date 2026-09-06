@@ -6,6 +6,7 @@ choose cleanup actions, delete refs, prune worktrees, or apply policy.
 
 from __future__ import annotations
 
+import os
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,9 @@ def _run_git(
     check: bool = True,
 ) -> subprocess.CompletedProcess[str]:
     path = Path(repo).expanduser().resolve()
+    env = os.environ.copy()
+    # Prevent optional Git index refreshes/locks during observational scans.
+    env["GIT_OPTIONAL_LOCKS"] = "0"
     try:
         proc = subprocess.run(
             ["git", "-C", str(path), *args],
@@ -28,6 +32,7 @@ def _run_git(
             text=True,
             timeout=30,
             check=False,
+            env=env,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise GitRepoToolError(f"git {' '.join(args)} failed for {path}: {exc}") from exc
