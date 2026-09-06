@@ -70,7 +70,7 @@ swarm-control-server = "swarm_mcp.servers.control:main"
 swarm-tools-server = "swarm_mcp.servers.tools:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["swarm_mcp", "src/agent_tools"]
+packages = ["swarm_mcp", "src/agent_tools", "tools_v2"]
 
 [tool.ruff]
 line-length = 100
