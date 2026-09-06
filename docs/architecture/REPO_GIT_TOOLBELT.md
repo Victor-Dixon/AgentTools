@@ -27,7 +27,7 @@ CPC
     -> mutation
 ```
 
-## v1 API
+## v1 Python API
 
 ```python
 from agent_tools.repo import (
@@ -64,6 +64,22 @@ Returns ahead/behind counts and whether `head` is already an ancestor of `base`.
 
 Parses `git worktree list --porcelain` and records path, HEAD, branch/detached state, locked/prunable flags, existence, and raw dirty counts.
 
+## Registered toolbelt adapters
+
+The `tools_v2` registry exposes thin wrappers over the Python contract:
+
+```text
+repo.identity   -> repo_identity()
+repo.status     -> repo_status()
+repo.branches   -> list_branches()
+repo.compare    -> compare_refs()
+repo.worktrees  -> list_worktrees()
+```
+
+These adapters live in `tools_v2.categories.repo_tools` and contain no independent Git implementation. They validate parameters, call `agent_tools.repo`, and normalize the result into `ToolResult`.
+
+`remote_default_branch()` remains a Python-level helper in v1 because ProjectScanner consumes it while resolving canonical branch context; it can receive a registry adapter later if another operator-facing consumer needs it.
+
 ## Safety contract
 
 The v1 module is read-only. It does not call:
@@ -81,14 +97,18 @@ It also does not infer `DELETE_SAFE`, `SALVAGE`, `PR_OWNED`, or any other lifecy
 
 ## First consumer
 
-ProjectScanner's `projectscanner_fleet_hygiene_snapshot.v1` prototype is the first intended consumer. The migration should replace its private Git inspection helpers with this API while leaving ProjectScanner-specific dirty-path classification, canonical-branch interpretation, fleet signals, and snapshot schema in ProjectScanner.
+ProjectScanner's `projectscanner_fleet_hygiene_snapshot.v1` is the first consumer. Its private generic Git inspection helpers have been replaced by this API while ProjectScanner-specific dirty-path classification, canonical-branch interpretation, fleet signals, and snapshot schema remain in ProjectScanner.
 
 ## Verification
 
-Focused regression target:
+Focused regression targets:
 
 ```bash
-python -m pytest tests/test_repo_git_tools.py -q
+python -m pytest \
+  tests/test_repo_git_tools.py \
+  tests/test_repo_tool_adapters.py \
+  tests/test_repo_tool_registry.py \
+  -q
 ```
 
 The tests use disposable Git repositories and worktrees. No production repository mutation is required.
