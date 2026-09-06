@@ -36,10 +36,22 @@ def test_repo_registry_category_is_complete() -> None:
     assert set(registry.list_by_category("repo")) == EXPECTED
 
 
+def test_repo_registry_is_cwd_independent(tmp_path: Path, monkeypatch) -> None:
+    """Installed registry lookup must not depend on running from the repo root."""
+    monkeypatch.chdir(tmp_path)
+
+    registry = ToolRegistry()
+
+    assert EXPECTED.issubset(set(registry.list_tools()))
+    assert registry.get_tool("repo.identity").get_spec().name == "repo.identity"
+
+
 def test_repo_registry_does_not_require_optional_requests() -> None:
     """Registry-only consumers must not import unrelated optional dependencies."""
     code = r'''
 import builtins
+import os
+import tempfile
 
 real_import = builtins.__import__
 
@@ -51,6 +63,7 @@ def guarded_import(name, globals=None, locals=None, fromlist=(), level=0):
 
 
 builtins.__import__ = guarded_import
+os.chdir(tempfile.mkdtemp(prefix="agenttools-registry-isolation-"))
 
 from tools_v2.tool_registry import ToolRegistry
 
