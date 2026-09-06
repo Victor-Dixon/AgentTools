@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 SCHEMA = "dream_control.v1"
@@ -36,7 +36,7 @@ AGENT_STATUSES = ("idle", "active", "blocked", "waiting_ci", "stopped")
 
 
 def utc_now() -> str:
-    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def new_id(prefix: str) -> str:
@@ -125,7 +125,7 @@ class Agent:
             seen = datetime.fromisoformat(self.last_seen.replace("Z", "+00:00"))
         except ValueError:
             return True
-        return (datetime.now(UTC) - seen).total_seconds() > max_age_seconds
+        return (datetime.now(timezone.utc) - seen).total_seconds() > max_age_seconds
 
 
 @dataclass
