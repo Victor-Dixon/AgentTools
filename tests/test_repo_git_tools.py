@@ -3,7 +3,14 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from agent_tools.repo import compare_refs, list_branches, list_worktrees, repo_identity, repo_status
+from agent_tools.repo import (
+    compare_refs,
+    list_branches,
+    list_worktrees,
+    remote_default_branch,
+    repo_identity,
+    repo_status,
+)
 
 
 def _git(repo: Path, *args: str) -> str:
@@ -70,6 +77,24 @@ def test_branch_inventory_and_compare_are_fact_only(tmp_path: Path) -> None:
     assert comparison["ahead"] == 1
     assert comparison["behind"] == 0
     assert comparison["head_is_ancestor_of_base"] is False
+
+
+def test_remote_default_branch_and_branch_count_ignore_symbolic_head(tmp_path: Path) -> None:
+    source = _init_repo(tmp_path / "source")
+    bare = tmp_path / "remote.git"
+    subprocess.run(["git", "clone", "--bare", str(source), str(bare)], check=True, capture_output=True, text=True)
+
+    clone = tmp_path / "clone"
+    subprocess.run(["git", "clone", str(bare), str(clone)], check=True, capture_output=True, text=True)
+    _git(clone, "remote", "set-head", "origin", "-a")
+
+    default = remote_default_branch(clone)
+    inventory = list_branches(clone)
+
+    assert default["branch"] == "master"
+    assert default["symbolic_ref"] == "origin/master"
+    assert inventory["remote_count"] == 1
+    assert [row["name"] for row in inventory["remote_branches"]] == ["master"]
 
 
 def test_worktree_inventory_reports_detached_and_dirty_facts(tmp_path: Path) -> None:
