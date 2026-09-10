@@ -11,6 +11,7 @@ Author: Agent-5 (Business Intelligence Specialist)
 import importlib
 import json
 import logging
+from pathlib import Path
 from typing import Any
 
 from .adapters.base_adapter import IToolAdapter
@@ -27,17 +28,18 @@ class ToolRegistry:
 
     def __init__(self):
         """Initialize registry."""
-        self._cache: dict[str, IToolAdapter] = {}
+        self._cache: dict[str, type[IToolAdapter]] = {}
         self._registry_data = self._load_registry_data()
 
     def _load_registry_data(self) -> dict[str, list[str]]:
-        """Load tool registry data from JSON file."""
+        """Load tool registry data relative to the installed package."""
+        registry_path = Path(__file__).with_name("tool_registry.lock.json")
         try:
-            with open("tools_v2/tool_registry.lock.json", "r") as f:
+            with registry_path.open("r", encoding="utf-8") as f:
                 data = json.load(f)
                 return data.get("tools", {})
         except (FileNotFoundError, json.JSONDecodeError) as e:
-            logger.warning(f"Could not load registry data: {e}")
+            logger.warning(f"Could not load registry data from {registry_path}: {e}")
             return {}
 
     def _resolve_tool_class(self, tool_name: str) -> type[IToolAdapter]:
