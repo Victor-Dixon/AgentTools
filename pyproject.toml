@@ -45,9 +45,9 @@ dreamwire = "dream_control.cli:main"
 dreamlane = "dream_control.cli:main"
 brain-probe = "dream_control.cli:main"
 
+[tool.setuptools]
+py-modules = ["rover_cli"]
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["swarm_mcp*", "agent_tools*", "tools*", "dream_control*"]
-
-[tool.setuptools.py-modules]
-py-modules = ["rover_cli"]
