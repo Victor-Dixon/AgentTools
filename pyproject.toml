@@ -1,93 +1,53 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "we-are-swarm-agenttools"
-version = "0.6.0"
-description = "Multi-agent AI coordination framework with MCP servers, task messaging, conflict detection, consensus, shared memory, and verifiable work."
-readme = "README.md"
-license = "MIT"
-authors = [
-    { name = "Victor Dixon" }
+name = "agenttools-dreamos"
+version = "0.1.0"
+description = "Core utilities for Dream.OS multi-agent orchestration and swarm MCP tooling."
+requires-python = ">=3.9"
+authors = [{ name = "Dream.OS Contributors" }]
+dependencies = [
+    "PyYAML>=6.0",
+    "psutil>=5.9",
+    "redis>=5.0",
 ]
-maintainers = [
-    { name = "Victor Dixon" }
-]
-keywords = [
-    "ai", "agents", "multi-agent", "swarm", "mcp", "model-context-protocol",
-    "coordination", "llm", "claude", "gpt", "automation", "consensus",
-    "conflict-detection", "work-verification", "ai-orchestration"
-]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-]
-requires-python = ">=3.10"
-dependencies = []
 
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
-    "coverage>=7.6",
-    "ruff>=0.1.0",
-    "mypy>=1.0",
-    "python-dotenv>=1.0",
 ]
-discord = [
-    "discord.py>=2.0",
-    "requests>=2.28",
-    "python-dotenv>=1.0",
-]
-full = [
-    "pyautogui>=0.9",
-    "paramiko>=3.0",
-    "requests>=2.28",
-    "python-dotenv>=1.0",
-]
-
-[project.urls]
-Homepage = "https://github.com/Victor-Dixon/AgentTools"
-Documentation = "https://github.com/Victor-Dixon/AgentTools#readme"
-Repository = "https://github.com/Victor-Dixon/AgentTools"
-Issues = "https://github.com/Victor-Dixon/AgentTools/issues"
 
 [project.scripts]
-swarm = "swarm_mcp.cli:main"
-swarm-messaging-server = "swarm_mcp.servers.messaging:main"
-swarm-memory-server = "swarm_mcp.servers.memory:main"
-swarm-tasks-server = "swarm_mcp.servers.tasks:main"
-swarm-control-server = "swarm_mcp.servers.control:main"
-swarm-tools-server = "swarm_mcp.servers.tools:main"
+ac_v2 = "tools.toolbelt.agent_coordinate_v2:main"
+ac-v2 = "tools.toolbelt.agent_coordinate_v2:main"
+ac2 = "tools.toolbelt.agent_coordinate_v2:main"
+ac-adv = "tools.toolbelt.agent_coordinate_advanced:main"
+ac-ci = "tools.toolbelt.agent_coordinate_ci_guard:main"
+swarm-mcp-server = "swarm_mcp.server:main"
+swarm-mcp-health = "swarm_mcp.healthcheck:main"
+swarm-mcp-release-check = "swarm_mcp.release_check:main"
+v2-consolidation = "swarm_mcp.v2_consolidation:main"
+rover-start = "rover_cli:rover_start"
+rover-status = "rover_cli:rover_status"
+rover-resume = "rover_cli:rover_resume"
+rover-paused = "rover_cli:rover_paused"
+passdown = "dream_control.cli:main"
+dreamcap = "dream_control.cli:main"
+dreamevent = "dream_control.cli:main"
+dreamscan = "dream_control.cli:main"
+dreamvps = "dream_control.cli:main"
+dreamrun = "dream_control.cli:main"
+dreaminstall = "dream_control.cli:main"
+dreamwire = "dream_control.cli:main"
+dreamlane = "dream_control.cli:main"
+brain-probe = "dream_control.cli:main"
 
-[tool.hatch.build.targets.wheel]
-packages = ["swarm_mcp", "src/agent_tools", "tools_v2"]
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["swarm_mcp*", "agent_tools*", "tools*", "dream_control*"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "W", "UP"]
-ignore = ["E501"]
-
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_ignores = true
-strict = false
-
-[tool.pytest.ini_options]
-pythonpath = ["src", "."]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-addopts = "-v --tb=short"
+[tool.setuptools.py-modules]
+py-modules = ["rover_cli"]
