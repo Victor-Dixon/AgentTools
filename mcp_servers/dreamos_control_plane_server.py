@@ -40,7 +40,7 @@ if GAB_SCRIPTS.is_dir():
     sys.path.insert(0, str(GAB_SCRIPTS))
 
 SERVER_NAME = "dreamos-control-plane"
-SERVER_VERSION = "0.4.0"
+SERVER_VERSION = "0.5.0"
 PROTOCOL_VERSION = "2024-11-05"
 
 # OAuth scope + MCP tool annotation SSOT (ChatGPT connector discovery)
@@ -111,6 +111,38 @@ TOOL_AUTH: dict[str, dict[str, Any]] = {
         "annotations": {"readOnlyHint": True, "openWorldHint": False},
     },
     "recent_delivery_receipts": {
+        "scopes": ["dreamos.read"],
+        "annotations": {"readOnlyHint": True, "openWorldHint": False},
+    },
+    "read_channels": {
+        "scopes": ["dreamos.read"],
+        "annotations": {"readOnlyHint": True, "openWorldHint": False},
+    },
+    "read_messages": {
+        "scopes": ["dreamos.read"],
+        "annotations": {"readOnlyHint": True, "openWorldHint": True},
+    },
+    "send_message_allowlisted": {
+        "scopes": ["dreamos.write"],
+        "annotations": {
+            "readOnlyHint": False,
+            "destructiveHint": False,
+            "openWorldHint": True,
+        },
+    },
+    "dispatch_agent_message": {
+        "scopes": ["dreamos.write"],
+        "annotations": {"readOnlyHint": False, "destructiveHint": False, "openWorldHint": True},
+    },
+    "get_agent_status": {
+        "scopes": ["dreamos.read"],
+        "annotations": {"readOnlyHint": True, "openWorldHint": False},
+    },
+    "get_task_receipt": {
+        "scopes": ["dreamos.read"],
+        "annotations": {"readOnlyHint": True, "openWorldHint": False},
+    },
+    "connector_security_contract": {
         "scopes": ["dreamos.read"],
         "annotations": {"readOnlyHint": True, "openWorldHint": False},
     },
@@ -725,6 +757,109 @@ def recent_delivery_receipts(limit: int = 10) -> dict[str, Any]:
     }
 
 
+def _import_discord_architect_connector():
+    from agent_tools.discord_architect_connector import (  # type: ignore  # noqa: WPS433
+        read_channels as connector_read_channels,
+        read_messages as connector_read_messages,
+        security_contract as connector_security_contract,
+        send_message_allowlisted as connector_send_message_allowlisted,
+    )
+
+    return (
+        connector_read_channels,
+        connector_read_messages,
+        connector_send_message_allowlisted,
+        connector_security_contract,
+    )
+
+
+def read_channels() -> dict[str, Any]:
+    """Discord Architect Connector: router allowlist channel inventory."""
+    connector_read_channels, _, _, _ = _import_discord_architect_connector()
+    out = connector_read_channels()
+    out["reused"] = "agent_tools.discord_architect_connector.read_channels"
+    return out
+
+
+def read_messages(
+    route_key: str = "smoke_test",
+    limit: int = 10,
+    live: bool = False,
+) -> dict[str, Any]:
+    """Allowlisted channel message read (dry_run/live=false default)."""
+    _, connector_read_messages, _, _ = _import_discord_architect_connector()
+    out = connector_read_messages(route_key=route_key, limit=limit, live=live)
+    out["reused"] = "agent_tools.discord_architect_connector.read_messages"
+    return out
+
+
+def send_message_allowlisted(
+    content: str,
+    route_key: str = "smoke_test",
+    dry_run: bool = True,
+    human_approved: bool = False,
+) -> dict[str, Any]:
+    """Allowlisted smoke-channel send; dry_run default; live needs human_approved + env gate."""
+    _, _, connector_send, _ = _import_discord_architect_connector()
+    out = connector_send(
+        content,
+        route_key=route_key,
+        dry_run=dry_run,
+        human_approved=human_approved,
+    )
+    out["reused"] = "agent_tools.discord_architect_connector.send_message_allowlisted"
+    return out
+
+
+def dispatch_agent_message(
+    target: str,
+    message: str,
+    correlation_id: str | None = None,
+    dry_run: bool = True,
+) -> dict[str, Any]:
+    """Alias → existing send_agent_command (A2A bus; preserves durable IDs)."""
+    out = send_agent_command(
+        target=target,
+        message=message,
+        correlation_id=correlation_id,
+        dry_run=dry_run,
+    )
+    out["tool"] = "dispatch_agent_message"
+    out["alias_of"] = "send_agent_command"
+    return out
+
+
+def get_agent_status() -> dict[str, Any]:
+    """Alias → fleet_status (status.json inventory)."""
+    out = fleet_status()
+    out["tool"] = "get_agent_status"
+    out["alias_of"] = "fleet_status"
+    return out
+
+
+def get_task_receipt(correlation_id: str) -> dict[str, Any]:
+    """Alias → task_status + collect_results by correlation_id."""
+    status = task_status(correlation_id)
+    collected = collect_results(correlation_id)
+    return {
+        "ok": bool(status.get("ok", True) or collected.get("ok")),
+        "namespace": "discord",
+        "tool": "get_task_receipt",
+        "alias_of": ["task_status", "collect_results"],
+        "correlation_id": correlation_id,
+        "task_status": status,
+        "collect_results": collected,
+        "generated_at": _now(),
+    }
+
+
+def connector_security_contract() -> dict[str, Any]:
+    _, _, _, contract = _import_discord_architect_connector()
+    out = contract()
+    out["reused"] = "agent_tools.discord_architect_connector.security_contract"
+    return out
+
+
 # ---------------------------------------------------------------------------
 # MCP protocol
 # ---------------------------------------------------------------------------
@@ -746,6 +881,13 @@ TOOLS: dict[str, Callable[..., dict[str, Any]]] = {
     "list_webhooks": list_webhooks,
     "health": health,
     "recent_delivery_receipts": recent_delivery_receipts,
+    "read_channels": read_channels,
+    "read_messages": read_messages,
+    "send_message_allowlisted": send_message_allowlisted,
+    "dispatch_agent_message": dispatch_agent_message,
+    "get_agent_status": get_agent_status,
+    "get_task_receipt": get_task_receipt,
+    "connector_security_contract": connector_security_contract,
 }
 
 TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
@@ -879,6 +1021,63 @@ TOOL_SCHEMAS: dict[str, dict[str, Any]] = {
             "type": "object",
             "properties": {"limit": {"type": "integer", "default": 10}},
         },
+    },
+    "read_channels": {
+        "description": "Discord Architect Connector: list router channels + connector allowlist (no secrets).",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    "read_messages": {
+        "description": "Read messages from an allowlisted channel only (live=false dry-run default).",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "route_key": {"type": "string", "default": "smoke_test"},
+                "limit": {"type": "integer", "default": 10},
+                "live": {"type": "boolean", "default": False},
+            },
+        },
+    },
+    "send_message_allowlisted": {
+        "description": "Send to connector-allowlisted channel only; dry_run default; live needs human_approved + env gate.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "content": {"type": "string"},
+                "route_key": {"type": "string", "default": "smoke_test"},
+                "dry_run": {"type": "boolean", "default": True},
+                "human_approved": {"type": "boolean", "default": False},
+            },
+            "required": ["content"],
+        },
+    },
+    "dispatch_agent_message": {
+        "description": "Alias of send_agent_command — durable A2A bus dispatch with correlation IDs.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "target": {"type": "string"},
+                "message": {"type": "string"},
+                "correlation_id": {"type": "string"},
+                "dry_run": {"type": "boolean", "default": True},
+            },
+            "required": ["target", "message"],
+        },
+    },
+    "get_agent_status": {
+        "description": "Alias of fleet_status — Agent-N status.json inventory.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    "get_task_receipt": {
+        "description": "Alias wrapping task_status + collect_results by correlation_id.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"correlation_id": {"type": "string"}},
+            "required": ["correlation_id"],
+        },
+    },
+    "connector_security_contract": {
+        "description": "Discord Architect Connector security defaults and forbidden actions.",
+        "inputSchema": {"type": "object", "properties": {}},
     },
 }
 

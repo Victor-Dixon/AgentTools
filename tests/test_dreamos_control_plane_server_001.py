@@ -52,6 +52,13 @@ def test_tools_list_exact_set():
         "list_webhooks",
         "health",
         "recent_delivery_receipts",
+        "read_channels",
+        "read_messages",
+        "send_message_allowlisted",
+        "dispatch_agent_message",
+        "get_agent_status",
+        "get_task_receipt",
+        "connector_security_contract",
     }
     assert names == expected
 
