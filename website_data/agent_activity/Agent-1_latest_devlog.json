@@ -1,8 +1,0 @@
-{
-  "agent_id": "Agent-1",
-  "filename": "devlog_20260705_shift_enter_multiline.json",
-  "content": "{\n  \"schema\": \"dreamvault.devlog.d2a_slice.v1\",\n  \"agent_id\": \"Agent-1\",\n  \"message_id\": \"msg_20260705_165743\",\n  \"shipped\": [\n    \"Shift+Enter multiline !message \u2014 line-by-line paste, no early Cursor submit\",\n    \"tools/agent_transport/shift_enter.py + SSOT core + Agent_Cellphone fix\",\n    \"pytest agent_transport 10/10 PASS\",\n    \"Discord D2A report HTTP 204\"\n  ],\n  \"blocked\": [],\n  \"artifacts\": [\n    \"tools/agent_transport/shift_enter.py\",\n    \"agent_workspaces/Agent-1/coordination/d2a_msg_20260705_165743_shift_enter_multiline.json\"\n  ],\n  \"next_unblock\": \"Operator restart Discord Commander bot; smoke-test multi-line !message\",\n  \"next_high_leverage\": {\n    \"task_id\": \"maskzero_site_polish_day_20260705\",\n    \"owner\": \"Agent-3\",\n    \"rationale\": \"P0 product lane after messaging transport fix\"\n  }\n}\n",
-  "timestamp": "2026-07-05T17:08:13.179385+00:00",
-  "word_count": 68,
-  "line_count": 23
-}
