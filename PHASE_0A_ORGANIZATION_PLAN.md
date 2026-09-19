@@ -1,5 +1,7 @@
 # 📋 Phase 0A: Organization & Planning
 
+**Historical snapshot notice (reviewed 2026-07-03):** This 2025 planning document is retained for context only. It is not the current execution roadmap. Use `docs/root/MASTER_TASK_LOG.md`, `NEXT_UP.md`, `MASTER_TASK_LIST.md`, `ROADMAP.md`, and `docs/architecture/DOMAIN_MODEL.md` for current status, next work, and domain boundaries.
+
 **Date**: 2025-12-26  
 **Status**: In Progress  
 **Priority**: P0 - CRITICAL FOUNDATION  

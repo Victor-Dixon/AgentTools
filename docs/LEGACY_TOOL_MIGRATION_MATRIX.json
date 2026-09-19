@@ -28,67 +28,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/agent2_website_audit.py",
-    "classes": [
-      "Agent2WebsiteAuditor"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "fetch_url_content",
-      "analyze_html_content",
-      "calculate_seo_score",
-      "calculate_ux_score",
-      "get_ollama_insights",
-      "audit_website",
-      "audit_multiple_sites",
-      "_extract_top_issues"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/agent_system_training_program.py",
-    "classes": [
-      "TrainingModule",
-      "AgentProfile",
-      "AgentSystemTrainingProgram"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_training_modules",
-      "_load_agent_profiles",
-      "_define_certification_levels",
-      "onboard_agent",
-      "assess_agent_skills",
-      "_infer_expertise_from_agent_id",
-      "_get_next_certification_level",
-      "generate_training_curriculum",
-      "run_practice_session",
-      "run_certification_exam"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/agent_workspace_cleanup.py",
-    "classes": [],
-    "functions": [
-      "get_agent_workspace_dirs",
-      "identify_cleanup_candidates",
-      "create_archive_dir",
-      "safe_archive_file",
-      "perform_cleanup",
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/analysis/__init__.py",
     "classes": [],
     "functions": [],
@@ -363,70 +302,6 @@
       "run_full_analysis",
       "print_analysis_report",
       "track_tool_usage"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/analytics/unified_analytics_dashboard.py",
-    "classes": [
-      "WebsiteAnalytics",
-      "AnalyticsAlert",
-      "UnifiedAnalyticsDashboard"
-    ],
-    "functions": [
-      "__post_init__",
-      "__init__",
-      "collect_website_analytics",
-      "_mock_page_views",
-      "_mock_unique_visitors",
-      "_mock_bounce_rate",
-      "_mock_session_duration",
-      "_mock_top_pages",
-      "_mock_traffic_sources",
-      "_calculate_seo_score",
-      "_calculate_performance_score",
-      "_save_analytics_data",
-      "generate_unified_dashboard",
-      "_determine_website_status",
-      "_generate_recommendations",
-      "_generate_alerts",
-      "_save_dashboard",
-      "generate_analytics_report",
-      "_calculate_metrics_summary",
-      "_calculate_trends",
-      "display_dashboard"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/automate_pyautogui_dispatch.py",
-    "classes": [
-      "DispatchTarget",
-      "DispatchStep",
-      "DispatchReport"
-    ],
-    "functions": [
-      "_ensure_utf8",
-      "_parse_agent_id",
-      "_resolve_repo",
-      "_load_json",
-      "_coords_candidate_paths",
-      "_candidate_coord_keys",
-      "_resolve_target",
-      "_profile_matches_target",
-      "_resolve_devtools_click",
-      "_focus_target",
-      "_run_outbox_helper",
-      "_dispatch_packet",
-      "_parse_plan",
-      "_parse_args",
-      "_build_steps",
-      "main",
-      "append"
     ],
     "has_main_guard": true,
     "suggested_status": "script_candidate",
@@ -716,27 +591,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/closure_quality_audit.py",
-    "classes": [
-      "QualityIssue",
-      "ClosureQualityAudit"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "scan_python_files",
-      "run_linting_check",
-      "check_imports",
-      "check_cli_tools",
-      "analyze_functionality_consolidation",
-      "generate_report",
-      "run_full_audit"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/codemods/__init__.py",
     "classes": [],
     "functions": [],
@@ -982,8 +836,7 @@
       "get_external_dependencies",
       "get_internal_dependencies",
       "get_circular_dependencies",
-      "export_to_json",
-      "_normalize_module_path"
+      "export_to_json"
     ],
     "has_main_guard": false,
     "suggested_status": "salvage_candidate",
@@ -1140,27 +993,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/cycle_accomplishment_integrator.py",
-    "classes": [
-      "CycleAccomplishmentIntegrator"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_points_config",
-      "validate_inputs",
-      "load_agent_status",
-      "check_idempotency",
-      "update_cycle_status_atomic",
-      "_calculate_accomplishments_config",
-      "generate_accomplishment_report",
-      "post_to_cycle_channel"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/debug/check_stuck_messages.py",
     "classes": [],
     "functions": [
@@ -1228,39 +1060,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/deployment/automated_deployment_pipeline.py",
-    "classes": [
-      "WebsiteConfig",
-      "DeploymentResult",
-      "AutomatedDeploymentPipeline"
-    ],
-    "functions": [
-      "__post_init__",
-      "__init__",
-      "_load_website_configs",
-      "_save_config",
-      "_log_deployment_result"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/devlog_poster.py",
-    "classes": [],
-    "functions": [
-      "split_content_into_pages",
-      "update_agent_status",
-      "save_devlog_for_website",
-      "post_agent_heartbeat",
-      "post_devlog_to_discord",
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/devops/documentation_assistant.py",
     "classes": [
       "DocumentationAssistant"
@@ -1316,42 +1115,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/discord/__init__.py",
-    "classes": [],
-    "functions": [],
-    "has_main_guard": false,
-    "suggested_status": "possible_duplicate",
-    "suggested_target": "tools_v2/utils/__init__.py"
-  },
-  {
-    "path": "tools/discord/config.py",
-    "classes": [],
-    "functions": [
-      "parse_export_file",
-      "first_value",
-      "resolve_discord_config"
-    ],
-    "has_main_guard": false,
-    "suggested_status": "salvage_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord/create_webhook.py",
-    "classes": [],
-    "functions": [],
-    "has_main_guard": false,
-    "suggested_status": "legacy_review",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord/list_channels.py",
-    "classes": [],
-    "functions": [],
-    "has_main_guard": false,
-    "suggested_status": "legacy_review",
-    "suggested_target": null
-  },
-  {
     "path": "tools/discord/unified_discord.py",
     "classes": [
       "UnifiedDiscord"
@@ -1368,82 +1131,6 @@
       "verify_running",
       "upload_file"
     ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord/webhook_sender.py",
-    "classes": [
-      "DiscordWebhookResult"
-    ],
-    "functions": [
-      "_resolve_webhook_url",
-      "send_payload",
-      "send_payload_file"
-    ],
-    "has_main_guard": false,
-    "suggested_status": "salvage_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord_commander/post_to_discord_router.py",
-    "classes": [],
-    "functions": [
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord_commander/run_message_router_discord_bot_with_restart.py",
-    "classes": [],
-    "functions": [
-      "run_bot",
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord_commander/run_unified_discord_bot_with_restart.py",
-    "classes": [],
-    "functions": [
-      "run_bot",
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord_commander/start_discord_system.py",
-    "classes": [],
-    "functions": [
-      "_token_present",
-      "_spawn",
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord_commander/start_message_bus_processor.py",
-    "classes": [],
-    "functions": [
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/discord_commander/start_message_queue_processor.py",
-    "classes": [],
-    "functions": [],
     "has_main_guard": true,
     "suggested_status": "script_candidate",
     "suggested_target": null
@@ -1479,28 +1166,6 @@
     "suggested_target": "tools_v2/utils/__init__.py"
   },
   {
-    "path": "tools/force_multiplier_gate.py",
-    "classes": [
-      "ForceMultiplierGate"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "load_rehydration_snapshot",
-      "load_agent_status",
-      "get_current_git_sha",
-      "check_task_scope",
-      "check_ownership",
-      "check_execution_readiness",
-      "check_alignment",
-      "evaluate_gate",
-      "print_gate_results"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/github/unified_github.py",
     "classes": [
       "UnifiedGitHub"
@@ -1516,92 +1181,6 @@
       "merge_analyze_plans",
       "merge_complete",
       "audit_architecture"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/hybrid_website_audit.py",
-    "classes": [
-      "HybridWebsiteAuditor"
-    ],
-    "functions": [
-      "__init__",
-      "fetch_page_content",
-      "parse_html_content",
-      "manual_seo_analysis",
-      "manual_ux_analysis"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/intelligent_system_suggester.py",
-    "classes": [
-      "SystemRecommendation",
-      "WorkflowSuggestion",
-      "IntelligentSystemSuggester"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_system_knowledge",
-      "_load_task_patterns",
-      "_load_success_patterns",
-      "_calculate_efficiency_weights",
-      "analyze_task",
-      "_identify_task_type",
-      "_calculate_system_confidence",
-      "_generate_reasoning",
-      "suggest_workflow",
-      "_select_workflow_pattern",
-      "_calculate_workflow_efficiency",
-      "_estimate_completion_time",
-      "_calculate_confidence_level",
-      "_identify_optimization_opportunities",
-      "generate_learning_report"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/maintenance/maintenance_checklists.py",
-    "classes": [
-      "MaintenanceTask",
-      "MaintenanceChecklist",
-      "MaintenanceSystem"
-    ],
-    "functions": [
-      "__post_init__",
-      "__post_init__",
-      "__init__",
-      "_load_maintenance_templates",
-      "generate_website_checklist",
-      "_calculate_next_due",
-      "_estimate_duration",
-      "_save_checklist",
-      "load_checklist",
-      "update_task_status",
-      "_log_maintenance_completion",
-      "get_overdue_tasks",
-      "generate_maintenance_schedule",
-      "display_checklist",
-      "verify_maintenance_compliance"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/messaging_cli_wrapper.py",
-    "classes": [],
-    "functions": [
-      "_dreamvault_roots",
-      "_resolve_ssot_script",
-      "main"
     ],
     "has_main_guard": true,
     "suggested_status": "script_candidate",
@@ -1706,87 +1285,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/monitoring/website_health_monitor.py",
-    "classes": [
-      "HealthCheckResult",
-      "HealthAlert",
-      "WebsiteHealthMonitor"
-    ],
-    "functions": [
-      "__post_init__",
-      "__init__",
-      "_load_config",
-      "generate_health_report",
-      "display_health_report"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/one_screen_execution_loop.py",
-    "classes": [
-      "OneScreenExecutionLoop"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "load_rehydration_snapshot",
-      "save_rehydration_snapshot",
-      "execute_command",
-      "validate_output",
-      "update_snapshot_after_execution",
-      "run_execution_loop"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/operating_cycle_system_integration.py",
-    "classes": [
-      "CyclePhase",
-      "EnhancedOperatingCycle",
-      "OperatingCycleIntegrator"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_agent_expertise",
-      "_load_system_templates",
-      "_load_efficiency_metrics",
-      "enhance_operating_cycle",
-      "_calculate_efficiency_gain",
-      "_calculate_utilization_rate",
-      "generate_system_checklist",
-      "generate_agent_playbook",
-      "analyze_efficiency_gains"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/rehydration_manager.py",
-    "classes": [
-      "RehydrationManager"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "get_current_git_sha",
-      "load_agent_status",
-      "load_inbox_messages",
-      "create_rehydration_snapshot",
-      "save_rehydration_snapshot",
-      "validate_resume_gates",
-      "get_status_summary"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/security/check_sensitive_files.py",
     "classes": [],
     "functions": [
@@ -1810,46 +1308,6 @@
       "audit_python_dependencies",
       "audit_npm_dependencies",
       "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/soft_onboard_cli.py",
-    "classes": [
-      "SoftOnboardAgent"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "run_command",
-      "run_command_live",
-      "step_load_state",
-      "step_evaluate_gate",
-      "step_execute_visual_onboarding",
-      "step_validate_closure",
-      "onboard_agent"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/streamlined_website_audit.py",
-    "classes": [
-      "StreamlinedWebsiteAuditor"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "fetch_content",
-      "analyze_content",
-      "calculate_scores",
-      "get_ollama_insights",
-      "audit_website",
-      "_get_priority_actions",
-      "audit_batch"
     ],
     "has_main_guard": true,
     "suggested_status": "script_candidate",
@@ -1937,51 +1395,6 @@
     "classes": [],
     "functions": [
       "run_validation"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/system_discovery_agent.py",
-    "classes": [
-      "SystemTool",
-      "SystemDiscoveryAgent"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_systems_registry",
-      "_load_agent_expertise",
-      "discover_all_systems",
-      "find_tools_for_task",
-      "get_operating_cycle_integration",
-      "analyze_usage_patterns"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/system_utilization_feedback_loop.py",
-    "classes": [
-      "SystemUsageEvent",
-      "SystemEffectivenessMetrics",
-      "SystemUtilizationFeedbackLoop"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_usage_history",
-      "_calculate_system_metrics",
-      "_analyze_agent_patterns",
-      "_generate_swarm_insights",
-      "track_usage_event",
-      "analyze_agent_effectiveness",
-      "_generate_agent_recommendations",
-      "generate_improvement_recommendations",
-      "get_swarm_insights",
-      "generate_predictive_recommendations"
     ],
     "has_main_guard": true,
     "suggested_status": "script_candidate",
@@ -2358,26 +1771,9 @@
     "path": "tools/toolbelt/__main__.py",
     "classes": [],
     "functions": [
-      "_invoke_entry_point",
       "main",
       "print_help",
       "print_tools"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/toolbelt/cli/onboarding_cli.py",
-    "classes": [
-      "Args"
-    ],
-    "functions": [
-      "_validate_agent",
-      "cmd_soft",
-      "cmd_status",
-      "cmd_hard",
-      "main"
     ],
     "has_main_guard": true,
     "suggested_status": "script_candidate",
@@ -2489,7 +1885,6 @@
     ],
     "functions": [
       "__init__",
-      "_dreamvault_messaging_script",
       "execute",
       "_soft_onboarding",
       "_hard_onboarding",
@@ -2557,16 +1952,6 @@
     "suggested_target": null
   },
   {
-    "path": "tools/toolbelt_cli.py",
-    "classes": [],
-    "functions": [
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
     "path": "tools/toolbelt_registry.py",
     "classes": [
       "ToolRegistry"
@@ -2581,33 +1966,6 @@
     ],
     "has_main_guard": false,
     "suggested_status": "salvage_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/validate_closure_next_action.py",
-    "classes": [
-      "ClosureNextActionValidator"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "load_rehydration_snapshot",
-      "validate_singularity_rule"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/validate_closure_run_id.py",
-    "classes": [],
-    "functions": [
-      "validate_run_id",
-      "get_current_git_sha",
-      "main"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
     "suggested_target": null
   },
   {
@@ -2732,41 +2090,6 @@
       "verify_file",
       "verify_cicd",
       "verify_credentials"
-    ],
-    "has_main_guard": true,
-    "suggested_status": "script_candidate",
-    "suggested_target": null
-  },
-  {
-    "path": "tools/vps_deploy_bridge/vps_deploy_bridge.py",
-    "classes": [
-      "DeployBridgeError",
-      "DeployReport"
-    ],
-    "functions": [
-      "_utc_now",
-      "load_schema",
-      "load_request",
-      "_is_iso_datetime",
-      "validate_schema",
-      "normalize_path",
-      "validate_target_path",
-      "validate_command",
-      "validate_service_name",
-      "validate_source_path",
-      "validate_upload_constraints",
-      "validate_request",
-      "get_ssh_config",
-      "_ssh_base",
-      "_scp_base",
-      "build_plan",
-      "should_execute",
-      "run_command_line",
-      "execute_plan",
-      "write_report",
-      "process_request",
-      "main",
-      "to_dict"
     ],
     "has_main_guard": true,
     "suggested_status": "script_candidate",

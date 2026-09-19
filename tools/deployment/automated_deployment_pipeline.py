@@ -266,12 +266,7 @@ class AutomatedDeploymentPipeline:
         success_rate = checks_passed / total_checks if total_checks > 0 else 0
         overall_success = success_rate >= 0.8  # 80% success threshold
 
-        logger.info(
-            "Health checks passed %s/%s (%.1f%%)",
-            checks_passed,
-            total_checks,
-            success_rate * 100,
-        )
+        logger.info(".1f"
         return overall_success
 
     async def _check_ssl_certificate(self, domain: str) -> bool:

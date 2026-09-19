@@ -596,8 +596,7 @@ class WebsiteHealthMonitor:
         print("📊 SUMMARY")
         print(f"Websites Monitored: {summary['total_websites']}")
         print(f"Total Checks: {total_checks}")
-        print(f"Healthy Percentage: {healthy_pct:.1f}%")
-        print(f"Healthy: {summary['healthy_checks']} 🟢")
+        print(".1f"        print(f"Healthy: {summary['healthy_checks']} 🟢")
         print(f"Warnings: {summary['warning_checks']} 🟡")
         print(f"Critical: {summary['critical_checks']} 🔴")
         print()
@@ -608,7 +607,7 @@ class WebsiteHealthMonitor:
             healthy_pct = (data["healthy"] / data["total_checks"] * 100) if data["total_checks"] > 0 else 0
 
             status_emoji = "🟢" if healthy_pct >= 80 else "🟡" if healthy_pct >= 60 else "🔴"
-            print(f"{status_emoji} {website}: {healthy_pct:.1f}% healthy")
+            print(".1f"
             if data["critical"] > 0:
                 print(f"   🔴 Critical Issues: {data['critical']}")
             if data["warning"] > 0:

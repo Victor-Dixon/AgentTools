@@ -145,22 +145,22 @@ def perform_cleanup(agent_id: str, dry_run: bool = True) -> Tuple[int, int]:
         relative_path = file_path.relative_to(project_root)
         print(f"   - {relative_path} ({description})")
 
-    print("\n📊 Cleanup Summary:")
-    for desc, count in type_counts.items():
+    print("
+📊 Cleanup Summary:"    for desc, count in type_counts.items():
         print(f"   - {desc}: {count} files")
 
     if dry_run:
-        print("\n🔍 DRY RUN MODE - No files will be moved")
-        print("💡 Run with --cleanup to perform actual cleanup")
+        print("
+🔍 DRY RUN MODE - No files will be moved"        print("💡 Run with --cleanup to perform actual cleanup")
         return len(all_candidates), 0
 
     # Perform actual cleanup
-    print("\n🗂️ Creating archive directory...")
-    archive_dir = create_archive_dir(project_root, agent_id)
+    print("
+🗂️ Creating archive directory..."    archive_dir = create_archive_dir(project_root, agent_id)
     print(f"📦 Archive location: {archive_dir}")
 
-    print("\n🧹 Performing cleanup...")
-    success_count = 0
+    print("
+🧹 Performing cleanup..."    success_count = 0
     total_count = len(all_candidates)
 
     for file_path, description in all_candidates:
@@ -168,8 +168,8 @@ def perform_cleanup(agent_id: str, dry_run: bool = True) -> Tuple[int, int]:
         if safe_archive_file(file_path, archive_dir, relative_path):
             success_count += 1
 
-    print("\n✅ Cleanup completed!")
-    print(f"   Total candidates: {total_count}")
+    print("
+✅ Cleanup completed!"    print(f"   Total candidates: {total_count}")
     print(f"   Successfully archived: {success_count}")
     print(f"   Archive location: {archive_dir}")
 
@@ -202,11 +202,11 @@ def main():
         total_candidates, archived_count = perform_cleanup(args.agent, dry_run)
 
         if dry_run:
-            print("\n📋 To perform actual cleanup, run:")
-            print(f"   python tools/agent_workspace_cleanup.py --agent {args.agent} --cleanup")
+            print("
+📋 To perform actual cleanup, run:"            print(f"   python tools/agent_workspace_cleanup.py --agent {args.agent} --cleanup")
         else:
-            print("\n✅ Workspace cleanup completed successfully")
-            if archived_count > 0:
+            print("
+✅ Workspace cleanup completed successfully"            if archived_count > 0:
                 print(f"   📦 {archived_count} files archived safely")
 
     except Exception as e:

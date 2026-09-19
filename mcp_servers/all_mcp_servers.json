@@ -22,22 +22,22 @@
     },
     "git-operations": {
       "command": "python",
-      "args": ["-m", "swarm_mcp.servers.git_operations"],
+      "args": ["mcp_servers/git_operations_server.py"],
       "description": "🐺 Hunt verification, commit tracking"
     },
     "code-quality": {
       "command": "python",
-      "args": ["-m", "swarm_mcp.servers.code_quality"],
+      "args": ["mcp_servers/code_quality_server.py"],
       "description": "🐺 Code compliance and refactoring"
     },
     "observability": {
       "command": "python",
-      "args": ["-m", "swarm_mcp.servers.observability"],
+      "args": ["mcp_servers/observability_server.py"],
       "description": "🐺 Swarm health monitoring and metrics"
     },
     "testing": {
       "command": "python",
-      "args": ["-m", "swarm_mcp.servers.testing"],
+      "args": ["mcp_servers/testing_server.py"],
       "description": "🐺 Coverage analysis and mutation testing"
     },
     "dependency-management": {

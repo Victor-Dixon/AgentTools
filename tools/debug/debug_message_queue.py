@@ -241,22 +241,6 @@ def fix_queue_issues(auto_fix: bool = False) -> Dict[str, Any]:
     """Fix identified queue issues."""
     fixes_applied = []
 
-    # Fix 0: Create missing queue SSOT file
-    queue_dir = project_root / "message_queue"
-    queue_file = queue_dir / "queue.json"
-    if not queue_file.exists():
-        if auto_fix:
-            try:
-                queue_dir.mkdir(parents=True, exist_ok=True)
-                queue_file.write_text("[]\n", encoding="utf-8")
-                fixes_applied.append(
-                    f"Created missing queue SSOT: {queue_file}")
-            except Exception as e:
-                fixes_applied.append(f"Failed to create queue file: {e}")
-        else:
-            fixes_applied.append(
-                f"Queue file missing (not created): {queue_file}")
-
     # Fix 1: Clear lock files
     lock_status = check_lock_files()
     if lock_status["found"]:
@@ -274,12 +258,6 @@ def fix_queue_issues(auto_fix: bool = False) -> Dict[str, Any]:
 
     # Fix 2: Reset stuck messages
     analysis = analyze_queue_entries()
-    if "error" in analysis:
-        return {
-            "fixes_applied": fixes_applied,
-            "count": len(fixes_applied),
-            "analysis_error": analysis.get("error"),
-        }
     if "stuck_messages" in analysis and analysis["stuck_messages"]:
         if auto_fix:
             queue_file = project_root / "message_queue" / "queue.json"
@@ -479,17 +457,6 @@ def main():
     print("=" * 70)
 
     recommendations = []
-    # analysis/proc_status may be unset when queue missing or psutil absent
-    if "analysis" not in locals():
-        analysis = {}
-    if "proc_status" not in locals():
-        proc_status = {"running": True}
-
-    if not queue_status["exists"]:
-        recommendations.append(
-            "Create empty queue SSOT: tools/message_queue/queue.json as [] "
-            "(or run with --fix)"
-        )
 
     if not queue_status['valid']:
         recommendations.append("Fix queue file format or restore from backup")

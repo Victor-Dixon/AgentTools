@@ -1,0 +1,19 @@
+# ROADMAP — agent-tools
+
+**Last updated:** 2026-05-19
+**Planning authority:** DreamVault (`D:/DreamVault`)
+
+## Now
+- Align repo docs with master task contract.
+- Verify tests for active lane changes.
+
+## Next
+- Close top P1 task from `MASTER_TASK_LIST.md`.
+- Promote stable changes to GitHub canonical branch.
+
+## Later
+- Reduce dirty working tree or classify as experiment.
+- Integrate with DreamSync mobile/desktop coordination.
+
+## Risks
+- Uncommitted experiments on desktop until classified.

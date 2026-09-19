@@ -3,16 +3,6 @@
 
 Provides standardized CLI interface for agent onboarding operations.
 Wraps OnboardingExecutor methods with safety rails and validation.
-
-Canonical toolbelt flags (preferred)::
-
-    python -m tools.toolbelt --onboard-status --agent Agent-N
-    python -m tools.toolbelt --onboard-soft --agent Agent-N
-    python -m tools.toolbelt --onboard-hard --agent Agent-N --yes
-
-Legacy dispatcher form (same handlers)::
-
-    python -m tools.toolbelt.cli.onboarding_cli onboard:status --agent Agent-N
 """
 
 import argparse
@@ -69,22 +59,8 @@ exit(ex._soft_onboarding(args))
 
 
 def cmd_status(argv: list[str]) -> int:
-    """Show onboarding/rehydration readiness for an agent.
-
-    Preferred invocation via the unified toolbelt::
-
-        python -m tools.toolbelt --onboard-status --agent Agent-2
-
-    Prints the expected ``status.json`` and inbox paths under
-    ``agent_workspaces/<agent>/`` and exits 0 when ``--agent`` is valid.
-    """
-    p = argparse.ArgumentParser(
-        prog="onboard:status",
-        description=(
-            "Show onboarding/rehydration readiness for an agent. "
-            "Canonical: python -m tools.toolbelt --onboard-status --agent Agent-N"
-        ),
-    )
+    """Show onboarding status for an agent."""
+    p = argparse.ArgumentParser(prog="onboard:status")
     p.add_argument("--agent", required=True, help="Agent ID (Agent-1..Agent-8)")
     ns = p.parse_args(argv)
     _validate_agent(ns.agent)

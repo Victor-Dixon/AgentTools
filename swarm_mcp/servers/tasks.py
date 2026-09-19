@@ -44,48 +44,38 @@ def add_to_inbox(task: str, agent_id: Optional[str] = None) -> Dict[str, Any]:
     """Add a task to the INBOX section."""
     try:
         content = read_task_log()
-
-        inbox_pattern = r"(## (?:📥 )?INBOX.*?\n+)(.*?)(?=\n---|\n## |\Z)"
+        
+        # If file doesn't exist or is empty, maybe create it? 
+        # For now assume it exists or fail gracefully if section missing.
+        
+        inbox_pattern = r"(## 📥 INBOX.*?\n\n)(.*?)(\n---)"
         match = re.search(inbox_pattern, content, re.DOTALL)
 
-        agent_note = f" (from {agent_id})" if agent_id else ""
-        new_task = f"- [ ] {task}{agent_note}\n"
-
         if not match:
-            block = f"## 📥 INBOX\n\n{new_task}\n---\n"
-            new_content = (content.rstrip() + "\n\n" + block).lstrip()
-            if write_task_log(new_content):
-                return {
-                    "success": True,
-                    "task": task,
-                    "location": "INBOX",
-                    "message": task,
-                    "agent_id": agent_id,
-                }
-            return {"success": False, "error": "Failed to write task log"}
+            return {"success": False, "error": "INBOX section not found in MASTER_TASK_LOG.md"}
 
         prefix = match.group(1)
         existing_tasks = match.group(2).strip()
-        suffix_start = match.end()
+        suffix = match.group(3)
 
+        agent_note = f" (from {agent_id})" if agent_id else ""
+        new_task = f"- [ ] {task}{agent_note}\n"
+        
         updated_tasks = existing_tasks + "\n" + new_task if existing_tasks else new_task
-        new_content = content[: match.start()] + prefix + updated_tasks + content[suffix_start:]
-
+        
+        new_content = content[:match.start()] + prefix + updated_tasks + "\n" + suffix + content[match.end():]
+        
+        # Update timestamp
         new_content = re.sub(
             r"\*\*Last Updated:\*\* \d{4}-\d{2}-\d{2}",
             f"**Last Updated:** {datetime.now().strftime('%Y-%m-%d')}",
-            new_content,
+            new_content
         )
 
         if write_task_log(new_content):
-            return {
-                "success": True,
-                "task": task,
-                "location": "INBOX",
-                "message": task,
-                "agent_id": agent_id,
-            }
-        return {"success": False, "error": "Failed to write task log"}
+            return {"success": True, "task": task, "location": "INBOX"}
+        else:
+            return {"success": False, "error": "Failed to write task log"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
@@ -95,8 +85,8 @@ def mark_task_complete(task_description: str, section: str = "THIS WEEK") -> Dic
         content = read_task_log()
         
         section_patterns = {
-            "THIS WEEK": r"(## 🎯 THIS WEEK.*?\n+)(.*?)(?=\n---|\n## |\Z)",
-            "INBOX": r"(## (?:📥 )?INBOX.*?\n+)(.*?)(?=\n---|\n## |\Z)",
+            "THIS WEEK": r"(## 🎯 THIS WEEK.*?\n\n)(.*?)(\n---)",
+            "INBOX": r"(## 📥 INBOX.*?\n\n)(.*?)(\n---)",
         }
         
         pattern = section_patterns.get(section)
@@ -120,7 +110,7 @@ def mark_task_complete(task_description: str, section: str = "THIS WEEK") -> Dic
         replacement = r"- [x] " + task_description + "\n"
         new_tasks_text = re.sub(task_pattern, replacement, tasks_text)
         
-        new_content = content[:match.start()] + match.group(1) + new_tasks_text + content[match.end():]
+        new_content = content[:match.start()] + match.group(1) + new_tasks_text + match.group(3) + content[match.end():]
         
         new_content = re.sub(
             r"\*\*Last Updated:\*\* \d{4}-\d{2}-\d{2}",
@@ -135,43 +125,37 @@ def mark_task_complete(task_description: str, section: str = "THIS WEEK") -> Dic
     except Exception as e:
         return {"success": False, "error": str(e)}
 
-def _section_tasks(content: str, section_label: str) -> list[str]:
-    blocks = re.split(r"\n(?=## )", content)
-    label_upper = section_label.upper()
-    for block in blocks:
-        header = block.split("\n", 1)[0]
-        if label_upper not in header.upper():
-            continue
-        body = block.split("\n", 1)[1] if "\n" in block else ""
-        body = re.split(r"\n## ", body, maxsplit=1)[0]
-        return [line.strip() for line in body.split("\n") if line.strip().startswith("-")]
-    return []
-
-
 def get_tasks(section: Optional[str] = None) -> Dict[str, Any]:
     """Get tasks from specified section or all sections."""
     try:
         content = read_task_log()
-
-        section_labels = {
-            "INBOX": "INBOX",
-            "THIS WEEK": "THIS WEEK",
-            "WAITING ON": "WAITING ON",
-            "PARKED": "PARKED",
+        
+        sections_map = {
+            "INBOX": r"## 📥 INBOX.*?\n\n(.*?)\n---",
+            "THIS WEEK": r"## 🎯 THIS WEEK.*?\n\n(.*?)\n---",
+            "WAITING ON": r"## ⏳ WAITING ON.*?\n\n(.*?)\n---",
+            "PARKED": r"## 🧊 PARKED.*?\n\n(.*?)\n---",
         }
 
         if section:
-            label = section_labels.get(section)
-            if not label:
+            pattern = sections_map.get(section)
+            if not pattern:
                 return {"success": False, "error": f"Unknown section: {section}"}
-            tasks = _section_tasks(content, label)
-            return {"success": True, "section": section, "tasks": tasks, "sections": {section: tasks}}
-
-        results = {
-            sec_name: _section_tasks(content, label) for sec_name, label in section_labels.items()
-        }
-        results = {k: v for k, v in results.items() if v}
-        return {"success": True, "sections": results}
+            
+            match = re.search(pattern, content, re.DOTALL)
+            tasks = []
+            if match:
+                tasks_text = match.group(1).strip()
+                tasks = [line.strip() for line in tasks_text.split("\n") if line.strip().startswith("-")]
+            return {"success": True, "section": section, "tasks": tasks}
+        else:
+            results = {}
+            for sec_name, pattern in sections_map.items():
+                match = re.search(pattern, content, re.DOTALL)
+                if match:
+                    tasks_text = match.group(1).strip()
+                    results[sec_name] = [line.strip() for line in tasks_text.split("\n") if line.strip().startswith("-")]
+            return {"success": True, "sections": results}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
@@ -284,38 +268,6 @@ def recover_system(error_log: str) -> Dict[str, Any]:
             "proposed_strategy": strategy,
             "status": "ready_to_execute" 
             # We don't auto-execute in this demo tool for safety
-        }
-    except Exception as e:
-        return {"success": False, "error": str(e)}
-
-
-def score_tasks() -> Dict[str, Any]:
-    """
-    Score INBOX tasks using the Stage 4 scorer when available.
-
-    This is retained as a compatibility surface for the MCP tasks server tests.
-    """
-    if not HAS_STAGE_4:
-        return {"success": False, "error": "Stage 4 modules not available"}
-
-    try:
-        inbox = get_tasks("INBOX")
-        if not inbox.get("success"):
-            return inbox
-
-        raw_tasks = inbox.get("tasks", [])
-        scorer = TaskScorer()
-        scored = scorer.score_tasks(raw_tasks)
-        return {
-            "success": True,
-            "scored_tasks": [
-                {
-                    "task_id": getattr(task, "task_id", None),
-                    "score": getattr(task, "score", None),
-                    "priority": getattr(task, "priority", None),
-                }
-                for task in scored
-            ],
         }
     except Exception as e:
         return {"success": False, "error": str(e)}

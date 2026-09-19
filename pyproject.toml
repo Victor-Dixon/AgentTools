@@ -3,18 +3,21 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "swarm-mcp"
-version = "0.1.0"
-description = "🐺 WE ARE SWARM - Multi-Agent AI Coordination Framework with consensus voting, conflict detection, capability learning, and work verification"
+name = "we-are-swarm-agenttools"
+version = "0.6.0"
+description = "Multi-agent AI coordination framework with MCP servers, task messaging, conflict detection, consensus, shared memory, and verifiable work."
 readme = "README.md"
 license = "MIT"
 authors = [
-    { name = "The Swarm" }
+    { name = "Victor Dixon" }
+]
+maintainers = [
+    { name = "Victor Dixon" }
 ]
 keywords = [
     "ai", "agents", "multi-agent", "swarm", "mcp", "model-context-protocol",
     "coordination", "llm", "claude", "gpt", "automation", "consensus",
-    "conflict-detection", "machine-learning-free", "ai-orchestration"
+    "conflict-detection", "work-verification", "ai-orchestration"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -38,6 +41,7 @@ dev = [
     "coverage>=7.6",
     "ruff>=0.1.0",
     "mypy>=1.0",
+    "python-dotenv>=1.0",
 ]
 discord = [
     "discord.py>=2.0",
@@ -52,10 +56,10 @@ full = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/swarm-team/swarm-mcp"
-Documentation = "https://github.com/swarm-team/swarm-mcp#readme"
-Repository = "https://github.com/swarm-team/swarm-mcp"
-Issues = "https://github.com/swarm-team/swarm-mcp/issues"
+Homepage = "https://github.com/Victor-Dixon/AgentTools"
+Documentation = "https://github.com/Victor-Dixon/AgentTools#readme"
+Repository = "https://github.com/Victor-Dixon/AgentTools"
+Issues = "https://github.com/Victor-Dixon/AgentTools/issues"
 
 [project.scripts]
 swarm = "swarm_mcp.cli:main"
@@ -64,9 +68,19 @@ swarm-memory-server = "swarm_mcp.servers.memory:main"
 swarm-tasks-server = "swarm_mcp.servers.tasks:main"
 swarm-control-server = "swarm_mcp.servers.control:main"
 swarm-tools-server = "swarm_mcp.servers.tools:main"
+passdown = "dream_control.cli:main"
+dreamcap = "dream_control.cli:main"
+dreamevent = "dream_control.cli:main"
+dreamscan = "dream_control.cli:main"
+dreamvps = "dream_control.cli:main"
+dreamrun = "dream_control.cli:main"
+dreaminstall = "dream_control.cli:main"
+dreamwire = "dream_control.cli:main"
+dreamlane = "dream_control.cli:main"
+brain-probe = "dream_control.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["swarm_mcp", "src/agent_tools"]
+packages = ["swarm_mcp", "src/agent_tools", "tools_v2", "dream_control"]
 
 [tool.ruff]
 line-length = 100

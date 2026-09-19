@@ -10,6 +10,7 @@ Author: Agent-7 - Repository Cloning Specialist
 
 import logging
 import subprocess
+import sys
 from typing import Any
 
 from ..adapters.base_adapter import IToolAdapter, ToolResult, ToolSpec
@@ -40,7 +41,7 @@ class V2CheckTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         """Execute V2 compliance check."""
         try:
-            cmd = ["python", "tools/v2_checker_cli.py", "--check", params["path"]]
+            cmd = [sys.executable, "tools/v2_checker_cli.py", "--check", params["path"]]
 
             if params.get("fix"):
                 cmd.append("--fix")
@@ -79,7 +80,7 @@ class V2ReportTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         """Execute V2 report generation."""
         try:
-            cmd = ["python", "tools/v2_checker_cli.py", "--report"]
+            cmd = [sys.executable, "tools/v2_checker_cli.py", "--report"]
 
             if params.get("format") == "json":
                 cmd.append("--json")

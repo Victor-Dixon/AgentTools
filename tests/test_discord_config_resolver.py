@@ -6,8 +6,6 @@ from tools.discord.config import resolve_discord_config
 def test_resolves_freeride_token_alias_from_file(tmp_path, monkeypatch):
     monkeypatch.delenv("DISCORD_BOT_TOKEN", raising=False)
     monkeypatch.delenv("FREERIDEINVESTOR_DISCORD_BOT_TOKEN", raising=False)
-    monkeypatch.delenv("DISCORD_GUILD_ID", raising=False)
-    monkeypatch.delenv("DISCORD_TARGET_GUILD_ID", raising=False)
 
     secrets = tmp_path / "secrets.env"
     secrets.write_text(

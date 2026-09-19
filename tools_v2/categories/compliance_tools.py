@@ -10,6 +10,7 @@ Author: Agent-7 - Repository Cloning Specialist
 
 import logging
 import subprocess
+import sys
 from typing import Any
 
 from ..adapters.base_adapter import IToolAdapter, ToolResult, ToolSpec
@@ -39,7 +40,7 @@ class ComplianceHistoryTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         """Execute compliance history retrieval."""
         try:
-            cmd = ["python", "tools/compliance_history_tracker.py", "--history"]
+            cmd = [sys.executable, "tools/compliance_history_tracker.py", "--history"]
 
             if params.get("agent_id"):
                 cmd.extend(["--agent", params["agent_id"]])
@@ -82,7 +83,7 @@ class PolicyCheckTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         """Execute policy check."""
         try:
-            cmd = ["python", "tools/compliance_dashboard.py", "--check", params["path"]]
+            cmd = [sys.executable, "tools/compliance_dashboard.py", "--check", params["path"]]
 
             result = subprocess.run(cmd, capture_output=True, text=True)
 

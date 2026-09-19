@@ -4,18 +4,6 @@ Promotion target: VPS long-running inbound bot. Slash commands sync to DISCORD_G
 """
 
 from __future__ import annotations
-# C2A_SELF_GAS_ROOT_DEFAULTS_041
-# Canonical desktop roots for C2A/S2A hard onboard and self-gas routes.
-import os as _c2a_self_gas_env_041
-_c2a_self_gas_env_041.environ["DREAMVAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["DREAMOS_VAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["VAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
-_c2a_self_gas_env_041.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
-_c2a_self_gas_env_041.environ.setdefault("DEFAULT_MODE", "pyautogui")
-_c2a_self_gas_env_041.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
-_c2a_self_gas_env_041.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
-_c2a_self_gas_env_041.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
 
 import asyncio
 import logging
@@ -31,34 +19,9 @@ SLASH_COMMANDS = (
     "/status",
     "/help",
     "/swarm-status",
-    "/focus",
     "/fleet-audit",
-    "/prompts",
-    "/send",
-    "/swarm",
-    "/broadcast",
-    "/agents",
-    "/agent-status",
-    "/commands",
-    "/swarm-help",
-    "/info",
-    "/gui",
-    "/connect",
-    "/onboard",
 )
-PREFIX_COMMANDS = (
-    "!ping",
-    "!status",
-    "!help",
-    "!swarm-status",
-    "!focus",
-    "!message",
-    "!broadcast",
-    "!onboard",
-    "!bump",
-    "!heal",
-    "!gui",
-)
+PREFIX_COMMANDS = ("!ping", "!status", "!help", "!swarm-status", "!message", "!heal")
 
 
 def _require_discord():
@@ -114,20 +77,6 @@ def _try_fleet_audit() -> dict[str, Any]:
         return {"error": str(exc)}
 
 
-def _build_focus_message() -> str:
-    """TODAY_FOCUS from DreamVault SSOT — core command (not cog-dependent)."""
-    vault = _vault_root()
-    src = vault / "src"
-    if src.is_dir() and str(src) not in sys.path:
-        sys.path.insert(0, str(src))
-    from dreamvault.discord.commander.focus_payload import (
-        build_and_publish_focus,
-        format_focus_discord_message,
-    )
-
-    return format_focus_discord_message(build_and_publish_focus(vault))
-
-
 class UnifiedDiscordBot:
     """Operator Discord bot with slash + prefix command surfaces."""
 
@@ -140,12 +89,6 @@ class UnifiedDiscordBot:
         self.token = token or os.getenv("DISCORD_BOT_TOKEN", "")
         self.guild_id = guild_id or os.getenv("DISCORD_GUILD_ID", "")
         self.bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
-        from .online_receipt import OnlineReceiptPublisher
-
-        self._online_receipts = OnlineReceiptPublisher(
-            self.bot,
-            os.getenv("DISCORD_BOT_RECEIPT_CHANNEL_NAME", "bot-dreamos-commander"),
-        )
         self._discord = discord
         self._app_commands = app_commands
         self.connection_healthy = False
@@ -161,10 +104,20 @@ class UnifiedDiscordBot:
         @self.bot.event
         async def on_ready() -> None:
             logger.info("Discord Commander bot ready as %s", self.bot.user)
-            receipt = await self._online_receipts.emit_state_change()
-            logger.info("Discord Commander online receipt: %s", receipt)
+            synced_count = 0
             try:
-                await self._sync_slash_commands(label="base")
+                if self.guild_id:
+                    guild = self._discord.Object(id=int(self.guild_id))
+                    pending = self.bot.tree.get_commands(guild=guild)
+                    logger.info("Guild tree pending commands: %d", len(pending))
+                    synced = await self.bot.tree.sync(guild=guild)
+                else:
+                    pending = self.bot.tree.get_commands()
+                    logger.info("Global tree pending commands: %d", len(pending))
+                    synced = await self.bot.tree.sync()
+                synced_count = len(synced)
+                names = ", ".join(c.name for c in synced) if synced else "(none)"
+                logger.info("Synced %d slash commands to guild: %s", synced_count, names)
             except Exception as exc:
                 logger.error("Slash command sync failed: %s", exc)
             logger.info(
@@ -173,69 +126,19 @@ class UnifiedDiscordBot:
                 ", ".join(SLASH_COMMANDS),
             )
             await self._load_promoted_slice()
-            if self._slice_loaded:
-                try:
-                    await self._sync_slash_commands(label="promoted")
-                except Exception as exc:
-                    logger.error("Promoted slash command sync failed: %s", exc)
-
-        @self.bot.event
-        async def on_disconnect() -> None:
-            self.connection_healthy = False
-            self._online_receipts.mark_disconnected()
-            logger.warning("Discord Commander disconnected")
-
-        @self.bot.event
-        async def on_resumed() -> None:
-            self.connection_healthy = True
-            receipt = await self._online_receipts.emit_state_change()
-            logger.info("Discord Commander reconnect receipt: %s", receipt)
-
-    async def _sync_slash_commands(self, *, label: str) -> None:
-        if self.guild_id:
-            guild = self._discord.Object(id=int(self.guild_id))
-            # Cog @app_commands land on the global tree. Guild sync alone only
-            # publishes guild-scoped commands (base /ping etc.). copy_global_to
-            # is required so promoted cogs (/play, /connect, restored) appear.
-            if label == "promoted":
-                self.bot.tree.copy_global_to(guild=guild)
-                logger.info(
-                    "Promoted: copied global app commands onto guild %s before sync",
-                    self.guild_id,
-                )
-            pending = self.bot.tree.get_commands(guild=guild)
-            logger.info("%s guild tree pending commands: %d", label.title(), len(pending))
-            synced = await self.bot.tree.sync(guild=guild)
-        else:
-            pending = self.bot.tree.get_commands()
-            logger.info("%s global tree pending commands: %d", label.title(), len(pending))
-            synced = await self.bot.tree.sync()
-        names = ", ".join(c.name for c in synced) if synced else "(none)"
-        logger.info("%s sync registered %d slash commands: %s", label.title(), len(synced), names)
-        if label == "promoted" and synced:
-            play_ok = any(getattr(c, "name", "") == "play" for c in synced)
-            logger.info(
-                "Promoted /play slash registration: %s",
-                "PASS" if play_ok else "MISSING",
-            )
 
     async def _load_promoted_slice(self) -> None:
         if self._slice_loaded:
             return
-        from .lifecycle.bot_lifecycle import BotLifecycleManager
+        try:
+            from .lifecycle.bot_lifecycle import BotLifecycleManager
 
-        lifecycle = BotLifecycleManager(self)
-        try:
+            lifecycle = BotLifecycleManager(self)
             await lifecycle.setup_hook()
+            self._slice_loaded = True
+            logger.info("Promoted Commander slice loaded")
         except Exception as exc:
-            logger.warning("Promoted slice setup_hook failed: %s", exc)
-            return
-        self._slice_loaded = True
-        try:
-            await lifecycle.send_startup_message()
-        except Exception as exc:
-            logger.warning("Startup views failed (cogs still active): %s", exc)
-        logger.info("Promoted Commander slice loaded")
+            logger.warning("Promoted slice not loaded: %s", exc)
 
     def _register_prefix_commands(self) -> None:
         @self.bot.command(name="ping")
@@ -254,26 +157,14 @@ class UnifiedDiscordBot:
         async def help_prefix(ctx) -> None:
             await ctx.send(
                 "**Discord Commander**\n"
-                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!focus` `!message` `!heal` `!gui`\n"
-                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/focus` `/fleet-audit` `/prompts` `/play`\n"
-                "Slash (restored): `/send` `/swarm` `/agents` `/agent-status` `/commands` "
-                "`/swarm-help` `/info` `/gui`"
+                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message <agent> <msg>` `!heal`\n"
+                "Slash: `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`"
             )
 
         @self.bot.command(name="swarm-status")
         async def swarm_status_prefix(ctx) -> None:
             embed = self._build_swarm_embed()
             await ctx.send(embed=embed)
-
-        @self.bot.command(name="focus")
-        async def focus_prefix(ctx) -> None:
-            try:
-                message = _build_focus_message()
-            except Exception as exc:
-                logger.exception("focus prefix command failed")
-                await ctx.send(f"focus error: {exc}")
-                return
-            await ctx.send(message[:2000])
 
     def _register_slash_commands(self) -> None:
         guild_obj = None
@@ -301,26 +192,14 @@ class UnifiedDiscordBot:
         async def help_slash(interaction) -> None:
             await interaction.response.send_message(
                 "**Discord Commander**\n"
-                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!focus` `!message` `!heal` `!gui`\n"
-                "Slash (core): `/ping` `/status` `/help` `/swarm-status` `/focus` `/fleet-audit` `/prompts` `/play`\n"
-                "Slash (restored): `/send` `/swarm` `/agents` `/agent-status` `/commands` "
-                "`/swarm-help` `/info` `/gui`"
+                "Prefix: `!ping` `!status` `!help` `!swarm-status` `!message <agent> <msg>` `!heal`\n"
+                "Slash: `/ping` `/status` `/help` `/swarm-status` `/fleet-audit`"
             )
 
         @slash(name="swarm-status", description="Agent workspace status from status.json")
         async def swarm_status_slash(interaction) -> None:
             embed = self._build_swarm_embed()
             await interaction.response.send_message(embed=embed)
-
-        @slash(name="focus", description="TODAY_FOCUS from DreamVault SSOT")
-        async def focus_slash(interaction) -> None:
-            try:
-                message = _build_focus_message()
-            except Exception as exc:
-                logger.exception("focus slash command failed")
-                await interaction.response.send_message(f"focus error: {exc}", ephemeral=True)
-                return
-            await interaction.response.send_message(message[:2000])
 
         @slash(name="fleet-audit", description="Audit Dream.OS guild bot roster (masked)")
         async def fleet_audit_slash(interaction) -> None:

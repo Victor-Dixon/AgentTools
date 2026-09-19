@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_toolbelt_surface_audit_is_generated_and_clean() -> None:
     subprocess.run(
-        [sys.executable, "scripts/audit_toolbelt_surfaces.py"],
+        ["python3", "scripts/audit_toolbelt_surfaces.py"],
         cwd=ROOT,
         check=True,
     )

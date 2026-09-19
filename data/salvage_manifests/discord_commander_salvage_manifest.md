@@ -24,9 +24,7 @@ Discord Commander is a reusable Discord ↔ agent ops bridge, not core Agent Cel
 | `src/agent_tools/discord_commander/inbound_dry_run.py` | Adapted from `scripts/health/discord_dry_run.py` |
 | `src/agent_tools/discord_commander/outbound_dry_run.py` | Built (not present in source) |
 | `src/agent_tools/discord_commander/status.py` | New |
-| `src/agent_tools/discord_commander/queue_bridge.py` | PyAutoGUI adapter boundary |
-| `src/agent_tools/discord_commander/pyautogui_transport.py` | Agent_Cellphone transport loader |
-| `src/agent_tools/discord_commander/message_queue_processor.py` | JSON queue processor (start-queue) |
+| `src/agent_tools/discord_commander/queue_bridge.py` | New (PyAutoGUI adapter boundary) |
 | `src/agent_tools/discord_commander/bot_runner_service.py` | Adapted from `src/discord_commander/bot_runner_service.py` |
 | `src/agent_tools/discord_commander/unified_discord_bot.py` | Slim promotion from `src/discord_commander/unified_discord_bot.py` |
 | `tools/discord_commander/post_to_discord_router.py` | Built (portfolio salvage missing) |
@@ -43,8 +41,7 @@ Discord Commander is a reusable Discord ↔ agent ops bridge, not core Agent Cel
 
 - `.env`, cookies, tokens
 - Full `src/discord_commander/` GUI surface (116 modules)
-- Duplicate Agent_Cellphone queue modules (removed 2026-06-24; consolidated into agent-tools)
-- `Agent_Cellphone/src/services/agent_cell_phone.py` remains PyAutoGUI SSOT (loaded via adapter)
+- `src/core/legacy_message_queue_processor.py` (remains in Agent Cellphone; referenced via adapter)
 - Unrelated Dreamscape GUI code
 
 ## Verification

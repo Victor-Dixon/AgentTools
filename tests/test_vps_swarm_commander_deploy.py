@@ -74,13 +74,12 @@ class TestHeadlessImportSmoke:
         assert ams.normalize_agent_id("3") == "Agent-3"
         assert "!message" in bot.PREFIX_COMMANDS
 
-    def test_queue_bridge_optional(self, monkeypatch):
+    def test_queue_bridge_optional(self):
         import sys
 
-        monkeypatch.setenv("DISCORD_COMMANDER_DISABLE_PYAUTOGUI", "1")
         src = ROOT / "src"
         if str(src) not in sys.path:
             sys.path.insert(0, str(src))
         from agent_tools.discord_commander.queue_bridge import deliver_message
 
-        assert deliver_message("hi", "Agent-1", None).success is False
+        assert deliver_message("hi", "Agent-1", None) is False

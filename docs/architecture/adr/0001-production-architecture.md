@@ -4,6 +4,8 @@
 
 Accepted for stabilization.
 
+**Reviewed 2026-05-17:** Boundary mapping remains directionally useful, but `kanban-scheduler/` is not present in the current checkout. Current workspace structure and active/inactive classification are documented in `PROJECT_STRUCTURE.md` and `PROJECT_AUDIT_REPORT.md`.
+
 ## Context
 
 AgentTools currently contains active runtime code, MCP server surfaces, web/API candidates, legacy tools, archives, and generated artifacts. The repo must be restored into a production-ready product without breaking existing behavior.
@@ -35,7 +37,7 @@ AgentTools will use a layered architecture:
 | Application | `swarm_mcp/core/coordinator.py`, `brain.py`, `memory.py`, `recovery.py`, `pattern_miner.py` |
 | Adapters | `swarm_mcp/servers/`, `mcp_servers/`, `apps/api/`, `apps/web/`, `integration/` |
 | Shared Contracts | `packages/shared/` |
-| Archive / Legacy | `tools/`, `kanban-scheduler/`, optional module folders |
+| Archive / Legacy | `tools/deprecated/`, `docs/quarantine/`, externally archived surfaces referenced by `docs/ARCHIVE_POINTER.md`, optional module folders after classification |
 
 ## Testing Strategy
 

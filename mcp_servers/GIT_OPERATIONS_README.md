@@ -75,7 +75,7 @@ Check git history for a specific file
 {
   "name": "check_file_history",
   "arguments": {
-    "file_path": "MASTER_TASK_LOG.md",
+    "file_path": "docs/root/MASTER_TASK_LOG.md",
     "days": 7
   }
 }

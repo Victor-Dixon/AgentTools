@@ -114,30 +114,17 @@ class OnboardingExecutor:
         return result.returncode
 
     def _onboarding_status(self, args) -> int:
-        """Check onboarding status for an agent.
-
-        Surfaces the canonical readiness paths used by
-        ``python -m tools.toolbelt --onboard-status --agent Agent-N``.
-        """
+        """Check onboarding status for an agent."""
         if not args.agent:
             print("❌ --agent required for status check")
             return 1
 
-        for line in format_onboarding_status_lines(args.agent):
-            print(line)
+        print(f"📊 Onboarding status for {args.agent}:")
+        print(f"   Status file: agent_workspaces/{args.agent}/status.json")
+        print(f"   Inbox: agent_workspaces/{args.agent}/inbox/")
+        print(f"   Use: cat agent_workspaces/{args.agent}/status.json | jq")
         return 0
 
 
-def format_onboarding_status_lines(agent: str) -> list[str]:
-    """Return human-readable onboard-status lines for ``agent`` (no I/O)."""
-    return [
-        f"📊 Onboarding status for {agent}:",
-        f"   Status file: agent_workspaces/{agent}/status.json",
-        f"   Inbox: agent_workspaces/{agent}/inbox/",
-        f"   Use: cat agent_workspaces/{agent}/status.json | jq",
-        "   Canonical: python -m tools.toolbelt --onboard-status --agent " + agent,
-    ]
-
-
-__all__ = ["OnboardingExecutor", "format_onboarding_status_lines"]
+__all__ = ["OnboardingExecutor"]
 

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_legacy_tool_migration_matrix_generates() -> None:
     subprocess.run(
-        [sys.executable, "scripts/build_legacy_tool_migration_matrix.py"],
+        ["python3", "scripts/build_legacy_tool_migration_matrix.py"],
         cwd=ROOT,
         check=True,
     )

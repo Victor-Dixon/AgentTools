@@ -1,0 +1,607 @@
+{
+  "copied": [
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 33,
+      "score_reasons": [
+        "agent+10",
+        "manager+8",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/agent/RecommendationManager.py",
+      "target_path": "research/salvage_reviews/scanners/RecommendationManager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 33,
+      "score_reasons": [
+        "agent+10",
+        "manager+8",
+        "assistant+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/src/agent/ConversationManager.py",
+      "target_path": "research/salvage_reviews/managers/ConversationManager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 31,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "readme+5",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/README.md",
+      "target_path": "research/salvage_reviews/docs/README.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 30,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "utils+5",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/utils/data_fetcher.py",
+      "target_path": "research/salvage_reviews/scanners/data_fetcher.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 30,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "utils+5",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/utils/performance_evaluator.py",
+      "target_path": "research/salvage_reviews/scanners/performance_evaluator.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 30,
+      "score_reasons": [
+        "agent+10",
+        "dispatcher+10",
+        "manager+8",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/_passive_income/project_manager_app/core/AgentDispatcher.py",
+      "target_path": "research/salvage_reviews/dispatchers/AgentDispatcher.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 27,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/config/bot_configs/bot1_config.yaml",
+      "target_path": "research/salvage_reviews/scanners/bot1_config.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 27,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/config/bot_configs/bot2_config.yaml",
+      "target_path": "research/salvage_reviews/scanners/bot2_config.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 27,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/config/config.yaml",
+      "target_path": "research/salvage_reviews/scanners/config.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 27,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/config/evaluation_criteria.yaml",
+      "target_path": "research/salvage_reviews/scanners/evaluation_criteria.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 26,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/docs/BotIntegrationGuide.md",
+      "target_path": "research/salvage_reviews/scanners/BotIntegrationGuide.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 26,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/docs/EvaluationCriteria.md",
+      "target_path": "research/salvage_reviews/scanners/EvaluationCriteria.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 26,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/docs/Recommendations.md",
+      "target_path": "research/salvage_reviews/scanners/Recommendations.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 26,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/requirements.txt",
+      "target_path": "research/salvage_reviews/scanners/requirements.txt"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 26,
+      "score_reasons": [
+        "agent+10",
+        "manager+8",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Mastermind_Finder_Bot/src/agent/InteractionManager.py",
+      "target_path": "research/salvage_reviews/managers/InteractionManager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/main.py",
+      "target_path": "research/salvage_reviews/scanners/main.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/scripts/evaluate_bots.py",
+      "target_path": "research/salvage_reviews/scanners/evaluate_bots.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/scripts/generate_recommendations.py",
+      "target_path": "research/salvage_reviews/scanners/generate_recommendations.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/agent/BotDiscoveryAgent.py",
+      "target_path": "research/salvage_reviews/scanners/BotDiscoveryAgent.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/bot_interfaces/Bot1Interface.py",
+      "target_path": "research/salvage_reviews/scanners/Bot1Interface.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/bot_interfaces/Bot2Interface.py",
+      "target_path": "research/salvage_reviews/scanners/Bot2Interface.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/models/recommender_model_train.py",
+      "target_path": "research/salvage_reviews/scanners/recommender_model_train.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/models/scoring_model.py",
+      "target_path": "research/salvage_reviews/scanners/scoring_model.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "discovery+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Bot_Discovery_Agent/src/run_discovery_agent.py",
+      "target_path": "research/salvage_reviews/scanners/run_discovery_agent.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "agent+10",
+        "assistant+7",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/src/agent/DatingAssistantAgent.py",
+      "target_path": "research/salvage_reviews/assistants/DatingAssistantAgent.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 25,
+      "score_reasons": [
+        "manager+8",
+        "bot+6",
+        "utilities+5",
+        "config+4",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/MLRobotmaker/Utilities/config_manager.py",
+      "target_path": "research/salvage_reviews/managers/config_manager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 22,
+      "score_reasons": [
+        "bot+6",
+        "utils+5",
+        "utilities+5",
+        "config+4",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/MLRobotmaker/Utilities/config_utils.py",
+      "target_path": "research/salvage_reviews/bots/config_utils.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 21,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "readme+5",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/README.md",
+      "target_path": "research/salvage_reviews/_indexed/data__ideas__repo_salvage_20260613__ideas__Dating_Assistant_Bot__README.md_36bc614e.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 20,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "utils+5",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/src/utils/match_evaluator.py",
+      "target_path": "research/salvage_reviews/assistants/match_evaluator.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 20,
+      "score_reasons": [
+        "agent+10",
+        "manager+8",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/_passive_income/project_manager_app/models/ai_agent_model.py",
+      "target_path": "research/salvage_reviews/managers/ai_agent_model.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 20,
+      "score_reasons": [
+        "agent+10",
+        "manager+8",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/modular_ai_agent/central_hub/goal_manager.py",
+      "target_path": "research/salvage_reviews/managers/goal_manager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 20,
+      "score_reasons": [
+        "agent+10",
+        "manager+8",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/modular_ai_agent/modules/data_pipeline/source_manager.py",
+      "target_path": "research/salvage_reviews/managers/source_manager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 19,
+      "score_reasons": [
+        "manager+8",
+        "utilities+5",
+        "config+4",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/machinelearningmodelmaker/Utilities/config_manager.py",
+      "target_path": "research/salvage_reviews/_indexed/data__reports__ml_ai_experiments__repo_salvage_20260613__machinelearningmodelmaker__Utilities__confi_a08274a0.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 18,
+      "score_reasons": [
+        "agent+10",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Mastermind_Finder_Bot/src/agent/MastermindFinderAgent.py",
+      "target_path": "research/salvage_reviews/bots/MastermindFinderAgent.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 18,
+      "score_reasons": [
+        "agent+10",
+        "readme+5",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/modular_ai_agent/README.md",
+      "target_path": "research/salvage_reviews/_indexed/data__ideas__repo_salvage_20260613__ideas__modular_ai_agent__README.md_f5990e54.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 18,
+      "score_reasons": [
+        "bot+6",
+        "utils+5",
+        "utilities+5",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/MLRobotmaker/Utilities/model_utils.py",
+      "target_path": "research/salvage_reviews/bots/model_utils.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 18,
+      "score_reasons": [
+        "bot+6",
+        "utils+5",
+        "utilities+5",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/MLRobotmaker/Utilities/utils.py",
+      "target_path": "research/salvage_reviews/bots/utils.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/config/config.yaml",
+      "target_path": "research/salvage_reviews/assistants/config.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/config/conversation_topics/hobbies.yaml",
+      "target_path": "research/salvage_reviews/assistants/hobbies.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/config/conversation_topics/movies.yaml",
+      "target_path": "research/salvage_reviews/assistants/movies.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/config/conversation_topics/travel.yaml",
+      "target_path": "research/salvage_reviews/assistants/travel.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/config/profiles.yaml",
+      "target_path": "research/salvage_reviews/assistants/profiles.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "config+4"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/config/prompts.yaml",
+      "target_path": "research/salvage_reviews/assistants/prompts.yaml"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 17,
+      "score_reasons": [
+        "bot+6",
+        "utilities+5",
+        "config+4",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/MLRobotmaker/Utilities/config_handling.py",
+      "target_path": "research/salvage_reviews/bots/config_handling.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 16,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/docs/ConversationStarters.md",
+      "target_path": "research/salvage_reviews/assistants/ConversationStarters.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 16,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/docs/DateIdeaSuggestions.md",
+      "target_path": "research/salvage_reviews/assistants/DateIdeaSuggestions.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 16,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/docs/ProfileOptimizationGuide.md",
+      "target_path": "research/salvage_reviews/assistants/ProfileOptimizationGuide.md"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 16,
+      "score_reasons": [
+        "assistant+7",
+        "bot+6",
+        "safe_doc+3"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Dating_Assistant_Bot/requirements.txt",
+      "target_path": "research/salvage_reviews/assistants/requirements.txt"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 16,
+      "score_reasons": [
+        "manager+8",
+        "bot+6",
+        "source+2"
+      ],
+      "source_path": "data/ideas/repo_salvage_20260613/ideas/Mastermind_Finder_Bot/src/outreach_engine/FollowUpManager.py",
+      "target_path": "research/salvage_reviews/managers/FollowUpManager.py"
+    },
+    {
+      "promotion_reason": "high_value_nonblocked_candidate",
+      "score": 16,
+      "score_reasons": [
+        "utils+5",
+        "utilities+5",
+        "config+4",
+        "source+2"
+      ],
+      "source_path": "data/reports/ml_ai_experiments/repo_salvage_20260613/machinelearningmodelmaker/Utilities/config_utils.py",
+      "target_path": "research/salvage_reviews/utilities/config_utils.py"
+    }
+  ],
+  "copied_count": 50,
+  "guardrails": [
+    "review copy only",
+    "no credential/auth/API wiring",
+    "no external integrations enabled",
+    "manual review required before integration"
+  ],
+  "id": "agenttools_salvage_review_manifest_20260613",
+  "skipped": [],
+  "skipped_count": 0,
+  "source_plan": "DreamVault/data/reports/github_consolidation/agenttools_scoped_promotion_plan_20260613.json",
+  "status": "review_copy"
+}

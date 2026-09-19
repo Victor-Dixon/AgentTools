@@ -1,0 +1,36 @@
+# Dream.OS Control Plane OAuth scope SSOT (ChatGPT connector)
+schema: dreamos.oauth_scopes.v1
+
+scopes_supported:
+  - dreamos.read
+  - dreamos.write
+  - repo.branch.delete
+
+default_scopes:
+  - dreamos.read
+
+base_scopes: []
+
+chatgpt_connector:
+  registration: USER_DEFINED
+  callback_uri: https://chatgpt.com/connector/oauth/QTOb4VcHdCsWsvg
+  callback_uri_chatgpt_ui: https://chatgpt.com/connector/oauth/QTOb4VcHdCsW
+  token_endpoint_auth_method: none
+  pkce: S256
+  oidc: false
+  dcr: false
+
+predefined_client:
+  client_id: dreamos-chatgpt-connector
+  client_type: public
+  redirect_uris:
+    - https://chatgpt.com/connector/oauth/QTOb4VcHdCsW
+    - https://chatgpt.com/connector/oauth/QTOb4VcHdCsWsvg
+
+tool_scopes:
+  read:
+    - dreamos.read
+  write:
+    - dreamos.write
+  branch_delete:
+    - repo.branch.delete

@@ -4,10 +4,10 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 
 ## Summary
 
-- `legacy_review`: 7
-- `possible_duplicate`: 16
-- `salvage_candidate`: 33
-- `script_candidate`: 121
+- `legacy_review`: 5
+- `possible_duplicate`: 15
+- `salvage_candidate`: 31
+- `script_candidate`: 88
 
 ## Records
 
@@ -24,27 +24,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - status: `script_candidate`
 - classes: `UnifiedAgent`
 - functions: `main, __init__, orient_agent, tasks_find, status_check, status_activity, lifecycle_automate, onboard_hard, lifecycle_heal`
-- has_main_guard: `True`
-
-### `tools/agent2_website_audit.py`
-
-- status: `script_candidate`
-- classes: `Agent2WebsiteAuditor`
-- functions: `main, __init__, fetch_url_content, analyze_html_content, calculate_seo_score, calculate_ux_score, get_ollama_insights, audit_website, audit_multiple_sites, _extract_top_issues`
-- has_main_guard: `True`
-
-### `tools/agent_system_training_program.py`
-
-- status: `script_candidate`
-- classes: `TrainingModule, AgentProfile, AgentSystemTrainingProgram`
-- functions: `main, __init__, _load_training_modules, _load_agent_profiles, _define_certification_levels, onboard_agent, assess_agent_skills, _infer_expertise_from_agent_id, _get_next_certification_level, generate_training_curriculum, run_practice_session, run_certification_exam`
-- has_main_guard: `True`
-
-### `tools/agent_workspace_cleanup.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `get_agent_workspace_dirs, identify_cleanup_candidates, create_archive_dir, safe_archive_file, perform_cleanup, main`
 - has_main_guard: `True`
 
 ### `tools/analysis/__init__.py`
@@ -158,20 +137,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - status: `script_candidate`
 - classes: `UnifiedAnalyzer`
 - functions: `main, __init__, analyze_repository, analyze_project_structure, analyze_file, detect_consolidation_opportunities, _calculate_similarity, analyze_overlaps, _extract_repo_name, _extract_tech_stack, run_full_analysis, print_analysis_report`
-- has_main_guard: `True`
-
-### `tools/analytics/unified_analytics_dashboard.py`
-
-- status: `script_candidate`
-- classes: `WebsiteAnalytics, AnalyticsAlert, UnifiedAnalyticsDashboard`
-- functions: `__post_init__, __init__, collect_website_analytics, _mock_page_views, _mock_unique_visitors, _mock_bounce_rate, _mock_session_duration, _mock_top_pages, _mock_traffic_sources, _calculate_seo_score, _calculate_performance_score, _save_analytics_data`
-- has_main_guard: `True`
-
-### `tools/automate_pyautogui_dispatch.py`
-
-- status: `script_candidate`
-- classes: `DispatchTarget, DispatchStep, DispatchReport`
-- functions: `_ensure_utf8, _parse_agent_id, _resolve_repo, _load_json, _coords_candidate_paths, _candidate_coord_keys, _resolve_target, _profile_matches_target, _resolve_devtools_click, _focus_target, _run_outbox_helper, _dispatch_packet`
 - has_main_guard: `True`
 
 ### `tools/autonomous/__init__.py`
@@ -331,13 +296,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - status: `script_candidate`
 - classes: `none`
 - functions: `none`
-- has_main_guard: `True`
-
-### `tools/closure_quality_audit.py`
-
-- status: `script_candidate`
-- classes: `QualityIssue, ClosureQualityAudit`
-- functions: `main, __init__, scan_python_files, run_linting_check, check_imports, check_cli_tools, analyze_functionality_consolidation, generate_report, run_full_audit`
 - has_main_guard: `True`
 
 ### `tools/codemods/__init__.py`
@@ -505,13 +463,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - functions: `send_discord_command, test_commands_interactive`
 - has_main_guard: `True`
 
-### `tools/cycle_accomplishment_integrator.py`
-
-- status: `script_candidate`
-- classes: `CycleAccomplishmentIntegrator`
-- functions: `main, __init__, _load_points_config, validate_inputs, load_agent_status, check_idempotency, update_cycle_status_atomic, _calculate_accomplishments_config, generate_accomplishment_report, post_to_cycle_channel`
-- has_main_guard: `True`
-
 ### `tools/debug/check_stuck_messages.py`
 
 - status: `script_candidate`
@@ -547,20 +498,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - functions: `check_queue_health, scan_logs_for_errors, check_agent_processes, main`
 - has_main_guard: `True`
 
-### `tools/deployment/automated_deployment_pipeline.py`
-
-- status: `script_candidate`
-- classes: `WebsiteConfig, DeploymentResult, AutomatedDeploymentPipeline`
-- functions: `__post_init__, __init__, _load_website_configs, _save_config, _log_deployment_result`
-- has_main_guard: `True`
-
-### `tools/devlog_poster.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `split_content_into_pages, update_agent_status, save_devlog_for_website, post_agent_heartbeat, post_devlog_to_discord, main`
-- has_main_guard: `True`
-
 ### `tools/devops/documentation_assistant.py`
 
 - status: `script_candidate`
@@ -582,89 +519,11 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - functions: `check_tools, check_env_vars, check_docker_status, main`
 - has_main_guard: `True`
 
-### `tools/discord/__init__.py`
-
-- status: `possible_duplicate`
-- possible target: `tools_v2/utils/__init__.py`
-- classes: `none`
-- functions: `none`
-- has_main_guard: `False`
-
-### `tools/discord/config.py`
-
-- status: `salvage_candidate`
-- classes: `none`
-- functions: `parse_export_file, first_value, resolve_discord_config`
-- has_main_guard: `False`
-
-### `tools/discord/create_webhook.py`
-
-- status: `legacy_review`
-- classes: `none`
-- functions: `none`
-- has_main_guard: `False`
-
-### `tools/discord/list_channels.py`
-
-- status: `legacy_review`
-- classes: `none`
-- functions: `none`
-- has_main_guard: `False`
-
 ### `tools/discord/unified_discord.py`
 
 - status: `script_candidate`
 - classes: `UnifiedDiscord`
 - functions: `main, __init__, system_start, system_restart, test_commands, test_bot_debug, test_channels, verify_buttons, verify_running, upload_file`
-- has_main_guard: `True`
-
-### `tools/discord/webhook_sender.py`
-
-- status: `salvage_candidate`
-- classes: `DiscordWebhookResult`
-- functions: `_resolve_webhook_url, send_payload, send_payload_file`
-- has_main_guard: `False`
-
-### `tools/discord_commander/post_to_discord_router.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `main`
-- has_main_guard: `True`
-
-### `tools/discord_commander/run_message_router_discord_bot_with_restart.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `run_bot, main`
-- has_main_guard: `True`
-
-### `tools/discord_commander/run_unified_discord_bot_with_restart.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `run_bot, main`
-- has_main_guard: `True`
-
-### `tools/discord_commander/start_discord_system.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `_token_present, _spawn, main`
-- has_main_guard: `True`
-
-### `tools/discord_commander/start_message_bus_processor.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `main`
-- has_main_guard: `True`
-
-### `tools/discord_commander/start_message_queue_processor.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `none`
 - has_main_guard: `True`
 
 ### `tools/doc_templates_achievements.py`
@@ -689,46 +548,11 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - functions: `none`
 - has_main_guard: `False`
 
-### `tools/force_multiplier_gate.py`
-
-- status: `script_candidate`
-- classes: `ForceMultiplierGate`
-- functions: `main, __init__, load_rehydration_snapshot, load_agent_status, get_current_git_sha, check_task_scope, check_ownership, check_execution_readiness, check_alignment, evaluate_gate, print_gate_results`
-- has_main_guard: `True`
-
 ### `tools/github/unified_github.py`
 
 - status: `script_candidate`
 - classes: `UnifiedGitHub`
 - functions: `main, __init__, pr_create, pr_debug, pr_fix, repo_audit, merge_analyze_failures, merge_analyze_plans, merge_complete, audit_architecture`
-- has_main_guard: `True`
-
-### `tools/hybrid_website_audit.py`
-
-- status: `script_candidate`
-- classes: `HybridWebsiteAuditor`
-- functions: `__init__, fetch_page_content, parse_html_content, manual_seo_analysis, manual_ux_analysis`
-- has_main_guard: `True`
-
-### `tools/intelligent_system_suggester.py`
-
-- status: `script_candidate`
-- classes: `SystemRecommendation, WorkflowSuggestion, IntelligentSystemSuggester`
-- functions: `main, __init__, _load_system_knowledge, _load_task_patterns, _load_success_patterns, _calculate_efficiency_weights, analyze_task, _identify_task_type, _calculate_system_confidence, _generate_reasoning, suggest_workflow, _select_workflow_pattern`
-- has_main_guard: `True`
-
-### `tools/maintenance/maintenance_checklists.py`
-
-- status: `script_candidate`
-- classes: `MaintenanceTask, MaintenanceChecklist, MaintenanceSystem`
-- functions: `__post_init__, __post_init__, __init__, _load_maintenance_templates, generate_website_checklist, _calculate_next_due, _estimate_duration, _save_checklist, load_checklist, update_task_status, _log_maintenance_completion, get_overdue_tasks`
-- has_main_guard: `True`
-
-### `tools/messaging_cli_wrapper.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `_dreamvault_roots, _resolve_ssot_script, main`
 - has_main_guard: `True`
 
 ### `tools/migration/discover_repos_manual.py`
@@ -766,34 +590,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - functions: `main, __init__, monitor_queue_health, check_message_queue_file, monitor_service_health, monitor_disk_usage, monitor_agent_status, monitor_workspace_health, monitor_test_coverage, run_full_monitoring, print_monitoring_report, check_agent_workspace`
 - has_main_guard: `True`
 
-### `tools/monitoring/website_health_monitor.py`
-
-- status: `script_candidate`
-- classes: `HealthCheckResult, HealthAlert, WebsiteHealthMonitor`
-- functions: `__post_init__, __init__, _load_config, generate_health_report, display_health_report`
-- has_main_guard: `True`
-
-### `tools/one_screen_execution_loop.py`
-
-- status: `script_candidate`
-- classes: `OneScreenExecutionLoop`
-- functions: `main, __init__, load_rehydration_snapshot, save_rehydration_snapshot, execute_command, validate_output, update_snapshot_after_execution, run_execution_loop`
-- has_main_guard: `True`
-
-### `tools/operating_cycle_system_integration.py`
-
-- status: `script_candidate`
-- classes: `CyclePhase, EnhancedOperatingCycle, OperatingCycleIntegrator`
-- functions: `main, __init__, _load_agent_expertise, _load_system_templates, _load_efficiency_metrics, enhance_operating_cycle, _calculate_efficiency_gain, _calculate_utilization_rate, generate_system_checklist, generate_agent_playbook, analyze_efficiency_gains`
-- has_main_guard: `True`
-
-### `tools/rehydration_manager.py`
-
-- status: `script_candidate`
-- classes: `RehydrationManager`
-- functions: `main, __init__, get_current_git_sha, load_agent_status, load_inbox_messages, create_rehydration_snapshot, save_rehydration_snapshot, validate_resume_gates, get_status_summary`
-- has_main_guard: `True`
-
 ### `tools/security/check_sensitive_files.py`
 
 - status: `script_candidate`
@@ -806,20 +602,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - status: `script_candidate`
 - classes: `none`
 - functions: `run_command, scan_sensitive_files, scan_content_secrets, audit_python_dependencies, audit_npm_dependencies, main`
-- has_main_guard: `True`
-
-### `tools/soft_onboard_cli.py`
-
-- status: `script_candidate`
-- classes: `SoftOnboardAgent`
-- functions: `main, __init__, run_command, run_command_live, step_load_state, step_evaluate_gate, step_execute_visual_onboarding, step_validate_closure, onboard_agent`
-- has_main_guard: `True`
-
-### `tools/streamlined_website_audit.py`
-
-- status: `script_candidate`
-- classes: `StreamlinedWebsiteAuditor`
-- functions: `main, __init__, fetch_content, analyze_content, calculate_scores, get_ollama_insights, audit_website, _get_priority_actions, audit_batch`
 - has_main_guard: `True`
 
 ### `tools/swarm/agents/import_healer.py`
@@ -876,20 +658,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - status: `script_candidate`
 - classes: `none`
 - functions: `run_validation`
-- has_main_guard: `True`
-
-### `tools/system_discovery_agent.py`
-
-- status: `script_candidate`
-- classes: `SystemTool, SystemDiscoveryAgent`
-- functions: `main, __init__, _load_systems_registry, _load_agent_expertise, discover_all_systems, find_tools_for_task, get_operating_cycle_integration, analyze_usage_patterns`
-- has_main_guard: `True`
-
-### `tools/system_utilization_feedback_loop.py`
-
-- status: `script_candidate`
-- classes: `SystemUsageEvent, SystemEffectivenessMetrics, SystemUtilizationFeedbackLoop`
-- functions: `main, __init__, _load_usage_history, _calculate_system_metrics, _analyze_agent_patterns, _generate_swarm_insights, track_usage_event, analyze_agent_effectiveness, _generate_agent_recommendations, generate_improvement_recommendations, get_swarm_insights, generate_predictive_recommendations`
 - has_main_guard: `True`
 
 ### `tools/thea/__init__.py`
@@ -1073,14 +841,7 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 
 - status: `script_candidate`
 - classes: `none`
-- functions: `_invoke_entry_point, main, print_help, print_tools`
-- has_main_guard: `True`
-
-### `tools/toolbelt/cli/onboarding_cli.py`
-
-- status: `script_candidate`
-- classes: `Args`
-- functions: `_validate_agent, cmd_soft, cmd_status, cmd_hard, main`
+- functions: `main, print_help, print_tools`
 - has_main_guard: `True`
 
 ### `tools/toolbelt/executors/__init__.py`
@@ -1137,7 +898,7 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 
 - status: `salvage_candidate`
 - classes: `OnboardingExecutor`
-- functions: `__init__, _dreamvault_messaging_script, execute, _soft_onboarding, _hard_onboarding, _onboarding_status`
+- functions: `__init__, execute, _soft_onboarding, _hard_onboarding, _onboarding_status`
 - has_main_guard: `False`
 
 ### `tools/toolbelt/executors/refactor_executor.py`
@@ -1168,33 +929,12 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - functions: `execute`
 - has_main_guard: `False`
 
-### `tools/toolbelt_cli.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `main`
-- has_main_guard: `True`
-
 ### `tools/toolbelt_registry.py`
 
 - status: `salvage_candidate`
 - classes: `ToolRegistry`
 - functions: `__init__, _build_flag_map, get_tool_for_flag, get_tool_by_name, list_tools, get_all_flags`
 - has_main_guard: `False`
-
-### `tools/validate_closure_next_action.py`
-
-- status: `script_candidate`
-- classes: `ClosureNextActionValidator`
-- functions: `main, __init__, load_rehydration_snapshot, validate_singularity_rule`
-- has_main_guard: `True`
-
-### `tools/validate_closure_run_id.py`
-
-- status: `script_candidate`
-- classes: `none`
-- functions: `validate_run_id, get_current_git_sha, main`
-- has_main_guard: `True`
 
 ### `tools/validation/audit_imports.py`
 
@@ -1243,13 +983,6 @@ Purpose: classify `tools/` modules before porting, archiving, or deleting.
 - status: `script_candidate`
 - classes: `UnifiedVerifier`
 - functions: `create_parser, main, __init__, verify_repo, verify_merge, verify_file, verify_cicd, verify_credentials`
-- has_main_guard: `True`
-
-### `tools/vps_deploy_bridge/vps_deploy_bridge.py`
-
-- status: `script_candidate`
-- classes: `DeployBridgeError, DeployReport`
-- functions: `_utc_now, load_schema, load_request, _is_iso_datetime, validate_schema, normalize_path, validate_target_path, validate_command, validate_service_name, validate_source_path, validate_upload_constraints, validate_request`
 - has_main_guard: `True`
 
 ### `tools/website_audit_ollama.py`

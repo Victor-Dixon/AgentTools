@@ -1,5 +1,7 @@
 # 🗺️ Master Plan: Tools Consolidation Phase 1
 
+**Historical snapshot notice (reviewed 2026-07-03):** This consolidation plan is retained for context only and is not the current execution roadmap. Use `docs/root/MASTER_TASK_LOG.md`, `MASTER_TASK_LIST.md`, `ROADMAP.md`, and `docs/architecture/DOMAIN_MODEL.md` for current status, active blockers, and domain boundaries.
+
 **Goal**: Consolidate 399 specialized tools into 3 unified systems (`unified_monitor`, `unified_validator`, `unified_analyzer`), reducing tool count by ~56%.
 
 **Strategy**: "Consolidate, Verify, DELETE".

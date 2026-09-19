@@ -1,5 +1,5 @@
 {
-  "count": 87,
+  "count": 92,
   "disabled_tools": {
     "agent.points": {
       "disabled_reason": "Missing class: tools_v2.categories.session_tools.PointsCalculatorTool",
@@ -378,6 +378,26 @@
     "oss.status": [
       "tools_v2.categories.oss_tools",
       "OSSStatusTool"
+    ],
+    "repo.branches": [
+      "tools_v2.categories.repo_tools",
+      "RepoBranchesTool"
+    ],
+    "repo.compare": [
+      "tools_v2.categories.repo_tools",
+      "RepoCompareTool"
+    ],
+    "repo.identity": [
+      "tools_v2.categories.repo_tools",
+      "RepoIdentityTool"
+    ],
+    "repo.status": [
+      "tools_v2.categories.repo_tools",
+      "RepoStatusTool"
+    ],
+    "repo.worktrees": [
+      "tools_v2.categories.repo_tools",
+      "RepoWorktreesTool"
     ],
     "security.audit": [
       "tools_v2.categories.security_audit_tools",

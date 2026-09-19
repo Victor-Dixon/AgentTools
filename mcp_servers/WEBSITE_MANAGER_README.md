@@ -238,7 +238,7 @@ Common site keys:
 - `tools/strategy_blog_automation.py` - Blog automation source
 - `trading_robot/website_design/` - Website design assets
 - `DELEGATION_BOARD.md` - Task ownership for website tasks
-- `MASTER_TASK_LOG.md` - Task tracking
+- `docs/root/MASTER_TASK_LOG.md` - Canonical task tracking
 
 ## Troubleshooting
 

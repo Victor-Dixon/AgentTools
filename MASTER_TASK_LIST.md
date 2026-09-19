@@ -1,451 +1,58 @@
-# MASTER TASK LIST - WE ARE SWARM
-
-## 2026-07-14 Documentation Repair Reconciliation
-
-**Status:** historical ledger with current projection note.
-**Execution SSOT:** `docs/root/MASTER_TASK_LOG.md`.
-
-The historical task body below is preserved for evidence. Current execution status should be read from `docs/root/MASTER_TASK_LOG.md` first, then mirrored through `NEXT_UP.md`.
-
-Current high-priority projection:
-
-| Priority | Status | Task ID | Objective | Verification |
-|---|---|---|---|---|
-| P0 | pending | SWARM-003 | Build and publish `swarm-mcp`; record exact non-secret output. | `python -m build`; `twine upload dist/*` |
-| P0 | pending | SWARM-004 | Clean install/import/CLI smoke after publish. | `pip install swarm-mcp`; `python -c "import swarm_mcp"`; `swarm --help` |
-| P1 | active | AGENTTOOLS-MCP-001 | Classify package MCP servers vs expanded legacy MCP servers. | `pytest -q tests/test_mcp_servers.py` |
-| P1 | active | AGENTTOOLS-TV2-001 | Inventory `tools_v2` migration and choose next characterized adapter seam. | `pytest -q tools_v2/tests tests/test_tools_v2_registry_contract.py` |
-
-Stale lower-body claims corrected by this note:
-
-- Branch/count claims from 2026-01 and 2026-03 are historical evidence, not current status.
-- PyPI publish and clean install remain incomplete until SWARM-003/SWARM-004 have command-output evidence.
-- Active-vs-legacy MCP classification remains open.
-
----
-
-# Historical Task Ledger - WE ARE SWARM
-
-**Last Updated:** 2026-01-11
-**Status:** Active Development
-**Package:** swarm-mcp v0.1.0
-**Phase:** Task Assignment & Execution
-
----
-
-## 📊 Project Overview
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| Core Modules | 3 | ✅ Complete |
-| IP-Level Modules | 5 | ✅ Complete |
-| CLI Commands | 7 | ✅ Complete |
-| MCP Servers | 4+ | ✅ Complete |
-| Total Lines | ~4,500 | ✅ Complete |
-| Test Coverage | >80% | ✅ Complete |
-| PyPI Published | No | ⏳ Pending |
-| Tools Consolidated | 709 → 158 (78% reduction) | ✅ Complete |
-| Git Status | Clean | ✅ All branches merged & cleaned |
-
----
-
-## 🤖 AGENT TASK ASSIGNMENTS (2026-01-11)
-
-### Agent-5: Package Publishing & Distribution Lead
-**Specialty:** Infrastructure & DevOps
-**Assigned Tasks:**
-- [ ] [INFRA][P0][SWARM-002] Create PyPI account and API token
-- [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*`
-- [ ] [INFRA][P0][SWARM-004] Verify install works: `pip install swarm-mcp`
-- [ ] [INFRA][P0] Create CHANGELOG.md with version history
-- [ ] [INFRA][P0] Verify LICENSE file present (MIT)
-- [ ] [INFRA][P0] Version bumped to 0.1.0 (verify in pyproject.toml)
-**Timeline:** Complete by 2026-01-11 EOD
-**Priority:** P0 - Critical for launch
-
-### Agent-6: Quality Assurance & Testing Lead
-**Specialty:** Testing & Quality Assurance
-**Assigned Tasks:**
-- [ ] [QA][P0] All P0 tasks complete verification
-- [ ] [QA][P0] Tests pass with >80% coverage validation
-- [ ] [QA][P0] README completeness audit
-- [ ] [QA][P0] All MCP servers tested and working
-- [ ] [QA][P0] CLI commands tested end-to-end
-- [ ] [QA][P0] Create integration test suite
-- [ ] [QA][P0] Test with Claude Desktop MCP integration
-- [ ] [QA][P0] Test with Cursor MCP integration
-**Timeline:** Complete by 2026-01-12
-**Priority:** P0 - Critical for launch
-
-### Agent-7: Tools Consolidation & Architecture Lead
-**Specialty:** Web Development & System Architecture
-**Assigned Tasks:**
-- [ ] [ORG][P0] Complete Phase 0A: Organization & Planning (START HERE)
-- [ ] [ORG][P0] Create comprehensive tool inventory system
-- [ ] [ORG][P0] Dependency Mapping completion
-- [ ] [ORG][P0] Usage Analysis completion
-- [ ] [ORG][P0] Migration Strategy Planning
-- [ ] [ORG][P0] Risk Assessment & Mitigation
-- [ ] [ORG][P0] Tracking & Monitoring Systems setup
-- [ ] [ORG][P0] Testing Framework Setup
-- [ ] [CONSOLIDATE][P0] Phase 1: Analysis & Mapping
-- [ ] [CONSOLIDATE][P0] Phase 2: Unified Tools Migration
-**Timeline:** Complete by 2026-01-13
-**Priority:** P0 - Foundation for all consolidation work
-
-### Agent-8: Documentation & CLI Enhancement Lead
-**Specialty:** Documentation & User Experience
-**Assigned Tasks:**
-- [ ] [DOCS][P1][SWARM-014] Verify `CONTRIBUTING.md` completeness
-- [ ] [DOCS][P1][SWARM-015] Verify `examples/` directory completeness
-- [ ] [DOCS][P1][SWARM-016] Create `examples/two_agent_setup.py`
-- [ ] [DOCS][P1][SWARM-017] Create `examples/full_swarm.py`
-- [ ] [DOCS][P1][SWARM-018] Create `examples/consensus_demo.py`
-- [ ] [DOCS][P1][SWARM-019] Add docstring coverage to all public methods
-- [ ] [DOCS][P1] Create API documentation (Sphinx or similar)
-- [ ] [CLI][P1][SWARM-020] Add `swarm vote` command
-- [ ] [CLI][P1][SWARM-021] Add `swarm conflict` command
-- [ ] [CLI][P1][SWARM-022] Add `swarm profile` command
-- [ ] [CLI][P1][SWARM-023] Add `swarm prove` command
-- [ ] [CLI][P1][SWARM-024] Add `swarm patterns` command
-**Timeline:** Complete by 2026-01-14
-**Priority:** P1 - High priority for user experience
-
----
-
-## 🚨 CRITICAL PRIORITY (P0) - This Week
-
-### Package Publishing & Distribution
-- [ ] [INFRA][P0][SWARM-002] Create PyPI account and API token
-- [ ] [INFRA][P0][SWARM-003] Publish to PyPI: `python -m build && twine upload dist/*`
-- [ ] [INFRA][P0][SWARM-004] Verify install works: `pip install swarm-mcp`
-- [ ] [INFRA][P0] Create CHANGELOG.md with version history
-- [ ] [INFRA][P0] Verify LICENSE file present (MIT)
-- [ ] [INFRA][P0] Version bumped to 0.1.0 (verify in pyproject.toml)
-
-### Pre-Launch Verification
-- [ ] [QA][P0] All P0 tasks complete
-- [ ] [QA][P0] Tests pass with >80% coverage
-- [ ] [QA][P0] README is comprehensive and accurate
-- [ ] [QA][P0] All MCP servers tested and working
-- [ ] [QA][P0] CLI commands tested end-to-end
-
-### Tools & Tools_v2 Consolidation (CRITICAL)
-
-#### Phase 0A: Organization & Planning (START HERE)
-See `PHASE_0A_ORGANIZATION_PLAN.md` for complete Phase 0A task breakdown.
-
-**Key Phase 0A Tasks:**
-- [x] [ORG][P0] Create comprehensive tool inventory system ✅
-- [x] [ORG][P0] Dependency Mapping ✅
-- [ ] [ORG][P0] Usage Analysis
-- [ ] [ORG][P0] Migration Strategy Planning
-- [ ] [ORG][P0] Risk Assessment & Mitigation
-- [ ] [ORG][P0] Tracking & Monitoring Systems
-- [ ] [ORG][P0] Testing Framework Setup
-- [ ] [ORG][P0] Documentation Framework
-- [ ] [ORG][P0] Success Criteria Definition
-- [ ] [ORG][P0] Rollback Procedures
-
----
-
-## 🔥 HIGH PRIORITY (P1) - Next Week
-
-### Documentation
-- [ ] [DOCS][P1][SWARM-014] Create `CONTRIBUTING.md` with contribution guidelines ✅ (exists, verify completeness)
-- [ ] [DOCS][P1][SWARM-015] Create `examples/` directory with usage examples ✅ (exists, verify completeness)
-- [ ] [DOCS][P1][SWARM-016] Create `examples/two_agent_setup.py` - Minimal example
-- [ ] [DOCS][P1][SWARM-017] Create `examples/full_swarm.py` - 8-agent example
-- [ ] [DOCS][P1][SWARM-018] Create `examples/consensus_demo.py` - Voting example
-- [ ] [DOCS][P1][SWARM-019] Add docstring coverage to all public methods
-- [ ] [DOCS][P1] Create API documentation (Sphinx or similar)
-- [ ] [DOCS][P1] Create architecture diagrams
-
-### CLI Enhancements
-- [ ] [CLI][P1][SWARM-020] Add `swarm vote` command for consensus voting
-- [ ] [CLI][P1][SWARM-021] Add `swarm conflict` command to check/declare intent
-- [ ] [CLI][P1][SWARM-022] Add `swarm profile` command to view agent DNA
-- [ ] [CLI][P1][SWARM-023] Add `swarm prove` command for work proof
-- [ ] [CLI][P1][SWARM-024] Add `swarm patterns` command to view discovered patterns
-
-### Integration & Testing
-- [ ] [INTEG][P1][SWARM-025] Test with Claude Desktop MCP integration
-- [ ] [INTEG][P1][SWARM-026] Test with Cursor MCP integration
-- [ ] [INTEG][P1][SWARM-027] Create `.cursor/mcp.json` template for easy setup
-- [ ] [INTEG][P1][SWARM-028] Create `claude_desktop_config.json` template
-- [ ] [INTEG][P1] Test all MCP servers with real agents
-- [ ] [INTEG][P1] Create integration test suite
-
-### Tools & Tools_v2 Consolidation (Continued)
-
-See `TOOLS_CONSOLIDATION_PLAN.md` for complete consolidation strategy.
-
-**Phase 1-8 Tasks:**
-- [ ] [CONSOLIDATE][P0] Phase 1: Analysis & Mapping
-- [ ] [CONSOLIDATE][P0] Phase 2: Unified Tools Migration
-- [ ] [CONSOLIDATE][P1] Phase 3: Domain Tools Migration
-- [ ] [CONSOLIDATE][P1] Phase 4: Adapter Pattern Conversion
-- [ ] [CONSOLIDATE][P1] Phase 5: Registry Unification
-- [ ] [CONSOLIDATE][P1] Phase 6: Duplicate Removal
-- [ ] [CONSOLIDATE][P1] Phase 7: Testing & Validation
-- [ ] [CONSOLIDATE][P2] Phase 8: Documentation & Cleanup
-
----
-
-## 📋 MEDIUM PRIORITY (P2) - Backlog
-
-### New Features
-- [ ] [FEAT][P2][SWARM-029] Add WebSocket support for real-time messaging
-- [ ] [FEAT][P2][SWARM-030] Add REST API server option (not just MCP)
-- [ ] [FEAT][P2][SWARM-031] Add agent heartbeat/health monitoring
-- [ ] [FEAT][P2][SWARM-032] Add task dependencies (task B waits for task A)
-- [ ] [FEAT][P2][SWARM-033] Add agent workload balancing
-- [ ] [FEAT][P2][SWARM-034] Add priority queue for urgent messages
-- [ ] [FEAT][P2][SWARM-035] Add message acknowledgment system
-- [ ] [FEAT][P2][SWARM-036] Add agent capability declaration (what can I do?)
-
-### UI/Visualization
-- [ ] [UI][P2][SWARM-037] Create web dashboard for swarm monitoring
-- [ ] [UI][P2][SWARM-038] Add agent status visualization
-- [ ] [UI][P2][SWARM-039] Add message flow diagram
-- [ ] [UI][P2][SWARM-040] Add pattern visualization
-- [ ] [UI][P2][SWARM-041] Add leaderboard display
-
-### Performance Optimization
-- [ ] [PERF][P2][SWARM-042] Add caching for frequently accessed data
-- [ ] [PERF][P2][SWARM-043] Optimize pattern mining for large event histories
-- [ ] [PERF][P2][SWARM-044] Add async/await support for all I/O operations
-- [ ] [PERF][P2][SWARM-045] Add connection pooling for future DB support
-
-### Security Enhancements
-- [ ] [SEC][P2][SWARM-046] Add message encryption option
-- [ ] [SEC][P2][SWARM-047] Add agent authentication
-- [ ] [SEC][P2][SWARM-048] Add permission system (who can assign to whom)
-- [ ] [SEC][P2][SWARM-049] Add audit logging for all operations
-
-### Tool Ecosystem Improvements
-- [ ] [TOOLS][P2] Expand `unified_environment.py` to install missing dependencies (not just check)
-- [ ] [TOOLS][P2] Integrate `unified_debugger.py` to auto-create GitHub issues for critical errors
-- [ ] [TOOLS][P2] Review and consolidate remaining tool duplicates
-- [ ] [TOOLS][P2] Complete migration of tools to `tools_v2/` structure
-- [ ] [TOOLS][P2] Standardize all tools to use unified interfaces
-
----
-
-## 🎯 LAUNCH CHECKLIST
-
-### Pre-Launch (Before PyPI)
-- [ ] All P0 tasks complete
-- [ ] Tests pass with >80% coverage
-- [ ] README is comprehensive
-- [ ] LICENSE file present (MIT)
-- [ ] CHANGELOG.md created
-- [ ] Version bumped to 0.1.0
-- [ ] All examples work correctly
-- [ ] Integration tests pass
-
-### Launch Day
-- [ ] Publish to PyPI
-- [ ] Create GitHub Release with tag v0.1.0
-- [ ] Update README with installation instructions
-- [ ] Tweet/post announcement
-- [ ] Submit to HackerNews
-- [ ] Post on Reddit (r/Python, r/MachineLearning, r/LocalLLaMA)
-- [ ] Post on LinkedIn
-- [ ] Update project website (if applicable)
-
-### Post-Launch
-- [ ] Monitor PyPI download stats
-- [ ] Respond to GitHub issues
-- [ ] Collect feedback
-- [ ] Plan v0.2.0 features
-- [ ] Create roadmap document
-
----
-
-## ✅ COMPLETED TASKS
-
-### 2025-12-25 - Consolidation & Package Creation
-- [x] [CLEAN][P0] Consolidate 709 → 160 tools (78% reduction)
-- [x] [CLEAN][P0] Recover 22 diamond tools from deletion
-- [x] [CLEAN][P0] Recover critical swarm dependencies (gas_messaging, opportunity_scanners)
-- [x] [PKG][P0] Create `swarm_mcp` package structure
-- [x] [PKG][P0] Create `pyproject.toml` for PyPI
-- [x] [CLI][P0] Create human-friendly CLI (status, send, inbox, search, learn, tasks, assign)
-- [x] [DOCS][P0] Write comprehensive README with examples
-- [x] [IP][P0] Create ConsensusEngine - multi-agent voting
-- [x] [IP][P0] Create ConflictDetector - duplicate work prevention
-- [x] [IP][P0] Create AgentDNA - capability learning
-- [x] [IP][P0] Create WorkProofSystem - verifiable completion
-- [x] [IP][P0] Create PatternMiner - coordination pattern discovery
-- [x] [BRAND][P0] Rebrand to "WE ARE SWARM" (wolves, not bees)
-
-### 2025-12-25 - MCP Server Implementation
-- [x] [MCP][P0][SWARM-005] Implement `swarm_mcp/servers/messaging.py` - Full MCP protocol
-- [x] [MCP][P0][SWARM-006] Implement `swarm_mcp/servers/memory.py` - PackMemory MCP wrapper
-- [x] [MCP][P0][SWARM-007] Implement `swarm_mcp/servers/tasks.py` - Task management MCP
-- [x] [MCP][P0][SWARM-008] Implement `swarm_mcp/servers/control.py` - Coordination MCP
-
-### 2025-12-25 - Testing
-- [x] [QA][P0][SWARM-009] Write tests for `consensus.py` - All voting rules
-- [x] [QA][P0][SWARM-010] Write tests for `conflict.py` - Conflict detection scenarios
-- [x] [QA][P0][SWARM-011] Write tests for `agent_dna.py` - Profile learning
-- [x] [QA][P0][SWARM-012] Write tests for `work_proof.py` - Proof generation/verification
-- [x] [QA][P0][SWARM-013] Write tests for `pattern_miner.py` - Pattern discovery
-
-### 2025-12-25 - Package Build
-- [x] [INFRA][P0][SWARM-001] Build and test package locally with `pip install -e .`
-
-### 2025-12-26 - Gap Analysis & New Tools
-- [x] [TOOLS][P0] Create `unified_security_scanner.py` - Security scanning
-- [x] [TOOLS][P0] Create `unified_debugger.py` - Debugging and forensics
-- [x] [TOOLS][P0] Create `unified_environment.py` - Environment verification
-
-### 2025-12-26 - Git Cleanup
-- [x] [INFRA][P0] Pull all changes from origin
-- [x] [INFRA][P0] Merge branch `cursor/mod-deployment-automation-pipeline-955e` into main
-- [x] [INFRA][P0] Delete merged remote branch `cursor/autonomous-system-enhancements-5d05`
-- [x] [INFRA][P0] Delete merged remote branch `cursor/mod-deployment-automation-pipeline-955e`
-- [x] [INFRA][P0] Push all changes to origin/main
-- [x] [INFRA][P0] Repository is clean - all branches merged and deleted
-
-### 2025-12-26 - Documentation
-- [x] [DOCS][P0] Create comprehensive `MASTER_TASK_LIST.md`
-- [x] [DOCS][P0] Create `PHASE_0A_ORGANIZATION_PLAN.md`
-- [x] [DOCS][P0] Create `TOOLS_CONSOLIDATION_PLAN.md`
-- [x] [DOCS][P0] Create `BRANCH_CLEANUP_STATUS.md`
-- [x] [DOCS][P0] Commit all planning documents to repository
-
-### 2026-01-11 - Task Assignment & Agent Coordination
-- [x] [COORD][P0] Create comprehensive agent task assignments
-- [x] [COORD][P0] Assign Package Publishing tasks to Agent-5
-- [x] [COORD][P0] Assign QA & Testing tasks to Agent-6
-- [x] [COORD][P0] Assign Tools Consolidation tasks to Agent-7
-- [x] [COORD][P0] Assign Documentation & CLI tasks to Agent-8
-- [x] [COORD][P0] Send task assignment messages via messaging system
-- [x] [COORD][P0] Update MASTER_TASK_LIST.md with agent assignments
-
----
-
-## 📝 TASK CATEGORIES
-
-| Category | Description |
-|----------|-------------|
-| `[INFRA]` | Infrastructure/DevOps |
-| `[MCP]` | MCP Server Implementation |
-| `[QA]` | Testing/Quality Assurance |
-| `[DOCS]` | Documentation |
-| `[CLI]` | Command Line Interface |
-| `[INTEG]` | Integration |
-| `[FEAT]` | New Feature |
-| `[UI]` | User Interface |
-| `[PERF]` | Performance |
-| `[SEC]` | Security |
-| `[CLEAN]` | Cleanup |
-| `[TOOLS]` | Tool Ecosystem |
-| `[ORG]` | Organization |
-| `[CONSOLIDATE]` | Consolidation |
-
----
-
-## 🏷️ PRIORITY LEVELS
-
-| Priority | Meaning | Timeline |
-|----------|---------|----------|
-| `[P0]` | Critical - Do This Week | Immediate |
-| `[P1]` | High - Do Next Week | 1-2 weeks |
-| `[P2]` | Medium - Backlog | 1-3 months |
-
----
-
-## 📊 Progress Tracking
-
-### Overall Progress
-- **P0 Tasks**: 7/50 complete (14%)
-- **P1 Tasks**: 0/35 complete (0%)
-- **P2 Tasks**: 0/25 complete (0%)
-
-### Agent Assignment Progress (2026-01-11)
-- ✅ **Agent-5**: 6/6 P0 tasks assigned (Package Publishing) - MESSAGE SENT
-- ✅ **Agent-6**: 8/8 P0 tasks assigned (QA & Testing) - MESSAGE SENT
-- ✅ **Agent-7**: 10/10 P0 tasks assigned (Tools Consolidation) - MESSAGE SENT
-- ✅ **Agent-8**: 11/11 P1 tasks assigned (Documentation & CLI) - MESSAGE SENT
-- **Total Assigned Tasks**: 35 tasks across 4 agents - ALL ASSIGNED
-
----
-
-## 🐺 WE ARE SWARM
-
-*"The strength of the pack is the wolf, and the strength of the wolf is the pack."*
-
-**Alone we are strong. Together we are unstoppable.**
-
----
-
-## Quick Reference Commands
-
-```bash
-# Check current status
-swarm status --agents agent-1,agent-2
-
-# Run tests
-pytest tests/ -v
-
-# Build package
-python -m build
-
-# Publish to PyPI
-twine upload dist/*
-
-# Install locally for development
-pip install -e .
-
-# Run toolbelt
-python -m tools.toolbelt --list
-
-# Check git status
-git status
-```
-
----
-
-## 🔍 CODE QUALITY ISSUES (2026-01-12 Audit)
-
-### Medium Priority Issues
-- [ ] [QUALITY][P2][AUDIT-001] Fix CLI tool error in `tools/cli.py` (Traceback in import section)
-- [ ] [QUALITY][P2][AUDIT-002] Fix syntax error in `tools/agent_workspace_cleanup.py` (unterminated string on line 148)
-- [ ] [PROTOCOL][P2][CLOSURE-001] Update S2A validation logic for terminal encoding compatibility (PowerShell emoji rendering causes false validation failures)
-
-### Consolidation Opportunities
-- [ ] [QUALITY][P3][AUDIT-003] Consolidate file_upload implementations (5 duplicate implementations across codebase)
-- [ ] [QUALITY][P3][AUDIT-004] Consolidate api_client implementations (3 duplicate implementations)
-- [ ] [QUALITY][P3][AUDIT-005] Consolidate logging implementations (10 duplicate implementations across codebase)
-
-**Audit Source:** `tools/closure_quality_audit.py` run on 2026-01-12 + Agent-5 closure documentation
-**Total Issues:** 6 (3 medium priority + 3 consolidation opportunities)
-**Added By:** Agent-3 during session closure + Agent-5 during session closure
-
----
-
-## Notes
-
-- This master task list consolidates tasks from multiple planning documents
-- See `PHASE_0A_ORGANIZATION_PLAN.md` for detailed Phase 0A tasks
-- See `TOOLS_CONSOLIDATION_PLAN.md` for detailed consolidation phases
-- **START WITH**: Phase 0A: Organization & Planning before any migration work
-- **Git Status**: ✅ Clean - All branches merged and deleted, ready for Phase 0A
-
----
-
-## Active (origin/main sync 2026-06-21)
-
-- [ ] Classify active vs deprecated MCP servers.
-- [ ] Inventory `tools_v2` migration status.
-- [ ] Document test gates that require external sibling repos.
-
-## Backlog (origin/main sync 2026-06-21)
-
-- [ ] Unified tool registry.
-- [ ] MCP lifecycle governance.
-- [ ] Discord orchestration expansion.
-- [ ] Cross-repo automation coordination.
+# MASTER TASK LIST — AgentTools strategic inventory
+
+**Last reconciled:** 2026-08-11
+**Purpose:** Backlog and strategic inventory — what work exists
+**Execution-status SSOT:** `docs/root/MASTER_TASK_LOG.md`
+**Immediate-action mirror:** `NEXT_UP.md`
+**Domain-model SSOT:** `docs/architecture/DOMAIN_MODEL.md`
+
+This file inventories work; it does not claim execution status. Record status and evidence in the execution SSOT first, then reflect no more than five immediate actions in `NEXT_UP.md`.
+
+## Toolbelt/runtime helpers
+
+- [ ] Inventory maintained helpers across `tools/`, `tools_v2/`, and operator surfaces; label ownership and supported entry points.
+- [ ] Revalidate salvaged and scaffolded helpers before treating them as promoted runtime capabilities.
+- [ ] Remove or quarantine generated/runtime artifacts only after provenance and consumer checks.
+- [ ] Resolve or explicitly accept remaining npm audit risk before a TypeScript deployment.
+
+## CPC/cliprun/operator workflow
+
+- [ ] Confirm what CPC and cliprun mean in the current phone and desktop lanes; mark intent `Unknown` until an owner/evidence source confirms it.
+- [ ] Map current phone/desktop entry points, configuration, credential boundaries, and failure recovery.
+- [ ] Verify that helper contracts still match their current consumers before consolidation or promotion.
+- [ ] Document a narrow smoke test for each retained operator workflow.
+
+## MCP/API capability registry
+
+- [ ] Inventory registry entries by purpose, provenance, authentication model, maintenance state, risk, and overlap.
+- [ ] Validate every promoted MCP target and API wrapper through a narrow operation and recorded evidence.
+- [ ] Require a promotion manifest; do not bulk-ingest discovery catalogs.
+- [ ] Reconcile task-log mutation paths with the canonical `docs/root/MASTER_TASK_LOG.md` location.
+
+## Marketing capability audit
+
+- [ ] Compare the verified bridge requirements with existing AgentTools capabilities and `Victor-Dixon/socialmediamanager` ownership.
+- [ ] Classify each candidate as `EXISTING | DUPLICATE | PROMOTION_CANDIDATE | BLOCKED | REJECTED | UNKNOWN`.
+- [ ] Verify provenance, authentication, platform terms/risk, deduplication, and the narrow operation before promotion.
+- [ ] Keep social execution in `socialmediamanager`; expose only reusable capability from AgentTools.
+
+## Validation/testing
+
+- [ ] Preserve Python test, import-healer coverage, and MCP catalog gates established for SWARM-014 through SWARM-016.
+- [ ] Complete SWARM-003 with redacted publish evidence; do not infer success from a tag or runbook.
+- [ ] Complete SWARM-004 with clean install, import, and CLI smoke evidence after publication.
+- [ ] Add evidence-backed tests for each promoted helper or integration.
+
+## Repo cleanup/planning
+
+- [ ] Reconcile the six `Needs verification` history groups recorded in the execution SSOT.
+- [ ] Decide and document the remote/upstream policy for local branch `work`.
+- [ ] Keep this inventory, the execution SSOT, `NEXT_UP.md`, and the domain model aligned without duplicating roles.
+- [ ] Review historical planning artifacts and label them non-canonical rather than silently treating them as current.
+
+## Dream.OS integration boundaries
+
+- [ ] Verify AgentTools boundaries against Dream.OS core and projectscanner using current repositories/contracts; otherwise record them as `Unknown`.
+- [ ] Preserve ownership: DreamVault/Dream.OS owns governed task, context, and approval state; AgentTools owns reusable tools/integrations.
+- [ ] Characterize message/task/work-proof schemas at adapter boundaries and avoid duplicating core orchestration.
+- [ ] Record external runtime topology and deployment state as `Unknown` until directly evidenced.

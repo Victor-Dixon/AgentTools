@@ -2,9 +2,9 @@
 
 ## Summary
 
-- `tools`: 177 Python files
+- `tools`: 139 Python files
 - `tools_v2`: 89 Python files
-- `mcp_servers`: 30 Python files
+- `mcp_servers`: 28 Python files
 - `swarm_mcp`: 23 Python files
 
 ## Classification Policy
@@ -29,27 +29,6 @@
 - syntax_ok: `True`
 - classes: `UnifiedAgent`
 - functions: `main, __init__, orient_agent, tasks_find, status_check, status_activity, lifecycle_automate, onboard_hard, lifecycle_heal`
-
-### `tools/agent2_website_audit.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `Agent2WebsiteAuditor`
-- functions: `main, __init__, fetch_url_content, analyze_html_content, calculate_seo_score, calculate_ux_score, get_ollama_insights, audit_website, audit_multiple_sites, _extract_top_issues`
-
-### `tools/agent_system_training_program.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `TrainingModule, AgentProfile, AgentSystemTrainingProgram`
-- functions: `main, __init__, _load_training_modules, _load_agent_profiles, _define_certification_levels, onboard_agent, assess_agent_skills, _infer_expertise_from_agent_id, _get_next_certification_level, generate_training_curriculum, run_practice_session, run_certification_exam`
-
-### `tools/agent_workspace_cleanup.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `get_agent_workspace_dirs, identify_cleanup_candidates, create_archive_dir, safe_archive_file, perform_cleanup, main`
 
 ### `tools/analysis/__init__.py`
 
@@ -162,20 +141,6 @@
 - syntax_ok: `True`
 - classes: `UnifiedAnalyzer`
 - functions: `main, __init__, analyze_repository, analyze_project_structure, analyze_file, detect_consolidation_opportunities, _calculate_similarity, analyze_overlaps, _extract_repo_name, _extract_tech_stack, run_full_analysis, print_analysis_report, track_tool_usage`
-
-### `tools/analytics/unified_analytics_dashboard.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `WebsiteAnalytics, AnalyticsAlert, UnifiedAnalyticsDashboard`
-- functions: `__post_init__, __init__, collect_website_analytics, _mock_page_views, _mock_unique_visitors, _mock_bounce_rate, _mock_session_duration, _mock_top_pages, _mock_traffic_sources, _calculate_seo_score, _calculate_performance_score, _save_analytics_data, generate_unified_dashboard, _determine_website_status, _generate_recommendations, _generate_alerts, _save_dashboard, generate_analytics_report`
-
-### `tools/automate_pyautogui_dispatch.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `DispatchTarget, DispatchStep, DispatchReport`
-- functions: `_ensure_utf8, _parse_agent_id, _resolve_repo, _load_json, _coords_candidate_paths, _candidate_coord_keys, _resolve_target, _profile_matches_target, _resolve_devtools_click, _focus_target, _run_outbox_helper, _dispatch_packet, _parse_plan, _parse_args, _build_steps, main, append`
 
 ### `tools/autonomous/__init__.py`
 
@@ -331,13 +296,6 @@
 - classes: `none`
 - functions: `none`
 
-### `tools/closure_quality_audit.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `QualityIssue, ClosureQualityAudit`
-- functions: `main, __init__, scan_python_files, run_linting_check, check_imports, check_cli_tools, analyze_functionality_consolidation, generate_report, run_full_audit`
-
 ### `tools/codemods/__init__.py`
 
 - risk: `legacy_review`
@@ -441,7 +399,7 @@
 - risk: `legacy_review`
 - syntax_ok: `True`
 - classes: `DependencyType, DependencyNode, DependencyMapper`
-- functions: `extract_imports, _is_internal_module, _is_stdlib, find_circular_dependencies, load_registry_dependencies, map_registry_relationships, to_dict, dfs, __init__, scan_directory, _get_tool_id, build_dependency_graph, _find_tool_by_module, get_external_dependencies, get_internal_dependencies, get_circular_dependencies, export_to_json, _normalize_module_path`
+- functions: `extract_imports, _is_internal_module, _is_stdlib, find_circular_dependencies, load_registry_dependencies, map_registry_relationships, to_dict, dfs, __init__, scan_directory, _get_tool_id, build_dependency_graph, _find_tool_by_module, get_external_dependencies, get_internal_dependencies, get_circular_dependencies, export_to_json`
 
 ### `tools/consolidation/tests/__init__.py`
 
@@ -499,13 +457,6 @@
 - classes: `none`
 - functions: `send_discord_command, test_commands_interactive`
 
-### `tools/cycle_accomplishment_integrator.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `CycleAccomplishmentIntegrator`
-- functions: `main, __init__, _load_points_config, validate_inputs, load_agent_status, check_idempotency, update_cycle_status_atomic, _calculate_accomplishments_config, generate_accomplishment_report, post_to_cycle_channel`
-
 ### `tools/debug/check_stuck_messages.py`
 
 - risk: `legacy_review`
@@ -541,20 +492,6 @@
 - classes: `none`
 - functions: `check_queue_health, scan_logs_for_errors, check_agent_processes, main`
 
-### `tools/deployment/automated_deployment_pipeline.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `WebsiteConfig, DeploymentResult, AutomatedDeploymentPipeline`
-- functions: `__post_init__, __init__, _load_website_configs, _save_config, _log_deployment_result`
-
-### `tools/devlog_poster.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `split_content_into_pages, update_agent_status, save_devlog_for_website, post_agent_heartbeat, post_devlog_to_discord, main`
-
 ### `tools/devops/documentation_assistant.py`
 
 - risk: `legacy_review`
@@ -576,89 +513,12 @@
 - classes: `none`
 - functions: `check_tools, check_env_vars, check_docker_status, main`
 
-### `tools/discord/__init__.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `none`
-
-### `tools/discord/config.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `parse_export_file, first_value, resolve_discord_config`
-
-### `tools/discord/create_webhook.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `none`
-
-### `tools/discord/list_channels.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `none`
-
 ### `tools/discord/unified_discord.py`
 
 - risk: `legacy_review`
 - syntax_ok: `True`
 - classes: `UnifiedDiscord`
 - functions: `main, __init__, system_start, system_restart, test_commands, test_bot_debug, test_channels, verify_buttons, verify_running, upload_file`
-
-### `tools/discord/webhook_sender.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `DiscordWebhookResult`
-- functions: `_resolve_webhook_url, send_payload, send_payload_file`
-
-### `tools/discord_commander/post_to_discord_router.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `main`
-
-### `tools/discord_commander/run_message_router_discord_bot_with_restart.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `run_bot, main`
-
-### `tools/discord_commander/run_unified_discord_bot_with_restart.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `run_bot, main`
-
-### `tools/discord_commander/start_discord_system.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `_token_present, _spawn, main`
-
-### `tools/discord_commander/start_message_bus_processor.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `main`
-
-### `tools/discord_commander/start_message_queue_processor.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `none`
 
 ### `tools/doc_templates_achievements.py`
 
@@ -681,47 +541,12 @@
 - classes: `none`
 - functions: `none`
 
-### `tools/force_multiplier_gate.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `ForceMultiplierGate`
-- functions: `main, __init__, load_rehydration_snapshot, load_agent_status, get_current_git_sha, check_task_scope, check_ownership, check_execution_readiness, check_alignment, evaluate_gate, print_gate_results`
-
 ### `tools/github/unified_github.py`
 
 - risk: `legacy_review`
 - syntax_ok: `True`
 - classes: `UnifiedGitHub`
 - functions: `main, __init__, pr_create, pr_debug, pr_fix, repo_audit, merge_analyze_failures, merge_analyze_plans, merge_complete, audit_architecture`
-
-### `tools/hybrid_website_audit.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `HybridWebsiteAuditor`
-- functions: `__init__, fetch_page_content, parse_html_content, manual_seo_analysis, manual_ux_analysis`
-
-### `tools/intelligent_system_suggester.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `SystemRecommendation, WorkflowSuggestion, IntelligentSystemSuggester`
-- functions: `main, __init__, _load_system_knowledge, _load_task_patterns, _load_success_patterns, _calculate_efficiency_weights, analyze_task, _identify_task_type, _calculate_system_confidence, _generate_reasoning, suggest_workflow, _select_workflow_pattern, _calculate_workflow_efficiency, _estimate_completion_time, _calculate_confidence_level, _identify_optimization_opportunities, generate_learning_report`
-
-### `tools/maintenance/maintenance_checklists.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `MaintenanceTask, MaintenanceChecklist, MaintenanceSystem`
-- functions: `__post_init__, __post_init__, __init__, _load_maintenance_templates, generate_website_checklist, _calculate_next_due, _estimate_duration, _save_checklist, load_checklist, update_task_status, _log_maintenance_completion, get_overdue_tasks, generate_maintenance_schedule, display_checklist, verify_maintenance_compliance`
-
-### `tools/messaging_cli_wrapper.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `_dreamvault_roots, _resolve_ssot_script, main`
 
 ### `tools/migration/discover_repos_manual.py`
 
@@ -758,34 +583,6 @@
 - classes: `UnifiedMonitor, WorkspaceHealth`
 - functions: `main, __init__, monitor_queue_health, check_message_queue_file, monitor_service_health, monitor_disk_usage, monitor_agent_status, monitor_workspace_health, monitor_test_coverage, run_full_monitoring, print_monitoring_report, check_agent_workspace`
 
-### `tools/monitoring/website_health_monitor.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `HealthCheckResult, HealthAlert, WebsiteHealthMonitor`
-- functions: `__post_init__, __init__, _load_config, generate_health_report, display_health_report`
-
-### `tools/one_screen_execution_loop.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `OneScreenExecutionLoop`
-- functions: `main, __init__, load_rehydration_snapshot, save_rehydration_snapshot, execute_command, validate_output, update_snapshot_after_execution, run_execution_loop`
-
-### `tools/operating_cycle_system_integration.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `CyclePhase, EnhancedOperatingCycle, OperatingCycleIntegrator`
-- functions: `main, __init__, _load_agent_expertise, _load_system_templates, _load_efficiency_metrics, enhance_operating_cycle, _calculate_efficiency_gain, _calculate_utilization_rate, generate_system_checklist, generate_agent_playbook, analyze_efficiency_gains`
-
-### `tools/rehydration_manager.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `RehydrationManager`
-- functions: `main, __init__, get_current_git_sha, load_agent_status, load_inbox_messages, create_rehydration_snapshot, save_rehydration_snapshot, validate_resume_gates, get_status_summary`
-
 ### `tools/security/check_sensitive_files.py`
 
 - risk: `legacy_review`
@@ -799,20 +596,6 @@
 - syntax_ok: `True`
 - classes: `none`
 - functions: `run_command, scan_sensitive_files, scan_content_secrets, audit_python_dependencies, audit_npm_dependencies, main`
-
-### `tools/soft_onboard_cli.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `SoftOnboardAgent`
-- functions: `main, __init__, run_command, run_command_live, step_load_state, step_evaluate_gate, step_execute_visual_onboarding, step_validate_closure, onboard_agent`
-
-### `tools/streamlined_website_audit.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `StreamlinedWebsiteAuditor`
-- functions: `main, __init__, fetch_content, analyze_content, calculate_scores, get_ollama_insights, audit_website, _get_priority_actions, audit_batch`
 
 ### `tools/swarm/agents/import_healer.py`
 
@@ -869,20 +652,6 @@
 - syntax_ok: `True`
 - classes: `none`
 - functions: `run_validation`
-
-### `tools/system_discovery_agent.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `SystemTool, SystemDiscoveryAgent`
-- functions: `main, __init__, _load_systems_registry, _load_agent_expertise, discover_all_systems, find_tools_for_task, get_operating_cycle_integration, analyze_usage_patterns`
-
-### `tools/system_utilization_feedback_loop.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `SystemUsageEvent, SystemEffectivenessMetrics, SystemUtilizationFeedbackLoop`
-- functions: `main, __init__, _load_usage_history, _calculate_system_metrics, _analyze_agent_patterns, _generate_swarm_insights, track_usage_event, analyze_agent_effectiveness, _generate_agent_recommendations, generate_improvement_recommendations, get_swarm_insights, generate_predictive_recommendations`
 
 ### `tools/thea/__init__.py`
 
@@ -1064,14 +833,7 @@
 - risk: `legacy_review`
 - syntax_ok: `True`
 - classes: `none`
-- functions: `_invoke_entry_point, main, print_help, print_tools`
-
-### `tools/toolbelt/cli/onboarding_cli.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `Args`
-- functions: `_validate_agent, cmd_soft, cmd_status, cmd_hard, main`
+- functions: `main, print_help, print_tools`
 
 ### `tools/toolbelt/executors/__init__.py`
 
@@ -1127,7 +889,7 @@
 - risk: `legacy_review`
 - syntax_ok: `True`
 - classes: `OnboardingExecutor`
-- functions: `__init__, _dreamvault_messaging_script, execute, _soft_onboarding, _hard_onboarding, _onboarding_status`
+- functions: `__init__, execute, _soft_onboarding, _hard_onboarding, _onboarding_status`
 
 ### `tools/toolbelt/executors/refactor_executor.py`
 
@@ -1157,33 +919,12 @@
 - classes: `VectorExecutor`
 - functions: `execute`
 
-### `tools/toolbelt_cli.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `main`
-
 ### `tools/toolbelt_registry.py`
 
 - risk: `legacy_review`
 - syntax_ok: `True`
 - classes: `ToolRegistry`
 - functions: `__init__, _build_flag_map, get_tool_for_flag, get_tool_by_name, list_tools, get_all_flags`
-
-### `tools/validate_closure_next_action.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `ClosureNextActionValidator`
-- functions: `main, __init__, load_rehydration_snapshot, validate_singularity_rule`
-
-### `tools/validate_closure_run_id.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `validate_run_id, get_current_git_sha, main`
 
 ### `tools/validation/audit_imports.py`
 
@@ -1233,13 +974,6 @@
 - syntax_ok: `True`
 - classes: `UnifiedVerifier`
 - functions: `create_parser, main, __init__, verify_repo, verify_merge, verify_file, verify_cicd, verify_credentials`
-
-### `tools/vps_deploy_bridge/vps_deploy_bridge.py`
-
-- risk: `legacy_review`
-- syntax_ok: `True`
-- classes: `DeployBridgeError, DeployReport`
-- functions: `_utc_now, load_schema, load_request, _is_iso_datetime, validate_schema, normalize_path, validate_target_path, validate_command, validate_service_name, validate_source_path, validate_upload_constraints, validate_request, get_ssh_config, _ssh_base, _scp_base, build_plan, should_execute, run_command_line`
 
 ### `tools/website_audit_ollama.py`
 
@@ -1841,7 +1575,7 @@
 - risk: `keep_active`
 - syntax_ok: `True`
 - classes: `TestToolRegistry`
-- functions: `test_registry_initialization, test_singleton_pattern, test_list_tools, test_list_by_category, test_list_by_category_single_filter, test_resolve_valid_tool, test_resolve_invalid_tool, test_caching, test_export_lock`
+- functions: `test_registry_initialization, test_singleton_pattern, test_list_tools, test_list_by_category, test_resolve_valid_tool, test_resolve_invalid_tool, test_caching, test_export_lock`
 
 ### `tools_v2/tests/test_smoke_categories.py`
 
@@ -1884,13 +1618,6 @@
 - syntax_ok: `True`
 - classes: `none`
 - functions: `none`
-
-### `mcp_servers/ai_orchestration_server.py`
-
-- risk: `adapter_surface`
-- syntax_ok: `True`
-- classes: `AIOrchestrationServer`
-- functions: `__init__, _fallback_task_analysis, _extract_domains_from_task, _generate_ai_message_template`
 
 ### `mcp_servers/backup_automation_server.py`
 
@@ -1940,13 +1667,6 @@
 - syntax_ok: `True`
 - classes: `none`
 - functions: `generate_api_docs, update_readme, generate_type_docs, check_doc_coverage, validate_links, handle_tool_call, main`
-
-### `mcp_servers/dreamos_brain_advisory_client.py`
-
-- risk: `adapter_surface`
-- syntax_ok: `True`
-- classes: `none`
-- functions: `get_base_url, _get, health_check, search_advisory, get_entry, is_api_available, map_search_results`
 
 ### `mcp_servers/environment_setup_server.py`
 
@@ -2212,7 +1932,7 @@
 - risk: `keep_active`
 - syntax_ok: `True`
 - classes: `none`
-- functions: `get_coordinator, check_pack_status, assign_hunt, scout_territory, main, emit`
+- functions: `get_coordinator, check_pack_status, assign_hunt, scout_territory, main`
 
 ### `swarm_mcp/servers/memory.py`
 
@@ -2233,7 +1953,7 @@
 - risk: `keep_active`
 - syntax_ok: `True`
 - classes: `none`
-- functions: `read_task_log, write_task_log, add_to_inbox, mark_task_complete, _section_tasks, get_tasks, select_next_task, verify_task_completion, recover_system, score_tasks, main`
+- functions: `read_task_log, write_task_log, add_to_inbox, mark_task_complete, get_tasks, select_next_task, verify_task_completion, recover_system, main`
 
 ### `swarm_mcp/servers/tools.py`
 

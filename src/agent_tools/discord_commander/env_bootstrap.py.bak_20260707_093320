@@ -1,0 +1,108 @@
+"""Load DreamVault secrets + Commander env for hidden workers and bot startup."""
+
+from __future__ import annotations
+# D2A_AGENTTOOLS_BRIDGE_ENV_DEFAULTS_035
+# Canonical visible-session D2A delivery defaults.
+import os as _dreamos_d2a_env_035
+_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
+_dreamos_d2a_env_035.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
+_dreamos_d2a_env_035.environ.setdefault("DEFAULT_MODE", "pyautogui")
+_dreamos_d2a_env_035.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
+_dreamos_d2a_env_035.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
+_dreamos_d2a_env_035.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
+_dreamos_d2a_env_035.environ.setdefault("PYTHONPATH", r"D:\agent-tools\src;D:\DreamVault\src")
+
+import os
+from pathlib import Path
+
+
+def _load_dotenv_file(path: Path, *, force_keys: frozenset[str] | None = None) -> None:
+    if not path.is_file():
+        return
+    force = force_keys or frozenset()
+    for raw in path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[7:].strip()
+        if "=" not in line:
+            continue
+        name, _, val = line.partition("=")
+        name = name.strip()
+        val = val.strip().strip("'").strip('"')
+        if not name:
+            continue
+        if name in force or name not in os.environ:
+            os.environ[name] = val
+
+
+_SECRETS_FORCE_KEYS = frozenset(
+    {
+        "DISCORD_BOT_TOKEN",
+        "DISCORD_GUILD_ID",
+        "DISCORD_COMMANDER_WEBHOOK_FALLBACK",
+        "DISCORD_COMMANDER_USE_MESSAGE_BUS",
+        "ALLOW_LIVE_CURSOR_INJECTION",
+    }
+)
+
+
+def bootstrap_commander_env(*, dreamvault_root: Path | None = None) -> Path | None:
+    """Load secrets and set SSOT flags for Discord Commander + message bus."""
+    from .messaging_roots import apply_messaging_roots
+
+    apply_messaging_roots()
+    root = dreamvault_root or Path(os.environ.get("DREAMVAULT_ROOT", r"D:\DreamVault"))
+    if not root.is_dir():
+        return None
+
+    secrets = root / "runtime" / "secrets" / "secrets.local.env"
+    _load_dotenv_file(secrets, force_keys=_SECRETS_FORCE_KEYS)
+
+    os.environ.setdefault("DREAMVAULT_ROOT", str(root))
+    os.environ.setdefault("AGENT_CELLPHONE_ROOT", r"D:\repos\Agent_Cellphone")
+    os.environ.setdefault("DISCORD_COMMANDER_USE_MESSAGE_BUS", "1")
+    os.environ.setdefault("DISCORD_COMMANDER_USE_D2A_TEMPLATE", "1")
+    os.environ.setdefault("DISCORD_COMMANDER_WEBHOOK_FALLBACK", "0")  # !message is PyAutoGUI-only
+    os.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
+    os.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
+    os.environ.setdefault("DREAMVAULT_AGENT_TRANSPORT_SSOT", "1")
+    os.environ["AGENT_TRANSPORT_LINE_BY_LINE"] = "0"
+    os.environ["AGENT_TRANSPORT_BULK_PASTE_FORCE"] = "1"
+
+    if not os.environ.get("DISCORD_GUILD_ID"):
+        os.environ["DISCORD_GUILD_ID"] = "1375298054357254257"
+
+    return root
+
+
+def processor_lock_path(dreamvault_root: Path) -> Path:
+    return dreamvault_root / "data" / "messaging" / "ledger" / "processor.lock"
+
+
+def message_bus_processor_running(dreamvault_root: Path) -> bool:
+    """True when SSOT bus processor holds a live PID lock."""
+    lock = processor_lock_path(dreamvault_root)
+    if not lock.is_file():
+        return False
+    try:
+        pid = int(lock.read_text(encoding="utf-8").strip())
+    except (OSError, ValueError):
+        return False
+    if pid <= 0:
+        return False
+    if os.name == "nt":
+        import ctypes
+
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.OpenProcess(0x1000, False, pid)
+        if handle:
+            kernel32.CloseHandle(handle)
+            return True
+        return False
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError:
+        return False

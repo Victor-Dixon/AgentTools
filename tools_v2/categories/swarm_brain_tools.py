@@ -86,28 +86,14 @@ class SearchKnowledgeTool(IToolAdapter):
 
     def execute(self, params: dict[str, Any]) -> dict[str, Any]:
         """Execute knowledge search."""
-        agent_id = params.get("agent_id", "Agent-1")
-        query = params.get("query")
-        limit = int(params.get("limit", 10))
-
-        if not query:
-            return {"success": False, "error": "query required"}
-
-        try:
-            from mcp_servers.dreamos_brain_advisory_client import (
-                is_api_available,
-                map_search_results,
-                search_advisory,
-            )
-
-            if is_api_available():
-                api_payload = search_advisory(query, limit=limit)
-                return map_search_results(api_payload, agent_id, query)
-        except Exception:
-            pass
-
         try:
             from src.swarm_brain import SwarmMemory
+
+            agent_id = params.get("agent_id", "Agent-1")
+            query = params.get("query")
+
+            if not query:
+                return {"success": False, "error": "query required"}
 
             memory = SwarmMemory(agent_id)
             results = memory.search_swarm_knowledge(query)
@@ -115,19 +101,13 @@ class SearchKnowledgeTool(IToolAdapter):
             return {
                 "success": True,
                 "results": [
-                    {"title": r.title, "author": r.author, "tags": r.tags} for r in results[:limit]
+                    {"title": r.title, "author": r.author, "tags": r.tags} for r in results
                 ],
                 "count": len(results),
-                "non_canonical": True,
-                "source": "agenttools-local-swarm-memory",
             }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "non_canonical": True,
-            }
+            return {"success": False, "error": str(e)}
 
 
 class LogSessionTool(IToolAdapter):

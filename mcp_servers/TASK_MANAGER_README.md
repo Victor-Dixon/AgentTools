@@ -1,6 +1,8 @@
 # Task Manager MCP Server
 
-MCP server for managing the MASTER_TASK_LOG.md system. Enables agents to update task status, add tasks, and track work.
+MCP server for managing the `docs/root/MASTER_TASK_LOG.md` system. Enables agents to update task status, add tasks, and track work.
+
+**Status note (2026-05-17):** `docs/root/MASTER_TASK_LOG.md` is the project-status SSOT. Root `MASTER_TASK_LOG.md` is only a compatibility pointer.
 
 ## Configuration
 
@@ -22,7 +24,7 @@ Add to your MCP settings (e.g., Claude Desktop config):
 ## Available Tools
 
 ### 1. `add_task_to_inbox`
-Add a task to the INBOX section of MASTER_TASK_LOG.md
+Add a task to the INBOX section of `docs/root/MASTER_TASK_LOG.md`.
 
 **Parameters:**
 - `task` (required): Task description to add
@@ -78,7 +80,7 @@ Move a task to WAITING ON section
 ```
 
 ### 4. `get_tasks`
-Get tasks from MASTER_TASK_LOG.md
+Get tasks from `docs/root/MASTER_TASK_LOG.md`.
 
 **Parameters:**
 - `section` (optional): Specific section to get tasks from ("INBOX", "THIS WEEK", "WAITING ON", "PARKED"). If not provided, returns all sections.
@@ -96,7 +98,7 @@ Get tasks from MASTER_TASK_LOG.md
 ## Integration with Agent Operating Cycle
 
 ### CYCLE START
-- Check MASTER_TASK_LOG for assigned tasks using `get_tasks`
+- Check `docs/root/MASTER_TASK_LOG.md` for assigned tasks using `get_tasks`
 - Review THIS WEEK section for priorities
 
 ### DURING CYCLE
@@ -110,16 +112,16 @@ Get tasks from MASTER_TASK_LOG.md
 
 ## Usage in Agent Messages
 
-Agents should update MASTER_TASK_LOG at cycle end:
+Agents should update `docs/root/MASTER_TASK_LOG.md` at cycle end:
 
 ```
-✅ UPDATE MASTER_TASK_LOG (MANDATORY):
+✅ UPDATE docs/root/MASTER_TASK_LOG.md (MANDATORY):
 - Use MCP tool: task_manager_server
 - If task completed → mark_task_complete(task_description, section="THIS WEEK")
 - If task blocked → move_task_to_waiting(task_description, reason="blocked on X", agent_id="{agent_id}")
 - If new task identified → add_task_to_inbox(task="description", agent_id="{agent_id}")
-- Location: MASTER_TASK_LOG.md (repository root)
-- Reference: QUICK_START_GUIDE.md
+- Location: docs/root/MASTER_TASK_LOG.md
+- Reference: NEXT_UP.md
 ```
 
 ## Benefits
@@ -132,7 +134,7 @@ Agents should update MASTER_TASK_LOG at cycle end:
 
 ## Related Documents
 
-- `MASTER_TASK_LOG.md` - The task log file
+- `docs/root/MASTER_TASK_LOG.md` - The canonical task log file
 - `DELEGATION_BOARD.md` - Task ownership assignments
 - `SWARM_TASK_PACKETS.md` - Swarm execution directives
 - `QUICK_START_GUIDE.md` - How to use the system

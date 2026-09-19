@@ -1,5 +1,7 @@
 # 🛠️ MCP Tools Roadmap - Game Server & Automation
 
+**Historical/secondary-lane notice (reviewed 2026-07-03):** This document describes possible game-server and automation tools. It is not the current SWARM MCP release roadmap. Current repository status and domain boundaries live in `docs/root/MASTER_TASK_LOG.md`, `ROADMAP.md`, and `docs/architecture/DOMAIN_MODEL.md`. Active production use of these game/community surfaces is **Unknown** from this repository.
+
 Building on the mod deployment success, here are high-value MCP tools targeting the same markets.
 
 ---

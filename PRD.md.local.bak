@@ -1,0 +1,51 @@
+---
+title: agent-tools Product Requirements Document
+repository: D:\agent-tools
+status: Draft
+version: 1.0
+last_updated: 2026-05-19
+x-standard-prd: v1
+dreamvault_authority: D:/DreamVault
+---
+
+## Overview
+**Multi-Agent AI Coordination Framework** with Model Context Protocol (MCP) support.
+
+## Problem Statement
+- Define the core user/operator problem this repo solves.
+
+## Goals
+- Ship a maintainable, test-backed capability for agent-tools.
+- Keep docs aligned with DreamVault master task ledger.
+
+## Non-Goals
+- Unscoped refactors outside this repository.
+
+## Target Users
+- Operator (Victor)
+- Agents and automation tooling
+
+## Scope
+- In scope: features implemented in this repository.
+- Out of scope: cross-repo migrations without manifest + approval.
+
+## Requirements
+### Functional
+- TBD — derive from codebase audit.
+
+### Non-Functional
+- Test-backed changes where applicable.
+- No destructive git without explicit approval.
+
+## Success Metrics
+- Required docs present: PRD, ROADMAP, MASTER_TASK_LIST, NEXT_UP.
+- Tasks traceable in DreamVault cockpit.
+
+## Milestones
+| Milestone | Status |
+|-----------|--------|
+| Documentation contract | In progress |
+| Core feature stability | TBD |
+
+## Links
+- Remote: `https://github.com/Victor-Dixon/Agent-Tools.git`

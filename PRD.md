@@ -1,72 +1,109 @@
-# PRD - AgentTools
+# PRD - Repository Product Definition
 
-**Last updated:** 2026-07-14
-**Status:** Active control-plane/toolbelt repository
-**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`
+**Last reviewed:** 2026-07-03  
+**Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
+**Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`
 
-## Purpose
+This repository is a mixed workspace. The release-critical product lane is **SWARM MCP** (`swarm-mcp`), a Python package for multi-agent coordination over MCP. The same repository also contains an **AgentTools/operator tooling** lane and a separate **Family Focus Board** TypeScript product lane.
 
-AgentTools is the Dream.OS operator control-plane and toolbelt layer. It provides MCP server infrastructure, operator utilities, automation surfaces, integration bridges, repository orchestration helpers, verification tools, and governance-support utilities around Dream.OS.
+---
 
-AgentTools is not the Dream.OS runtime swarm engine and is not the canonical governance/reporting vault.
+## 1. Product identity
 
-## Users
+### Primary lane: SWARM MCP
 
-- Operators who need local toolbelt commands and operational automation.
-- Agents that call MCP servers or tool adapters for coordination, verification, messaging, and control-plane work.
-- Maintainers who classify active vs legacy tooling and prepare reusable utilities for promotion.
+SWARM MCP is a Python package and MCP toolbelt for multi-agent AI coordination. It models agents, tasks, messages, memory, consensus, conflicts, work proofs, verification, pattern mining, and coordination control surfaces.
 
-## Workflows
+**Audience:** AI-agent operators, maintainers, and developers who need local coordination primitives exposed through Python APIs, a CLI, and MCP servers.
 
-- Run the toolbelt through `D:\agent-tools\tools\toolbelt_cli.py`.
-- Use `swarm_mcp/cli.py` for package-level coordination commands.
-- Expose MCP server behavior through `swarm_mcp/servers/` and legacy/expanded servers in `mcp_servers/`.
-- Use `tools_v2/` adapters for the migration path toward safer, registry-backed tool execution.
-- Use `tests/`, `tools/consolidation/tests/`, `tools/swarm/tests/`, and `tools_v2/tests/` as the configured pytest surfaces.
+**Problem solved:** Multiple AI agents can duplicate work, lose context, make untracked decisions, or claim completion without evidence. SWARM MCP provides file-backed coordination primitives to reduce those failures.
 
-## Requirements
+### Secondary lane: AgentTools/operator tooling
 
-- Keep `docs/root/MASTER_TASK_LOG.md` as the execution-status SSOT.
-- Mirror only the highest-leverage active tasks in `NEXT_UP.md`.
-- Preserve the boundary: AgentTools owns operator/control-plane tooling; DreamOS owns runtime/swarm execution; DreamVault owns governance inventory, reports, and promotion manifests.
-- Do not promote legacy MCP/tool surfaces without active-vs-legacy classification and verification evidence.
-- Do not treat root historical task lists as newer than the dated SSOT log.
+AgentTools is the local operator tooling and MCP integration lane: standalone MCP servers, tool registries, repo automation, CI/security/docs helpers, Discord/operator bridges, and migration/salvage utilities.
 
-## Current Capabilities
+**Audience:** Repository operators and agent maintainers.
 
-- `swarm_mcp/core/` contains coordination primitives for messaging, memory, consensus, conflict detection, task scoring, verification, work proof, recovery, and pattern mining.
-- `swarm_mcp/servers/` contains 5 package MCP server entrypoints: `control.py`, `memory.py`, `messaging.py`, `tasks.py`, and `tools.py`.
-- `swarm_mcp/cli.py` defines 12 CLI subcommands: `status`, `send`, `inbox`, `search`, `learn`, `tasks`, `assign`, `vote`, `conflict`, `profile`, `prove`, and `patterns`.
-- `mcp_servers/` contains a broader legacy/expanded MCP server inventory that still requires classification before promotion.
-- `tools/` and `tools_v2/` contain operational toolbelt utilities and adapter migration surfaces.
-- `apps/api/`, `apps/web/`, and `packages/shared/` exist as product/control-plane surfaces.
+**Problem solved:** Operators need reusable automation and MCP-accessible tools around the coordination package and repository maintenance work.
 
-## Partial Capabilities
+### Separate lane: Family Focus Board
 
-- PyPI release remains incomplete until SWARM-003 and SWARM-004 have command-output evidence in the SSOT.
-- Active vs legacy MCP server ownership is not fully classified.
-- `tools_v2` migration is in progress and should remain test-first.
-- Some gates depend on sibling canonical repositories or local environment setup.
-- The repository currently has an existing dirty worktree unrelated to this documentation sync.
+Family Focus Board is a TypeScript Kanban plus shared Pomodoro/focus-room product under `apps/` and `packages/`.
 
-## Deferred Scope
+**Audience:** Family/business users. Exact deployed user base is **Unknown** from this repository.
 
-- Runtime/swarm execution ownership that belongs in DreamOS.
-- Governance reports, promotion manifests, and portfolio intelligence ownership that belongs in DreamVault.
-- Destructive cleanup or removal of legacy tools without a classification manifest and verification.
-- Publishing or release completion claims without PyPI/build/install evidence.
+**Problem solved:** Work needs to be visible as cards, time needs to be protected through Pomodoro sessions, and focus-room state needs to be shared. Web integration is currently incomplete.
 
-## Success Criteria
+---
 
-- `docs/root/MASTER_TASK_LOG.md` has dated, evidence-backed current status.
-- `NEXT_UP.md` contains 3-7 active, concrete tasks mirrored from the SSOT.
-- Active MCP/tool surfaces are classified with implementation paths and tests.
-- `pytest -q` or the focused configured gates pass in the local environment.
-- Documentation distinguishes package MCP surfaces from legacy/expanded MCP servers.
+## 2. In scope
 
-## Unresolved Decisions
+| Lane | In-scope surfaces |
+|---|---|
+| SWARM MCP | `swarm_mcp/core/`, `swarm_mcp/servers/`, `swarm_mcp/cli.py`, `pyproject.toml`, `tests/`, release docs |
+| AgentTools/operator tooling | `mcp_servers/`, `tools/`, `tools_v2/`, CI/security/import/doc helpers, operator MCP catalogs |
+| Family Focus Board | `apps/api/`, `apps/web/`, `packages/shared/`, `docs/mvp.md`, migrations and timer contracts |
 
-- Which `mcp_servers/` files are keep, merge, archive, or delete.
-- Which `tools_v2/` adapters become the canonical execution path for each tool category.
-- Whether the package release path remains `swarm-mcp` only or includes broader AgentTools control-plane distribution.
-- How to handle dirty-worktree operational reports during documentation-only repair passes.
+---
+
+## 3. Out of scope or unknown
+
+- Hosted runtime topology for MCP servers: **Unknown**.
+- Active production use of Discord, WordPress, mod/game-server, and player analytics tools: **Unknown**.
+- External DreamOS/DreamVault runtime contracts beyond boundary docs in this repo: **Unknown**.
+- Replacing implemented behavior as part of this audit: out of scope unless documentation is clearly wrong.
+
+---
+
+## 4. Major requirements derived from current implementation
+
+### SWARM MCP
+
+- Provide public Python exports for coordination primitives.
+- Expose a `swarm` CLI with 12 documented subcommands.
+- Expose five packaged MCP server entry points:
+  - `swarm-messaging-server`
+  - `swarm-memory-server`
+  - `swarm-tasks-server`
+  - `swarm-control-server`
+  - `swarm-tools-server`
+- Keep runtime package dependencies lightweight; optional/full tooling dependencies remain optional.
+- Preserve file-backed operation for messages, memory, consensus, conflicts, proofs, and pattern storage.
+- Publish and verify `swarm-mcp==0.6.0` before claiming release completion.
+
+### AgentTools/operator tooling
+
+- Keep `mcp_servers/all_mcp_servers.json` aligned with existing modules/scripts.
+- Keep broken `tools_v2` adapters outside the active registry until they instantiate cleanly.
+- Keep active/deprecated status visible for legacy tooling.
+- Keep security/import/docs/CI helper docs aligned with current command behavior.
+
+### Family Focus Board
+
+- Model orgs, users, boards, lists, cards, focus rooms, Pomodoro sessions, activity logs, inventory categories, and inventory items.
+- Use PostgreSQL migrations as the schema source.
+- Use `packages/shared` timer state machine for room timer behavior.
+- Add real API/web tests, linting, deployment docs, and web/API wiring before treating this as production-ready.
+
+---
+
+## 5. Success metrics
+
+| Area | Success metric |
+|---|---|
+| SWARM MCP release | `swarm-mcp==0.6.0` publishes to PyPI and passes clean install/import/CLI smoke evidence in `docs/root/MASTER_TASK_LOG.md`. |
+| SWARM MCP quality | `python3 -m pytest tests -q` and import-healer coverage gate pass in CI. |
+| MCP catalog | Catalog validation reports 0 missing targets. |
+| AgentTools/tooling | Active registry entries instantiate; disabled entries remain documented with rationale. |
+| Documentation | `README.md`, `PRD.md`, `ROADMAP.md`, `MASTER_TASK_LIST.md`, `docs/root/MASTER_TASK_LOG.md`, `NEXT_UP.md`, `AGENTS.md`, and `docs/architecture/DOMAIN_MODEL.md` agree on identity, status, domain, and next work. |
+| Family Focus Board | API/web tests and lint scripts become real gates; shared timer tests continue to pass; deployment requirements are documented. |
+
+---
+
+## 6. Current status
+
+- SWARM MCP M0 Python gates and M2 MCP catalog integrity are complete per SSOT evidence.
+- SWARM MCP M1 release proof is blocked because the `v0.6.0` publish job did not receive `PYPI_API_TOKEN`.
+- SWARM-004 clean PyPI install verification remains blocked until `0.6.0` is live.
+- SWARM-017 npm audit is partial: high severity issues were reduced; remaining moderate `next`/`postcss` risk is accepted only while the TS lane is non-production.
+- Documentation/domain model synchronization was updated on 2026-07-03; remaining cleanup is classification of historical/legacy docs and tool surfaces.

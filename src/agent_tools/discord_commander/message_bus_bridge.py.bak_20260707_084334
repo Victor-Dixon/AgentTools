@@ -1,0 +1,189 @@
+"""Route Discord Commander !message through DreamVault unified message bus (D2A template SSOT)."""
+
+from __future__ import annotations
+
+import logging
+import os
+import sys
+import time
+from pathlib import Path
+from typing import Any
+
+from .env_bootstrap import bootstrap_commander_env, message_bus_processor_running
+from .template_bridge import resolve_dreamvault_root
+
+logger = logging.getLogger(__name__)
+
+POLL_INTERVAL_SEC = 0.5
+PROCESSOR_DELIVERY_TIMEOUT_SEC = 20.0
+
+
+def message_bus_enabled() -> bool:
+    return os.environ.get("DISCORD_COMMANDER_USE_MESSAGE_BUS", "1").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+
+
+def _ensure_import(root: Path) -> None:
+    src = str(root / "src")
+    scripts = str(root / "runtime" / "scripts")
+    for path in (src, scripts):
+        if path not in sys.path:
+            sys.path.insert(0, path)
+
+
+def _poll_bus_message(
+    *,
+    paths,
+    message_id: str,
+    timeout_sec: float = PROCESSOR_DELIVERY_TIMEOUT_SEC,
+) -> tuple[str, dict[str, Any]]:
+    from dreamvault.runtime_bus import get_message
+
+    deadline = time.monotonic() + timeout_sec
+    last: dict[str, Any] = {}
+    while time.monotonic() < deadline:
+        try:
+            last = get_message(message_id=message_id, state_path=paths.state_path)
+        except KeyError:
+            last = {}
+        status = str(last.get("status") or "")
+        if status in ("completed", "failed"):
+            return status, last
+        time.sleep(POLL_INTERVAL_SEC)
+    return "timeout", last
+
+
+def send_via_message_bus(
+    *,
+    agent_id: str,
+    raw_content: str,
+    sender: str,
+    live: bool = False,
+) -> tuple[bool, str, dict[str, Any]]:
+    """Enqueue D2A on unified bus; single delivery owner (processor OR inline, never both)."""
+    bootstrap_commander_env()
+    root = resolve_dreamvault_root()
+    if root is None:
+        return False, "DreamVault root not found", {"message_bus": "skipped", "reason": "dreamvault_missing"}
+
+    try:
+        _ensure_import(root)
+        os.environ.setdefault("DREAMVAULT_ROOT", str(root))
+        os.environ.setdefault(
+            "AGENT_CELLPHONE_ROOT",
+            os.environ.get("AGENT_CELLPHONE_ROOT", r"D:\Agent_Cellphone"),
+        )
+        os.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
+        from dreamvault.discord.d2a_ingress_adapter import ingest_discord_message_command
+        from dreamvault.message_bus.dispatcher import default_bus_paths, dispatch_next
+        from dreamvault.runtime_bus import RuntimeBusError
+
+        command = f"!message {agent_id} {raw_content}"
+        paths = default_bus_paths(root)
+        result = ingest_discord_message_command(
+            command,
+            sender=sender,
+            paths=paths,
+        )
+        bus_message_id = result.bus_message.id
+        meta: dict[str, Any] = {
+            "message_bus": "enqueued",
+            "bus_message_id": bus_message_id,
+            "category": result.bus_message.category.value,
+            "message_template": "D2A",
+            "template_category": "D2A",
+            "verify_markers": list(result.verify_markers),
+            "body_preview": (result.bus_message.body or "")[:160],
+            "transport": "message_bus_enqueue_only",
+        }
+        processor_up = message_bus_processor_running(root)
+        meta["processor_running"] = processor_up
+        live = live or os.environ.get("ALLOW_LIVE_CURSOR_INJECTION", "").strip() == "1"
+        if not live:
+            return (
+                False,
+                "ALLOW_LIVE_CURSOR_INJECTION=1 required for PyAutoGUI delivery",
+                meta,
+            )
+
+        if processor_up:
+            status, row = _poll_bus_message(paths=paths, message_id=bus_message_id)
+            meta["bus_final_status"] = status
+            if status == "completed":
+                meta["transport"] = "message_bus_processor_live"
+                return (
+                    True,
+                    f"D2A delivered to {agent_id} via message bus processor (PyAutoGUI)",
+                    meta,
+                )
+            if status == "failed":
+                meta["transport"] = "message_bus_processor_failed"
+                return (
+                    False,
+                    f"D2A processor delivery failed for {agent_id} (bus status=failed)",
+                    meta,
+                )
+            meta["transport"] = "message_bus_processor_timeout"
+            return (
+                False,
+                f"D2A enqueued but processor did not complete within {PROCESSOR_DELIVERY_TIMEOUT_SEC:.0f}s",
+                meta,
+            )
+
+        dispatch_result = None
+        last_error = ""
+        for attempt in range(4):
+            try:
+                dispatch_result = dispatch_next(paths=paths, live=True)
+                break
+            except RuntimeBusError as exc:
+                last_error = str(exc)
+                if "delivery in flight" in last_error.lower() and attempt < 3:
+                    time.sleep(1.5)
+                    continue
+                meta["transport"] = "message_bus_dispatch_error"
+                meta["dispatch_error"] = last_error
+                return (
+                    False,
+                    f"D2A dispatch blocked: {last_error}",
+                    meta,
+                )
+            except Exception as exc:
+                logger.exception("inline live dispatch failed")
+                meta["transport"] = "message_bus_dispatch_error"
+                meta["dispatch_error"] = str(exc)
+                return (
+                    False,
+                    f"D2A dispatch failed for {agent_id}: {exc}",
+                    meta,
+                )
+
+        if dispatch_result and dispatch_result.success:
+            meta["transport"] = "message_bus_enqueue_and_live_dispatch"
+            meta["dispatch_target"] = dispatch_result.target_agent
+            meta["dispatch_detail"] = dispatch_result.detail
+            return (
+                True,
+                f"D2A delivered to {dispatch_result.target_agent} via PyAutoGUI ({dispatch_result.detail})",
+                meta,
+            )
+        if dispatch_result and not dispatch_result.success:
+            meta["transport"] = "message_bus_dispatch_failed"
+            meta["dispatch_detail"] = dispatch_result.detail
+            return (
+                False,
+                f"D2A dispatch failed for {agent_id}: {dispatch_result.detail}",
+                meta,
+            )
+        meta["dispatch_error"] = last_error or "no queued message after enqueue"
+        return (
+            False,
+            f"D2A enqueued but live dispatch did not run for {agent_id}",
+            meta,
+        )
+    except Exception as exc:
+        logger.exception("message bus send failed")
+        return False, str(exc), {"message_bus": "error", "error": str(exc)}

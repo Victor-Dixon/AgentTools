@@ -1,31 +1,14 @@
-# DreamVault intelligence promotion (AgentTools)
+# DreamVault Intelligence Promotion
 
-Promoted scripts (controlled apply):
+Promoted reusable intelligence/runtime tooling from DreamVault.
 
-- build_capability_unlock_intelligence_001.py
-- build_commit_life_intelligence_001.py
-- build_projectscanner_cloud_control_closeout_001.py
-- build_projectscanner_cloud_duplicate_scan_001.py
-- build_projectscanner_cloud_duplicate_scan_002.py
-- build_projectscanner_context_assembler_001.py
-- build_projectscanner_discord_intelligence_cards_001.py
-- build_projectscanner_github_cloud_inventory_001.py
-- build_projectscanner_issue_intelligence_001.py
-- build_projectscanner_library_index.py
-- build_projectscanner_promotion_recommendation_engine_001.py
-- build_projectscanner_repo_health_score_001.py
-- champion_projectscanner_audit_packet_001.py
-- classify_runtime_residue_001.py
-- cleanup_runtime_residue_apply_001.py
-- connect_tsla_candles_to_trade_replay_001.py
-- demo_daily_tsla_trade_packet_discord.py
-- dream_env_broker.py
-- dreamsync_projectscanner_context_bridge_001.py
-- emit_planner_discord_architect_event_001.py
-- generate_project_intelligence_bundles.py
-- materialize_project_intelligence_artifacts_001.py
-- planner_unlock_discord_capability_feed_001.py
-- planner_unlock_discord_capability_feed_verify_001.py
-- promote_intelligence_operationalization_into_agenttools_001.py
+Contents:
+- commit life intelligence
+- runtime residue classification
+- guarded cleanup apply mode
+- TSLA trade replay candle connector
+- Dream secrets utility
+- promotion manifest generator
 
-Gate: no_secret_leakage — dream_secrets.py deferred.
+Promotion source: DreamVault
+Promotion id: promote_intelligence_operationalization_into_agenttools_001

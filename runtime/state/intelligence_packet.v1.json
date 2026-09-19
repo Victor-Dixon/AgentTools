@@ -1,0 +1,70 @@
+{
+  "candidate_lanes": [
+    "projectscanner_task_derivation_engine_001",
+    "autonomous_patch_validator_001"
+  ],
+  "canonical_sha256": "25bef71b79d1f28a788b358e7bc005772e5d3b7c18e43d93049adf73ef9234fa",
+  "dirty_classes": {
+    "documentation": 5,
+    "source_code": 27,
+    "tests": 14
+  },
+  "experiment_boundary": {
+    "is_experiment": false,
+    "signals": []
+  },
+  "generated_at": "2026-07-05T21:24:59.232028+00:00",
+  "git": {
+    "branch": "main",
+    "dirty_count": 21,
+    "is_repo": true,
+    "untracked_count": 25
+  },
+  "manifest_path": "D:\\agent-tools\\runtime\\state\\intelligence_packet.v1.json",
+  "ownership": {
+    "canonical_owner": "unknown",
+    "owns": []
+  },
+  "recommended_action": "proceed_with_governed_patch",
+  "repo": "agent-tools",
+  "repo_root": "D:\\agent-tools",
+  "risk_level": "low",
+  "schema": "projectscanner_intelligence_packet.v1",
+  "technology": {
+    "languages": {
+      "python": 104
+    },
+    "markers": [
+      "ci"
+    ]
+  },
+  "topology": {
+    "depth": 0,
+    "top_level_dirs": [
+      ".benchmarks",
+      ".cursor",
+      ".github",
+      ".pytest_cache",
+      "_ops",
+      "agent_workspaces",
+      "apps",
+      "config",
+      "custom_ide_prototype",
+      "data",
+      "deploy",
+      "devlogs",
+      "dist",
+      "docs",
+      "examples",
+      "integration",
+      "logs",
+      "mcp_servers",
+      "pack_messages",
+      "packages",
+      "promoted",
+      "quarantine",
+      "reports",
+      "runtime"
+    ]
+  }
+}

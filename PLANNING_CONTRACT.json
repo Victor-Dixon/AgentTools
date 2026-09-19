@@ -1,0 +1,13 @@
+{
+  "schema_version": "dreamos.fleet-planning.v1",
+  "repo_key": "github:victor-dixon/agenttools",
+  "authority": {
+    "master_task_list": "MASTER_TASK_LIST.md",
+    "master_task_log": "docs/root/MASTER_TASK_LOG.md",
+    "next_up": "NEXT_UP.md",
+    "domain_model": "docs/architecture/DOMAIN_MODEL.md"
+  },
+  "next_up": {
+    "action_headings": ["Immediate actions"]
+  }
+}

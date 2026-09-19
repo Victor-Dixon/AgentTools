@@ -1,0 +1,370 @@
+"""Agent message delivery for toolbelt Commander (no GUI dependency).
+
+Delivery order:
+1. PyAutoGUI readiness preflight (fail fast)
+2. DreamVault unified message bus (D2A template) + inline live dispatch when processor idle
+3. Direct PyAutoGUI fallback only when bus times out (single audit line — SENT or FAILED)
+
+!message is PyAutoGUI-only — no Discord webhook fallback.
+"""
+
+from __future__ import annotations
+
+import logging
+import os
+import re
+from typing import Any, Optional
+
+from .delivery_preflight import validate_pyautogui_readiness
+from .messaging_delivery_log import record_delivery
+from .messaging_roots import apply_messaging_roots
+from .models import CommandResult, DeliveryResult, BroadcastResult
+from .message_bus_bridge import message_bus_enabled, send_via_message_bus
+from .queue_bridge import deliver_message, get_transport
+from .template_bridge import wrap_d2a_message
+
+logger = logging.getLogger(__name__)
+
+_AGENT_ID_PATTERN = re.compile(r"^agent[- ]?(\d+)$", re.IGNORECASE)
+
+
+def normalize_agent_id(raw: str) -> Optional[str]:
+    """Normalize user input to Agent-N form (1-8)."""
+    value = raw.strip()
+    if not value:
+        return None
+    if value.startswith("Agent-") and value[6:].isdigit():
+        num = int(value[6:])
+        if 1 <= num <= 8:
+            return f"Agent-{num}"
+        return None
+    if value.isdigit():
+        num = int(value)
+        if 1 <= num <= 8:
+            return f"Agent-{num}"
+        return None
+    match = _AGENT_ID_PATTERN.match(value)
+    if match:
+        num = int(match.group(1))
+        if 1 <= num <= 8:
+            return f"Agent-{num}"
+    return None
+
+
+def _format_sender(discord_user: Any | None) -> str:
+    if discord_user is None:
+        return "Discord Commander"
+    name = getattr(discord_user, "display_name", None) or getattr(discord_user, "name", None)
+    if name:
+        return f"Discord User ({name})"
+    return "Discord Commander"
+
+
+def _final_status(success: bool) -> str:
+    return "SENT" if success else "FAILED"
+
+
+def _record_final_delivery(
+    *,
+    source: str,
+    agent_id: str,
+    success: bool,
+    transport: str,
+    message_preview: str,
+    error_code: str | None,
+    detail: str | None,
+    extra: dict[str, Any],
+) -> None:
+    """One audit line per !message — final outcome only."""
+    record_delivery(
+        source=source,
+        agent_id=agent_id,
+        transport=transport,
+        success=success,
+        message_preview=message_preview,
+        error_code=error_code,
+        detail=detail,
+        extra={**extra, "final_status": _final_status(success)},
+    )
+
+
+def _build_command_result(
+    *,
+    success: bool,
+    agent: str,
+    transport: str,
+    message: str,
+    error_code: str | None = None,
+    extra: dict[str, Any] | None = None,
+) -> CommandResult:
+    data = dict(extra or {})
+    data["transport"] = transport
+    data["final_status"] = _final_status(success)
+    return CommandResult(
+        success=success,
+        message=message,
+        agent=agent,
+        error_code=error_code,
+        data=data,
+    )
+
+
+def send_agent_message(
+    agent_id: str,
+    message: str,
+    *,
+    discord_user: Any | None = None,
+    priority: str = "regular",
+    transport: Any | None = None,
+    dry_run: bool = False,
+    source: str = "discord_commander",
+) -> CommandResult:
+    """Send a direct message to an agent via PyAutoGUI (message bus or direct transport)."""
+    roots = apply_messaging_roots()
+    normalized = normalize_agent_id(agent_id)
+    if not normalized:
+        return CommandResult(
+            success=False,
+            message=f"Invalid agent id: {agent_id!r}. Use Agent-1 .. Agent-8.",
+            agent=agent_id,
+            error_code="INVALID_AGENT",
+            data={"final_status": "FAILED"},
+        )
+
+    body = message.strip()
+    if not body:
+        return CommandResult(
+            success=False,
+            message="Message body cannot be empty.",
+            agent=normalized,
+            error_code="EMPTY_MESSAGE",
+            data={"final_status": "FAILED"},
+        )
+
+    sender = _format_sender(discord_user)
+
+    if dry_run:
+        readiness = validate_pyautogui_readiness(normalized)
+        return CommandResult(
+            success=True,
+            message=f"Dry-run: would deliver D2A to {normalized} via PyAutoGUI",
+            agent=normalized,
+            data={
+                "transport": "pyautogui_dry_run",
+                "final_status": "SENT",
+                "messaging_roots": roots,
+                "readiness": readiness.ready,
+                "layout_mode": readiness.layout_mode,
+            },
+        )
+
+    readiness = validate_pyautogui_readiness(normalized)
+    if not readiness.ready:
+        detail = readiness.detail or "PyAutoGUI not ready"
+        _record_final_delivery(
+            source=source,
+            agent_id=normalized,
+            success=False,
+            transport="preflight_blocked",
+            message_preview=body,
+            error_code=readiness.error_code,
+            detail=detail,
+            extra={"messaging_roots": roots, "layout_mode": readiness.layout_mode},
+        )
+        return _build_command_result(
+            success=False,
+            agent=normalized,
+            transport="preflight_blocked",
+            message=f"FAILED: {detail}",
+            error_code=readiness.error_code,
+            extra={
+                "messaging_roots": roots,
+                "layout_mode": readiness.layout_mode,
+                "readiness_warnings": readiness.warnings,
+            },
+        )
+
+    os.environ["AGENT_GAS_LAYOUT_MODE"] = readiness.layout_mode
+    bus_attempt: dict[str, Any] | None = None
+
+    if message_bus_enabled():
+        bus_ok, bus_detail, bus_meta = send_via_message_bus(
+            agent_id=normalized,
+            raw_content=body,
+            sender=sender,
+            live=True,
+        )
+        bus_attempt = {"ok": bus_ok, "detail": bus_detail, **bus_meta}
+        if bus_ok:
+            _record_final_delivery(
+                source=source,
+                agent_id=normalized,
+                success=True,
+                transport=str(bus_meta.get("transport", "message_bus")),
+                message_preview=bus_meta.get("body_preview") or body,
+                error_code=None,
+                detail=bus_detail,
+                extra={"messaging_roots": roots, "bus_attempt": bus_attempt},
+            )
+            return _build_command_result(
+                success=True,
+                agent=normalized,
+                transport=str(bus_meta.get("transport", "message_bus")),
+                message=f"SENT: {bus_detail}",
+                extra={**bus_meta, "messaging_roots": roots},
+            )
+        logger.warning("Message bus delivery failed (%s) — trying direct PyAutoGUI once", bus_detail)
+
+    body, template_meta = wrap_d2a_message(agent_id=normalized, raw_content=body, sender=sender)
+
+    resolved_transport = transport if transport is not None else get_transport(None)
+    if resolved_transport is None:
+        detail = (
+            "PyAutoGUI transport unavailable after preflight. Check AGENT_CELLPHONE_ROOT / "
+            "DREAMVAULT_AGENT_TRANSPORT_SSOT and coords calibration."
+        )
+        _record_final_delivery(
+            source=source,
+            agent_id=normalized,
+            success=False,
+            transport="none",
+            message_preview=body,
+            error_code="NO_TRANSPORT",
+            detail=detail,
+            extra={**template_meta, "messaging_roots": roots, "bus_attempt": bus_attempt},
+        )
+        return _build_command_result(
+            success=False,
+            agent=normalized,
+            transport="none",
+            message=f"FAILED: {detail}",
+            error_code="NO_TRANSPORT",
+            extra={**template_meta, "messaging_roots": roots, "bus_attempt": bus_attempt},
+        )
+
+    py_result = deliver_message(body, normalized, resolved_transport)
+    if py_result.success:
+        transport_name = "pyautogui_bus_fallback" if bus_attempt else "pyautogui"
+        data: dict[str, Any] = {
+            **template_meta,
+            "messaging_roots": roots,
+            "layout_mode": readiness.layout_mode,
+        }
+        if bus_attempt:
+            data["bus_attempt"] = bus_attempt
+        if py_result.detail:
+            data["layout_note"] = py_result.detail
+        if readiness.warnings:
+            data["readiness_warnings"] = readiness.warnings
+        _record_final_delivery(
+            source=source,
+            agent_id=normalized,
+            success=True,
+            transport=transport_name,
+            message_preview=body,
+            error_code=None,
+            detail=py_result.detail,
+            extra=data,
+        )
+        note = " (bus timeout fallback)" if bus_attempt else ""
+        return _build_command_result(
+            success=True,
+            agent=normalized,
+            transport=transport_name,
+            message=f"SENT: Delivered to {normalized} via PyAutoGUI{note}",
+            extra=data,
+        )
+
+    detail = py_result.detail or "PyAutoGUI delivery failed"
+    code = py_result.error_code or "PYAUTOGUI_FAILED"
+    _record_final_delivery(
+        source=source,
+        agent_id=normalized,
+        success=False,
+        transport="pyautogui",
+        message_preview=body,
+        error_code=code,
+        detail=detail,
+        extra={**template_meta, "messaging_roots": roots, "bus_attempt": bus_attempt},
+    )
+    logger.error("PyAutoGUI failed for %s (%s): %s", normalized, code, detail)
+    return _build_command_result(
+        success=False,
+        agent=normalized,
+        transport="pyautogui",
+        message=f"FAILED: {detail}",
+        error_code=code,
+        extra={
+            "pyautogui_error": detail,
+            **template_meta,
+            "messaging_roots": roots,
+            "bus_attempt": bus_attempt,
+        },
+    )
+
+
+def broadcast_agent_messages(
+    message: str,
+    *,
+    agents: list[str] | None = None,
+    discord_user: Any | None = None,
+    source: str = "discord_broadcast",
+    transport: Any | None = None,
+    dry_run: bool = False,
+) -> BroadcastResult:
+    """Send the same D2A message to each agent sequentially (message bus / PyAutoGUI)."""
+    from agent_tools.discord_commander.swarm_status_helper import list_swarm_agents
+
+    body = message.strip()
+    if not body:
+        return BroadcastResult(
+            success=False,
+            message="Message body cannot be empty.",
+            error_code="EMPTY_MESSAGE",
+        )
+
+    targets = list(agents) if agents else list_swarm_agents()
+    if not targets:
+        return BroadcastResult(
+            success=False,
+            message="No agents configured for broadcast.",
+            error_code="NO_AGENTS",
+        )
+
+    delivered: list[str] = []
+    failed: list[str] = []
+    results: list[CommandResult] = []
+
+    for agent_id in targets:
+        result = send_agent_message(
+            agent_id,
+            body,
+            discord_user=discord_user,
+            transport=transport,
+            dry_run=dry_run,
+            source=source,
+        )
+        results.append(result)
+        agent = result.agent or agent_id
+        if result.success:
+            delivered.append(agent)
+        else:
+            failed.append(agent)
+
+    ok = bool(delivered) and not failed
+    partial = bool(delivered) and bool(failed)
+    if ok:
+        msg = f"SENT: Broadcast delivered to {len(delivered)}/{len(targets)} agents"
+    elif partial:
+        msg = f"FAILED: Broadcast partial {len(delivered)}/{len(targets)}; failed: {', '.join(failed)}"
+    else:
+        msg = f"FAILED: Broadcast failed for all {len(targets)} agents"
+
+    return BroadcastResult(
+        success=ok,
+        message=msg,
+        delivered=delivered,
+        failed=failed,
+        results=results,
+        error_code=None if ok else ("PARTIAL_BROADCAST" if partial else "BROADCAST_FAILED"),
+    )

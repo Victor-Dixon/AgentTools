@@ -502,11 +502,10 @@ class UnifiedAnalyticsDashboard:
         summary = dashboard["summary"]
         print("📊 SUMMARY")
         print(f"Total Websites: {summary['total_websites']}")
-        print(f"Total Page Views: {summary['total_page_views']:,}")
-        print(f"Total Unique Visitors: {summary['total_unique_visitors']:,}")
-        print(f"Average Bounce Rate: {summary['average_bounce_rate']:.1f}%")
-        print(f"Average SEO Score: {summary['average_seo_score']:.1f}")
-        print(f"Average Performance Score: {summary['average_performance_score']:.1f}")
+        print(","
+        print(","
+        print(".1f")
+        print(".1f")
         print()
 
         # Website status

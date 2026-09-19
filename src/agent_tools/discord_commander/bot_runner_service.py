@@ -4,29 +4,6 @@ Adapted from Agent_Cellphone_V2_Repository/src/discord_commander/bot_runner_serv
 """
 
 from __future__ import annotations
-# C2A_SELF_GAS_ROOT_DEFAULTS_041
-# Canonical desktop roots for C2A/S2A hard onboard and self-gas routes.
-import os as _c2a_self_gas_env_041
-_c2a_self_gas_env_041.environ["DREAMVAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["DREAMOS_VAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["VAULT_ROOT"] = r"D:\DreamVault"
-_c2a_self_gas_env_041.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
-_c2a_self_gas_env_041.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
-_c2a_self_gas_env_041.environ.setdefault("DEFAULT_MODE", "pyautogui")
-_c2a_self_gas_env_041.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
-_c2a_self_gas_env_041.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
-_c2a_self_gas_env_041.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
-
-# D2A_AGENTTOOLS_BRIDGE_ENV_DEFAULTS_035
-# Canonical visible-session D2A delivery defaults.
-import os as _dreamos_d2a_env_035
-_dreamos_d2a_env_035.environ["AGENT_CELLPHONE_ROOT"] = r"D:\repos\Agent_Cellphone"
-_dreamos_d2a_env_035.environ.setdefault("ALLOW_LIVE_CURSOR_INJECTION", "1")
-_dreamos_d2a_env_035.environ.setdefault("DEFAULT_MODE", "pyautogui")
-_dreamos_d2a_env_035.environ.setdefault("COORDINATE_MODE", "4-agent-1monitor")
-_dreamos_d2a_env_035.environ.setdefault("AGENT_GAS_LAYOUT_MODE", "4-agent-1monitor")
-_dreamos_d2a_env_035.environ.setdefault("DREAMOS_ALLOW_PYAUTOGUI_FAILSAFE_OVERRIDE", "1")
-_dreamos_d2a_env_035.environ.setdefault("PYTHONPATH", r"D:\agent-tools\src;D:\DreamVault\src")
 
 import asyncio
 import logging
@@ -95,13 +72,12 @@ async def run_bot_service() -> int:
 
 
 def main() -> int:
-    from .env_bootstrap import bootstrap_commander_env
-    from .logging_config import configure_discord_commander_logging
-
-    bootstrap_commander_env()
-    log_path = configure_discord_commander_logging("bot")
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(message)s",
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
     print(f"Discord Commander bot runner — {datetime.now().isoformat()}")
-    print(f"LOG_FILE={log_path}")
     if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     return asyncio.run(run_bot_service())

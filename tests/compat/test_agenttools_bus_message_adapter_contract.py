@@ -34,7 +34,7 @@ def test_no_agenttools_bus_message_adapter_exists_yet() -> None:
         and (
             "bus_message" in path.name.lower()
             or "message_adapter" in path.name.lower()
-            or "message_schema" in path.name.lower()
+            or "dreamos" in path.name.lower()
         )
     ]
 

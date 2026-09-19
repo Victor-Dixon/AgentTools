@@ -8,18 +8,8 @@ from typing import Any
 import discord
 from discord.ext import commands
 
-from agent_tools.discord_commander.agent_message_sender import (
-    broadcast_agent_messages,
-    send_agent_message_async,
-)
-from agent_tools.discord_commander.messaging_delivery_log import delivery_jsonl_path
-from agent_tools.discord_commander.models import DELIVERY_QUEUED
-from agent_tools.discord_commander.utils.message_chunking import (
-    MAX_EMBED_DESCRIPTION,
-    MAX_FIELD_VALUE,
-    preview_for_embed,
-    truncate_embed_field,
-)
+from agent_tools.discord_commander.agent_message_sender import send_agent_message
+from agent_tools.discord_commander.utils.message_chunking import chunk_field_value
 
 logger = logging.getLogger(__name__)
 
@@ -35,175 +25,36 @@ class MessagingCommands(commands.Cog):
     @commands.command(name="message", description="Send message to agent")
     async def message(self, ctx: commands.Context, agent_id: str, *, message: str) -> None:
         """Send direct message to agent: `!message Agent-1 Check your inbox`."""
-        import asyncio
-
         try:
-            logger.info(
-                "!message invoked by=%s agent=%s len=%d",
-                getattr(ctx.author, "name", "unknown"),
-                agent_id,
-                len(message),
-            )
-            # Never run sync bus/PyAutoGUI work on the Discord gateway loop.
-            result = await send_agent_message_async(
+            result = send_agent_message(
                 agent_id=agent_id,
                 message=message,
                 discord_user=ctx.author,
                 priority="regular",
-                source="discord_bot_command",
             )
 
-            data = result.data or {}
-            final_status = str(
-                data.get("final_status")
-                or data.get("delivery_status")
-                or ("SENT" if result.success else "FAILED")
-            )
-            agent = result.agent or agent_id
-            transport = data.get("transport", "unknown")
-            template_cat = data.get("message_template") or data.get("template_category") or "raw"
-            if final_status in (DELIVERY_QUEUED, "DISPATCHING"):
-                color = discord.Color.gold()
-            elif final_status in ("SENT", "LIVE_SENT", "DELIVERED"):
-                color = discord.Color.green()
-            else:
-                color = discord.Color.red()
-
-            embed = discord.Embed(
-                title=f"!message {final_status}",
-                description=truncate_embed_field(result.message, MAX_EMBED_DESCRIPTION),
-                color=color,
-            )
-            embed.add_field(
-                name="Target",
-                value=truncate_embed_field(f"**{agent}**"),
-                inline=True,
-            )
-            embed.add_field(
-                name="Transport",
-                value=truncate_embed_field(str(transport)),
-                inline=True,
-            )
-            embed.add_field(
-                name="Template",
-                value=truncate_embed_field(str(template_cat)),
-                inline=True,
-            )
-            bus_id = data.get("bus_message_id") or data.get("message_id")
-            if bus_id:
-                embed.add_field(
-                    name="Bus message",
-                    value=truncate_embed_field(f"`{bus_id}`"),
-                    inline=False,
+            if result.success:
+                agent = result.agent or agent_id
+                embed = discord.Embed(
+                    title="Message Sent",
+                    description=f"Delivered to **{agent}**",
+                    color=discord.Color.green(),
                 )
-            roots = data.get("messaging_roots")
-            if isinstance(roots, dict):
-                embed.add_field(
-                    name="Roots",
-                    value=truncate_embed_field(
-                        f"agent-tools: `{roots.get('agent_tools_root', '?')}`\n"
-                        f"coords: `{roots.get('coords_root', '?')}`"
-                    ),
-                    inline=False,
-                )
-            layout_note = data.get("layout_note")
-            if layout_note:
-                embed.add_field(
-                    name="Layout note",
-                    value=truncate_embed_field(str(layout_note)),
-                    inline=False,
-                )
-            bus_attempt = data.get("bus_attempt")
-            if isinstance(bus_attempt, dict) and not bus_attempt.get("ok"):
-                embed.add_field(
-                    name="Bus note",
-                    value=truncate_embed_field(
-                        str(bus_attempt.get("detail") or "bus unavailable")
-                    ),
-                    inline=False,
-                )
-            if result.error_code:
-                embed.add_field(
-                    name="Error",
-                    value=truncate_embed_field(str(result.error_code)),
-                    inline=True,
-                )
-            embed.add_field(
-                name="Audit log",
-                value=truncate_embed_field(f"`{delivery_jsonl_path()}`"),
-                inline=False,
-            )
-            # Truncate preview only — full D2A body remains on bus/payload disk.
-            embed.add_field(
-                name="Message preview",
-                value=preview_for_embed(message, bus_id=str(bus_id) if bus_id else None),
-                inline=False,
-            )
-            delivery_state = truncate_embed_field(
-                f"final_status={final_status} "
-                f"delivery_status={data.get('delivery_status')} "
-                f"live_dispatched={data.get('live_dispatched')} "
-                f"confirmed={data.get('confirmed')} "
-                f"processor_running={data.get('processor_running')}"
-            )
-            embed.add_field(name="Delivery receipt", value=delivery_state, inline=False)
-            # Fail-closed before Discord API: EmbedProxy.value assignment is a no-op —
-            # must use set_field_at so oversized confirmation fields never reach Discord.
-            for index, field in enumerate(list(embed.fields)):
-                if len(field.value or "") > MAX_FIELD_VALUE:
-                    embed.set_field_at(
-                        index,
-                        name=field.name,
-                        value=truncate_embed_field(field.value, MAX_FIELD_VALUE),
-                        inline=field.inline,
+                transport = (result.data or {}).get("transport", "unknown")
+                embed.add_field(name="Transport", value=str(transport), inline=True)
+                message_chunks = chunk_field_value(message)
+                embed.add_field(name="Message", value=message_chunks[0], inline=False)
+                for index, chunk in enumerate(message_chunks[1:], start=2):
+                    embed.add_field(
+                        name=f"Message (continued {index}/{len(message_chunks)})",
+                        value=chunk,
+                        inline=False,
                     )
-            if embed.description and len(embed.description) > MAX_EMBED_DESCRIPTION:
-                embed.description = truncate_embed_field(
-                    embed.description, MAX_EMBED_DESCRIPTION
-                )
-            await ctx.send(embed=embed)
-            if final_status == "FAILED":
-                logger.warning(
-                    "!message failed agent=%s error=%s detail=%s",
-                    agent_id,
-                    result.error_code,
-                    result.message,
-                )
-        except asyncio.TimeoutError:
-            await ctx.reply(
-                "Message accepted, but live delivery confirmation is still pending."
-            )
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send(f"Failed to send message to {agent_id}: {result.message}")
         except Exception as exc:
             self.logger.error("message command failed: %s", exc, exc_info=True)
-            await ctx.send(f"Error: {exc}")
-
-    @commands.command(name="broadcast", aliases=["swarm"], description="Broadcast message to all agents")
-    async def broadcast(self, ctx: commands.Context, *, message: str) -> None:
-        """Broadcast to Agent-1..8: `!broadcast Check your inboxes`."""
-        import asyncio
-
-        try:
-            logger.info(
-                "!broadcast invoked by=%s len=%d",
-                getattr(ctx.author, "name", "unknown"),
-                len(message),
-            )
-            await ctx.send("Broadcasting to swarm (enqueue / sequential off-loop)…")
-            result = await asyncio.to_thread(
-                broadcast_agent_messages,
-                message,
-                discord_user=ctx.author,
-                source="discord_bot_broadcast",
-            )
-            lines = [result.message]
-            if result.delivered:
-                lines.append(f"✅ {', '.join(result.delivered)}")
-            if result.failed:
-                lines.append(f"❌ {', '.join(result.failed)}")
-            lines.append(f"Log: `{delivery_jsonl_path()}`")
-            await ctx.send("\n".join(lines))
-        except Exception as exc:
-            self.logger.error("broadcast command failed: %s", exc, exc_info=True)
             await ctx.send(f"Error: {exc}")
 
 

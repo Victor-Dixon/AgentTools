@@ -47,98 +47,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/agent2_website_audit.py",
-    "syntax_ok": true,
-    "classes": [
-      "Agent2WebsiteAuditor"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "fetch_url_content",
-      "analyze_html_content",
-      "calculate_seo_score",
-      "calculate_ux_score",
-      "get_ollama_insights",
-      "audit_website",
-      "audit_multiple_sites",
-      "_extract_top_issues"
-    ],
-    "imports": [
-      "json",
-      "re",
-      "sys",
-      "time",
-      "pathlib",
-      "typing",
-      "urllib.parse",
-      "urllib.request",
-      "urllib.error",
-      "ollama",
-      "argparse",
-      "traceback"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/agent_system_training_program.py",
-    "syntax_ok": true,
-    "classes": [
-      "TrainingModule",
-      "AgentProfile",
-      "AgentSystemTrainingProgram"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_training_modules",
-      "_load_agent_profiles",
-      "_define_certification_levels",
-      "onboard_agent",
-      "assess_agent_skills",
-      "_infer_expertise_from_agent_id",
-      "_get_next_certification_level",
-      "generate_training_curriculum",
-      "run_practice_session",
-      "run_certification_exam"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "random",
-      "typing",
-      "dataclasses",
-      "datetime"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/agent_workspace_cleanup.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "get_agent_workspace_dirs",
-      "identify_cleanup_candidates",
-      "create_archive_dir",
-      "safe_archive_file",
-      "perform_cleanup",
-      "main"
-    ],
-    "imports": [
-      "argparse",
-      "os",
-      "shutil",
-      "pathlib",
-      "datetime",
-      "typing",
-      "traceback"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/analysis/__init__.py",
     "syntax_ok": true,
     "classes": [],
@@ -545,96 +453,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/analytics/unified_analytics_dashboard.py",
-    "syntax_ok": true,
-    "classes": [
-      "WebsiteAnalytics",
-      "AnalyticsAlert",
-      "UnifiedAnalyticsDashboard"
-    ],
-    "functions": [
-      "__post_init__",
-      "__init__",
-      "collect_website_analytics",
-      "_mock_page_views",
-      "_mock_unique_visitors",
-      "_mock_bounce_rate",
-      "_mock_session_duration",
-      "_mock_top_pages",
-      "_mock_traffic_sources",
-      "_calculate_seo_score",
-      "_calculate_performance_score",
-      "_save_analytics_data",
-      "generate_unified_dashboard",
-      "_determine_website_status",
-      "_generate_recommendations",
-      "_generate_alerts",
-      "_save_dashboard",
-      "generate_analytics_report",
-      "_calculate_metrics_summary",
-      "_calculate_trends",
-      "display_dashboard"
-    ],
-    "imports": [
-      "json",
-      "logging",
-      "sys",
-      "datetime",
-      "pathlib",
-      "typing",
-      "requests",
-      "dataclasses",
-      "argparse",
-      "asyncio"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/automate_pyautogui_dispatch.py",
-    "syntax_ok": true,
-    "classes": [
-      "DispatchTarget",
-      "DispatchStep",
-      "DispatchReport"
-    ],
-    "functions": [
-      "_ensure_utf8",
-      "_parse_agent_id",
-      "_resolve_repo",
-      "_load_json",
-      "_coords_candidate_paths",
-      "_candidate_coord_keys",
-      "_resolve_target",
-      "_profile_matches_target",
-      "_resolve_devtools_click",
-      "_focus_target",
-      "_run_outbox_helper",
-      "_dispatch_packet",
-      "_parse_plan",
-      "_parse_args",
-      "_build_steps",
-      "main",
-      "append"
-    ],
-    "imports": [
-      "__future__",
-      "argparse",
-      "json",
-      "os",
-      "subprocess",
-      "sys",
-      "time",
-      "dataclasses",
-      "pathlib",
-      "typing",
-      "pyautogui",
-      "pyperclip"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/autonomous/__init__.py",
     "syntax_ok": true,
     "classes": [],
@@ -675,8 +493,7 @@
       "re",
       "sys",
       "pathlib",
-      "typing",
-      "argparse"
+      "typing"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -938,6 +755,7 @@
     "functions": [],
     "imports": [
       "tools.cli.dispatchers.unified_dispatcher",
+      "tools.cli.dispatchers.unified_dispatcher",
       "tools.cli.main"
     ],
     "has_main_guard": false,
@@ -1071,40 +889,6 @@
     "imports": [
       "__future__",
       "tools.cli.main"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/closure_quality_audit.py",
-    "syntax_ok": true,
-    "classes": [
-      "QualityIssue",
-      "ClosureQualityAudit"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "scan_python_files",
-      "run_linting_check",
-      "check_imports",
-      "check_cli_tools",
-      "analyze_functionality_consolidation",
-      "generate_report",
-      "run_full_audit"
-    ],
-    "imports": [
-      "argparse",
-      "ast",
-      "importlib",
-      "os",
-      "re",
-      "subprocess",
-      "sys",
-      "pathlib",
-      "typing",
-      "dataclasses",
-      "traceback"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -1469,8 +1253,7 @@
       "get_external_dependencies",
       "get_internal_dependencies",
       "get_circular_dependencies",
-      "export_to_json",
-      "_normalize_module_path"
+      "export_to_json"
     ],
     "imports": [
       "ast",
@@ -1636,7 +1419,7 @@
       "sys",
       "pathlib",
       "logging",
-      "agent_tools.discord_commander.unified_discord_bot"
+      "src.discord_commander.unified_discord_bot"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -1683,40 +1466,6 @@
       "sys",
       "pathlib",
       "pyautogui"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/cycle_accomplishment_integrator.py",
-    "syntax_ok": true,
-    "classes": [
-      "CycleAccomplishmentIntegrator"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_points_config",
-      "validate_inputs",
-      "load_agent_status",
-      "check_idempotency",
-      "update_cycle_status_atomic",
-      "_calculate_accomplishments_config",
-      "generate_accomplishment_report",
-      "post_to_cycle_channel"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "os",
-      "re",
-      "tempfile",
-      "shutil",
-      "datetime",
-      "pathlib",
-      "typing",
-      "dotenv",
-      "requests"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -1833,67 +1582,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/deployment/automated_deployment_pipeline.py",
-    "syntax_ok": true,
-    "classes": [
-      "WebsiteConfig",
-      "DeploymentResult",
-      "AutomatedDeploymentPipeline"
-    ],
-    "functions": [
-      "__post_init__",
-      "__init__",
-      "_load_website_configs",
-      "_save_config",
-      "_log_deployment_result"
-    ],
-    "imports": [
-      "asyncio",
-      "json",
-      "logging",
-      "subprocess",
-      "sys",
-      "datetime",
-      "pathlib",
-      "typing",
-      "requests",
-      "dataclasses",
-      "argparse",
-      "socket"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/devlog_poster.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "split_content_into_pages",
-      "update_agent_status",
-      "save_devlog_for_website",
-      "post_agent_heartbeat",
-      "post_devlog_to_discord",
-      "main"
-    ],
-    "imports": [
-      "argparse",
-      "os",
-      "sys",
-      "json",
-      "pathlib",
-      "typing",
-      "datetime",
-      "dotenv",
-      "requests",
-      "dotenv",
-      "requests",
-      "time"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/devops/documentation_assistant.py",
     "syntax_ok": true,
     "classes": [
@@ -1969,71 +1657,9 @@
       "subprocess",
       "json",
       "pathlib",
-      "argparse",
       "dotenv"
     ],
     "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord/__init__.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [],
-    "imports": [
-      "webhook_sender"
-    ],
-    "has_main_guard": false,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord/config.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "parse_export_file",
-      "first_value",
-      "resolve_discord_config"
-    ],
-    "imports": [
-      "__future__",
-      "os",
-      "pathlib",
-      "typing"
-    ],
-    "has_main_guard": false,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord/create_webhook.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [],
-    "imports": [
-      "__future__",
-      "json",
-      "os",
-      "sys",
-      "pathlib",
-      "requests"
-    ],
-    "has_main_guard": false,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord/list_channels.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [],
-    "imports": [
-      "__future__",
-      "json",
-      "os",
-      "sys",
-      "pathlib",
-      "requests"
-    ],
-    "has_main_guard": false,
     "risk": "legacy_review"
   },
   {
@@ -2070,138 +1696,6 @@
       "tools.verify_discord_buttons",
       "tools.check_discord_running",
       "tools.upload_file_to_discord"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord/webhook_sender.py",
-    "syntax_ok": true,
-    "classes": [
-      "DiscordWebhookResult"
-    ],
-    "functions": [
-      "_resolve_webhook_url",
-      "send_payload",
-      "send_payload_file"
-    ],
-    "imports": [
-      "__future__",
-      "json",
-      "os",
-      "dataclasses",
-      "pathlib",
-      "typing",
-      "requests"
-    ],
-    "has_main_guard": false,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord_commander/post_to_discord_router.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "argparse",
-      "sys",
-      "pathlib",
-      "agent_tools.discord_commander.outbound_router"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord_commander/run_message_router_discord_bot_with_restart.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "run_bot",
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "subprocess",
-      "sys",
-      "time",
-      "pathlib",
-      "agent_tools.discord_commander.env_bootstrap"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord_commander/run_unified_discord_bot_with_restart.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "run_bot",
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "os",
-      "os",
-      "subprocess",
-      "sys",
-      "time",
-      "pathlib",
-      "agent_tools.discord_commander.env_bootstrap"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord_commander/start_discord_system.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "_token_present",
-      "_spawn",
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "logging",
-      "os",
-      "subprocess",
-      "sys",
-      "time",
-      "pathlib"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord_commander/start_message_bus_processor.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "os",
-      "subprocess",
-      "sys",
-      "pathlib",
-      "agent_tools.discord_commander.env_bootstrap"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/discord_commander/start_message_queue_processor.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [],
-    "imports": [
-      "__future__",
-      "sys",
-      "start_message_bus_processor"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -2244,36 +1738,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/force_multiplier_gate.py",
-    "syntax_ok": true,
-    "classes": [
-      "ForceMultiplierGate"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "load_rehydration_snapshot",
-      "load_agent_status",
-      "get_current_git_sha",
-      "check_task_scope",
-      "check_ownership",
-      "check_execution_readiness",
-      "check_alignment",
-      "evaluate_gate",
-      "print_gate_results"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "os",
-      "subprocess",
-      "pathlib",
-      "typing"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/github/unified_github.py",
     "syntax_ok": true,
     "classes": [
@@ -2307,136 +1771,6 @@
       "tools.analyze_merge_plans",
       "tools.complete_merge_into_main",
       "tools.github_architecture_audit"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/hybrid_website_audit.py",
-    "syntax_ok": true,
-    "classes": [
-      "HybridWebsiteAuditor"
-    ],
-    "functions": [
-      "__init__",
-      "fetch_page_content",
-      "parse_html_content",
-      "manual_seo_analysis",
-      "manual_ux_analysis"
-    ],
-    "imports": [
-      "asyncio",
-      "json",
-      "os",
-      "re",
-      "sys",
-      "time",
-      "pathlib",
-      "typing",
-      "urllib.parse",
-      "urllib.robotparser",
-      "httpx",
-      "requests",
-      "bs4",
-      "ollama",
-      "argparse",
-      "traceback"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/intelligent_system_suggester.py",
-    "syntax_ok": true,
-    "classes": [
-      "SystemRecommendation",
-      "WorkflowSuggestion",
-      "IntelligentSystemSuggester"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_system_knowledge",
-      "_load_task_patterns",
-      "_load_success_patterns",
-      "_calculate_efficiency_weights",
-      "analyze_task",
-      "_identify_task_type",
-      "_calculate_system_confidence",
-      "_generate_reasoning",
-      "suggest_workflow",
-      "_select_workflow_pattern",
-      "_calculate_workflow_efficiency",
-      "_estimate_completion_time",
-      "_calculate_confidence_level",
-      "_identify_optimization_opportunities",
-      "generate_learning_report"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "re",
-      "typing",
-      "dataclasses",
-      "datetime",
-      "math"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/maintenance/maintenance_checklists.py",
-    "syntax_ok": true,
-    "classes": [
-      "MaintenanceTask",
-      "MaintenanceChecklist",
-      "MaintenanceSystem"
-    ],
-    "functions": [
-      "__post_init__",
-      "__post_init__",
-      "__init__",
-      "_load_maintenance_templates",
-      "generate_website_checklist",
-      "_calculate_next_due",
-      "_estimate_duration",
-      "_save_checklist",
-      "load_checklist",
-      "update_task_status",
-      "_log_maintenance_completion",
-      "get_overdue_tasks",
-      "generate_maintenance_schedule",
-      "display_checklist",
-      "verify_maintenance_compliance"
-    ],
-    "imports": [
-      "json",
-      "logging",
-      "sys",
-      "datetime",
-      "pathlib",
-      "typing",
-      "dataclasses",
-      "argparse"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/messaging_cli_wrapper.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "_dreamvault_roots",
-      "_resolve_ssot_script",
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "os",
-      "subprocess",
-      "sys",
-      "pathlib"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -2596,133 +1930,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/monitoring/website_health_monitor.py",
-    "syntax_ok": true,
-    "classes": [
-      "HealthCheckResult",
-      "HealthAlert",
-      "WebsiteHealthMonitor"
-    ],
-    "functions": [
-      "__post_init__",
-      "__init__",
-      "_load_config",
-      "generate_health_report",
-      "display_health_report"
-    ],
-    "imports": [
-      "asyncio",
-      "json",
-      "logging",
-      "smtplib",
-      "sys",
-      "datetime",
-      "email.mime.text",
-      "pathlib",
-      "typing",
-      "requests",
-      "dataclasses",
-      "argparse",
-      "time",
-      "ssl",
-      "socket",
-      "socket",
-      "time",
-      "re",
-      "datetime"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/one_screen_execution_loop.py",
-    "syntax_ok": true,
-    "classes": [
-      "OneScreenExecutionLoop"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "load_rehydration_snapshot",
-      "save_rehydration_snapshot",
-      "execute_command",
-      "validate_output",
-      "update_snapshot_after_execution",
-      "run_execution_loop"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "subprocess",
-      "sys",
-      "time",
-      "pathlib",
-      "typing",
-      "datetime"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/operating_cycle_system_integration.py",
-    "syntax_ok": true,
-    "classes": [
-      "CyclePhase",
-      "EnhancedOperatingCycle",
-      "OperatingCycleIntegrator"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_agent_expertise",
-      "_load_system_templates",
-      "_load_efficiency_metrics",
-      "enhance_operating_cycle",
-      "_calculate_efficiency_gain",
-      "_calculate_utilization_rate",
-      "generate_system_checklist",
-      "generate_agent_playbook",
-      "analyze_efficiency_gains"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "typing",
-      "dataclasses",
-      "datetime"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/rehydration_manager.py",
-    "syntax_ok": true,
-    "classes": [
-      "RehydrationManager"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "get_current_git_sha",
-      "load_agent_status",
-      "load_inbox_messages",
-      "create_rehydration_snapshot",
-      "save_rehydration_snapshot",
-      "validate_resume_gates",
-      "get_status_summary"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "subprocess",
-      "datetime",
-      "pathlib",
-      "typing"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/security/check_sensitive_files.py",
     "syntax_ok": true,
     "classes": [],
@@ -2737,8 +1944,7 @@
       "subprocess",
       "sys",
       "pathlib",
-      "typing",
-      "argparse"
+      "typing"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -2765,66 +1971,6 @@
       "typing",
       "argparse",
       "pip_audit"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/soft_onboard_cli.py",
-    "syntax_ok": true,
-    "classes": [
-      "SoftOnboardAgent"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "run_command",
-      "run_command_live",
-      "step_load_state",
-      "step_evaluate_gate",
-      "step_execute_visual_onboarding",
-      "step_validate_closure",
-      "onboard_agent"
-    ],
-    "imports": [
-      "argparse",
-      "subprocess",
-      "sys",
-      "os",
-      "pathlib"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/streamlined_website_audit.py",
-    "syntax_ok": true,
-    "classes": [
-      "StreamlinedWebsiteAuditor"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "fetch_content",
-      "analyze_content",
-      "calculate_scores",
-      "get_ollama_insights",
-      "audit_website",
-      "_get_priority_actions",
-      "audit_batch"
-    ],
-    "imports": [
-      "json",
-      "re",
-      "sys",
-      "time",
-      "pathlib",
-      "typing",
-      "urllib.parse",
-      "urllib.request",
-      "urllib.error",
-      "ollama",
-      "argparse"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -2956,69 +2102,6 @@
       "pathlib",
       "tempfile",
       "tools.swarm.agents.import_healer"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/system_discovery_agent.py",
-    "syntax_ok": true,
-    "classes": [
-      "SystemTool",
-      "SystemDiscoveryAgent"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_systems_registry",
-      "_load_agent_expertise",
-      "discover_all_systems",
-      "find_tools_for_task",
-      "get_operating_cycle_integration",
-      "analyze_usage_patterns"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "os",
-      "sys",
-      "pathlib",
-      "typing",
-      "dataclasses"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/system_utilization_feedback_loop.py",
-    "syntax_ok": true,
-    "classes": [
-      "SystemUsageEvent",
-      "SystemEffectivenessMetrics",
-      "SystemUtilizationFeedbackLoop"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "_load_usage_history",
-      "_calculate_system_metrics",
-      "_analyze_agent_patterns",
-      "_generate_swarm_insights",
-      "track_usage_event",
-      "analyze_agent_effectiveness",
-      "_generate_agent_recommendations",
-      "generate_improvement_recommendations",
-      "get_swarm_insights",
-      "generate_predictive_recommendations"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "statistics",
-      "typing",
-      "dataclasses",
-      "datetime",
-      "collections"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -3607,42 +2690,17 @@
     "syntax_ok": true,
     "classes": [],
     "functions": [
-      "_invoke_entry_point",
       "main",
       "print_help",
       "print_tools"
     ],
     "imports": [
-      "__future__",
-      "importlib",
-      "inspect",
-      "logging",
       "sys",
+      "importlib",
+      "logging",
       "typing",
       "tools.toolbelt_registry",
       "tools.toolbelt_registry"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/toolbelt/cli/onboarding_cli.py",
-    "syntax_ok": true,
-    "classes": [
-      "Args"
-    ],
-    "functions": [
-      "_validate_agent",
-      "cmd_soft",
-      "cmd_status",
-      "cmd_hard",
-      "main"
-    ],
-    "imports": [
-      "argparse",
-      "sys",
-      "subprocess",
-      "dataclasses"
     ],
     "has_main_guard": true,
     "risk": "legacy_review"
@@ -3788,7 +2846,6 @@
     ],
     "functions": [
       "__init__",
-      "_dreamvault_messaging_script",
       "execute",
       "_soft_onboarding",
       "_hard_onboarding",
@@ -3796,10 +2853,7 @@
     ],
     "imports": [
       "logging",
-      "os",
       "subprocess",
-      "sys",
-      "pathlib",
       "typing"
     ],
     "has_main_guard": false,
@@ -3882,21 +2936,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/toolbelt_cli.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "main"
-    ],
-    "imports": [
-      "__future__",
-      "subprocess",
-      "sys"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/toolbelt_registry.py",
     "syntax_ok": true,
     "classes": [
@@ -3914,45 +2953,6 @@
       "typing"
     ],
     "has_main_guard": false,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/validate_closure_next_action.py",
-    "syntax_ok": true,
-    "classes": [
-      "ClosureNextActionValidator"
-    ],
-    "functions": [
-      "main",
-      "__init__",
-      "load_rehydration_snapshot",
-      "validate_singularity_rule"
-    ],
-    "imports": [
-      "argparse",
-      "json",
-      "pathlib",
-      "typing"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
-    "path": "tools/validate_closure_run_id.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "validate_run_id",
-      "get_current_git_sha",
-      "main"
-    ],
-    "imports": [
-      "argparse",
-      "re",
-      "pathlib",
-      "subprocess"
-    ],
-    "has_main_guard": true,
     "risk": "legacy_review"
   },
   {
@@ -4166,56 +3166,6 @@
     "risk": "legacy_review"
   },
   {
-    "path": "tools/vps_deploy_bridge/vps_deploy_bridge.py",
-    "syntax_ok": true,
-    "classes": [
-      "DeployBridgeError",
-      "DeployReport"
-    ],
-    "functions": [
-      "_utc_now",
-      "load_schema",
-      "load_request",
-      "_is_iso_datetime",
-      "validate_schema",
-      "normalize_path",
-      "validate_target_path",
-      "validate_command",
-      "validate_service_name",
-      "validate_source_path",
-      "validate_upload_constraints",
-      "validate_request",
-      "get_ssh_config",
-      "_ssh_base",
-      "_scp_base",
-      "build_plan",
-      "should_execute",
-      "run_command_line",
-      "execute_plan",
-      "write_report",
-      "process_request",
-      "main",
-      "to_dict"
-    ],
-    "imports": [
-      "__future__",
-      "argparse",
-      "hashlib",
-      "json",
-      "os",
-      "re",
-      "shlex",
-      "subprocess",
-      "sys",
-      "dataclasses",
-      "datetime",
-      "pathlib",
-      "typing"
-    ],
-    "has_main_guard": true,
-    "risk": "legacy_review"
-  },
-  {
     "path": "tools/website_audit_ollama.py",
     "syntax_ok": true,
     "classes": [
@@ -4302,6 +3252,7 @@
     ],
     "functions": [],
     "imports": [
+      "tool_registry",
       "tool_registry",
       "toolbelt_core"
     ],
@@ -6351,7 +5302,6 @@
       "adapters.base_adapter",
       "src.swarm_brain",
       "src.swarm_brain",
-      "mcp_servers.dreamos_brain_advisory_client",
       "src.swarm_brain",
       "src.swarm_brain",
       "src.swarm_brain"
@@ -6883,7 +5833,6 @@
       "test_singleton_pattern",
       "test_list_tools",
       "test_list_by_category",
-      "test_list_by_category_single_filter",
       "test_resolve_valid_tool",
       "test_resolve_invalid_tool",
       "test_caching",
@@ -6965,7 +5914,6 @@
       "importlib",
       "json",
       "logging",
-      "pathlib",
       "typing",
       "adapters.base_adapter",
       "adapters.error_types"
@@ -7045,35 +5993,6 @@
     "functions": [],
     "imports": [],
     "has_main_guard": false,
-    "risk": "adapter_surface"
-  },
-  {
-    "path": "mcp_servers/ai_orchestration_server.py",
-    "syntax_ok": true,
-    "classes": [
-      "AIOrchestrationServer"
-    ],
-    "functions": [
-      "__init__",
-      "_fallback_task_analysis",
-      "_extract_domains_from_task",
-      "_generate_ai_message_template"
-    ],
-    "imports": [
-      "asyncio",
-      "json",
-      "logging",
-      "typing",
-      "pathlib",
-      "mcp.server",
-      "mcp.server.models",
-      "mcp.server.stdio",
-      "mcp.types",
-      "sys",
-      "core.orchestration.ai_orchestrator_factory",
-      "core.orchestration.registry"
-    ],
-    "has_main_guard": true,
     "risk": "adapter_surface"
   },
   {
@@ -7275,31 +6194,6 @@
       "yaml"
     ],
     "has_main_guard": true,
-    "risk": "adapter_surface"
-  },
-  {
-    "path": "mcp_servers/dreamos_brain_advisory_client.py",
-    "syntax_ok": true,
-    "classes": [],
-    "functions": [
-      "get_base_url",
-      "_get",
-      "health_check",
-      "search_advisory",
-      "get_entry",
-      "is_api_available",
-      "map_search_results"
-    ],
-    "imports": [
-      "__future__",
-      "json",
-      "os",
-      "urllib.error",
-      "urllib.parse",
-      "urllib.request",
-      "typing"
-    ],
-    "has_main_guard": false,
     "risk": "adapter_surface"
   },
   {
@@ -7692,7 +6586,6 @@
       "pathlib",
       "typing",
       "src.swarm_brain.swarm_memory",
-      "mcp_servers.dreamos_brain_advisory_client",
       "src.swarm_brain.agent_notes",
       "src.swarm_brain.agent_notes"
     ],
@@ -8306,8 +7199,7 @@
       "check_pack_status",
       "assign_hunt",
       "scout_territory",
-      "main",
-      "emit"
+      "main"
     ],
     "imports": [
       "json",
@@ -8369,12 +7261,10 @@
       "write_task_log",
       "add_to_inbox",
       "mark_task_complete",
-      "_section_tasks",
       "get_tasks",
       "select_next_task",
       "verify_task_completion",
       "recover_system",
-      "score_tasks",
       "main"
     ],
     "imports": [
