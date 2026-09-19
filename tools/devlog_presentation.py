@@ -48,7 +48,7 @@ def split_lossless(content: str, max_length: int = DETAIL_BODY_LIMIT) -> list[st
             chunks.append(content)
             break
         boundary = content.rfind("\n", 0, max_length + 1)
-        cut = boundary + 1 if boundary >= max_length // 3 else max_length
+        cut = boundary + 1 if max_length // 3 <= boundary < max_length else max_length
         chunks.append(content[:cut])
         content = content[cut:]
     return chunks
