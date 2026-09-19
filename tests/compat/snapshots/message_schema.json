@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dreamos.dev/contracts/message_schema.json",
+  "title": "DreamOS Transport-First Message Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "from",
+    "to",
+    "type",
+    "body",
+    "created_at",
+    "status",
+    "lease_owner",
+    "lease_expires_at",
+    "reply_to",
+    "device_hint",
+    "transport",
+    "required_capabilities",
+    "routing_hints",
+    "assigned_to",
+    "result",
+    "error"
+  ],
+  "properties": {
+    "id": {"type": "string", "format": "uuid"},
+    "from": {"type": "string", "minLength": 1},
+    "to": {"type": "string", "minLength": 1},
+    "type": {"type": "string", "minLength": 1},
+    "body": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "type": "string",
+      "enum": ["new", "claimed", "running", "complete", "failed", "expired"]
+    },
+    "lease_owner": {"type": ["string", "null"]},
+    "lease_expires_at": {"type": ["string", "null"], "format": "date-time"},
+    "reply_to": {"type": ["string", "null"]},
+    "device_hint": {"type": "string", "minLength": 1},
+    "transport": {"type": "string", "enum": ["filesystem", "git", "manual_clipboard"]},
+    "required_capabilities": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "routing_hints": {"type": "object"},
+    "assigned_to": {"type": ["string", "null"]},
+    "result": {"type": ["object", "null"]},
+    "error": {"type": ["string", "null"]},
+    "meta": {"type": "object"}
+  }
+}

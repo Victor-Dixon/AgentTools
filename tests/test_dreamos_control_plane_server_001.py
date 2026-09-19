@@ -61,6 +61,9 @@ def test_tools_list_exact_set():
         "connector_security_contract",
     }
     assert names == expected
+    assert "delete_ref" not in names
+    assert "shell" not in names
+    assert "branch_delete_receipt" not in names
 
 
 def test_initialize():
