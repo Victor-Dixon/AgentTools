@@ -42,6 +42,7 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.0",
     "python-dotenv>=1.0",
+    "jsonschema>=4.0",
 ]
 discord = [
     "discord.py>=2.0",
