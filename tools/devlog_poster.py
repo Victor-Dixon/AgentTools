@@ -63,7 +63,7 @@ def update_agent_status(agent_id: str, activity: str, devlog_path: Optional[str]
     """
     # Create agent workspace directory if it doesn't exist
     agent_dir = project_root / "agent_workspaces" / agent_id
-    agent_dir.mkdir(exist_ok=True)
+    agent_dir.mkdir(parents=True, exist_ok=True)
 
     # Update status file
     status_file = agent_dir / "status.json"
