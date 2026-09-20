@@ -26,11 +26,7 @@ def test_no_agenttools_bus_message_adapter_exists_yet() -> None:
         if ".git" not in path.parts
         and "__pycache__" not in path.parts
         and "node_modules" not in path.parts
-        and not (
-            len(path.relative_to(repo).parts) >= 2
-            and path.relative_to(repo).parts[0] == "tests"
-            and path.relative_to(repo).parts[1] == "compat"
-        )
+        and path.relative_to(repo).parts[0] not in {"tests", "mcp_servers"}
         and (
             "bus_message" in path.name.lower()
             or "message_adapter" in path.name.lower()

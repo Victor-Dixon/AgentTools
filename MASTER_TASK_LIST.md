@@ -1,6 +1,6 @@
 # MASTER TASK LIST — AgentTools strategic inventory
 
-**Last reconciled:** 2026-08-11
+**Last reconciled:** 2026-09-20
 **Purpose:** Backlog and strategic inventory — what work exists
 **Execution-status SSOT:** `docs/root/MASTER_TASK_LOG.md`
 **Immediate-action mirror:** `NEXT_UP.md`
@@ -42,6 +42,7 @@ This file inventories work; it does not claim execution status. Record status an
 - [ ] Complete SWARM-003 with redacted publish evidence; do not infer success from a tag or runbook.
 - [ ] Complete SWARM-004 with clean install, import, and CLI smoke evidence after publication.
 - [ ] Add evidence-backed tests for each promoted helper or integration.
+- [x] Reconstruct PR #27 Discord Architect Connector on current master with required CI evidence (replacement PR #29). Live send / HTTP-OAuth remain unauthorized.
 
 ## Repo cleanup/planning
 
@@ -49,6 +50,7 @@ This file inventories work; it does not claim execution status. Record status an
 - [ ] Decide and document the remote/upstream policy for local branch `work`.
 - [ ] Keep this inventory, the execution SSOT, `NEXT_UP.md`, and the domain model aligned without duplicating roles.
 - [ ] Review historical planning artifacts and label them non-canonical rather than silently treating them as current.
+- [ ] After PR #29 merges, close superseded PR #27 and retire `feat/discord-architect-connector-v0` under governed branch cleanup.
 
 ## Dream.OS integration boundaries
 

@@ -1,0 +1,39 @@
+{
+  "id": "pr27_discord_architect_connector_salvage_001",
+  "generated": "2026-09-20T15:50:00Z",
+  "source_pr": 27,
+  "source_branch": "feat/discord-architect-connector-v0",
+  "source_head": "56a0dd6b1235d80d3002c09d8b70013cfc5c1b4c",
+  "replacement_branch": "cursor/pr27-discord-architect-connector-cfa1",
+  "target_repo": "Victor-Dixon/AgentTools",
+  "status": "reconstructed_on_current_master",
+  "unique_work_proven": true,
+  "history_policy": "Do not merge stale branch history wholesale. Reconstruct connector-specific files on current master.",
+  "live_send_env_gate_default": "off",
+  "client_human_approved_trusted": false,
+  "copied_files": [
+    "src/agent_tools/discord_architect_connector/__init__.py",
+    "mcp_servers/dreamos_control_plane_server.py",
+    "docs/runbooks/discord_architect_connector.md",
+    "tests/test_discord_architect_connector_001.py",
+    "tests/test_dreamos_control_plane_server_001.py"
+  ],
+  "supporting_files": [
+    "tests/compat/test_agenttools_bus_message_adapter_contract.py",
+    ".github/workflows/swarm_ci.yml",
+    "data/reports/toolbelt_absorption/pr27_discord_architect_connector_promotion_manifest.json",
+    "docs/branch_reconciliation/PR27_DISCORD_ARCHITECT_CONNECTOR.md"
+  ],
+  "not_promoted": [
+    "unrelated S2A/VPS/Commander historical commits on feat/discord-architect-connector-v0",
+    "tests/compat/snapshots/message_schema.json competing-schema snapshot from PR #27",
+    "jsonschema runtime dependency added only for that snapshot test"
+  ],
+  "repairs": [
+    "Replace datetime.UTC with timezone.utc for Python 3.10 CI",
+    "Treat client human_approved as untrusted metadata",
+    "Fail closed when live send is requested without DISCORD_CONNECTOR_ALLOW_LIVE_SEND=1",
+    "Fixture-backed router config so tests do not require D:\\DreamVault",
+    "Exclude mcp_servers/ and tests/ from BusMessage adapter tripwire"
+  ]
+}
