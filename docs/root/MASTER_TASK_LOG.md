@@ -1,7 +1,7 @@
 # MASTER TASK LOG — AgentTools execution SSOT
 
-**Last updated:** 2026-08-11
-**Status:** Active planning and verification; historical reconstruction applied
+**Last updated:** 2026-09-20
+**Status:** Active planning and verification; PR #27 Discord Architect Connector reconstructed on current master
 **Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`
 **Strategic inventory:** `MASTER_TASK_LIST.md`
 **Immediate-action mirror:** `NEXT_UP.md`
@@ -10,6 +10,8 @@ This file is the single source of truth for repository execution status and evid
 
 ## Current status
 
+- PR #27 Discord Architect Connector unique work was reconstructed on current `master` as replacement PR #29 (`cursor/pr27-discord-architect-connector-cfa1`, head `33776e8b`). Required Swarm CI `build-and-test` passed on that exact head. Live Discord send, VPS deploy, and HTTP/OAuth reachability remain unauthorized / `Unknown`.
+- Superseded source PR #27 / `feat/discord-architect-connector-v0` is eligible for `SALVAGE_COMPLETE` retirement after #29 merges; do not merge its 53-commit historical stack.
 - `SWARM-003` remains open: publication success requires redacted PyPI/CI evidence.
 - `SWARM-004` remains blocked on publication: clean install, import, and CLI smoke evidence is still required.
 - The marketing capability audit is active as a bounded reusable-capability lane; bulk catalog ingestion is prohibited.
@@ -344,3 +346,31 @@ The following six grouped claims must not be treated as verified facts without a
 - Six grouped historical claims remain `Needs verification`.
 - CPC/cliprun ownership and current runtime use are `Unknown`.
 - Branch `work` has no configured upstream.
+
+## 2026-09-20 - PR #27 Discord Architect Connector salvage
+
+**Lane:** feature shipped; cleanup/refactor; infra/CI/runtime change
+
+### Completed
+
+- Reconstructed PR #27 unique connector work onto current `master` as replacement PR #29 without merging 53 unrelated historical commits.
+- Repaired Python 3.10 `datetime.UTC` collection failure and treated client `human_approved=true` as untrusted metadata.
+- Kept `DISCORD_CONNECTOR_ALLOW_LIVE_SEND` off by default; live Discord send, VPS deploy, and bot-permission expansion were not authorized.
+
+### Evidence
+
+- replacement branch: `cursor/pr27-discord-architect-connector-cfa1`
+- replacement PR: `#29`
+- source PR preserved for evidence: `#27` / `feat/discord-architect-connector-v0` @ `56a0dd6b`
+- local required pytest set: `82 passed, 2 skipped`
+- exact-head required CI: GitHub Actions run `35520691882` job `build-and-test` **PASS** (`82 passed, 2 skipped`); connector tests including `test_client_human_approved_is_not_authorization` passed
+- exact-head advisory CI: `Legacy repository audit (advisory)` **FAIL** on pre-existing legacy tests (CLI shim, syntax-broken tools, tasks server). Connector tests collected and passed; this is not the previous `datetime.UTC` collection blocker.
+- workflow conclusion: `success` because advisory is `continue-on-error`
+- promotion manifest: `data/reports/toolbelt_absorption/pr27_discord_architect_connector_promotion_manifest.json`
+- closeout: `docs/branch_reconciliation/PR27_DISCORD_ARCHITECT_CONNECTOR.md`
+
+### Remaining blockers
+
+- HTTP/OAuth reachability, live guild/channel authorization, and durable live send/ack against Discord remain `Unknown` / unauthorized.
+- Superseded PR #27 source branch retirement remains a governed cleanup step after #29 merges.
+- Advisory full-suite failures are pre-existing and outside this lane.
