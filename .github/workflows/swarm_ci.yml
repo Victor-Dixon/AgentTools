@@ -114,7 +114,9 @@ jobs:
           tests/test_work_proof.py \
           tests/test_repo_git_tools.py \
           tests/test_repo_tool_adapters.py \
-          tests/test_repo_tool_registry.py
+          tests/test_repo_tool_registry.py \
+          tests/test_discord_architect_connector_001.py \
+          tests/test_dreamos_control_plane_server_001.py
 
   legacy-audit:
     name: Legacy repository audit (advisory)

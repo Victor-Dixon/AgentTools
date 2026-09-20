@@ -1,0 +1,28 @@
+objective: >
+  Reconstruct PR #27 Discord Architect Connector on current master without
+  unrelated historical commits, repair Python 3.10 collection and the
+  client-human_approved authorization hole, then verify CI.
+scope:
+  - src/agent_tools/discord_architect_connector/
+  - mcp_servers/dreamos_control_plane_server.py
+  - tests/test_discord_architect_connector_001.py
+  - tests/test_dreamos_control_plane_server_001.py
+  - tests/compat/test_agenttools_bus_message_adapter_contract.py
+  - docs/runbooks/discord_architect_connector.md
+acceptance:
+  - Replacement branch contains only connector-specific unique work plus required tripwire/CI wiring
+  - Client human_approved=true does not authorize live send
+  - DISCORD_CONNECTOR_ALLOW_LIVE_SEND defaults off
+  - Connector tests collect and pass on Python 3.10
+  - Required Swarm CI build-and-test includes the new tests
+verification:
+  - python -m pytest tests/test_discord_architect_connector_001.py tests/test_dreamos_control_plane_server_001.py tests/compat/test_agenttools_bus_message_adapter_contract.py -q
+  - git diff --check
+holds:
+  - No Discord live send
+  - No VPS deploy
+  - No bot-permission expansion
+  - HTTP/OAuth reachability remains Unknown until independently evidenced
+next_lane: >
+  After replacement CI is green, merge the salvage PR, close superseded PR #27,
+  and retire feat/discord-architect-connector-v0 through governed branch cleanup.
