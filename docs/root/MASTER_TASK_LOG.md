@@ -10,8 +10,8 @@ This file is the single source of truth for repository execution status and evid
 
 ## Current status
 
-- PR #27 Discord Architect Connector unique work was reconstructed on current `master` as replacement PR #29 (`cursor/pr27-discord-architect-connector-cfa1`, head `33776e8b`). Required Swarm CI `build-and-test` passed on that exact head. Live Discord send, VPS deploy, and HTTP/OAuth reachability remain unauthorized / `Unknown`.
-- Superseded source PR #27 / `feat/discord-architect-connector-v0` is eligible for `SALVAGE_COMPLETE` retirement after #29 merges; do not merge its 53-commit historical stack.
+- PR #27 Discord Architect Connector unique work was reconstructed on current `master` as replacement PR #29 and merged (`f53c706f`). Required Swarm CI `build-and-test` passed on exact head `33776e8b` before merge. Live Discord send, VPS deploy, and HTTP/OAuth reachability remain unauthorized / `Unknown`.
+- Superseded source PR #27 is closed. Remote branch `feat/discord-architect-connector-v0` was deleted after merge.
 - `SWARM-003` remains open: publication success requires redacted PyPI/CI evidence.
 - `SWARM-004` remains blocked on publication: clean install, import, and CLI smoke evidence is still required.
 - The marketing capability audit is active as a bounded reusable-capability lane; bulk catalog ingestion is prohibited.
@@ -360,7 +360,7 @@ The following six grouped claims must not be treated as verified facts without a
 ### Evidence
 
 - replacement branch: `cursor/pr27-discord-architect-connector-cfa1`
-- replacement PR: `#29`
+- replacement PR: `#29` merged at `2026-09-20T15:50:56Z` as `f53c706f`
 - source PR preserved for evidence: `#27` / `feat/discord-architect-connector-v0` @ `56a0dd6b`
 - local required pytest set: `82 passed, 2 skipped`
 - exact-head required CI: GitHub Actions run `35520691882` job `build-and-test` **PASS** (`82 passed, 2 skipped`); connector tests including `test_client_human_approved_is_not_authorization` passed
@@ -372,5 +372,5 @@ The following six grouped claims must not be treated as verified facts without a
 ### Remaining blockers
 
 - HTTP/OAuth reachability, live guild/channel authorization, and durable live send/ack against Discord remain `Unknown` / unauthorized.
-- Superseded PR #27 source branch retirement remains a governed cleanup step after #29 merges.
+- Superseded PR #27 is closed and `feat/discord-architect-connector-v0` is deleted.
 - Advisory full-suite failures are pre-existing and outside this lane.

@@ -50,7 +50,7 @@ This file inventories work; it does not claim execution status. Record status an
 - [ ] Decide and document the remote/upstream policy for local branch `work`.
 - [ ] Keep this inventory, the execution SSOT, `NEXT_UP.md`, and the domain model aligned without duplicating roles.
 - [ ] Review historical planning artifacts and label them non-canonical rather than silently treating them as current.
-- [ ] After PR #29 merges, close superseded PR #27 and retire `feat/discord-architect-connector-v0` under governed branch cleanup.
+- [x] After PR #29 merged, close superseded PR #27 and delete `feat/discord-architect-connector-v0`.
 
 ## Dream.OS integration boundaries
 
