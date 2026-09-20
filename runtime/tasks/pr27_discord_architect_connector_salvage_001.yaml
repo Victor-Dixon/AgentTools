@@ -23,6 +23,14 @@ holds:
   - No VPS deploy
   - No bot-permission expansion
   - HTTP/OAuth reachability remains Unknown until independently evidenced
+status: closed
+closed_at: "2026-09-20T15:51:00Z"
+verification_recorded:
+  - local required pytest 82 passed, 2 skipped
+  - GitHub Actions 35520691882 build-and-test PASS
+  - PR #29 merged as f53c706f
+  - PR #27 closed
+  - feat/discord-architect-connector-v0 deleted
 next_lane: >
-  After replacement CI is green, merge the salvage PR, close superseded PR #27,
-  and retire feat/discord-architect-connector-v0 through governed branch cleanup.
+  Do not enable DISCORD_CONNECTOR_ALLOW_LIVE_SEND. Continue the marketing/API/MCP
+  promotion-candidate audit. HTTP/OAuth and live Discord send remain Unknown.

@@ -35,4 +35,4 @@ Replacement branch `cursor/pr27-discord-architect-connector-cfa1` reconstructs t
 
 ## Terminal disposition
 
-After the replacement PR is verified and merged, `feat/discord-architect-connector-v0` / PR #27 is eligible for governed `SALVAGE_COMPLETE` retirement. Default/protected/open-PR/live-dependency guards remain mandatory. No VPS deploy, Discord live send, or bot-permission expansion is authorized by this salvage.
+Replacement PR #29 merged to `master` at `2026-09-20T15:50:56Z` as `f53c706f`. Source PR #27 is closed. Remote `feat/discord-architect-connector-v0` is deleted. No VPS deploy, Discord live send, or bot-permission expansion is authorized by this salvage.
