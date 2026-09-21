@@ -44,43 +44,12 @@ from datetime import datetime, timezone
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+from tools.devlog_presentation import devlog_webhook_payload, render_devlog_pages, split_lossless
+
 
 def split_content_into_pages(content: str, max_length: int = 1900) -> list[str]:
-    """
-    Split content into pages that fit within Discord's message limits.
-
-    Args:
-        content: The full content to split
-        max_length: Maximum characters per page (default 1900 for safety)
-
-    Returns:
-        List of content pages
-    """
-    if len(content) <= max_length:
-        return [content]
-
-    pages = []
-    lines = content.split('\n')
-    current_page = ""
-    current_length = 0
-
-    for line in lines:
-        line_length = len(line) + 1  # +1 for newline
-
-        # If adding this line would exceed the limit, start a new page
-        if current_length + line_length > max_length and current_page:
-            pages.append(current_page.rstrip())
-            current_page = line + '\n'
-            current_length = line_length
-        else:
-            current_page += line + '\n'
-            current_length += line_length
-
-    # Add the last page if it has content
-    if current_page.strip():
-        pages.append(current_page.rstrip())
-
-    return pages
+    """Backward-compatible lossless splitting, including oversized single lines."""
+    return split_lossless(content, max_length) if content else [""]
 
 
 def update_agent_status(agent_id: str, activity: str, devlog_path: Optional[str] = None) -> None:
@@ -94,7 +63,7 @@ def update_agent_status(agent_id: str, activity: str, devlog_path: Optional[str]
     """
     # Create agent workspace directory if it doesn't exist
     agent_dir = project_root / "agent_workspaces" / agent_id
-    agent_dir.mkdir(exist_ok=True)
+    agent_dir.mkdir(parents=True, exist_ok=True)
 
     # Update status file
     status_file = agent_dir / "status.json"
@@ -259,8 +228,8 @@ def post_devlog_to_discord(agent_id: str, devlog_path: str, is_status_update: bo
     update_agent_status(agent_id, activity, devlog_path)
     save_devlog_for_website(agent_id, devlog_path)
 
-    # Split content into pages
-    pages = split_content_into_pages(content)
+    # Mobile-first briefing plus unmodified, losslessly paginated source.
+    pages = render_devlog_pages(agent_id, content)
 
     try:
         # Load environment variables
@@ -286,19 +255,7 @@ def post_devlog_to_discord(agent_id: str, devlog_path: str, is_status_update: bo
         success_count = 0
 
         for page_num, page_content in enumerate(pages, 1):
-            # Create pagination header
-            if total_pages == 1:
-                header = f"**{agent_id} Devlog Update**"
-            else:
-                header = f"**{agent_id} Devlog Update** (Page {page_num}/{total_pages})"
-                # Add continuation marker for multi-page
-                if page_num > 1:
-                    header += " *(continued)*"
-
-            payload = {
-                "username": f"{agent_id} Devlog",
-                "content": f"{header}\n\n{page_content}"
-            }
+            payload = devlog_webhook_payload(agent_id, page_content, page_num, total_pages)
 
             # Add small delay between pages to avoid rate limiting
             if page_num > 1:
@@ -322,12 +279,12 @@ def post_devlog_to_discord(agent_id: str, devlog_path: str, is_status_update: bo
         else:
             print(
                 f"⚠️ Only posted {success_count}/{total_pages} pages - status monitoring and website integration still active")
-            return True  # Status/website updates succeeded even if Discord partially failed
+            return False  # Website success does not imply Discord delivery.
 
     except Exception as e:
         print(
             f"⚠️ Discord posting error: {e} - status monitoring and website integration still active")
-        return True  # Status/website updates succeeded even if Discord failed
+        return False  # Surface webhook failure to the caller.
 
 
 def main():
