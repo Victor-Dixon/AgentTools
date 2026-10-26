@@ -12,7 +12,7 @@ jobs:
   # Keep this job id stable so any existing required-check configuration
   # continues to resolve while the blocking signal stays package-focused.
   build-and-test:
-    runs-on: [self-hosted, linux, x64, agenttools-ci]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
@@ -122,7 +122,7 @@ jobs:
   legacy-audit:
     name: Legacy repository audit (advisory)
     continue-on-error: true
-    runs-on: [self-hosted, linux, x64, agenttools-ci]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
