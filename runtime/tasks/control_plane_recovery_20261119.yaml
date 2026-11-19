@@ -1,0 +1,21 @@
+task_id: AT-CONTROL-PLANE-RECOVERY-001
+status: DEFERRED
+priority: P2
+objective: Restore the existing Dream.OS Control Plane connection after branch-debt cleanup
+implementation_started: false
+authority: operator_requested_draft_only
+owner_repo: Victor-Dixon/AgentTools
+scope:
+  - existing MCP server, tunnel and authentication integration
+constraints:
+  - Diagnose the failing layer before implementation
+  - Reuse GitHub Architect and fixed-operation maintenance bridge
+  - No new executor or arbitrary shell tool
+  - No credential publication or permission expansion
+  - No Discord sends or destructive smoke tests
+acceptance:
+  - Operator connection completes through intended OAuth flow
+  - Connected health and discovery succeed
+  - One scoped read-only inspection returns redacted evidence
+  - Unauthorized requests fail closed
+reference: docs/operator/control_plane_recovery_20261119.md

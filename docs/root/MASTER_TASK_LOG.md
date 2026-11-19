@@ -374,3 +374,8 @@ The following six grouped claims must not be treated as verified facts without a
 - HTTP/OAuth reachability, live guild/channel authorization, and durable live send/ack against Discord remain `Unknown` / unauthorized.
 - Superseded PR #27 is closed and `feat/discord-architect-connector-v0` is deleted.
 - Advisory full-suite failures are pre-existing and outside this lane.
+
+
+## 2026-11-19 — Control Plane recovery deferred draft
+
+AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified connector failure is USER_NOT_LOGGED_IN; root cause/service state remain unverified. Added a bounded recovery runbook and task proposal at Victor's request. This completes documentation preparation only, not restoration. GitHub Architect/VPS queue remains the operational fallback. No runtime/auth/credential change. Return to branch debt.

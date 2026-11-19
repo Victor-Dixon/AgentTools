@@ -58,3 +58,8 @@ This file inventories work; it does not claim execution status. Record status an
 - [ ] Preserve ownership: DreamVault/Dream.OS owns governed task, context, and approval state; AgentTools owns reusable tools/integrations.
 - [ ] Characterize message/task/work-proof schemas at adapter boundaries and avoid duplicating core orchestration.
 - [ ] Record external runtime topology and deployment state as `Unknown` until directly evidenced.
+
+
+## Deferred operator recovery
+
+- [ ] AT-CONTROL-PLANE-RECOVERY-001 | P2 | DEFERRED | Restore existing Dream.OS Control Plane connection after branch-debt cleanup. Runbook: docs/operator/control_plane_recovery_20261119.md; task: runtime/tasks/control_plane_recovery_20261119.yaml. Draft only; no service or credential change authorized by the task proposal.
