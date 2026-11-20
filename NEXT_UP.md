@@ -30,3 +30,12 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 - **Evidence:** local `python -m pytest` required set `82 passed, 2 skipped`; GitHub Actions `35520691882` `build-and-test` PASS (`82 passed, 2 skipped`); advisory FAIL on pre-existing legacy tests, not connector collection; `gh pr view 29` state=MERGED; `git push origin --delete feat/discord-architect-connector-v0` succeeded.
 - **Blockers:** Live Discord send / HTTP-OAuth / VPS remain unauthorized or `Unknown`. Advisory full suite still fails historically. Open PR #28 (`feat/devlog-poster-mobile-20260919`) is unrelated and was not retired.
 - **Next agent ask:** `Do not enable DISCORD_CONNECTOR_ALLOW_LIVE_SEND. Continue the marketing/API/MCP promotion-candidate audit using current contracts, then record evidence in docs/root/MASTER_TASK_LOG.md before updating NEXT_UP.md.`
+
+
+## Agent passdown — 2026-11-19 UTC
+
+- Branch/PR: docs/control-plane-recovery-deferred-20261119, requested deferred draft.
+- Completed: bounded recovery plan and task proposal; implementation NOT STARTED.
+- Evidence: connected Control Plane call returned USER_NOT_LOGGED_IN; source entrypoint inspected. Working GitHub Architect queue/VPS path has deletion receipts.
+- Blockers: actual deployed transport/auth/service failure remains unverified; recovery deliberately deferred.
+- Next agent ask: Resume branch-debt cleanup through existing Architect/VPS path. Take AT-CONTROL-PLANE-RECOVERY-001 later; follow docs/operator/control_plane_recovery_20261119.md without expanding permissions.
