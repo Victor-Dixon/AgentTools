@@ -52,7 +52,7 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 ## Agent passdown — 2026-11-25 UTC (Agent 4)
 
 - #34/#37 merged; #42 source verified 3/3 at `67dec58e`, CI `45712309029`. See execution SSOT for evidence.
-- Next: #42 merged; #49 compatibility implemented, required CI passed at e41c8895 (run 45715626639), advisory failed. Confirm targeted regression and integrate #49. Gateway activation independent; preserve existing holds and Agent1 passdown.
+- Completed: #49 merged `34d06306805f287e60aab4022cbd44e8f7ebe56b`; #52 merged `3412cbad4b86abc3e7c1d828e361b775e62aac8c`. Existing adapter CI artifact fixture run `45716832152` returned artifact `15070586520`, 175 bytes, unexpired at original verification. Source/local verification only; authenticated remote workspace activation remains held. Next: gateway owner verifies bounded authenticated workspace contract; preserve Agent1/Agent2 passdowns.
 
 
 ## Agent passdown — 2026-11-25 UTC (Agent 2)
