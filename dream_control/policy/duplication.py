@@ -11,6 +11,7 @@ from typing import Any
 
 NOT_AUTHORIZED = "NOT_AUTHORIZED"
 AUTHORIZED = "AUTHORIZED"
+UNVERIFIED = "UNVERIFIED"
 RISK = "DUPLICATE_IMPLEMENTATION_RISK"
 
 
@@ -42,6 +43,15 @@ def check_duplication(
     evidence = evidence or {}
     owner = evidence.get("canonical_owner")
     implementations = [i for i in evidence.get("implementations", []) if isinstance(i, dict)]
+
+    if not implementations and not owner and evidence.get("absence_verified") is not True:
+        return DuplicationVerdict(
+            capability=capability,
+            verdict=UNVERIFIED,
+            canonical_owner=None,
+            warning="Discovery does not establish absence of an existing implementation.",
+            directive="Obtain verified absence or canonical ownership before creating a capability.",
+        )
 
     if not implementations and not owner:
         return DuplicationVerdict(

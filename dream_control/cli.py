@@ -364,7 +364,7 @@ def cmd_cap(args: argparse.Namespace) -> int:
         )
     if args.json:
         _emit(report, True)
-        return 0
+        return 0 if verdict["verdict"] == "AUTHORIZED" else 3
 
     print(f"CAPABILITY SEARCH\n\n  requested capability:\n    {args.capability}\n")
     print("  findings:")
