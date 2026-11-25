@@ -191,3 +191,15 @@ def test_code_quality_mcp_failure_protocol():
     assert responses[0]["result"]["isError"] is True
     assert responses[1]["error"]["code"] == -32602
     assert responses[2]["error"]["code"] == -32602
+
+
+def test_js_dead_code_failure_is_not_clean(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+    from mcp_servers import code_quality_server as server
+    def run(cmd, **kwargs):
+        assert cmd == ["npx", "--no-install", "ts-prune"]
+        return SimpleNamespace(returncode=2, stdout="", stderr="tool unavailable")
+    monkeypatch.setattr(server.subprocess, "run", run)
+    result = server.find_dead_code(str(tmp_path), language="typescript")
+    assert result["success"] is False
+    assert result["exit_code"] == 2
