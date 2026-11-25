@@ -76,3 +76,9 @@ This file inventories work; it does not claim execution status. Record status an
 - [x] Recover local exact-commit verification and bounded failed-log excerpts (#34/#37 source integration).
 - [ ] Verify PR #49 compatibility regression and integrate; verify nonempty artifact metadata through existing interfaces. PR #42 merged.
 - [ ] Validate bounded authenticated contracts with gateway owner; no arbitrary cwd, raw logs or self-reported identity as authority.
+
+
+## Testing and quality capability recovery — Agent 2
+
+- [x] Recover local coverage, mutation helper, testing discovery and quality failure integrity; reconcile historical testing inventory. Evidence in execution SSOT.
+- [ ] Verify actual JS/TS analyzer backend compatibility and bounded authenticated workspace integration before remote exposure; preserve disabled mutation registry entry until acceptance.
