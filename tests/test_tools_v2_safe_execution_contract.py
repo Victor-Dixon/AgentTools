@@ -229,7 +229,7 @@ def test_js_dead_code_knip_fallback(monkeypatch, tmp_path):
     def run(cmd, **kwargs):
         assert cmd == [str(executable), "--reporter", "json", "--no-exit-code"]
         return SimpleNamespace(returncode=0, stdout=json.dumps({
-            "files": [], "issues": [{"file": "src/lib.ts", "exports": [{"name": "unused"}]}]
+            "files": [], "issues": [{"file": "src/lib.ts", "exports": [{"name": "unused"}], "enumMembers": {}}]
         }), stderr="")
     monkeypatch.setattr(server.subprocess, "run", run)
     result = server.find_dead_code(str(tmp_path), language="typescript")
