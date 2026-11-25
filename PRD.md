@@ -1,6 +1,6 @@
 # PRD - Repository Product Definition
 
-**Last reviewed:** 2026-07-03  
+**Last reviewed:** 2026-11-25  
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
 **Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`
 
@@ -69,7 +69,7 @@ Family Focus Board is a TypeScript Kanban plus shared Pomodoro/focus-room produc
   - `swarm-tools-server`
 - Keep runtime package dependencies lightweight; optional/full tooling dependencies remain optional.
 - Preserve file-backed operation for messages, memory, consensus, conflicts, proofs, and pattern storage.
-- Publish and verify `swarm-mcp==0.6.0` before claiming release completion.
+- Publish and verify `we-are-swarm-agenttools==0.6.0` only after the explicit release gate in `docs/release/PYPI_FIRST_RELEASE.md`; import namespace remains `swarm_mcp`.
 
 ### AgentTools/operator tooling
 
@@ -83,7 +83,7 @@ Family Focus Board is a TypeScript Kanban plus shared Pomodoro/focus-room produc
 - Model orgs, users, boards, lists, cards, focus rooms, Pomodoro sessions, activity logs, inventory categories, and inventory items.
 - Use PostgreSQL migrations as the schema source.
 - Use `packages/shared` timer state machine for room timer behavior.
-- Add real API/web tests, linting, deployment docs, and web/API wiring before treating this as production-ready.
+- Add real API/web tests, linting, deployment docs, authenticated tenant isolation and web/API wiring before treating this as production-ready.
 
 ---
 
@@ -91,7 +91,7 @@ Family Focus Board is a TypeScript Kanban plus shared Pomodoro/focus-room produc
 
 | Area | Success metric |
 |---|---|
-| SWARM MCP release | `swarm-mcp==0.6.0` publishes to PyPI and passes clean install/import/CLI smoke evidence in `docs/root/MASTER_TASK_LOG.md`. |
+| SWARM MCP release | `we-are-swarm-agenttools==0.6.0` publishes to PyPI and passes clean install/import/CLI smoke evidence in `docs/root/MASTER_TASK_LOG.md`. |
 | SWARM MCP quality | `python3 -m pytest tests -q` and import-healer coverage gate pass in CI. |
 | MCP catalog | Catalog validation reports 0 missing targets. |
 | AgentTools/tooling | Active registry entries instantiate; disabled entries remain documented with rationale. |
@@ -103,7 +103,7 @@ Family Focus Board is a TypeScript Kanban plus shared Pomodoro/focus-room produc
 ## 6. Current status
 
 - SWARM MCP M0 Python gates and M2 MCP catalog integrity are complete per SSOT evidence.
-- SWARM MCP M1 release proof is blocked because the `v0.6.0` publish job did not receive `PYPI_API_TOKEN`.
+- SWARM MCP M1 remains gated by authenticated PyPI account/project identity, Trusted Publisher configuration and explicit release authorization. The historical token failure is not the current release mechanism; no publication is verified.
 - SWARM-004 clean PyPI install verification remains blocked until `0.6.0` is live.
 - SWARM-017 npm audit is partial: high severity issues were reduced; remaining moderate `next`/`postcss` risk is accepted only while the TS lane is non-production.
 - Documentation/domain model synchronization was updated on 2026-07-03; remaining cleanup is classification of historical/legacy docs and tool surfaces.
