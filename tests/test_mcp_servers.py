@@ -131,3 +131,17 @@ def test_linter_success_tracks_exit_code(monkeypatch, tmp_path, exit_code):
     result = run_linter(str(tmp_path), linter="ruff")
     assert result["success"] is (exit_code == 0)
     assert result["exit_code"] == exit_code
+
+
+@pytest.mark.parametrize("exit_code, expected", [(0, True), (1, False), (2, False), (3, True)])
+def test_python_dead_code_result_contract(monkeypatch, tmp_path, exit_code, expected):
+    from mcp_servers.code_quality_server import find_dead_code
+
+    output = "sample.py:1: unused function 'f' (80% confidence)" if exit_code == 3 else ""
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw:
+                        subprocess.CompletedProcess(a[0], exit_code, output, ""))
+    result = find_dead_code(str(tmp_path), language="python")
+    assert result["success"] is expected
+    assert result["exit_code"] == exit_code
+    if exit_code == 3:
+        assert result["total"] == 1
