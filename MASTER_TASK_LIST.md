@@ -63,3 +63,9 @@ This file inventories work; it does not claim execution status. Record status an
 ## Deferred operator recovery
 
 - [ ] AT-CONTROL-PLANE-RECOVERY-001 | P2 | DEFERRED | Restore existing Dream.OS Control Plane connection after branch-debt cleanup. Runbook: docs/operator/control_plane_recovery_20261119.md; task: runtime/tasks/control_plane_recovery_20261119.yaml. Draft only; no service or credential change authorized by the task proposal.
+
+## Fleet capability recovery — Agent 1
+
+- Duplicate-prevention policy and runner-persistence collector are existing reusable capabilities; integration evidence resides in the 2026-11-25 execution SSOT entry, not this inventory.
+- [ ] Verify bounded live collector promotion via existing authenticated gateway; do not duplicate discovery or monitoring systems.
+- [ ] Reconcile merged repair branches through existing preservation-aware retirement workflow.

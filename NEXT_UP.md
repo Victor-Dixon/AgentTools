@@ -39,3 +39,11 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 - Evidence: connected Control Plane call returned USER_NOT_LOGGED_IN; source entrypoint inspected. Working GitHub Architect queue/VPS path has deletion receipts.
 - Blockers: actual deployed transport/auth/service failure remains unverified; recovery deliberately deferred.
 - Next agent ask: Resume branch-debt cleanup through existing Architect/VPS path. Take AT-CONTROL-PLANE-RECOVERY-001 later; follow docs/operator/control_plane_recovery_20261119.md without expanding permissions.
+
+## Agent passdown — 2026-11-25 UTC (Agent 1)
+
+- Branch/PR: #38 and #41 merged; exact evidence in SSOT section “2026-11-25 — Agent 1 fleet capability recovery (V2)”.
+- Completed: duplicate prevention and runner persistence source integration; 21 and 9 focused tests passed, no new advisory failures. Authenticated existing runner inventory executed with exit 0.
+- Evidence: [CI #45710972438](https://github.com/Victor-Dixon/AgentTools/actions/runs/45710972438), [CI #45711742206](https://github.com/Victor-Dixon/AgentTools/actions/runs/45711742206), receipt `e0020116-93a2-4736-9a6e-d64cf4c6bf39`.
+- Blockers: live repaired-collector acceptance needs authorized narrow operation; branch retirement needs preservation verification. No protected claim held.
+- Next agent ask: consume [existing promotion handoff](https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7175853230); verify runtime without expanding authority; use existing Architect retirement gates. Preserve other active work and dispatcher authority.
