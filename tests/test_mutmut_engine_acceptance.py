@@ -10,7 +10,7 @@ import pytest
                     reason="requires isolated mutmut 2.4.5 environment")
 def test_real_mutmut_engine(tmp_path):
     from importlib.metadata import version
-    from tools_v2.categories.testing_tools import evaluate_mutation_counts
+    from tools_v2.categories.testing_tools import evaluate_mutmut_xml
     import xml.etree.ElementTree as ET
 
     assert version("mutmut") == "2.4.5"
@@ -37,17 +37,9 @@ def test_real_mutmut_engine(tmp_path):
     assert cases
     assert any(case.find("failure") is not None for case in cases), report.stdout
     assert any(case.find("failure") is None and case.find("error") is None and case.find("skipped") is None for case in cases), report.stdout
-    counts = {"killed": 0, "survived": 0, "timeout": 0}
-    for case in cases:
-        failure = case.find("failure")
-        assert case.find("error") is None and case.find("skipped") is None
-        if failure is None:
-            counts["killed"] += 1
-        else:
-            assert failure.get("message") == "bad_survived"
-            counts["survived"] += 1
-    assert counts == {"killed": 1, "survived": 1, "timeout": 0}
-    assert evaluate_mutation_counts(counts, 50).success
-    assert not evaluate_mutation_counts(counts, 51).success
+    assert evaluate_mutmut_xml(report.stdout, 50).success
+    assert evaluate_mutmut_xml(report.stdout, 51).exit_code == 1
+    assert evaluate_mutmut_xml(report.stdout.replace("bad_survived", "unknown"), 0).exit_code == 2
+    assert evaluate_mutmut_xml(report.stdout.replace('tests="2"', 'tests="3"'), 0).exit_code == 2
     print("MUTMUT_REAL_REPORT=" + report.stdout)
     print("MUTMUT_THRESHOLD_ACCEPTANCE=PASS")
