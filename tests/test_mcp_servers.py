@@ -145,3 +145,16 @@ def test_python_dead_code_result_contract(monkeypatch, tmp_path, exit_code, expe
     assert result["exit_code"] == exit_code
     if exit_code == 3:
         assert result["total"] == 1
+
+
+@pytest.mark.parametrize("linter", ["biome", "clippy", "golangci-lint"])
+def test_unsupported_linter_dry_run_never_executes(monkeypatch, tmp_path, linter):
+    from mcp_servers.code_quality_server import auto_fix_lint
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("Unsupported dry-run must not launch a mutating command")
+
+    monkeypatch.setattr(subprocess, "run", unexpected)
+    result = auto_fix_lint(str(tmp_path), linter=linter, dry_run=True)
+    assert not result["success"]
+    assert "dry-run" in result["error"].lower()
