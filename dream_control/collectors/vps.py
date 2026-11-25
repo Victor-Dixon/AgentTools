@@ -23,7 +23,10 @@ _PROBE = (
     "echo '---SYSTEMD---'; systemctl is-active dreamos-brain 2>/dev/null; "
     "echo '---RUNNER_SYSTEMD---'; "
     "unit=$(cat {runner_dir}/.service 2>/dev/null); "
-    "if printf '%s\\n' \"$unit\" | grep -Eq '^actions\\.runner\\.[A-Za-z0-9_.@-]+\\.service    "echo '---REPOS---'; ls -1 ~/projects 2>/dev/null | head -20; "
+    "if printf '%s\\n' \"$unit\" | grep -Eq '^actions\\.runner\\.[A-Za-z0-9_.@-]+\\.service$'; then "
+    "systemctl is-enabled -- \"$unit\" 2>/dev/null; "
+    "else echo unknown; fi; "
+    "echo '---REPOS---'; ls -1 ~/projects 2>/dev/null | head -20; "
     "echo '---UPTIME---'; uptime -p 2>/dev/null"
 )
 
