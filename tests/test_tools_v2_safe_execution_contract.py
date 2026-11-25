@@ -196,10 +196,43 @@ def test_code_quality_mcp_failure_protocol():
 def test_js_dead_code_failure_is_not_clean(monkeypatch, tmp_path):
     from types import SimpleNamespace
     from mcp_servers import code_quality_server as server
+    bin_dir = tmp_path / "node_modules" / ".bin"
+    bin_dir.mkdir(parents=True)
+    suffix = ".cmd" if server.os.name == "nt" else ""
+    executable = bin_dir / ("ts-prune" + suffix)
+    executable.touch()
     def run(cmd, **kwargs):
-        assert cmd == ["npx", "--no-install", "ts-prune"]
-        return SimpleNamespace(returncode=2, stdout="", stderr="tool unavailable")
+        assert cmd == [str(executable)]
+        return SimpleNamespace(returncode=2, stdout="", stderr="tool failed")
     monkeypatch.setattr(server.subprocess, "run", run)
     result = server.find_dead_code(str(tmp_path), language="typescript")
     assert result["success"] is False
     assert result["exit_code"] == 2
+
+
+def test_js_dead_code_absent_tool_never_downloads(monkeypatch, tmp_path):
+    from mcp_servers import code_quality_server as server
+    def unexpected(*args, **kwargs):
+        raise AssertionError("must not execute or download")
+    monkeypatch.setattr(server.subprocess, "run", unexpected)
+    assert server.find_dead_code(str(tmp_path), language="typescript")["success"] is False
+
+
+def test_js_dead_code_knip_fallback(monkeypatch, tmp_path):
+    import json
+    from types import SimpleNamespace
+    from mcp_servers import code_quality_server as server
+    bin_dir = tmp_path / "node_modules" / ".bin"
+    bin_dir.mkdir(parents=True)
+    executable = bin_dir / ("knip.cmd" if server.os.name == "nt" else "knip")
+    executable.touch()
+    def run(cmd, **kwargs):
+        assert cmd == [str(executable), "--reporter", "json", "--no-exit-code"]
+        return SimpleNamespace(returncode=0, stdout=json.dumps({
+            "files": [], "issues": [{"file": "src/lib.ts", "exports": [{"name": "unused"}]}]
+        }), stderr="")
+    monkeypatch.setattr(server.subprocess, "run", run)
+    result = server.find_dead_code(str(tmp_path), language="typescript")
+    assert result["success"] is True
+    assert result["tool"] == "knip"
+    assert result["dead_code"][0]["item"]["name"] == "unused"
