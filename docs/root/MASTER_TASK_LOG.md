@@ -403,7 +403,7 @@ AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified co
 
 - Coverage adapter #35/#43: actual pytest-cov threshold acceptance, CI 45712221307.
 - Mutation #39/#45/#47/#48/#50: historical missing backend replaced by verified local helper; mutmut 2.4.5 fixture 1 killed/1 survived, threshold 50 passes/51 fails. Real reusable execution CI 45716302430 (2 passed). Registry entry remains disabled pending trusted isolated workspace binding.
-- Quality #36/#40/#46/#53/#54: exit integrity, dry-run safety and MCP error semantics; JS analyzer actual backend compatibility remains unverified.
+- Quality #36/#40/#46/#53/#54: exit integrity, dry-run safety and MCP error semantics; JS analyzer #57 merged `2b8e2d50d3a08b0fa77c89a05c9e124decde364f`: exact head `b0fae7ce`, CI 45719333410 (5 passed, 8 deselected), actual ts-prune 0.10.3 and Knip 5.46.0 each found one unused export; required Swarm CI 45719333398 PASS, legacy advisory FAIL. Local Linux fixture only; remote workspace acceptance remains open.
 - Testing MCP #51: real stdio discovery regression, CI 45716817531 (105 passed, 2 skipped).
 - #54 exact-head required CI 45717405366 (107 passed, 2 skipped); #55 inventory reconciliation merged 5c25890c, required CI 45717736966 passed. Legacy advisory audit failed; not full-suite acceptance.
 - Existing inventory corrected; no new registry. No authenticated remote execution, deployment, or protected claim granted.
