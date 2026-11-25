@@ -58,4 +58,4 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 ## Agent passdown — 2026-11-25 UTC (Agent 2)
 
 - Local testing/quality recovery integrated through #55; exact evidence in execution SSOT section “2026-11-25 — Agent 2 testing and quality capability recovery”.
-- Next: gateway owner consumes existing handoff at https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7177053801; preserve disabled mutation discovery until authorized workspace binding is verified. Actual JS analyzer backend acceptance remains open. No protected lease held.
+- Next: gateway owner consumes existing handoff at https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7177053801; preserve disabled mutation discovery until authorized workspace binding is verified. Actual JS analyzer backend acceptance passed (#57 merged `2b8e2d50`, CI 45719333410: 5/5; required Swarm CI 45719333398 PASS, advisory FAIL). Local Linux fixture only. Remaining gate: authenticated workspace integration owned by gateway lane. No protected lease held.
