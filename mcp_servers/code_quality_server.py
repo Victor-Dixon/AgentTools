@@ -211,7 +211,7 @@ def run_linter(
         warning_count = len([i for i in issues if i.get("severity") == "warning"])
         
         return {
-            "success": True,
+            "success": result.returncode == 0,
             "linter": linter,
             "issues": issues[:100],  # Limit results
             "total_issues": len(issues),
