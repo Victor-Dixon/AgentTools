@@ -16,17 +16,19 @@ def test_real_mutmut_engine(tmp_path):
     assert version("mutmut") == "2.4.5"
     (tmp_path / "src").mkdir()
     (tmp_path / "tests").mkdir()
+    (tmp_path / "src" / "__init__.py").touch()
     (tmp_path / "src" / "sample.py").write_text(
         "def add(a, b):\n    return a + b\n\ndef unused():\n    return 42\n")
     (tmp_path / "tests" / "test_sample.py").write_text(
         "from src.sample import add\n\ndef test_add():\n    assert add(2, 3) == 5\n")
     def run(*args):
         return subprocess.run(args, cwd=tmp_path, capture_output=True,
-                              text=True, timeout=120)
-    baseline = run(sys.executable, "-m", "pytest", "-q")
+                              text=True, timeout=120, env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
+    # Avoid stale bytecode when mutmut rewrites source within the same second.
+    baseline = run(sys.executable, "-B", "-m", "pytest", "-q")
     assert baseline.returncode == 0, baseline.stdout + baseline.stderr
     result = run("mutmut", "run", "--paths-to-mutate", "src",
-                 "--tests-dir", "tests", "--runner", sys.executable + " -m pytest -q")
+                 "--tests-dir", "tests", "--runner", sys.executable + " -B -m pytest -q")
     assert result.returncode in (0, 2), result.stdout + result.stderr
     report = run("mutmut", "junitxml")
     assert report.returncode == 0, report.stderr
@@ -34,4 +36,5 @@ def test_real_mutmut_engine(tmp_path):
     cases = list(root.iter("testcase"))
     assert cases
     assert any(case.find("failure") is not None for case in cases), report.stdout
+    assert any(case.find("failure") is None and case.find("error") is None and case.find("skipped") is None for case in cases), report.stdout
     print("MUTMUT_REAL_REPORT=" + report.stdout)
