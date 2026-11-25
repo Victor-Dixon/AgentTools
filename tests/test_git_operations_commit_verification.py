@@ -29,3 +29,23 @@ def test_commit_verification_rejects_non_hash_before_git(monkeypatch):
     for value in ("--help", "HEAD", "HEAD~1", "abcd", "a" * 40 + "\n", None):
         result = validate_commit(value)
         assert result == {"success": False, "error": "Invalid commit hash"}
+
+
+def test_commit_verification_accepts_non_utf8_filename(tmp_path, monkeypatch):
+    import os
+    import pytest
+
+    if os.name != "posix":
+        pytest.skip("byte filenames require POSIX")
+    git(tmp_path, "init", "-q")
+    git(tmp_path, "config", "user.email", "fixture@example.invalid")
+    git(tmp_path, "config", "user.name", "Fixture")
+    with open(os.fsencode(tmp_path) + b"/file-\xff.txt", "wb") as stream:
+        stream.write(b"one\n")
+    git(tmp_path, "add", "--all")
+    git(tmp_path, "commit", "-qm", "byte filename")
+    sha = git(tmp_path, "rev-parse", "HEAD")
+    monkeypatch.chdir(tmp_path)
+    result = validate_commit(sha)
+    assert result["success"] is True
+    assert (result["files_changed"], result["insertions"]) == (1, 1)
