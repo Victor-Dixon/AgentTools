@@ -96,3 +96,22 @@ def test_coverage_timeout_returns_structured_failure(monkeypatch, tmp_path):
     assert not result.success
     assert result.exit_code == 124
     assert result.output is None
+
+
+def test_mutation_gate_unavailable_fails_closed(monkeypatch):
+    import subprocess
+    from tools_v2.categories.testing_tools import MutationGateTool
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("Unavailable backend must not execute")
+
+    monkeypatch.setattr(subprocess, "run", unexpected)
+    tool = MutationGateTool()
+    for threshold in (-1, 101, True, "80"):
+        assert not tool.validate({"threshold": threshold})[0]
+        assert tool.execute({"threshold": threshold}).exit_code == 2
+    assert tool.validate({"threshold": 80})[0]
+    result = tool.execute({"threshold": 80})
+    assert not result.success
+    assert result.exit_code == 69
+    assert "unavailable" in result.error_message.lower()
