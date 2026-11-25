@@ -171,9 +171,9 @@ def validate_commit(commit_hash: str) -> Dict[str, Any]:
     ):
         return {"success": False, "error": "Invalid commit hash"}
 
-    def run(args):
+    def run(args, *, text=True):
         return subprocess.run(
-            ["git", *args], capture_output=True, text=True, cwd=".", timeout=15
+            ["git", *args], capture_output=True, text=text, cwd=".", timeout=15
         )
 
     try:
@@ -195,16 +195,16 @@ def validate_commit(commit_hash: str) -> Dict[str, Any]:
         # initial commits. NUL-delimited numstat handles unusual filenames.
         stats = run(["diff-tree", "--root", "--first-parent", "-m", "-r",
                      "--no-commit-id", "--no-renames", "--numstat", "-z",
-                     commit_hash, "--"])
+                     commit_hash, "--"], text=False)
         if stats.returncode != 0:
             return {"success": False, "error": "Commit statistics unavailable"}
         files_changed = insertions = deletions = binary_files = 0
-        for record in stats.stdout.split("\0"):
+        for record in stats.stdout.split(b"\0"):
             if not record:
                 continue
-            added, removed, _ = record.split("\t", 2)
+            added, removed, _ = record.split(b"\t", 2)
             files_changed += 1
-            if added == removed == "-":
+            if added == removed == b"-":
                 binary_files += 1
             else:
                 insertions += int(added)
