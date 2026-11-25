@@ -59,3 +59,9 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 
 - Local testing/quality recovery integrated through #55; exact evidence in execution SSOT section “2026-11-25 — Agent 2 testing and quality capability recovery”.
 - Next: gateway owner consumes existing handoff at https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7177053801; preserve disabled mutation discovery until authorized workspace binding is verified. Actual JS analyzer backend acceptance passed (#57 merged `2b8e2d50`, CI 45719333410: 5/5; required Swarm CI 45719333398 PASS, advisory FAIL). Local Linux fixture only. Remaining gate: authenticated workspace integration owned by gateway lane. No protected lease held.
+
+
+## Agent passdown — 2026-11-25 UTC (Agent 2 product readiness)
+
+- Branch: `docs/agent2-release-readiness-20261125`. Corrected stale SWARM-003/004 release identity and mechanism against `pyproject.toml`, README and current CI/release runbook; required clean-wheel CI 45720063617 passed, advisory failed. No PyPI account action or upload performed.
+- Next: qualify existing SWARM-003/004 and M3 Family Focus Board through Agent4; first demonstrate secure local card/focus workflow with actual tests, not placeholder scripts. Keep remote activation and PyPI release gates intact.
