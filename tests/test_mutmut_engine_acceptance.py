@@ -37,4 +37,17 @@ def test_real_mutmut_engine(tmp_path):
     assert cases
     assert any(case.find("failure") is not None for case in cases), report.stdout
     assert any(case.find("failure") is None and case.find("error") is None and case.find("skipped") is None for case in cases), report.stdout
+    counts = {"killed": 0, "survived": 0, "timeout": 0}
+    for case in cases:
+        failure = case.find("failure")
+        assert case.find("error") is None and case.find("skipped") is None
+        if failure is None:
+            counts["killed"] += 1
+        else:
+            assert failure.get("message") == "bad_survived"
+            counts["survived"] += 1
+    assert counts == {"killed": 1, "survived": 1, "timeout": 0}
+    assert evaluate_mutation_counts(counts, 50).success
+    assert not evaluate_mutation_counts(counts, 51).success
     print("MUTMUT_REAL_REPORT=" + report.stdout)
+    print("MUTMUT_THRESHOLD_ACCEPTANCE=PASS")
