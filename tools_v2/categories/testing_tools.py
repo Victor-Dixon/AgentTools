@@ -56,7 +56,7 @@ class CoverageReportTool(IToolAdapter):
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
         valid, errors = self.validate(params)
         if not valid:
-            return ToolResult(success=False, exit_code=2, error_message="Invalid parameters: " + ", ".join(errors))
+            return ToolResult(success=False, output=None, exit_code=2, error_message="Invalid parameters: " + ", ".join(errors))
         cmd = [sys.executable, "-m", "pytest", "--cov=.", "--cov-report=term", f"--cov-fail-under={params.get('min_coverage', 85)}"]
         if params.get("html"):
             cmd.append("--cov-report=html")
@@ -67,9 +67,9 @@ class CoverageReportTool(IToolAdapter):
                               exit_code=result.returncode,
                               error_message=(result.stderr or result.stdout) if result.returncode else None)
         except subprocess.TimeoutExpired:
-            return ToolResult(success=False, exit_code=124, error_message="Coverage execution timed out")
+            return ToolResult(success=False, output=None, exit_code=124, error_message="Coverage execution timed out")
         except OSError as exc:
-            return ToolResult(success=False, exit_code=1, error_message=str(exc))
+            return ToolResult(success=False, output=None, exit_code=1, error_message=str(exc))
 
 
 class MutationGateTool(IToolAdapter):
