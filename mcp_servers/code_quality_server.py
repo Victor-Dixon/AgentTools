@@ -554,9 +554,9 @@ def find_dead_code(
         else:
             try:
                 report = json.loads(result.stdout)
-                if not isinstance(report, dict) or not isinstance(report.get("files"), list) or not isinstance(report.get("issues"), list):
+                if not isinstance(report, dict) or not isinstance(report.get("files", []), list) or not isinstance(report.get("issues"), list):
                     raise ValueError("Unexpected knip report schema")
-                for file_path in report["files"]:
+                for file_path in report.get("files", []):
                     if not isinstance(file_path, str):
                         raise ValueError("Invalid file entry")
                     if include_tests or not ("test" in file_path or "spec" in file_path):
