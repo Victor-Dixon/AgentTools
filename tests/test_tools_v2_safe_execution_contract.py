@@ -171,3 +171,23 @@ def test_testing_mcp_discovery_protocol():
     assert [t["name"] for t in responses[1]["result"]["tools"]] == ["run_coverage_analysis"]
     assert responses[2]["error"]["code"] == -32602
     assert responses[3]["result"]["isError"] is True
+
+
+def test_code_quality_mcp_failure_protocol():
+    import json
+    import subprocess
+    import sys
+    requests = [
+        {"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "find_dead_code", "arguments": {"project_path": "/nonexistent-agenttools-fixture"}}},
+        {"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "unknown"}},
+        {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "find_dead_code", "arguments": {"invalid": True}}},
+    ]
+    result = subprocess.run([sys.executable, "mcp_servers/code_quality_server.py"],
+                            input="".join(json.dumps(r) + "\n" for r in requests),
+                            capture_output=True, text=True, timeout=15)
+    assert result.returncode == 0, result.stderr
+    responses = [json.loads(line) for line in result.stdout.splitlines()]
+    assert [r["id"] for r in responses] == [1, 2, 3]
+    assert responses[0]["result"]["isError"] is True
+    assert responses[1]["error"]["code"] == -32602
+    assert responses[2]["error"]["code"] == -32602
