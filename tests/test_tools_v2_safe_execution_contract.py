@@ -134,3 +134,17 @@ def test_coverage_real_backend_enforces_threshold(monkeypatch, tmp_path):
     assert not failing.success
     assert failing.exit_code != 0
     assert "Required test coverage" in failing.output
+
+
+def test_mutation_score_rejects_incomplete_and_empty_results():
+    import pytest
+    from tools_v2.categories.testing_tools import evaluate_mutation_counts
+
+    assert evaluate_mutation_counts({"killed": 8, "survived": 1, "timeout": 1}, 80).success
+    assert not evaluate_mutation_counts({"killed": 8, "survived": 1, "timeout": 1}, 81).success
+    for counts in ({}, {"killed": 0, "survived": 0, "timeout": 0},
+                   {"killed": True, "survived": 1, "timeout": 0},
+                   {"killed": 8, "survived": -1, "timeout": 0},
+                   {"killed": 8, "survived": 0, "timeout": 0, "unknown": 1}):
+        assert not evaluate_mutation_counts(counts, 0).success
+    assert not evaluate_mutation_counts({"killed": 8, "survived": 0, "timeout": 0}, True).success
