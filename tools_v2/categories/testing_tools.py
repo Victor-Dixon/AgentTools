@@ -111,3 +111,40 @@ def evaluate_mutation_counts(counts: dict[str, int], threshold: int) -> ToolResu
     return ToolResult(success=passed, output={**counts, "score": 100 * counts["killed"] / total},
                       exit_code=0 if passed else 1,
                       error_message=None if passed else "Mutation threshold not met")
+
+
+def evaluate_mutmut_xml(report: str, threshold: int) -> ToolResult:
+    """Normalize verified mutmut 2.4.5 JUnit output; reject unknown states."""
+    import xml.etree.ElementTree as ET
+
+    try:
+        if not isinstance(report, str) or len(report) > 2_000_000 or "<!" in report:
+            raise ValueError("Invalid XML input")
+        root = ET.fromstring(report)
+        if root.tag != "testsuites" or len(root) != 1:
+            raise ValueError("Unexpected report structure")
+        suite = root[0]
+        if suite.tag != "testsuite" or suite.get("name") != "mutmut":
+            raise ValueError("Unexpected suite")
+        counts = {"killed": 0, "survived": 0, "timeout": 0}
+        names = set()
+        for case in suite:
+            if case.tag != "testcase" or not case.get("name") or case.get("name") in names:
+                raise ValueError("Invalid mutant identity")
+            names.add(case.get("name"))
+            statuses = [child for child in case if child.tag != "system-out"]
+            if not statuses:
+                counts["killed"] += 1
+            elif len(statuses) == 1 and statuses[0].tag == "failure" and statuses[0].get("message") == "bad_survived":
+                counts["survived"] += 1
+            else:
+                raise ValueError("Unverified mutant status")
+        for node in (root, suite):
+            if int(node.attrib["tests"]) != len(names) or int(node.attrib["failures"]) != counts["survived"]:
+                raise ValueError("Incomplete report")
+            if any(int(node.get(key, "0")) != 0 for key in ("errors", "disabled", "skipped")):
+                raise ValueError("Incomplete execution")
+        return evaluate_mutation_counts(counts, threshold)
+    except (ET.ParseError, ValueError, KeyError, TypeError):
+        return ToolResult(success=False, output=None, exit_code=2,
+                          error_message="Invalid or incomplete mutmut report")
