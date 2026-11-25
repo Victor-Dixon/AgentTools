@@ -39,8 +39,8 @@ This file inventories work; it does not claim execution status. Record status an
 ## Validation/testing
 
 - [ ] Preserve Python test, import-healer coverage, and MCP catalog gates established for SWARM-014 through SWARM-016.
-- [ ] Complete SWARM-003 with redacted publish evidence; do not infer success from a tag or runbook.
-- [ ] Complete SWARM-004 with clean install, import, and CLI smoke evidence after publication.
+- [ ] Complete existing SWARM-003 under corrected `we-are-swarm-agenttools` identity and explicit Trusted Publisher/release gate; no publication inferred.
+- [ ] Complete SWARM-004 with clean PyPI install of `we-are-swarm-agenttools`, import, and CLI smoke evidence after authorized publication.
 - [ ] Add evidence-backed tests for each promoted helper or integration.
 - [x] Reconstruct PR #27 Discord Architect Connector on current master with required CI evidence (replacement PR #29). Live send / HTTP-OAuth remain unauthorized.
 

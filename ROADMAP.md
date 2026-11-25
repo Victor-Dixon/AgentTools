@@ -1,6 +1,6 @@
 # ROADMAP
 
-**Last updated:** 2026-07-03  
+**Last updated:** 2026-11-25  
 **Primary SSOT:** `docs/root/MASTER_TASK_LOG.md`  
 **Canonical domain model:** `docs/architecture/DOMAIN_MODEL.md`  
 **Roadmap scope:** SWARM MCP package release first, workspace stabilization second, product/tooling consolidation third.
@@ -41,7 +41,7 @@ Completed evidence in SSOT:
 - `python3 -m pytest tests -q` reported `72 passed, 1 skipped`.
 - `python3 tools/swarm/tests/check_import_healer_coverage.py` passes after reviewed baseline refresh.
 
-### M1 — Package release proof (`BLOCKED` — PyPI secret/configuration)
+### M1 — Package release proof (`BLOCKED` — explicit account/release authorization)
 
 **Goal:** Complete SWARM-003 and SWARM-004.
 
@@ -50,13 +50,13 @@ Current state:
 - Package version is `0.6.0`.
 - Tag `v0.6.0` was pushed.
 - CI build/test passed.
-- PyPI publish failed because `TWINE_PASSWORD` was empty in the tag publish job.
+- Historical tag publication failed with an empty `TWINE_PASSWORD`; current workflow uses Trusted Publishing and deliberate release authorization. Distribution is `we-are-swarm-agenttools`, not `swarm-mcp`.
 
 Exit criteria:
 
 - `python3 -m build` and `twine check` output captured in SSOT. Done locally.
 - PyPI upload or GitHub tag publish output captured with secrets redacted. Blocked.
-- Clean environment proves `pip install swarm-mcp==0.6.0`, import smoke, and `swarm status`. Pending publish.
+- Clean environment proves `pip install we-are-swarm-agenttools==0.6.0`, import smoke, and `swarm status`. Pending publish.
 
 ### M2 — MCP and tool surface integrity (`COMPLETE` 2026-06-29)
 
@@ -76,7 +76,7 @@ Completed evidence in SSOT:
 Exit criteria:
 
 - API/web lint scripts run real linters.
-- API has integration tests around org, board, list, card, timer, activity, inventory, and auth flows.
+- API has integration tests around org, board, list, card, timer, activity, inventory, and auth flows, including rejection of spoofed identities and cross-tenant requests.
 - Web reads/writes at least one board flow through the API.
 - Shared timer state remains covered by Vitest.
 - Deployment docs define `DATABASE_URL`, migrations, seed, and runtime ports.
@@ -104,12 +104,11 @@ Remaining exit criteria:
 ## Short-term initiatives
 
 1. **Unblock SWARM-003 PyPI publish.**
-   - Add/configure `PYPI_API_TOKEN` for `Victor-Dixon/AgentTools`.
-   - Re-run the failed `v0.6.0` publish job or re-trigger tag publish.
+   - Follow `docs/release/PYPI_FIRST_RELEASE.md`: authenticated account/identity, Trusted Publisher, exact-release preflight and explicit authorization. Do not publish by ordinary tag push.
    - Record redacted output in `docs/root/MASTER_TASK_LOG.md`.
 
 2. **Complete SWARM-004 clean install proof.**
-   - Install `swarm-mcp==0.6.0` from PyPI after publish.
+   - Install `we-are-swarm-agenttools==0.6.0` from PyPI after verified publication.
    - Verify import and CLI smoke.
    - Record output in SSOT and mirror `NEXT_UP.md`.
 
@@ -156,8 +155,8 @@ Remaining exit criteria:
 
 | Dependency | Required by | Current risk |
 |---|---|---|
-| `PYPI_API_TOKEN` GitHub secret/configuration | SWARM-003 publish | Missing or not passed to tag publish job; CI log showed empty `TWINE_PASSWORD`. |
-| PyPI `swarm-mcp` project ownership | SWARM-003 publish | Existing versions `0.1.0`-`0.5.0` do not expose this repo's current CLI; `0.6.0` must publish before clean proof. |
+| PyPI Trusted Publisher and explicit release authorization | SWARM-003 publish | Account/project identity and release gate not verified. |
+| PyPI `we-are-swarm-agenttools` project identity | SWARM-003 publish | Corrected name; ownership and publication unverified. The `swarm-mcp` distribution is unrelated. |
 | Python dev dependencies | Tests, CI, release confidence | Green as of 2026-06-29 SSOT evidence. |
 | Import-healer baseline | CI gate | Green as of 2026-06-29 SSOT evidence. |
 | MCP catalog accuracy | MCP client setup | 0 missing targets as of 2026-06-29 SSOT evidence. |
