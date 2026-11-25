@@ -79,3 +79,20 @@ def test_coverage_adapter_enforces_contract(monkeypatch, tmp_path):
         assert not tool.validate(params)[0]
         assert not tool.execute(params).success
     assert len(calls) == 1
+
+
+def test_coverage_timeout_returns_structured_failure(monkeypatch, tmp_path):
+    import subprocess
+    from tools_v2.categories.testing_tools import CoverageReportTool
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "tests").mkdir()
+
+    def run(cmd, **kwargs):
+        raise subprocess.TimeoutExpired(cmd, kwargs["timeout"])
+
+    monkeypatch.setattr(subprocess, "run", run)
+    result = CoverageReportTool().execute({})
+    assert not result.success
+    assert result.exit_code == 124
+    assert result.output is None
