@@ -523,86 +523,63 @@ def find_dead_code(
     dead_code = []
     
     if language in ["javascript", "typescript"]:
-        # Try ts-prune for TypeScript
+        # Use only project-installed executables; never download tools on demand.
+        bin_dir = project_path / "node_modules" / ".bin"
+        suffix = ".cmd" if os.name == "nt" else ""
+        ts_prune = bin_dir / ("ts-prune" + suffix)
+        knip = bin_dir / ("knip" + suffix)
+        tool = "ts-prune" if ts_prune.is_file() else "knip" if knip.is_file() else None
+        if tool is None:
+            return {"success": False, "error": "No project-local dead code finder available"}
+        cmd = [str(ts_prune)] if tool == "ts-prune" else [str(knip), "--reporter", "json", "--no-exit-code"]
         try:
-            cmd = ["npx", "--no-install", "ts-prune"]
-            result = subprocess.run(
-                cmd,
-                cwd=project_path,
-                capture_output=True,
-                text=True,
-                timeout=120
-            )
-            
-            if result.returncode != 0:
-                return {"success": False, "exit_code": result.returncode, "error": result.stderr or "ts-prune failed"}
-            if result.returncode == 0:
-                for line in result.stdout.split('\n'):
-                    if line.strip() and not line.startswith('('):
-                        # Parse: file:line - export name
-                        match = re.match(r'(.+):(\d+) - (.+)', line)
-                        if match:
-                            file_path = match.group(1)
-                            if not include_tests and ('test' in file_path or 'spec' in file_path):
-                                continue
-                            dead_code.append({
-                                "file": file_path,
-                                "line": int(match.group(2)),
-                                "export": match.group(3),
-                                "type": "unused_export"
-                            })
-            
-            return {
-                "success": True,
-                "language": language,
-                "tool": "ts-prune",
-                "dead_code": dead_code[:50],
-                "total": len(dead_code),
-                "truncated": len(dead_code) > 50
-            }
-            
-        except FileNotFoundError:
-            # Try knip as alternative
+            result = subprocess.run(cmd, cwd=project_path, capture_output=True, text=True, timeout=120)
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            return {"success": False, "error": str(exc)}
+        if result.returncode != 0:
+            return {"success": False, "exit_code": result.returncode, "error": result.stderr or tool + " failed"}
+        if tool == "ts-prune":
+            for line in result.stdout.splitlines():
+                if not line.strip():
+                    continue
+                match = re.fullmatch(r'(.+):(\d+) - (.+)', line)
+                if not match:
+                    return {"success": False, "error": "Invalid ts-prune report"}
+                file_path, line_number, export = match.groups()
+                if export.endswith(" (used in module)"):
+                    continue
+                if not include_tests and ("test" in file_path or "spec" in file_path):
+                    continue
+                dead_code.append({"file": file_path, "line": int(line_number), "export": export, "type": "unused_export"})
+        else:
             try:
-                result = subprocess.run(
-                    ["npx", "--no-install", "knip", "--reporter", "json"],
-                    cwd=project_path,
-                    capture_output=True,
-                    text=True,
-                    timeout=120
-                )
-                
-                if result.returncode != 0:
-                    return {"success": False, "exit_code": result.returncode, "error": result.stderr or "knip failed"}
-                if result.stdout:
-                    try:
-                        knip_output = json.loads(result.stdout)
-                        for category, items in knip_output.items():
-                            for item in items[:20]:
-                                dead_code.append({
-                                    "type": category,
-                                    "item": str(item)[:100]
-                                })
-                    except (ValueError, TypeError, AttributeError):
-                        return {"success": False, "error": "Invalid knip report"}
-                else:
-                    return {"success": False, "error": "Missing knip report"}
-                
-                return {
-                    "success": True,
-                    "language": language,
-                    "tool": "knip",
-                    "dead_code": dead_code[:50],
-                    "total": len(dead_code)
-                }
-                
-            except FileNotFoundError:
-                return {
-                    "success": False,
-                    "error": "No dead code finder available. Install ts-prune or knip.",
-                    "hint": "npm install -D ts-prune"
-                }
-    
+                report = json.loads(result.stdout)
+                if not isinstance(report, dict) or not isinstance(report.get("files"), list) or not isinstance(report.get("issues"), list):
+                    raise ValueError("Unexpected knip report schema")
+                for file_path in report["files"]:
+                    if not isinstance(file_path, str):
+                        raise ValueError("Invalid file entry")
+                    if include_tests or not ("test" in file_path or "spec" in file_path):
+                        dead_code.append({"type": "unused_file", "file": file_path})
+                for issue in report["issues"]:
+                    if not isinstance(issue, dict) or not isinstance(issue.get("file"), str):
+                        raise ValueError("Invalid issue entry")
+                    file_path = issue["file"]
+                    if not include_tests and ("test" in file_path or "spec" in file_path):
+                        continue
+                    for category, items in issue.items():
+                        if category == "file":
+                            continue
+                        if not isinstance(items, list):
+                            raise ValueError("Invalid issue category")
+                        for item in items:
+                            dead_code.append({"type": category, "file": file_path, "item": item})
+            except (ValueError, TypeError, AttributeError):
+                return {"success": False, "error": "Invalid knip report"}
+        return {"success": True, "language": language, "tool": tool,
+                "dead_code": dead_code[:50], "total": len(dead_code),
+                "truncated": len(dead_code) > 50}
+
     elif language == "python":
         # Try vulture for Python
         try:
