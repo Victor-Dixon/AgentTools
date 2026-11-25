@@ -803,6 +803,7 @@ def handle_tool_call(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
 def main():
     """Main MCP server loop."""
     while True:
+        request_id = None
         try:
             line = sys.stdin.readline()
             if not line:
@@ -834,12 +835,15 @@ def main():
             elif method == "tools/call":
                 tool_name = request.get("params", {}).get("name")
                 tool_args = request.get("params", {}).get("arguments", {})
+                if tool_name not in {tool["name"] for tool in TOOLS} or not isinstance(tool_args, dict):
+                    raise ValueError("Unknown tool or invalid arguments")
                 result = handle_tool_call(tool_name, tool_args)
                 response = {
                     "jsonrpc": "2.0",
                     "id": request_id,
                     "result": {
-                        "content": [{"type": "text", "text": json.dumps(result, indent=2)}]
+                        "content": [{"type": "text", "text": json.dumps(result, indent=2)}],
+                        "isError": not result.get("success", False)
                     }
                 }
             elif method == "notifications/initialized":
@@ -856,10 +860,13 @@ def main():
             
         except json.JSONDecodeError:
             continue
+        except (TypeError, ValueError) as e:
+            sys.stdout.write(json.dumps({"jsonrpc": "2.0", "id": request_id, "error": {"code": -32602, "message": str(e)}}) + "\n")
+            sys.stdout.flush()
         except Exception as e:
             error_response = {
                 "jsonrpc": "2.0",
-                "id": None,
+                "id": request_id,
                 "error": {"code": -32603, "message": str(e)}
             }
             sys.stdout.write(json.dumps(error_response) + "\n")
