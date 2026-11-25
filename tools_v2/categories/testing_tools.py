@@ -95,3 +95,19 @@ class MutationGateTool(IToolAdapter):
                               error_message="Invalid parameters: " + ", ".join(errors))
         return ToolResult(success=False, output=None, exit_code=69,
                           error_message="Mutation backend unavailable: no verified engine configured")
+
+
+def evaluate_mutation_counts(counts: dict[str, int], threshold: int) -> ToolResult:
+    """Evaluate complete normalized engine results; never accept absent evidence."""
+    if (type(threshold) is not int or not 0 <= threshold <= 100
+            or not isinstance(counts, dict)
+            or set(counts) != {"killed", "survived", "timeout"}
+            or any(type(n) is not int or n < 0 for n in counts.values())
+            or not sum(counts.values())):
+        return ToolResult(success=False, output=None, exit_code=2,
+                          error_message="Invalid or empty mutation evidence")
+    total = sum(counts.values())
+    passed = counts["killed"] * 100 >= threshold * total
+    return ToolResult(success=passed, output={**counts, "score": 100 * counts["killed"] / total},
+                      exit_code=0 if passed else 1,
+                      error_message=None if passed else "Mutation threshold not met")
