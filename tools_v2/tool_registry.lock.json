@@ -1,5 +1,5 @@
 {
-  "count": 92,
+  "count": 78,
   "disabled_tools": {
     "agent.points": {
       "disabled_reason": "Missing class: tools_v2.categories.session_tools.PointsCalculatorTool",
@@ -144,6 +144,14 @@
         "SLOCheckTool"
       ],
       "restore_policy": "Restore only after adapter instantiates and exposes ToolSpec/get_spec/validate."
+    },
+    "test.mutation": {
+      "disabled_reason": "No verified mutation engine configured",
+      "registry_entry": [
+        "tools_v2.categories.testing_tools",
+        "MutationGateTool"
+      ],
+      "restore_policy": "Restore after actual mutation engine execution and threshold enforcement are verified."
     }
   },
   "tools": {
@@ -418,10 +426,6 @@
     "test.coverage": [
       "tools_v2.categories.testing_tools",
       "CoverageReportTool"
-    ],
-    "test.mutation": [
-      "tools_v2.categories.testing_tools",
-      "MutationGateTool"
     ],
     "v2.check": [
       "tools_v2.categories.v2_tools",

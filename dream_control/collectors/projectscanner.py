@@ -120,6 +120,8 @@ def capability_search(capability: str, config: OperatorConfig | None = None) -> 
     searched: list[str] = []
 
     for label, blob in _iter_evidence_sources(config):
+        if not isinstance(blob, dict) or not blob:
+            continue
         searched.append(label)
         if _hits_in(blob, needle) or _hits_in(blob, needle.replace("_", " ")):
             repo = label.split(":", 1)[1] if ":" in label else "portfolio"
@@ -127,11 +129,14 @@ def capability_search(capability: str, config: OperatorConfig | None = None) -> 
                 {"repo": repo, "kind": "projectscanner_evidence", "evidence": label}
             )
 
+    expected = {"repo_graph", *(f"packet:{repo}" for repo in config.repos)}
+    complete = bool(config.repos) and expected.issubset(searched)
     return {
         "capability": capability,
         "implementations": implementations,
         "sources_searched": searched,
         "evidence_source": "projectscanner",
-        "complete": bool(searched),
-        "reason": "" if searched else "no ProjectScanner artifacts available; evidence incomplete",
+        "complete": complete,
+        "absence_verified": False,  # Text matches over artifacts cannot prove semantic absence.
+        "reason": "" if complete else "ProjectScanner artifact coverage incomplete",
     }

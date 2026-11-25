@@ -156,7 +156,7 @@ def assemble(
     if capability:
         packet["capability_search"] = capability_report(capability, config=config)
         verdict = packet["capability_search"]["verdict"]
-        if verdict["verdict"] == duplication_policy.NOT_AUTHORIZED:
+        if verdict["verdict"] != duplication_policy.AUTHORIZED and verdict.get("warning"):
             packet["warnings"].append(verdict["warning"])
     else:
         packet["capability_search"] = None
@@ -199,7 +199,8 @@ def capability_report(capability: str, *, config: OperatorConfig | None = None,
 
     verdict = duplication_policy.check_duplication(
         capability,
-        evidence={"canonical_owner": owner, "implementations": implementations},
+        evidence={"canonical_owner": owner, "implementations": implementations,
+                  "absence_verified": scanner.get("absence_verified") is True},
         requesting_repo=requesting_repo,
     )
     return {

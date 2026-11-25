@@ -21,6 +21,11 @@ _PROBE = (
     "echo '---RUNNER_FILES---'; ls -1a {runner_dir} 2>/dev/null | head -20; "
     "echo '---BRAIN---'; pgrep -af 'uvicorn|dreamosd|dreamos-brain' 2>/dev/null | head -5; "
     "echo '---SYSTEMD---'; systemctl is-active dreamos-brain 2>/dev/null; "
+    "echo '---RUNNER_SYSTEMD---'; "
+    "unit=$(cat {runner_dir}/.service 2>/dev/null); "
+    "if printf '%s\\n' \"$unit\" | grep -Eq '^actions\\.runner\\.[A-Za-z0-9_.@-]+\\.service$'; then "
+    "systemctl is-enabled -- \"$unit\" 2>/dev/null; "
+    "else echo unknown; fi; "
     "echo '---REPOS---'; ls -1 ~/projects 2>/dev/null | head -20; "
     "echo '---UPTIME---'; uptime -p 2>/dev/null"
 )
@@ -125,9 +130,13 @@ def collect(config: OperatorConfig | None = None, *, timeout: int = 20) -> dict[
         if not record["runner_registered"]:
             problems.append("runner registration (.runner) missing")
         record["reason"] = "; ".join(problems)
-    # The runner has been running under temporary nohup execution; a
-    # reboot-persistent systemd unit is a separate, unclaimed lane.
+    # Brain service health is independent of runner boot persistence.
+    runner_enabled = sections.get("RUNNER_SYSTEMD", [])
+    state = runner_enabled[0] if len(runner_enabled) == 1 else "unknown"
+    if state not in {"enabled", "enabled-runtime", "disabled", "static", "masked", "masked-runtime", "indirect", "generated", "transient", "linked", "linked-runtime", "alias"}:
+        state = "unknown"
+    record["runner_systemd_enabled_state"] = state
     record["runner_persistence"] = (
-        "systemd" if record.get("daemon_systemd") == "active" else "temporary_nohup_or_unknown"
+        "systemd" if state == "enabled" else "temporary_nohup_or_unknown"
     )
     return record
