@@ -8,16 +8,13 @@ V2 Compliance: <180 lines
 Author: Agent-7 - Repository Cloning Specialist
 """
 
-import logging
 import subprocess
 import sys
 from pathlib import Path
 from typing import Any
 
 from ..adapters.base_adapter import IToolAdapter, ToolResult, ToolSpec
-from ..adapters.error_types import ToolExecutionError
 
-logger = logging.getLogger(__name__)
 
 
 class CoverageReportTool(IToolAdapter):
@@ -81,28 +78,20 @@ class MutationGateTool(IToolAdapter):
             name="test.mutation",
             version="1.0.0",
             category="testing",
-            summary="Run mutation testing quality gate",
+            summary="Mutation testing gate (backend unavailable)",
             required_params=[],
             optional_params={"threshold": 80},
         )
 
     def validate(self, params: dict[str, Any]) -> tuple[bool, list[str]]:
-        """Validate parameters."""
-        return (True, [])
+        threshold = params.get("threshold", 80)
+        valid = type(threshold) is int and 0 <= threshold <= 100
+        return valid, [] if valid else ["threshold"]
 
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
-        """Execute mutation testing."""
-        try:
-            cmd = ["python", "tools/coverage/mutation_gate.py"]
-
-            result = subprocess.run(cmd, capture_output=True, text=True)
-
-            return ToolResult(
-                success=result.returncode == 0,
-                output=result.stdout,
-                exit_code=result.returncode,
-                error_message=result.stderr if result.returncode != 0 else None,
-            )
-        except Exception as e:
-            logger.error(f"Error running mutation tests: {e}")
-            raise ToolExecutionError(str(e), tool_name="test.mutation")
+        valid, errors = self.validate(params)
+        if not valid:
+            return ToolResult(success=False, output=None, exit_code=2,
+                              error_message="Invalid parameters: " + ", ".join(errors))
+        return ToolResult(success=False, output=None, exit_code=69,
+                          error_message="Mutation backend unavailable: no verified engine configured")
