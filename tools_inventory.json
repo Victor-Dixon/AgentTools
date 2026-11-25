@@ -973,10 +973,10 @@
         "--run"
       ],
       "registry": "none",
-      "status": "active",
-      "migration_target": null,
+      "status": "deprecated",
+      "migration_target": "tools_v2/categories/testing_tools.py",
       "migration_priority": null,
-      "notes": null
+      "notes": "Historical script removed. Recovered run_mutation_fixture verified in PR50 (CI 45716302430); test.mutation remains disabled pending authorized workspace integration. No remote execution authority."
     },
     "check_stuck_messages": {
       "name": "check_stuck_messages",
@@ -6053,11 +6053,11 @@
     },
     "testing_tools": {
       "name": "testing_tools",
-      "path": "categories/testing_tools.py",
+      "path": "tools_v2/categories/testing_tools.py",
       "type": "category",
       "category": "testing",
-      "lines_of_code": 93,
-      "v2_compliant": true,
+      "lines_of_code": 189,
+      "v2_compliant": false,
       "dependencies": [
         "adapters",
         "adapters.base_adapter",
@@ -6069,7 +6069,7 @@
       "status": "active",
       "migration_target": null,
       "migration_priority": null,
-      "notes": null
+      "notes": "Coverage actual backend verified PR43; mutation engine and scoring verified PR48/50 but registry disabled. Testing MCP discovery verified PR51. Local execution only; remote authorization not established."
     },
     "v2_tools": {
       "name": "v2_tools",
@@ -6632,8 +6632,8 @@
         "mcp_tools_self_test",
         "testing_tools"
       ],
-      "target_file": "tools/categories/testing_tools.py",
-      "existing": false
+      "target_file": "tools_v2/categories/testing_tools.py",
+      "existing": true
     },
     "security": {
       "tools": [
