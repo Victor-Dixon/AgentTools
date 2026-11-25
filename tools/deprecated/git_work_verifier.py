@@ -120,7 +120,7 @@ class GitWorkVerifier:
         sha, author, timestamp, message = result.stdout.rstrip("\n").split("\0", 3)
         stats = subprocess.run(
             ["git", "--literal-pathspecs", "diff-tree", "--root", "--first-parent",
-             "-m", "-r", "--no-commit-id", "--no-renames", "--numstat", "-z",
+             "-m", "-r", "--relative", "--no-commit-id", "--no-renames", "--numstat", "-z",
              sha, "--", file_path],
             cwd=self.repo_path, capture_output=True, check=True, timeout=15,
         )
@@ -139,7 +139,7 @@ class GitWorkVerifier:
                 deleted += int(minus)
         if not files:
             return []
-        return [GitEvidence(sha, author, datetime.fromisoformat(timestamp),
+        return [GitEvidence(sha, author, datetime.fromisoformat(timestamp.replace('Z', '+00:00')),
                             files, added, deleted, message)]
 
     def verify_multiple_claims(
