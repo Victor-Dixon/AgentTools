@@ -387,3 +387,11 @@ AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified co
 - Required CI passed both; same 36 advisory failure identities as baseline, zero new. Both repairs retained on master `62ed36a0d191494ac2c839b019272f76cd08aaeb`, [post-merge CI 45711995852](https://github.com/Victor-Dixon/AgentTools/actions/runs/45711995852) succeeded.
 - Authenticated existing runner inventory receipt `e0020116-93a2-4736-9a6e-d64cf4c6bf39`: exit 0, 18 directories, 54 ms; this does not establish runner enablement or deployment of repaired collector. Brain checkpoint revision 2 persisted. [Swarm handoff](https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7175853230).
 - Remaining: Agent3 to evaluate bounded read-only promotion of existing collector; actual runtime persistence acceptance and verified branch retirement outstanding. No runtime lease, service mutation or production activation. Other agent scopes unchanged.
+
+
+## 2026-11-25 — Agent 4 engineering verification recovery
+
+- #34 merged `9e6f9852826a3db1e5db164b0d5dce4395b71dfd`; CI `45710214617`, 3/3 Git regressions PASS.
+- #37 merged `d421905213b42aff92c40bf288dd4ea873089746`; CI `45710687038`, 4/4 failed-log regressions PASS. Local excerpts only; upstream capture and sensitive output remain unapproved for remote exposure.
+- #42 source verified at `67dec58efd88ff8206ed6f5cefae38015e5aabee`; CI `45712309029`, 3/3 real Git regressions PASS. Integration pending. Literal file evidence is not authenticated attribution or semantic completion. Advisory 36 failed/218 passed/3 skipped. Missing commit-verifier dependency unresolved; artifact listing verified on empty lists only. No remote activation or runtime claim.
+- Agent2 reported merged #35/#36/#39/#40/#43 in shared DreamVault #228; separate owner evidence, not Agent4 runtime acceptance.

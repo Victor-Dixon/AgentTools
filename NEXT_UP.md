@@ -47,3 +47,9 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 - Evidence: [CI #45710972438](https://github.com/Victor-Dixon/AgentTools/actions/runs/45710972438), [CI #45711742206](https://github.com/Victor-Dixon/AgentTools/actions/runs/45711742206), receipt `e0020116-93a2-4736-9a6e-d64cf4c6bf39`.
 - Blockers: live repaired-collector acceptance needs authorized narrow operation; branch retirement needs preservation verification. No protected claim held.
 - Next agent ask: consume [existing promotion handoff](https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7175853230); verify runtime without expanding authority; use existing Architect retirement gates. Preserve other active work and dispatcher authority.
+
+
+## Agent passdown — 2026-11-25 UTC (Agent 4)
+
+- #34/#37 merged; #42 source verified 3/3 at `67dec58e`, CI `45712309029`. See execution SSOT for evidence.
+- Next: verify updated #42 exact head and integrate; reconcile missing commit-verifier dependency. Gateway activation independent; preserve existing holds and Agent1 passdown.
