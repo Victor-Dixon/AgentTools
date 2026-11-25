@@ -148,3 +148,42 @@ def evaluate_mutmut_xml(report: str, threshold: int) -> ToolResult:
     except (ET.ParseError, ValueError, KeyError, TypeError):
         return ToolResult(success=False, output=None, exit_code=2,
                           error_message="Invalid or incomplete mutmut report")
+
+
+def run_mutation_fixture(workspace: Path, threshold: int) -> ToolResult:
+    """Run only in a caller-provisioned disposable workspace; not an authorization gate."""
+    import os
+    from importlib.metadata import version, PackageNotFoundError
+
+    try:
+        if type(threshold) is not int or not 0 <= threshold <= 100:
+            raise ValueError("Invalid threshold")
+        workspace = workspace.resolve(strict=True)
+        if not (workspace / "src").is_dir() or not (workspace / "tests").is_dir():
+            raise ValueError("Missing fixture directories")
+        if (workspace / ".mutmut-cache").exists() or any(workspace.rglob("*.pyc")):
+            raise ValueError("Workspace contains stale execution evidence")
+        if version("mutmut") != "2.4.5":
+            raise ValueError("Unverified engine version")
+        env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+        def run(args):
+            return subprocess.run(args, cwd=workspace, env=env,
+                                  capture_output=True, text=True, timeout=120)
+        baseline = run([sys.executable, "-B", "-m", "pytest", "-q"])
+        if baseline.returncode:
+            raise ValueError("Baseline tests failed")
+        result = run([sys.executable, "-B", "-m", "mutmut", "run",
+                      "--paths-to-mutate", "src", "--tests-dir", "tests",
+                      "--runner", sys.executable + " -B -m pytest -q"])
+        if result.returncode not in (0, 2):
+            raise ValueError("Mutation execution failed")
+        report = run([sys.executable, "-B", "-m", "mutmut", "junitxml"])
+        if report.returncode:
+            raise ValueError("Mutation report failed")
+        return evaluate_mutmut_xml(report.stdout, threshold)
+    except subprocess.TimeoutExpired:
+        return ToolResult(success=False, output=None, exit_code=124,
+                          error_message="Mutation execution timed out")
+    except (OSError, ValueError, PackageNotFoundError) as exc:
+        return ToolResult(success=False, output=None, exit_code=2,
+                          error_message=str(exc))
