@@ -115,9 +115,35 @@ def test_4_existing_implementation_blocks_duplicate_creation(control_home):
     assert "DreamVault" in verdict.warning
 
 
-def test_4b_absent_capability_authorizes_creation(control_home):
-    verdict = duplication_policy.check_duplication("a_capability_nobody_has", evidence={})
+def test_4b_absent_capability_requires_verified_absence(control_home):
+    for evidence in ({}, {"complete": True}, {"absence_verified": "true"}):
+        verdict = duplication_policy.check_duplication("unknown", evidence=evidence)
+        assert verdict.verdict == duplication_policy.UNVERIFIED
+    verdict = duplication_policy.check_duplication("unknown", evidence={"absence_verified": True})
     assert verdict.verdict == duplication_policy.AUTHORIZED
+
+
+def test_partial_scanner_artifacts_do_not_prove_absence(monkeypatch):
+    from types import SimpleNamespace
+    from dream_control.collectors import projectscanner
+    config = SimpleNamespace(repos=["one", "two"])
+    monkeypatch.setattr(projectscanner, "_iter_evidence_sources", lambda _: [("packet:one", {"name": "one"})])
+    result = projectscanner.capability_search("missing", config)
+    assert result["complete"] is False
+    assert result["absence_verified"] is False
+    monkeypatch.setattr(projectscanner, "_iter_evidence_sources", lambda _: [("repo_graph", {"name": "graph"}), ("packet:one", {"name": "one"}), ("packet:two", {"name": "two"})])
+    result = projectscanner.capability_search("missing", config)
+    assert result["complete"] is True
+    assert result["absence_verified"] is False
+
+
+def test_capability_report_unknown_fails_closed(control_home, monkeypatch):
+    monkeypatch.setattr(passdown_module.scanner_collector, "capability_search", lambda *a: {"implementations": [], "complete": True})
+    monkeypatch.setattr(passdown_module.dreamvault_integration, "canonical_owner", lambda *a: None)
+    monkeypatch.setattr(passdown_module.agenttools_integration, "provides", lambda *a: None)
+    report = passdown_module.capability_report("unknown")
+    assert report["verdict"]["verdict"] == duplication_policy.UNVERIFIED
+    assert cli_main(["cap", "check", "unknown", "--json"]) == 3
 
 
 def test_5_agenttools_capability_redirects_the_agent(control_home, monkeypatch):
@@ -247,6 +273,7 @@ def test_cap_check_exits_nonzero_when_duplication_is_not_authorized(control_home
                     "directive": "extend DreamVault"},
     })
     assert cli_main(["cap", "check", "governance", "--repo", "AgentTools"]) == 3
+    assert cli_main(["cap", "check", "governance", "--repo", "AgentTools", "--json"]) == 3
 
 
 def test_operator_config_never_loses_the_canonical_vps(control_home):
