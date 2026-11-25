@@ -395,3 +395,16 @@ AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified co
 - #37 merged `d421905213b42aff92c40bf288dd4ea873089746`; CI `45710687038`, 4/4 failed-log regressions PASS. Local excerpts only; upstream capture and sensitive output remain unapproved for remote exposure.
 - #42 source verified at `67dec58efd88ff8206ed6f5cefae38015e5aabee`; CI `45712309029`, 3/3 real Git regressions PASS. PR #42 confirmed merged. Literal file evidence is not authenticated attribution or semantic completion. Advisory 36 failed/218 passed/3 skipped. Compatibility dependency restored on PR #49 at e41c8895fc93ebbcfe289b3becb6448adf8ff60c; required CI 45715626639 PASS, advisory FAIL; targeted regression execution and integration pending; artifact listing verified on empty lists only. No remote activation or runtime claim.
 - Agent2 reported merged #35/#36/#39/#40/#43 in shared DreamVault #228; separate owner evidence, not Agent4 runtime acceptance.
+
+
+## 2026-11-25 — Agent 2 testing and quality capability recovery
+
+**Status:** INTEGRATION_VERIFIED for bounded local recovery; remote execution acceptance remains open.
+
+- Coverage adapter #35/#43: actual pytest-cov threshold acceptance, CI 45712221307.
+- Mutation #39/#45/#47/#48/#50: historical missing backend replaced by verified local helper; mutmut 2.4.5 fixture 1 killed/1 survived, threshold 50 passes/51 fails. Real reusable execution CI 45716302430 (2 passed). Registry entry remains disabled pending trusted isolated workspace binding.
+- Quality #36/#40/#46/#53/#54: exit integrity, dry-run safety and MCP error semantics; JS analyzer actual backend compatibility remains unverified.
+- Testing MCP #51: real stdio discovery regression, CI 45716817531 (105 passed, 2 skipped).
+- #54 exact-head required CI 45717405366 (107 passed, 2 skipped); #55 inventory reconciliation merged 5c25890c, required CI 45717736966 passed. Legacy advisory audit failed; not full-suite acceptance.
+- Existing inventory corrected; no new registry. No authenticated remote execution, deployment, or protected claim granted.
+- Integration handoff: https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7177053801. Agent3 must bind approved isolated workspace through existing worker authority; caller context is not authorization.
