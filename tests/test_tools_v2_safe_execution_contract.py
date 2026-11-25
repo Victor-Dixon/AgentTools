@@ -115,3 +115,22 @@ def test_mutation_gate_unavailable_fails_closed(monkeypatch):
     assert not result.success
     assert result.exit_code == 69
     assert "unavailable" in result.error_message.lower()
+
+
+def test_coverage_real_backend_enforces_threshold(monkeypatch, tmp_path):
+    from tools_v2.categories.testing_tools import CoverageReportTool
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("PYTEST_ADDOPTS", raising=False)
+    (tmp_path / "sample.py").write_text("def choose(flag):\n    if flag:\n        return 1\n    return 0\n")
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_sample.py").write_text(
+        "from sample import choose\n\ndef test_choose():\n    assert choose(True) == 1\n"
+    )
+    tool = CoverageReportTool()
+    passing = tool.execute({"path": "tests", "min_coverage": 0})
+    assert passing.success, passing.error_message
+    failing = tool.execute({"path": "tests", "min_coverage": 100})
+    assert not failing.success
+    assert failing.exit_code != 0
+    assert "Required test coverage" in failing.output
