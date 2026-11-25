@@ -64,3 +64,15 @@ def test_tool_result_public_shape_remains_stable() -> None:
         "error_message": "boom",
         "execution_time": 1.5,
     }
+
+
+def test_unavailable_mutation_backend_not_advertised():
+    import json
+    from pathlib import Path
+    from tools_v2.tool_registry import ToolRegistry
+    import tools_v2.tool_registry as registry_module
+
+    lock = json.loads(Path(registry_module.__file__).with_name("tool_registry.lock.json").read_text())
+    assert "test.mutation" not in ToolRegistry().list_tools()
+    assert "test.mutation" in lock["disabled_tools"]
+    assert lock["count"] == len(lock["tools"])
