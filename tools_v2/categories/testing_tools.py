@@ -10,6 +10,8 @@ Author: Agent-7 - Repository Cloning Specialist
 
 import logging
 import subprocess
+import sys
+from pathlib import Path
 from typing import Any
 
 from ..adapters.base_adapter import IToolAdapter, ToolResult, ToolSpec
@@ -33,28 +35,41 @@ class CoverageReportTool(IToolAdapter):
         )
 
     def validate(self, params: dict[str, Any]) -> tuple[bool, list[str]]:
-        """Validate parameters."""
-        return (True, [])  # No required params
+        errors = []
+        path = params.get("path", "tests/")
+        threshold = params.get("min_coverage", 85)
+        if not isinstance(path, str) or not path or path.startswith("-"):
+            errors.append("path")
+        else:
+            candidate = Path(path)
+            try:
+                if candidate.is_absolute() or ".." in candidate.parts or not candidate.resolve().is_relative_to(Path.cwd().resolve()) or not candidate.exists():
+                    errors.append("path")
+            except (OSError, ValueError):
+                errors.append("path")
+        if type(threshold) is not int or not 0 <= threshold <= 100:
+            errors.append("min_coverage")
+        if type(params.get("html", False)) is not bool:
+            errors.append("html")
+        return not errors, errors
 
     def execute(self, params: dict[str, Any], context: dict[str, Any] | None = None) -> ToolResult:
-        """Execute coverage analysis."""
+        valid, errors = self.validate(params)
+        if not valid:
+            return ToolResult(success=False, exit_code=2, error_message="Invalid parameters: " + ", ".join(errors))
+        cmd = [sys.executable, "-m", "pytest", "--cov=.", "--cov-report=term", f"--cov-fail-under={params.get('min_coverage', 85)}"]
+        if params.get("html"):
+            cmd.append("--cov-report=html")
+        cmd.extend(["--", params.get("path", "tests/")])
         try:
-            cmd = ["python", "tools/coverage/run_coverage_analysis.py"]
-
-            if params.get("html"):
-                cmd.append("--html")
-
-            result = subprocess.run(cmd, capture_output=True, text=True)
-
-            return ToolResult(
-                success=result.returncode == 0,
-                output=result.stdout,
-                exit_code=result.returncode,
-                error_message=result.stderr if result.returncode != 0 else None,
-            )
-        except Exception as e:
-            logger.error(f"Error running coverage: {e}")
-            raise ToolExecutionError(str(e), tool_name="test.coverage")
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+            return ToolResult(success=result.returncode == 0, output=result.stdout,
+                              exit_code=result.returncode,
+                              error_message=(result.stderr or result.stdout) if result.returncode else None)
+        except subprocess.TimeoutExpired:
+            return ToolResult(success=False, exit_code=124, error_message="Coverage execution timed out")
+        except OSError as exc:
+            return ToolResult(success=False, exit_code=1, error_message=str(exc))
 
 
 class MutationGateTool(IToolAdapter):
