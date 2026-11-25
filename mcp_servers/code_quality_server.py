@@ -258,6 +258,9 @@ def auto_fix_lint(
     if linter not in fix_commands:
         return {"success": False, "error": f"Auto-fix not supported for: {linter}"}
     
+    if dry_run and linter not in {"ruff", "eslint"}:
+        return {"success": False, "error": f"Dry-run not supported for: {linter}"}
+
     cmd = fix_commands[linter].copy()
     
     if dry_run and linter == "ruff":
