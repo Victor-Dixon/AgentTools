@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 sys.path.insert(0, str(Path(__file__).parent.parent / "tools"))
 
 try:
-    from tools.git_work_verifier import GitWorkVerifier, VerificationResult
+    from tools.deprecated.git_work_verifier import GitWorkVerifier, VerificationResult
     HAS_GIT_VERIFIER = True
 except ImportError:
     HAS_GIT_VERIFIER = False
@@ -48,6 +48,8 @@ def verify_git_work(
         return {
             "success": True,
             "verified": result.verified,
+            "identity_verified": False,
+            "semantic_completion_verified": False,
             "confidence": result.confidence,
             "reasoning": result.reasoning,
             "agent_id": agent_id,
