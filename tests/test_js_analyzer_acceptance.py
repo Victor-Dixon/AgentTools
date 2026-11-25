@@ -23,6 +23,9 @@ def test_real_analyzer(tmp_path, tool, version):
     (src / "lib.ts").write_text("export function used() { return 1; }\nexport function unused() { return 2; }\n")
     (tmp_path / "knip.json").write_text(json.dumps({"entry": ["src/index.ts"], "project": ["src/**/*.ts"]}))
     subprocess.run(["npm", "install", "--ignore-scripts", "--no-audit", "--no-fund", "--save-dev", f"{tool}@{version}", "typescript@5.7.3"], cwd=tmp_path, check=True, timeout=180)
+    if tool == "knip":
+        raw = subprocess.run([str(tmp_path / "node_modules" / ".bin" / "knip"), "--reporter", "json", "--no-exit-code"], cwd=tmp_path, capture_output=True, text=True, check=True, timeout=120)
+        print("KNIP_FIXTURE_REPORT=" + raw.stdout[:4000])
     result = find_dead_code(str(tmp_path), language="typescript")
     assert result["success"], result
     assert result["tool"] == tool, result
