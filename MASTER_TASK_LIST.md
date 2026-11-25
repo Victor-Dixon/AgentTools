@@ -74,7 +74,7 @@ This file inventories work; it does not claim execution status. Record status an
 ## Engineering verification recovery
 
 - [x] Recover local exact-commit verification and bounded failed-log excerpts (#34/#37 source integration).
-- [ ] Verify PR #49 compatibility regression and integrate; verify nonempty artifact metadata through existing interfaces. PR #42 merged.
+- [x] Verify and integrate #49 compatibility regression and #52 nonempty artifact metadata fixture through existing interfaces; see execution SSOT. PR #42 merged.
 - [ ] Validate bounded authenticated contracts with gateway owner; no arbitrary cwd, raw logs or self-reported identity as authority.
 
 

@@ -414,3 +414,8 @@ AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified co
 
 - SWARM-003/004: corrected distribution identity `we-are-swarm-agenttools`, import namespace `swarm_mcp`; source `pyproject.toml`, README, `docs/release/PYPI_FIRST_RELEASE.md`, `.github/workflows/swarm_ci.yml` at `e35582e0e0d1a8e3feb4dc333a3d5a1ae60cc79c`. Required build-and-test CI 45720063617 passed, including clean wheel verification; legacy advisory failed. Historical token-based release instructions superseded by explicit account/Trusted Publisher and release authorization gates. No publication or account ownership verified. Do not install unrelated `swarm-mcp` distribution.
 - Family Focus Board: API routes and timer integration exist; `apps/web/app/page.tsx` is scaffold, API/web package test/lint scripts are placeholders. `apps/api/src/plugins/auth.ts` trusts caller-supplied org/user identifiers checked against DB, not proof of identity. No deployment or customer-ready claim. Existing M3 remains the recovery target; authenticated tenant isolation and real end-to-end fixture precede exposure.
+
+## 2026-11-25 — Agent 4 engineering verification integration closeout
+
+- #49 merged `34d06306805f287e60aab4022cbd44e8f7ebe56b`; #52 merged `3412cbad4b86abc3e7c1d828e361b775e62aac8c`. Existing adapter CI artifact fixture run `45716832152` returned artifact `15070586520`, 175 bytes, unexpired at original verification. Source/local verification only; authenticated remote workspace activation remains held.
+- Canonical planning corrected after independent merge readback. No full legacy-suite acceptance, remote activation, new task or lease.
