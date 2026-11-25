@@ -59,3 +59,43 @@ def test_runner_registration_listing_and_health(
         assert ".runner" in result["runner_registration_files"]
     else:
         assert "registration (.runner) missing" in result["reason"]
+
+
+
+@pytest.mark.parametrize(
+    ("brain_state", "runner_state", "expected"),
+    [
+        ("active", "unknown", "temporary_nohup_or_unknown"),
+        ("active", "disabled", "temporary_nohup_or_unknown"),
+        ("active", "enabled-runtime", "temporary_nohup_or_unknown"),
+        ("inactive", "enabled", "systemd"),
+        ("active", "enabled", "systemd"),
+        ("active", "malformed", "temporary_nohup_or_unknown"),
+    ],
+)
+def test_runner_persistence_is_independent_of_brain(
+    tmp_path, monkeypatch, brain_state, runner_state, expected
+):
+    identity = tmp_path / "identity"
+    identity.touch()
+    config = OperatorConfig()
+    config.vps = {**config.vps, "identity_file": str(identity)}
+    monkeypatch.setattr(vps_collector, "tool_available", lambda _: True)
+
+    def fake_run(argv, *, timeout):
+        assert "systemctl is-enabled --" in argv[-1]
+        assert "/.service" in argv[-1]
+        return 0, (
+            "fixture-host\n---RUNNER_PROC---\n123 Runner.Listener\n"
+            "---RUNNER_FILES---\n.runner\n---BRAIN---\n"
+            f"---SYSTEMD---\n{brain_state}\n"
+            f"---RUNNER_SYSTEMD---\n{runner_state}\n"
+        ), ""
+
+    monkeypatch.setattr(vps_collector, "run", fake_run)
+    result = vps_collector.collect(config)
+    assert result["daemon_systemd"] == brain_state
+    assert result["runner_persistence"] == expected
+    assert result["runner_systemd_enabled_state"] == (
+        "unknown" if runner_state == "malformed" else runner_state
+    )
