@@ -126,75 +126,75 @@ def get_failed_logs(
     limit_lines: int = 100,
     cwd: str = "."
 ) -> Dict[str, Any]:
+    """Retrieve bounded failed-job log excerpts from a trusted local repo.
+
+    cwd is for local callers only; remote adapters must select the repository
+    server-side and must not expose this argument or raw log text.
     """
-    Fetch logs from failed CI jobs.
-    
-    Args:
-        run_id: Specific workflow run ID (default: latest failed)
-        job_name: Filter by job name
-        limit_lines: Max lines to return per job
-        cwd: Working directory
-    """
-    # Get failed run if not specified
-    if not run_id:
-        cmd = ["gh", "run", "list", "--status", "failure", "--limit", "1", "--json", "databaseId,displayTitle,conclusion,headBranch"]
-        result = _run_command(cmd, cwd)
-        
-        if result.get("success") and result.get("stdout"):
-            try:
-                runs = json.loads(result["stdout"])
-                if runs:
-                    run_id = runs[0].get("databaseId")
-            except json.JSONDecodeError:
-                pass
-    
-    if not run_id:
-        return {"success": False, "error": "No failed runs found"}
-    
-    # Get job logs
-    cmd = ["gh", "run", "view", str(run_id), "--log-failed"]
-    result = _run_command(cmd, cwd)
-    
+    if run_id is not None and (type(run_id) is not int or not 0 < run_id <= 2**63-1):
+        return {"success": False, "error": "Invalid run ID"}
+    if type(limit_lines) is not int or not 1 <= limit_lines <= 500:
+        return {"success": False, "error": "Invalid line limit"}
+    if job_name is not None and (not isinstance(job_name, str)
+                                 or not 1 <= len(job_name) <= 200):
+        return {"success": False, "error": "Invalid job name"}
+    if run_id is None:
+        result = _run_command(["gh", "run", "list", "--status", "failure",
+                               "--limit", "1", "--json", "databaseId"], cwd)
+        if not result.get("success"):
+            return {"success": False, "error": "Failed to identify failed run"}
+        try:
+            rows = json.loads(result.get("stdout", "[]"))
+            run_id = rows[0]["databaseId"]
+        except (ValueError, TypeError, KeyError, IndexError):
+            return {"success": False, "error": "No failed runs found"}
+        if type(run_id) is not int or not 0 < run_id <= 2**63-1:
+            return {"success": False, "error": "Invalid run ID"}
+
+    result = _run_command(["gh", "run", "view", str(run_id), "--log-failed"], cwd)
     if not result.get("success"):
-        # Try getting all logs
-        cmd = ["gh", "run", "view", str(run_id), "--log"]
-        result = _run_command(cmd, cwd)
-    
-    if result.get("success"):
-        logs = result.get("stdout", "")
-        
-        # Parse logs by job
-        jobs = {}
-        current_job = "unknown"
-        for line in logs.split("\n"):
-            # Job headers look like: "jobname\tstepname\tlogline"
-            parts = line.split("\t")
-            if len(parts) >= 2:
-                current_job = parts[0]
-                if current_job not in jobs:
-                    jobs[current_job] = []
-                jobs[current_job].append("\t".join(parts[1:]))
-            else:
-                if current_job not in jobs:
-                    jobs[current_job] = []
-                jobs[current_job].append(line)
-        
-        # Filter by job name if specified
-        if job_name:
-            jobs = {k: v for k, v in jobs.items() if job_name.lower() in k.lower()}
-        
-        # Limit lines
-        jobs = {k: v[-limit_lines:] for k, v in jobs.items()}
-        
-        return {
-            "success": True,
-            "run_id": run_id,
-            "jobs": jobs,
-            "job_count": len(jobs),
-            "filtered_by": job_name
-        }
-    
-    return {"success": False, "error": result.get("stderr", "Failed to get logs")}
+        return {"success": False, "error": "Failed to retrieve failed job logs"}
+    from collections import deque
+    jobs = {}
+    truncated = False
+    current_job = "unknown"
+    # Bound the returned projection globally, independently of job count.
+    for line in result.get("stdout", "").splitlines():
+        parts = line.split("\t", 2)
+        if len(parts) >= 2:
+            current_job = parts[0]
+            line = "\t".join(parts[1:])
+        if job_name and job_name.lower() not in current_job.lower():
+            continue
+        if len(current_job) > 200:
+            truncated = True
+            continue
+        if current_job not in jobs:
+            if len(jobs) >= 20:
+                truncated = True
+                continue
+            jobs[current_job] = deque(maxlen=limit_lines)
+        tail = jobs[current_job]
+        if len(tail) == limit_lines or len(line) > 2048:
+            truncated = True
+        tail.append(line[:2048])
+    remaining = 65536
+    projection = {}
+    for name, tail in jobs.items():
+        excerpt = []
+        for line in reversed(tail):
+            # Include conservative JSON framing/escaping overhead.
+            size = len(json.dumps(line).encode("utf-8")) + 2
+            if size > remaining:
+                truncated = True
+                break
+            remaining -= size
+            excerpt.append(line)
+        if excerpt:
+            projection[name] = list(reversed(excerpt))
+    return {"success": True, "run_id": run_id, "jobs": projection,
+            "job_count": len(projection), "filtered_by": job_name,
+            "truncated": truncated}
 
 
 def retry_failed_job(
