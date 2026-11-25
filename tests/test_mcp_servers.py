@@ -120,3 +120,14 @@ class TestMCPServers:
 
         assert result["success"] is True
         assert result["category"] == "C2A"
+
+
+@pytest.mark.parametrize("exit_code", [0, 1, 2])
+def test_linter_success_tracks_exit_code(monkeypatch, tmp_path, exit_code):
+    from mcp_servers.code_quality_server import run_linter
+
+    monkeypatch.setattr(subprocess, "run", lambda *a, **kw:
+                        subprocess.CompletedProcess(a[0], exit_code, "[]", "failure" if exit_code else ""))
+    result = run_linter(str(tmp_path), linter="ruff")
+    assert result["success"] is (exit_code == 0)
+    assert result["exit_code"] == exit_code
