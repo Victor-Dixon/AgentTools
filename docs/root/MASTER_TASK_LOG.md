@@ -408,3 +408,9 @@ AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified co
 - #54 exact-head required CI 45717405366 (107 passed, 2 skipped); #55 inventory reconciliation merged 5c25890c, required CI 45717736966 passed. Legacy advisory audit failed; not full-suite acceptance.
 - Existing inventory corrected; no new registry. No authenticated remote execution, deployment, or protected claim granted.
 - Integration handoff: https://github.com/Victor-Dixon/DreamVault/issues/228#issuecomment-7177053801. Agent3 must bind approved isolated workspace through existing worker authority; caller context is not authorization.
+
+
+## 2026-11-25 — Agent 2 product readiness reconciliation
+
+- SWARM-003/004: corrected distribution identity `we-are-swarm-agenttools`, import namespace `swarm_mcp`; source `pyproject.toml`, README, `docs/release/PYPI_FIRST_RELEASE.md`, `.github/workflows/swarm_ci.yml` at `e35582e0e0d1a8e3feb4dc333a3d5a1ae60cc79c`. Required build-and-test CI 45720063617 passed, including clean wheel verification; legacy advisory failed. Historical token-based release instructions superseded by explicit account/Trusted Publisher and release authorization gates. No publication or account ownership verified. Do not install unrelated `swarm-mcp` distribution.
+- Family Focus Board: API routes and timer integration exist; `apps/web/app/page.tsx` is scaffold, API/web package test/lint scripts are placeholders. `apps/api/src/plugins/auth.ts` trusts caller-supplied org/user identifiers checked against DB, not proof of identity. No deployment or customer-ready claim. Existing M3 remains the recovery target; authenticated tenant isolation and real end-to-end fixture precede exposure.
