@@ -163,57 +163,62 @@ def check_file_history(file_path: str, days: int = 7) -> Dict[str, Any]:
 
 
 def validate_commit(commit_hash: str) -> Dict[str, Any]:
-    """Validate a commit exists and get details."""
+    """Verify an exact commit object and first-parent change statistics."""
+    import re
+
+    if not isinstance(commit_hash, str) or not re.fullmatch(
+        r"(?:[0-9a-f]{40}|[0-9a-f]{64})", commit_hash
+    ):
+        return {"success": False, "error": "Invalid commit hash"}
+
+    def run(args, *, text=True):
+        return subprocess.run(
+            ["git", *args], capture_output=True, text=text, cwd=".", timeout=15
+        )
+
     try:
-        cmd = ["git", "show", "--pretty=format:%H|%an|%ai|%s",
-               "--stat", "--no-patch", commit_hash]
-        result = subprocess.run(cmd, capture_output=True, text=True, cwd=".")
+        # Reject non-commit objects, including annotated tags.
+        kind = run(["cat-file", "-t", commit_hash])
+        if kind.returncode != 0 or kind.stdout.strip() != "commit":
+            return {"success": False, "error": "Commit not found"}
 
-        if result.returncode != 0:
-            return {"success": False, "error": f"Commit not found: {commit_hash}"}
+        header = run(["show", "-s", "--format=%H%x00%an%x00%ai%x00%s",
+                      commit_hash, "--"])
+        if header.returncode != 0:
+            return {"success": False, "error": "Commit metadata unavailable"}
+        parts = header.stdout.rstrip("\n").split("\0", 3)
+        if len(parts) != 4 or parts[0] != commit_hash:
+            return {"success": False, "error": "Could not verify commit identity"}
+        hash_val, author, date, subject = parts
 
-        lines = result.stdout.split("\n")
-        header = lines[0] if lines else ""
-
-        if "|" in header:
-            parts = header.split("|", 3)
-            if len(parts) == 4:
-                hash_val, author, date, subject = parts
-
-                # Parse stats
-                files_changed = 0
-                insertions = 0
-                deletions = 0
-
-                for line in lines[1:]:
-                    if "file" in line.lower() and "changed" in line.lower():
-                        # Extract numbers from "X files changed, Y insertions(+), Z deletions(-)"
-                        import re
-                        match = re.search(r"(\d+)\s+files?\s+changed", line)
-                        if match:
-                            files_changed = int(match.group(1))
-                        match = re.search(r"(\d+)\s+insertions?", line)
-                        if match:
-                            insertions = int(match.group(1))
-                        match = re.search(r"(\d+)\s+deletions?", line)
-                        if match:
-                            deletions = int(match.group(1))
-
-                return {
-                    "success": True,
-                    "commit_hash": hash_val,
-                    "hash_short": hash_val[:8],
-                    "author": author,
-                    "date": date,
-                    "subject": subject,
-                    "files_changed": files_changed,
-                    "insertions": insertions,
-                    "deletions": deletions,
-                }
-
-        return {"success": False, "error": "Could not parse commit details"}
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+        # --first-parent gives deterministic merge statistics; --root handles
+        # initial commits. NUL-delimited numstat handles unusual filenames.
+        stats = run(["diff-tree", "--root", "--first-parent", "-m", "-r",
+                     "--no-commit-id", "--no-renames", "--numstat", "-z",
+                     commit_hash, "--"], text=False)
+        if stats.returncode != 0:
+            return {"success": False, "error": "Commit statistics unavailable"}
+        files_changed = insertions = deletions = binary_files = 0
+        for record in stats.stdout.split(b"\0"):
+            if not record:
+                continue
+            added, removed, _ = record.split(b"\t", 2)
+            files_changed += 1
+            if added == removed == b"-":
+                binary_files += 1
+            else:
+                insertions += int(added)
+                deletions += int(removed)
+        return {
+            "success": True, "commit_hash": hash_val,
+            "hash_short": hash_val[:8], "author": author,
+            "date": date, "subject": subject,
+            "files_changed": files_changed, "insertions": insertions,
+            "deletions": deletions, "binary_files": binary_files,
+            "statistics_basis": "first_parent",
+        }
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return {"success": False, "error": "Commit verification failed"}
 
 
 def verify_work_exists_mcp(file_patterns: List[str], agent_name: Optional[str] = None) -> Dict[str, Any]:
