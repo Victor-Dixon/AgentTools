@@ -554,7 +554,7 @@ def find_dead_code(
         else:
             try:
                 report = json.loads(result.stdout)
-                if not isinstance(report, dict) or not isinstance(report.get("files", []), list) or not isinstance(report.get("issues"), list):
+                if not isinstance(report, dict) or not isinstance(report.get("files"), list) or not isinstance(report.get("issues"), list):
                     raise ValueError("Unexpected knip report schema")
                 for file_path in report.get("files", []):
                     if not isinstance(file_path, str):
@@ -569,6 +569,13 @@ def find_dead_code(
                         continue
                     for category, items in issue.items():
                         if category == "file":
+                            continue
+                        if category == "enumMembers" and isinstance(items, dict):
+                            for enum_name, members in items.items():
+                                if not isinstance(members, list):
+                                    raise ValueError("Invalid enum members")
+                                for member in members:
+                                    dead_code.append({"type": category, "file": file_path, "enum": enum_name, "item": member})
                             continue
                         if not isinstance(items, list):
                             raise ValueError("Invalid issue category")
