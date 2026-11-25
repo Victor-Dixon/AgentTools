@@ -525,7 +525,7 @@ def find_dead_code(
     if language in ["javascript", "typescript"]:
         # Try ts-prune for TypeScript
         try:
-            cmd = ["npx", "ts-prune"]
+            cmd = ["npx", "--no-install", "ts-prune"]
             result = subprocess.run(
                 cmd,
                 cwd=project_path,
@@ -534,7 +534,9 @@ def find_dead_code(
                 timeout=120
             )
             
-            if result.returncode == 0 or result.stdout:
+            if result.returncode != 0:
+                return {"success": False, "exit_code": result.returncode, "error": result.stderr or "ts-prune failed"}
+            if result.returncode == 0:
                 for line in result.stdout.split('\n'):
                     if line.strip() and not line.startswith('('):
                         # Parse: file:line - export name
@@ -563,13 +565,15 @@ def find_dead_code(
             # Try knip as alternative
             try:
                 result = subprocess.run(
-                    ["npx", "knip", "--reporter", "json"],
+                    ["npx", "--no-install", "knip", "--reporter", "json"],
                     cwd=project_path,
                     capture_output=True,
                     text=True,
                     timeout=120
                 )
                 
+                if result.returncode != 0:
+                    return {"success": False, "exit_code": result.returncode, "error": result.stderr or "knip failed"}
                 if result.stdout:
                     try:
                         knip_output = json.loads(result.stdout)
@@ -579,8 +583,10 @@ def find_dead_code(
                                     "type": category,
                                     "item": str(item)[:100]
                                 })
-                    except:
-                        pass
+                    except (ValueError, TypeError, AttributeError):
+                        return {"success": False, "error": "Invalid knip report"}
+                else:
+                    return {"success": False, "error": "Missing knip report"}
                 
                 return {
                     "success": True,
