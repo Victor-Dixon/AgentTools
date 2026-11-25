@@ -50,3 +50,32 @@ def test_safe_tools_validate_and_execute_without_crashing() -> None:
             failures.append(f"{name}: crashed: {type(exc).__name__}: {exc}")
 
     assert not failures, "Safe tool execution failures:\n" + "\n".join(failures)
+
+
+def test_coverage_adapter_enforces_contract(monkeypatch, tmp_path):
+    import subprocess
+    import sys
+    from tools_v2.categories.testing_tools import CoverageReportTool
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "tests").mkdir()
+    calls = []
+
+    def run(cmd, **kwargs):
+        calls.append((cmd, kwargs))
+        return subprocess.CompletedProcess(cmd, 1, "coverage failed", "")
+
+    monkeypatch.setattr(subprocess, "run", run)
+    tool = CoverageReportTool()
+    result = tool.execute({"path": "tests", "min_coverage": 91})
+    assert not result.success
+    assert result.exit_code == 1
+    cmd, kwargs = calls[0]
+    assert cmd[:3] == [sys.executable, "-m", "pytest"]
+    assert "--cov-fail-under=91" in cmd
+    assert "tests" in cmd
+    assert kwargs["timeout"] > 0
+    for params in ({"path": "../outside"}, {"path": str(tmp_path)}, {"min_coverage": 101}, {"min_coverage": True}, {"path": "-k"}):
+        assert not tool.validate(params)[0]
+        assert not tool.execute(params).success
+    assert len(calls) == 1
