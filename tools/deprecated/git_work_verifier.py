@@ -88,114 +88,60 @@ class GitWorkVerifier:
                 reasoning=f"No git commits found for {file_path} in last {time_window_hours}h"
             )
         
-        # Check if agent name appears in commits
-        agent_commits = [e for e in evidence if agent.lower() in e.author.lower()]
-        
-        if agent_commits:
-            latest = agent_commits[0]
-            return VerificationResult(
-                claim=claim,
-                verified=True,
-                evidence=latest,
-                confidence="HIGH",
-                reasoning=f"Git commit {latest.commit_hash[:8]} confirms work by {agent}"
-            )
-        
-        # No matching agent commits
-        if evidence:
-            actual_author = evidence[0].author
-            return VerificationResult(
-                claim=claim,
-                verified=False,
-                evidence=evidence[0],
-                confidence="NONE",
-                reasoning=f"Git shows {file_path} modified by {actual_author}, not {agent}"
-            )
-        
+        # Author metadata is self-asserted, and a diff cannot establish
+        # semantic completion. Preserve evidence without awarding credit.
         return VerificationResult(
-            claim=claim,
-            verified=False,
-            evidence=None,
+            claim=claim, verified=False, evidence=evidence[0],
             confidence="LOW",
-            reasoning="Unable to verify - insufficient git evidence"
+            reasoning="File history observed; agent identity and claimed changes unverified",
         )
-    
-    def _get_git_evidence(
-        self,
-        file_path: str,
-        hours: int
-    ) -> List[GitEvidence]:
-        """Get git commit history for a file"""
-        try:
-            # Get commits in time window
-            since = datetime.now() - timedelta(hours=hours)
-            since_str = since.strftime("%Y-%m-%d %H:%M:%S")
-            
-            cmd = [
-                "git", "log",
-                f"--since={since_str}",
-                "--pretty=format:%H|%an|%ai|%s",
-                "--numstat",
-                "--", file_path
-            ]
-            
-            result = subprocess.run(
-                cmd,
-                cwd=self.repo_path,
-                capture_output=True,
-                text=True,
-                check=True
-            )
-            
-            return self._parse_git_log(result.stdout)
-        
-        except subprocess.CalledProcessError:
+
+    def _get_git_evidence(self, file_path: str, hours: int) -> List[GitEvidence]:
+        """Collect one recent literal-file commit; never infer task completion."""
+        from pathlib import PurePosixPath
+        if (not isinstance(file_path, str) or not file_path
+                or len(file_path) > 1024 or "\\" in file_path
+                or any(ord(c) < 32 for c in file_path)
+                or file_path.startswith(("/", ":"))
+                or any(p in ("", ".", "..") for p in file_path.split("/"))
+                or PurePosixPath(file_path).is_absolute()):
+            raise ValueError("Invalid repository-relative file path")
+        if type(hours) is not int or not 1 <= hours <= 168:
+            raise ValueError("Invalid time window")
+        result = subprocess.run(
+            ["git", "--literal-pathspecs", "log", "-1",
+             f"--since={hours} hours ago", "--format=%H%x00%an%x00%aI%x00%s",
+             "--no-show-signature", "--", file_path],
+            cwd=self.repo_path, capture_output=True, text=True,
+            errors="replace", check=True, timeout=15,
+        )
+        if not result.stdout.strip():
             return []
-    
-    def _parse_git_log(self, log_output: str) -> List[GitEvidence]:
-        """Parse git log output into evidence objects"""
-        evidence = []
-        lines = log_output.strip().split("\n")
-        
-        i = 0
-        while i < len(lines):
-            if "|" in lines[i]:
-                parts = lines[i].split("|")
-                if len(parts) >= 4:
-                    commit_hash = parts[0]
-                    author = parts[1]
-                    timestamp = datetime.fromisoformat(parts[2].replace(" ", "T", 1).rsplit(" ", 1)[0])
-                    message = parts[3]
-                    
-                    # Next line might be numstat
-                    files_changed = []
-                    lines_added = 0
-                    lines_deleted = 0
-                    
-                    if i + 1 < len(lines) and "\t" in lines[i + 1]:
-                        stat_parts = lines[i + 1].split("\t")
-                        if len(stat_parts) >= 3:
-                            try:
-                                lines_added = int(stat_parts[0]) if stat_parts[0] != "-" else 0
-                                lines_deleted = int(stat_parts[1]) if stat_parts[1] != "-" else 0
-                                files_changed = [stat_parts[2]]
-                            except ValueError:
-                                pass
-                        i += 1
-                    
-                    evidence.append(GitEvidence(
-                        commit_hash=commit_hash,
-                        author=author,
-                        timestamp=timestamp,
-                        files_changed=files_changed,
-                        lines_added=lines_added,
-                        lines_deleted=lines_deleted,
-                        commit_message=message
-                    ))
-            i += 1
-        
-        return evidence
-    
+        sha, author, timestamp, message = result.stdout.rstrip("\n").split("\0", 3)
+        stats = subprocess.run(
+            ["git", "--literal-pathspecs", "diff-tree", "--root", "--first-parent",
+             "-m", "-r", "--no-commit-id", "--no-renames", "--numstat", "-z",
+             sha, "--", file_path],
+            cwd=self.repo_path, capture_output=True, check=True, timeout=15,
+        )
+        files = []
+        added = deleted = 0
+        for record in stats.stdout.split(b"\0"):
+            if not record:
+                continue
+            plus, minus, name = record.split(b"\t", 2)
+            decoded = name.decode("utf-8", errors="surrogateescape")
+            if decoded != file_path:
+                continue
+            files.append(decoded)
+            if plus != b"-":
+                added += int(plus)
+                deleted += int(minus)
+        if not files:
+            return []
+        return [GitEvidence(sha, author, datetime.fromisoformat(timestamp),
+                            files, added, deleted, message)]
+
     def verify_multiple_claims(
         self,
         claims: List[Dict]
