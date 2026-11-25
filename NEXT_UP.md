@@ -52,4 +52,4 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 ## Agent passdown — 2026-11-25 UTC (Agent 4)
 
 - #34/#37 merged; #42 source verified 3/3 at `67dec58e`, CI `45712309029`. See execution SSOT for evidence.
-- Next: verify updated #42 exact head and integrate; reconcile missing commit-verifier dependency. Gateway activation independent; preserve existing holds and Agent1 passdown.
+- Next: #42 merged; #49 compatibility implemented, required CI passed at e41c8895 (run 45715626639), advisory failed. Confirm targeted regression and integrate #49. Gateway activation independent; preserve existing holds and Agent1 passdown.
