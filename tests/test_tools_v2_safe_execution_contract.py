@@ -148,3 +148,26 @@ def test_mutation_score_rejects_incomplete_and_empty_results():
                    {"killed": 8, "survived": 0, "timeout": 0, "unknown": 1}):
         assert not evaluate_mutation_counts(counts, 0).success
     assert not evaluate_mutation_counts({"killed": 8, "survived": 0, "timeout": 0}, True).success
+
+
+def test_testing_mcp_discovery_protocol():
+    import json
+    import subprocess
+    import sys
+    requests = [
+        {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05"}},
+        {"jsonrpc": "2.0", "method": "notifications/initialized"},
+        {"jsonrpc": "2.0", "id": 2, "method": "tools/list"},
+        {"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "run_mutation_tests"}},
+        {"jsonrpc": "2.0", "id": 4, "method": "tools/call", "params": {"name": "run_coverage_analysis", "arguments": {"min_coverage": -1}}},
+    ]
+    result = subprocess.run([sys.executable, "mcp_servers/testing_server.py"],
+                            input="".join(json.dumps(r) + "\n" for r in requests),
+                            capture_output=True, text=True, timeout=15)
+    assert result.returncode == 0, result.stderr
+    responses = [json.loads(line) for line in result.stdout.splitlines()]
+    assert [r["id"] for r in responses] == [1, 2, 3, 4]
+    assert responses[0]["result"]["capabilities"] == {"tools": {}}
+    assert [t["name"] for t in responses[1]["result"]["tools"]] == ["run_coverage_analysis"]
+    assert responses[2]["error"]["code"] == -32602
+    assert responses[3]["result"]["isError"] is True
