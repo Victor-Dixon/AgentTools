@@ -13,7 +13,7 @@ This file is an immediate-action mirror, not a backlog or historical log. Status
 2. **Verify reusable marketing/API/MCP promotion candidates.** Compare bridge requirements with AgentTools and `socialmediamanager`; classify each candidate and require provenance, auth/risk review, deduplication, a narrow verification, and a promotion manifest.
 3. **Confirm CPC/cliprun helpers still match current phone/desktop lanes.** Identify current owners and consumers before changing helpers; intent and runtime use are `Unknown` until evidenced.
 4. **Reconcile uncertain historical claims.** Work through the six `Needs verification` groups in the 2026-08-11 history reconstruction without converting commit subjects into deployment or test success.
-5. **Decide branch policy.** Document whether local branch `work` should receive a remote/upstream and how docs-only changes should be reviewed.
+5. AT-COMMANDER-INSTALLER-001 | P1 | READY | Repair Commander installer on an isolated branch with mocked system commands.
 
 ## Guardrails
 
