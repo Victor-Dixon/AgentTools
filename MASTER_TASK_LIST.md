@@ -10,6 +10,8 @@ This file inventories work; it does not claim execution status. Record status an
 
 ## Toolbelt/runtime helpers
 
+- [ ] AT-COMMANDER-INSTALLER-001 | P1 | READY | Repair Commander installer on an isolated branch with mocked system commands.
+
 - [ ] Inventory maintained helpers across `tools/`, `tools_v2/`, and operator surfaces; label ownership and supported entry points.
 - [ ] Revalidate salvaged and scaffolded helpers before treating them as promoted runtime capabilities.
 - [ ] Remove or quarantine generated/runtime artifacts only after provenance and consumer checks.
