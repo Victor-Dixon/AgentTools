@@ -419,3 +419,7 @@ AT-CONTROL-PLANE-RECOVERY-001: DEFERRED, implementation not started. Verified co
 
 - #49 merged `34d06306805f287e60aab4022cbd44e8f7ebe56b`; #52 merged `3412cbad4b86abc3e7c1d828e361b775e62aac8c`. Existing adapter CI artifact fixture run `45716832152` returned artifact `15070586520`, 175 bytes, unexpired at original verification. Source/local verification only; authenticated remote workspace activation remains held.
 - Canonical planning corrected after independent merge readback. No full legacy-suite acceptance, remote activation, new task or lease.
+
+## 2026-11-27 — Commander source engineering intake
+
+AT-COMMANDER-INSTALLER-001 is proposed for admission through this planning change under DreamVault #383. Local mock tests, installer source changes, commit and PR are in scope. VPS activation, migration and retirement require separate authority. The branch-policy question remains in MASTER_TASK_LIST.md. Installer implementation and worker pickup are pending.
