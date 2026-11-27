@@ -1,0 +1,22 @@
+id: AT-COMMANDER-INSTALLER-001
+title: Repair Commander installer activation and error propagation
+status: ready
+priority: P1
+repo_key: github:victor-dixon/agenttools
+source_issue: https://github.com/Victor-Dixon/DreamVault/issues/383
+branch: fix/383-commander-installer
+expected_head: 55aada89ec7b0170c9afcabb6f475c05a8c9ec29
+objective: Make install repeatable and activation explicit using isolated command mocks.
+scope:
+  - deploy/vps/swarm-commander/scripts/install.sh
+  - tests/test_vps_swarm_commander_deploy.py
+authority:
+  allowed: [isolated_source_edits, mocked_tests, commit, open_pr]
+  forbidden: [production_install, live_activation, production_credentials, migration, retirement]
+acceptance:
+  - Installation succeeds twice with test fixtures and preserves existing configuration.
+  - Default install never enables or starts the service, including when test credentials exist.
+  - Explicit activation rejects missing credentials and propagates systemctl failure.
+  - Dependency installation failure returns nonzero.
+verification:
+  - python -m pytest -q tests/test_vps_swarm_commander_deploy.py
